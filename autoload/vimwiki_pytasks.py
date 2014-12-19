@@ -48,42 +48,93 @@ How this plugin works:
         a) if task is marked as subtask by indentation, the dependency is created between
 """
 
-INCOMPLETE_TASK_REGEXP = (
-    "\v\* \[[^X]\].*"  # any amount of whitespace followed by uncompleted square
-    # Any of the following:
-    "(\(\d{4}-\d\d-\d\d( \d\d:\d\d)?\)" # Timestamp
-    "|#TW\s*$" # Task indicator (insert this to have the task added)
-    "|#[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})"  # Task UUID 
-)
 
-TASK_REGEXP = '#TW'
-
-tw = task.TaskWarrior()
-
-class Random(object):
-    attr = 'Ta dpc'
-
-r = Random()
+tw = TaskWarrior()
 
 def get_task(uuid):
     return tw.tasks.get(uuid=uuid)
 
-def load_tasks():
-    valid_tasks = [line for line in vim.current.buffer if re.search(TASK_REGEXP, line)]
 
-    for line in valid_tasks:
-        vim.command('echom "%s"' % line)
+class VimwikiTask(object):
+    def __init__(self, line, position):
+        """
+        Constructs a Vimwiki task from line at given position at the buffer
+        """
 
-    r.attr = 'Whoohoooo'
+        match = re.search(GENERIC_TASK, line)
+        self.indent = match.group('space')
+        self.text = match.group('text')
+        self.uuid = match.group('uuid')  # can be None for new tasks
+        self.due = match.group('due')  # TODO: convert to proper timestamp
+        self.completed = match.group('completed')
 
-def RandomExample():
-    vim.command('echom "volame daco"')
-    vim.command('echom "%s"' % r.attr)
+        # First set the task attribute to None, then try to load it, if possible
+        self.task = None
 
-def RandomExample3():
-    r.attr = r.attr + 'XO'
-    vim.command('echom "Random example 3"')
+        if self.uuid:
+            try:
+                self.task = tw.tasks.get(uuid=self.uuid)
+            except tasklib.task.DoesNotExist:
+                pass
+
+    def save_to_tw(self):
+        if not self.task:
+            self.task = Task(tw)
+    
+        # Push the values to the Task
+        self.task['description'] = self.text
+        self.task.save()
+
+        # Load the UUID
+        self.task.refresh()
+        self.uuid = self.task['uuid']
+        vim.command('echom "uuid: %s"' % self.uuid)
+
+        # Mark task as done. This works fine with already completed tasks.
+        if self.completed:
+            self.task.done()
+
+    def update_from_tw(self):
+        if not self.task:
+            return
+
+        self.task.refresh()
+        self.text = self.task['description']
+        # TODO: update due
+        self.completed = self.completed if not self.task['status'] == 'completed' else 'X'
+
+    def __str__(self):
+        self.update_from_tw()
+
+        return ''.join([
+            self.indent,
+            '* [',
+            self.completed,
+            '] ',
+            self.text,
+            '  #',
+            self.uuid or 'TW-NOT_SYNCED'
+        ])
+
+
+def load_update_incomplete_tasks():
+    """
+    Updates all the incomplete tasks in the vimwiki file if the info from TW is different.
+    """
+
+    for i in range(len(vim.current.buffer)):
+        line = vim.current.buffer[i]
+
+        if re.search(TASKS_TO_SAVE_TO_TW, line):
+            task = VimwikiTask(line, i)
+            task.save_to_tw()
+            line = str(task)
+
+        vim.current.buffer[i] = line
+
+    number_of_lines = len(vim.current.buffer)
+    vim.command('echom "lines: %d"' % number_of_lines)
 
 if __name__ == '__main__':
-    load_tasks()
+    load_update_incomplete_tasks()
 
