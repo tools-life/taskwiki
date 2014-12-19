@@ -36,9 +36,6 @@ GENERIC_TASK = ''.join([
     '(', UUID_COMMENT, ')?'   # UUID is optional, it can't be there for new tasks
 ])
 
-with open("vystup", 'w') as f:
-    f.write(TASKS_TO_SAVE_TO_TW)
-
 
 """
 How this plugin works:
