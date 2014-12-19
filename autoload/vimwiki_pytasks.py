@@ -64,7 +64,8 @@ class VimwikiTask(object):
         self.text = match.group('text')
         self.uuid = match.group('uuid')  # can be None for new tasks
         self.due = match.group('due')  # TODO: convert to proper timestamp
-        self.completed = match.group('completed')
+        self.completed_mark = match.group('completed')
+        self.completed = self.completed_mark is 'X'
 
         # First set the task attribute to None, then try to load it, if possible
         self.task = None
@@ -99,7 +100,8 @@ class VimwikiTask(object):
         self.task.refresh()
         self.text = self.task['description']
         # TODO: update due
-        self.completed = self.completed if not self.task['status'] == 'completed' else 'X'
+        self.completed = (self.task['status'] == u'completed')
+
 
     def __str__(self):
         self.update_from_tw()
@@ -107,7 +109,7 @@ class VimwikiTask(object):
         return ''.join([
             self.indent,
             '* [',
-            self.completed,
+            'X' if self.completed else self.completed_mark,
             '] ',
             self.text,
             '  #',
