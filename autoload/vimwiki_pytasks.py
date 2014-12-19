@@ -7,8 +7,9 @@ from tasklib.task import TaskWarrior, Task
 BRACKET_OPENING = re.escape('* [')
 BRACKET_CLOSING = re.escape('] ')
 EMPTY_SPACE = r'(?P<space>\s*)'
-TEXT = r'(?P<text>.+)'
-UUID = r'(?P<uuid>[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})'
+UUID_UNNAMED = r'[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}'
+UUID = r'(?P<uuid>{0})'.format(UUID_UNNAMED)
+TEXT = r'(?P<text>.+(?!{0}))'.format(UUID_UNNAMED)
 DUE = r'(?P<due>\(\d{4}-\d\d-\d\d( \d\d:\d\d)?\))'
 COMPLETION_MARK = r'(?P<completed>.)'
 UUID_COMMENT = '  #{0}'.format(UUID)
