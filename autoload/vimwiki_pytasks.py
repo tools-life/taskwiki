@@ -12,7 +12,8 @@ UUID = r'(?P<uuid>{0})'.format(UUID_UNNAMED)
 TEXT = r'(?P<text>.+(?!{0}))'.format(UUID_UNNAMED)
 DUE = r'(?P<due>\(\d{4}-\d\d-\d\d( \d\d:\d\d)?\))'
 COMPLETION_MARK = r'(?P<completed>.)'
-UUID_COMMENT = '  #{0}'.format(UUID)
+UUID_COMMENT = ' #{0}'.format(UUID)
+TW_SYNC_MARK = ' #TW'
 
 # Middle building blocks
 INCOMPLETE_TASK_PREFIX = EMPTY_SPACE + BRACKET_OPENING + '[^X]' + BRACKET_CLOSING + TEXT
@@ -20,10 +21,9 @@ INCOMPLETE_TASK_PREFIX = EMPTY_SPACE + BRACKET_OPENING + '[^X]' + BRACKET_CLOSIN
 # Final regexps
 TASKS_TO_SAVE_TO_TW = ''.join([
     INCOMPLETE_TASK_PREFIX,  # any amount of whitespace followed by uncompleted square
-    # Any of the following:
-    '(',
-        UUID_COMMENT, # Task UUID 
-    ')?'
+    TEXT,
+    '(', DUE, ')?'  # Due is optional
+    '(', UUID_COMMENT, '|', TW_SYNC_MARK, ')'   # UUID is not there for new tasks
 ])
 
 GENERIC_TASK = ''.join([
@@ -33,7 +33,7 @@ GENERIC_TASK = ''.join([
     BRACKET_CLOSING,
     TEXT,
     '(', DUE, ')?'  # Due is optional
-    '(', UUID_COMMENT, ')?'   # UUID is optional, it can't be there for new tasks
+    '(', UUID_COMMENT, '|', TW_SYNC_MARK, ')'   # UUID is not there for new tasks
 ])
 
 
