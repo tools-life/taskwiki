@@ -1,6 +1,43 @@
 import vim
 import re
-from tasklib import task
+
+from tasklib.task import TaskWarrior, Task
+
+# Building blocks
+BRACKET_OPENING = re.escape('* [')
+BRACKET_CLOSING = re.escape('] ')
+EMPTY_SPACE = r'(?P<space>\s*)'
+TEXT = r'(?P<text>.+)'
+UUID = r'(?P<uuid>[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})'
+DUE = r'(?P<due>\(\d{4}-\d\d-\d\d( \d\d:\d\d)?\))'
+COMPLETION_MARK = r'(?P<completed>.)'
+UUID_COMMENT = '  #{0}'.format(UUID)
+
+# Middle building blocks
+INCOMPLETE_TASK_PREFIX = EMPTY_SPACE + BRACKET_OPENING + '[^X]' + BRACKET_CLOSING + TEXT
+
+# Final regexps
+TASKS_TO_SAVE_TO_TW = ''.join([
+    INCOMPLETE_TASK_PREFIX,  # any amount of whitespace followed by uncompleted square
+    # Any of the following:
+    '(',
+        UUID_COMMENT, # Task UUID 
+    ')?'
+])
+
+GENERIC_TASK = ''.join([
+    EMPTY_SPACE,
+    BRACKET_OPENING,
+    COMPLETION_MARK,
+    BRACKET_CLOSING,
+    TEXT,
+    '(', DUE, ')?'  # Due is optional
+    '(', UUID_COMMENT, ')?'   # UUID is optional, it can't be there for new tasks
+])
+
+with open("vystup", 'w') as f:
+    f.write(TASKS_TO_SAVE_TO_TW)
+
 
 """
 How this plugin works:
