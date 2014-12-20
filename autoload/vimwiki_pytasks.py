@@ -3,17 +3,21 @@ import re
 
 from tasklib.task import TaskWarrior, Task
 
+# Unnamed building blocks
+UUID_UNNAMED = r'[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}'
+SPACE_UNNAMED = r'\s*'
+NONEMPTY_SPACE_UNNAMED = r'\s+'
+FINAL_SEGMENT_SEPARATOR_UNNAMED = r'(\s+|$)'
+
 # Building blocks
 BRACKET_OPENING = re.escape('* [')
 BRACKET_CLOSING = re.escape('] ')
 EMPTY_SPACE = r'(?P<space>\s*)'
-UUID_UNNAMED = r'[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}'
 UUID = r'(?P<uuid>{0})'.format(UUID_UNNAMED)
-TEXT = r'(?P<text>.+(?!{0}))'.format(UUID_UNNAMED)
+TEXT = r'(?P<text>.+(?<!{0}))'.format(UUID_UNNAMED)
 DUE = r'(?P<due>\(\d{4}-\d\d-\d\d( \d\d:\d\d)?\))'
 COMPLETION_MARK = r'(?P<completed>.)'
-UUID_COMMENT = ' #{0}'.format(UUID)
-TW_SYNC_MARK = ' #TW'
+UUID_COMMENT = '#{0}'.format(UUID)
 
 # Middle building blocks
 INCOMPLETE_TASK_PREFIX = EMPTY_SPACE + BRACKET_OPENING + '[^X]' + BRACKET_CLOSING + TEXT
@@ -21,9 +25,9 @@ INCOMPLETE_TASK_PREFIX = EMPTY_SPACE + BRACKET_OPENING + '[^X]' + BRACKET_CLOSIN
 # Final regexps
 TASKS_TO_SAVE_TO_TW = ''.join([
     INCOMPLETE_TASK_PREFIX,  # any amount of whitespace followed by uncompleted square
-    TEXT,
-    '(', DUE, ')?'  # Due is optional
-    '(', UUID_COMMENT, '|', TW_SYNC_MARK, ')'   # UUID is not there for new tasks
+    FINAL_SEGMENT_SEPARATOR_UNNAMED,
+    '(', DUE, FINAL_SEGMENT_SEPARATOR_UNNAMED, ')?'  # Due is optional
+    '(', UUID_COMMENT, FINAL_SEGMENT_SEPARATOR_UNNAMED, ')?'   # UUID is not there for new tasks
 ])
 
 GENERIC_TASK = ''.join([
@@ -32,8 +36,9 @@ GENERIC_TASK = ''.join([
     COMPLETION_MARK,
     BRACKET_CLOSING,
     TEXT,
-    '(', DUE, ')?'  # Due is optional
-    '(', UUID_COMMENT, '|', TW_SYNC_MARK, ')'   # UUID is not there for new tasks
+    FINAL_SEGMENT_SEPARATOR_UNNAMED,
+    '(', DUE, FINAL_SEGMENT_SEPARATOR_UNNAMED, ')?'  # Due is optional
+    '(', UUID_COMMENT, FINAL_SEGMENT_SEPARATOR_UNNAMED, ')?'   # UUID is not there for new tasks
 ])
 
 
