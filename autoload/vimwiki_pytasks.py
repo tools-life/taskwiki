@@ -71,6 +71,7 @@ class VimwikiTask(object):
         self.due = match.group('due')  # TODO: convert to proper timestamp
         self.completed_mark = match.group('completed')
         self.completed = self.completed_mark is 'X'
+        self.line_number = position
 
         # First set the task attribute to None, then try to load it, if possible
         self.task = None
@@ -80,6 +81,8 @@ class VimwikiTask(object):
                 self.task = tw.tasks.get(uuid=self.uuid)
             except tasklib.task.DoesNotExist:
                 pass
+
+        self.parent = self.find_parent_task()
 
     def save_to_tw(self):
         if not self.task:
@@ -94,6 +97,10 @@ class VimwikiTask(object):
         self.uuid = self.task['uuid']
         vim.command('echom "uuid: %s"' % self.uuid)
 
+        # Make parent task dependant on this task
+        if self.parent:
+            self.parent['depends'] = self.task['uuid']
+
         # Mark task as done. This works fine with already completed tasks.
         if self.completed:
             self.task.done()
@@ -107,7 +114,6 @@ class VimwikiTask(object):
         # TODO: update due
         self.completed = (self.task['status'] == u'completed')
 
-
     def __str__(self):
         self.update_from_tw()
 
@@ -120,6 +126,13 @@ class VimwikiTask(object):
             '  #',
             self.uuid or 'TW-NOT_SYNCED'
         ])
+
+    def find_parent_task(self):
+        for i in reversed(range(0, self.line_number)):
+            if re.search(TASKS_TO_SAVE_TO_TW, vim.current.buffer[i]):
+                task = VimwikiTask(line, i)
+                if len(task.indent) < len(self.indent):
+                    return task
 
 
 def load_update_incomplete_tasks():
