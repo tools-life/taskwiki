@@ -30,7 +30,7 @@ TASKS_TO_SAVE_TO_TW = ''.join([
     '(', UUID_COMMENT, FINAL_SEGMENT_SEPARATOR_UNNAMED, ')?'   # UUID is not there for new tasks
 ])
 
-GENERIC_TASK = ''.join([
+GENERIC_TASK = re.compile(''.join([
     EMPTY_SPACE,
     BRACKET_OPENING,
     COMPLETION_MARK,
@@ -39,7 +39,7 @@ GENERIC_TASK = ''.join([
     FINAL_SEGMENT_SEPARATOR_UNNAMED,
     '(', DUE, FINAL_SEGMENT_SEPARATOR_UNNAMED, ')?'  # Due is optional
     '(', UUID_COMMENT, FINAL_SEGMENT_SEPARATOR_UNNAMED, ')?'   # UUID is not there for new tasks
-])
+]))
 
 
 """
