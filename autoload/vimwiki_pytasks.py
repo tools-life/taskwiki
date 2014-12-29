@@ -139,11 +139,17 @@ class VimwikiTask(object):
         if self.completed and (self.task.pending or self.task.waiting):
             self.task.done()
 
-    def update_from_tw(self):
+
+    def update_from_tw(self, refresh=False):
         if not self.task:
             return
 
-        self.task.refresh()
+        # We refresh only if specified, since sometimes we
+        # know that the TW task is up to date (e.g. because we just
+        # loaded the object)
+        if refresh:
+            self.task.refresh()
+
         self.text = self.task['description']
         # TODO: update due
         self.completed = (self.task['status'] == u'completed')
