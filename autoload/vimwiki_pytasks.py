@@ -176,7 +176,7 @@ class VimwikiTask(object):
                     return task
 
 
-def load_update_incomplete_tasks():
+def update_from_tw():
     """
     Updates all the incomplete tasks in the vimwiki file if the info from TW is different.
     """
@@ -195,5 +195,5 @@ def load_update_incomplete_tasks():
     vim.command('echom "lines: %d"' % number_of_lines)
 
 if __name__ == '__main__':
-    load_update_incomplete_tasks()
+    update_from_tw()
 
