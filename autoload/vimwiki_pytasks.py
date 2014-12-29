@@ -184,12 +184,11 @@ def update_from_tw():
     for i in range(len(vim.current.buffer)):
         line = vim.current.buffer[i]
 
-        if re.search(TASKS_TO_SAVE_TO_TW, line):
-            task = VimwikiTask(line, i)
-            task.save_to_tw()
-            line = str(task)
+        if re.search(GENERIC_TASK, line):
+            task = cache[i]
+            task.update_from_tw()
+            task.update_in_buffer()
 
-        vim.current.buffer[i] = line
 
     number_of_lines = len(vim.current.buffer)
     vim.command('echom "lines: %d"' % number_of_lines)
