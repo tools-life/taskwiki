@@ -190,8 +190,24 @@ def update_from_tw():
             task.update_in_buffer()
 
 
-    number_of_lines = len(vim.current.buffer)
-    vim.command('echom "lines: %d"' % number_of_lines)
+def update_to_tw():
+    """
+    Updates all tasks that differ from their TaskWarrior representation.
+    """
+
+    cache.reset()
+
+    for i in range(len(vim.current.buffer)):
+        line = vim.current.buffer[i]
+
+        # First load all the tasks to the cache (this will set dependency sets)
+        if re.search(GENERIC_TASK, line):
+            task = cache[i]
+
+    for task in cache:
+        task.save_to_tw()
+        task.update_in_buffer()
+
 
 if __name__ == '__main__':
     update_from_tw()
