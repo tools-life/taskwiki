@@ -136,7 +136,7 @@ class VimwikiTask(object):
             self.uuid = self.task['uuid']
 
         # Mark task as done. This works fine with already completed tasks.
-        if self.completed:
+        if self.completed and (self.task.pending or self.task.waiting):
             self.task.done()
 
     def update_from_tw(self):
