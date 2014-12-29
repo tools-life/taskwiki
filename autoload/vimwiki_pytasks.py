@@ -170,8 +170,8 @@ class VimwikiTask(object):
 
     def find_parent_task(self):
         for i in reversed(range(0, self.line_number)):
-            if re.search(TASKS_TO_SAVE_TO_TW, vim.current.buffer[i]):
-                task = VimwikiTask(line, i)
+            if re.search(GENERIC_TASK, vim.current.buffer[i]):
+                task = cache[i]
                 if len(task.indent) < len(self.indent):
                     return task
 
