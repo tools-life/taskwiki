@@ -154,9 +154,10 @@ class VimwikiTask(object):
         # TODO: update due
         self.completed = (self.task['status'] == u'completed')
 
-    def __str__(self):
-        self.update_from_tw()
+    def update_in_buffer(self):
+        vim.current.buffer[self.line_number] = str(self)
 
+    def __str__(self):
         return ''.join([
             self.indent,
             '* [',
