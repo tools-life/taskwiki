@@ -132,13 +132,8 @@ class VimwikiTask(object):
             self.task.save()
 
         # Load the UUID
-        self.task.refresh()
-        self.uuid = self.task['uuid']
-        vim.command('echom "uuid: %s"' % self.uuid)
-
-        # Make parent task dependant on this task
-        if self.parent:
-            self.parent['depends'] = self.task['uuid']
+        if not self.uuid:
+            self.uuid = self.task['uuid']
 
         # Mark task as done. This works fine with already completed tasks.
         if self.completed:
