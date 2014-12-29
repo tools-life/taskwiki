@@ -97,6 +97,11 @@ class VimwikiTask(object):
         self.completed = self.completed_mark is 'X'
         self.line_number = position
 
+        # We need to track depedency set in a extra attribute, since
+        # this may be a new task, and hence it need not to be saved yet.
+        # We circumvent this problem by iteration order in the TaskCache
+        self.add_dependencies = set()
+
         # First set the task attribute to None, then try to load it, if possible
         self.task = None
 
@@ -110,6 +115,10 @@ class VimwikiTask(object):
 
 
         self.parent = self.find_parent_task()
+
+        # Make parent task dependant on this task
+        if self.parent:
+            self.parent.add_dependencies |= set([self])
 
     def save_to_tw(self):
 
