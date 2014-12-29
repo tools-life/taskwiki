@@ -54,8 +54,32 @@ How this plugin works:
 
 tw = TaskWarrior()
 
-def get_task(uuid):
-    return tw.tasks.get(uuid=uuid)
+class TaskCache(object):
+    def __init__(self):
+        self.cache = dict()
+
+    def __getitem__(self, key):
+        task = self.cache.get(key)
+
+        if task is None:
+            task = VimwikiTask(vim.current.buffer[key], key)
+            self.cache[key] = task
+
+        return task
+
+    def __iter__(self):
+        while self.cache.keys():
+            for key in list(self.cache.keys()):
+                task = self.cache[key]
+                if all([t.line_number not in self.cache.keys()
+                        for t in task.add_dependencies]):
+                    del self.cache[key]
+                    yield task
+
+    def reset(self):
+        self.cache = dict()
+
+cache = TaskCache()
 
 
 class VimwikiTask(object):
