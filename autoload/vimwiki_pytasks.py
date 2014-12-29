@@ -103,15 +103,16 @@ class VimwikiTask(object):
         if self.uuid:
             try:
                 self.task = tw.tasks.get(uuid=self.uuid)
-            except tasklib.task.DoesNotExist:
-                pass
+            except Task.DoesNotExist:
+                self.task = Task(tw)
+        else:
+            self.task = Task(tw)
+
 
         self.parent = self.find_parent_task()
 
     def save_to_tw(self):
-        if not self.task:
-            self.task = Task(tw)
-    
+
         # Push the values to the Task
         self.task['description'] = self.text
         self.task.save()
