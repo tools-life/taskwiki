@@ -122,9 +122,14 @@ class VimwikiTask(object):
 
     def save_to_tw(self):
 
-        # Push the values to the Task
-        self.task['description'] = self.text
-        self.task.save()
+        # Push the values to the Task only if the Vimwiki representation
+        # somehow differs
+        # TODO: Check more than description
+        if self.task['description'] != self.text:
+            self.task['description'] = self.text
+            self.task['depends'] |= set(s.task for s in self.add_dependencies
+                                        if not s.task.completed)
+            self.task.save()
 
         # Load the UUID
         self.task.refresh()
