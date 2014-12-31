@@ -1,5 +1,5 @@
 let s:plugin_path = escape(expand('<sfile>:p:h'), '\')
-execute 'pyfile ' . s:plugin_path . '/../autoload/vimwiki_pytasks.py'
+execute 'pyfile ' . s:plugin_path . '/../autoload/vimwiki-pytasks.py'
 
 augroup vimwiki_pytasks
     " when saving the file sync the tasks from vimwiki to TW
