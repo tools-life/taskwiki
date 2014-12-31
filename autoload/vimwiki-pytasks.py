@@ -17,6 +17,7 @@ UUID = r'(?P<uuid>{0})'.format(UUID_UNNAMED)
 TEXT = r'(?P<text>.+(?<!{0})(?<!\s))'.format(UUID_UNNAMED)
 DUE = r'(?P<due>\(\d{4}-\d\d-\d\d( \d\d:\d\d)?\))'
 COMPLETION_MARK = r'(?P<completed>.)'
+PRIORITY = r'(?P<priority>!{1,3})'
 UUID_COMMENT = '#{0}'.format(UUID)
 
 # Middle building blocks
@@ -37,8 +38,9 @@ GENERIC_TASK = re.compile(''.join([
     BRACKET_CLOSING,
     TEXT,
     FINAL_SEGMENT_SEPARATOR_UNNAMED,
-    '(', DUE, FINAL_SEGMENT_SEPARATOR_UNNAMED, ')?'  # Due is optional
-    '(', UUID_COMMENT, FINAL_SEGMENT_SEPARATOR_UNNAMED, ')?'   # UUID is not there for new tasks
+    '(', PRIORITY, FINAL_SEGMENT_SEPARATOR_UNNAMED, ')?'
+    '(', DUE, FINAL_SEGMENT_SEPARATOR_UNNAMED, ')?'
+    '(', UUID_COMMENT, FINAL_SEGMENT_SEPARATOR_UNNAMED, ')?'  # UUID is not there for new tasks
 ]))
 
 
@@ -82,6 +84,14 @@ class TaskCache(object):
 cache = TaskCache()
 
 
+def convert_priority_from_tw_format(priority):
+    return {None: 0, 'L': 1, 'M': 2, 'H': 3}[priority]
+
+
+def convert_priority_to_tw_format(priority):
+    return {0: None, 1: 'L', 2: 'M', 3: 'H'}[priority]
+
+
 class VimwikiTask(object):
     def __init__(self, line, position):
         """
@@ -96,6 +106,7 @@ class VimwikiTask(object):
         self.completed_mark = match.group('completed')
         self.completed = self.completed_mark is 'X'
         self.line_number = position
+        self.priority = len(match.group('priority') or []) # This is either 0,1,2 or 3
 
         # We need to track depedency set in a extra attribute, since
         # this may be a new task, and hence it need not to be saved yet.
@@ -124,13 +135,30 @@ class VimwikiTask(object):
         if self.parent:
             self.parent.add_dependencies |= set([self])
 
+    @property
+    def priority_from_tw_format(self):
+        return convert_priority_from_tw_format(self.task['priority'])
+
+    @property
+    def priority_to_tw_format(self):
+        return convert_priority_to_tw_format(self.priority)
+
+    @property
+    def tainted(self):
+        return any([
+            self.task['description'] != self.text,
+            self.task['priority'] != self.priority_to_tw_format,
+        ])
+
     def save_to_tw(self):
 
         # Push the values to the Task only if the Vimwiki representation
         # somehow differs
         # TODO: Check more than description
-        if self.task['description'] != self.text:
+        if self.tainted:
             self.task['description'] = self.text
+            self.task['priority'] = self.priority_to_tw_format
+            # TODO: this does not solve the issue of changed or removed deps (moved task)
             self.task['depends'] |= set(s.task for s in self.add_dependencies
                                         if not s.task.completed)
             self.task.save()
@@ -155,7 +183,7 @@ class VimwikiTask(object):
             self.task.refresh()
 
         self.text = self.task['description']
-        # TODO: update due
+        self.priority = self.priority_from_tw_format
         self.completed = (self.task['status'] == u'completed')
 
     def update_in_buffer(self):
@@ -168,6 +196,7 @@ class VimwikiTask(object):
             'X' if self.completed else self.completed_mark,
             '] ',
             self.text,
+            ' ' + '!' * self.priority if self.priority else ''
             '  #',
             self.uuid or 'TW-NOT_SYNCED'
         ])
