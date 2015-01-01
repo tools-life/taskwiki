@@ -1,6 +1,8 @@
-import vim
+import pytz
 import re
+import vim
 
+from datetime import datetime
 from tasklib.task import TaskWarrior, Task
 
 # Unnamed building blocks
@@ -40,6 +42,7 @@ GENERIC_TASK = re.compile(''.join([
     '(', UUID_COMMENT, FINAL_SEGMENT_SEPARATOR_UNNAMED, ')?'  # UUID is not there for new tasks
 ]))
 
+DATETIME_FORMAT = "(%Y-%m-%d %H:%M)"
 
 """
 How this plugin works:
@@ -52,6 +55,7 @@ How this plugin works:
 
 
 tw = TaskWarrior()
+local_timezone = pytz.timezone('Europe/Bratislava')
 
 class TaskCache(object):
     def __init__(self):
@@ -125,6 +129,19 @@ class VimwikiTask(object):
         else:
             self.task = Task(tw)
 
+        # To get local time aware timestamp, we need to convert to from local datetime
+        # to UTC time, since that is what tasklib (correctly) uses
+        if self.due:
+            # With strptime, we get a native datetime object
+            due_native_datetime = datetime.strptime(self.due, DATETIME_FORMAT)
+            # We need to interpret it as timezone aware object in user's timezone
+            # This properly handles DST, timezone offset and everything
+            due_local_datetime = local_timezone.localize(due_native_datetime)
+            # Convert to UTC
+            due_utc_datetime = due_local_datetime.astimezone(pytz.utc)
+            # And then convert back to native datetime, since that is what
+            # tasklib uses
+            self.due = due_utc_datetime.replace(tzinfo=None)
 
         self.parent = self.find_parent_task()
 
@@ -141,10 +158,17 @@ class VimwikiTask(object):
         return convert_priority_to_tw_format(self.priority)
 
     @property
+    def due_local_tz_string(self):
+        due_utc_datetime = self.due.replace(tzinfo=pytz.utc)
+        due_local_datetime = due_utc_datetime.astimezone(local_timezone)
+        return due_local_datetime.strftime(DATETIME_FORMAT)
+
+    @property
     def tainted(self):
         return any([
             self.task['description'] != self.text,
             self.task['priority'] != self.priority_to_tw_format,
+            self.task['due'] != self.due,
         ])
 
     def save_to_tw(self):
@@ -155,6 +179,7 @@ class VimwikiTask(object):
         if self.tainted:
             self.task['description'] = self.text
             self.task['priority'] = self.priority_to_tw_format
+            self.task['due'] = self.due
             # TODO: this does not solve the issue of changed or removed deps (moved task)
             self.task['depends'] |= set(s.task for s in self.add_dependencies
                                         if not s.task.completed)
@@ -182,6 +207,7 @@ class VimwikiTask(object):
         self.text = self.task['description']
         self.priority = self.priority_from_tw_format
         self.completed = (self.task['status'] == u'completed')
+        self.due = self.task['due']
 
     def update_in_buffer(self):
         vim.current.buffer[self.line_number] = str(self)
@@ -194,6 +220,7 @@ class VimwikiTask(object):
             '] ',
             self.text,
             ' ' + '!' * self.priority if self.priority else '',
+            ' ' + self.due_local_tz_string if self.due else '',
             '  #',
             self.uuid or 'TW-NOT_SYNCED'
         ])
