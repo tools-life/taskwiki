@@ -28,17 +28,6 @@ TEXT = r'(?P<text>.+' + ''.join(['(?<!%s)' % suffix for suffix in TEXT_FORBIDDEN
 COMPLETION_MARK = r'(?P<completed>.)'
 PRIORITY = r'(?P<priority>!{1,3})'
 
-# Middle building blocks
-INCOMPLETE_TASK_PREFIX = EMPTY_SPACE + BRACKET_OPENING + '[^X]' + BRACKET_CLOSING + TEXT
-
-# Final regexps
-TASKS_TO_SAVE_TO_TW = ''.join([
-    INCOMPLETE_TASK_PREFIX,  # any amount of whitespace followed by uncompleted square
-    FINAL_SEGMENT_SEPARATOR_UNNAMED,
-    '(', DUE, FINAL_SEGMENT_SEPARATOR_UNNAMED, ')?'  # Due is optional
-    '(', UUID_COMMENT, FINAL_SEGMENT_SEPARATOR_UNNAMED, ')?'   # UUID is not there for new tasks
-])
-
 GENERIC_TASK = re.compile(''.join([
     EMPTY_SPACE,
     BRACKET_OPENING,
