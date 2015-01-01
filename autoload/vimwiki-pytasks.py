@@ -15,7 +15,8 @@ FINAL_SEGMENT_SEPARATOR_UNNAMED = r'(\s+|$)'
 TEXT_FORBIDDEN_SUFFIXES = (
     r'\s',  # Text cannot end with whitespace
     r' !', r' !!', r' !!!',  # Any priority value
-    DUE_UNNAMED,
+    r'\(\d{4}-\d\d-\d\d\)', r'\(\d{4}-\d\d-\d\d \d\d:\d\d\)',  # Any datetime value
+    r'\(\d{4}-\d\d-\d\d',  # Any datetime value
     UUID_UNNAMED,  # Text cannot end with UUID
 )
 
@@ -26,7 +27,7 @@ EMPTY_SPACE = r'(?P<space>\s*)'
 UUID = r'(?P<uuid>{0})'.format(UUID_UNNAMED)
 DUE = r'(?P<due>{0})'.format(DUE_UNNAMED)
 UUID_COMMENT = '#{0}'.format(UUID)
-TEXT = r'(?P<text>.+' + ''.join(['(?<!%s)' % suffix for suffix in TEXT_FORBIDDEN_SUFFIXES])
+TEXT = r'(?P<text>.+' + ''.join(['(?<!%s)' % suffix for suffix in TEXT_FORBIDDEN_SUFFIXES]) + ')'
 COMPLETION_MARK = r'(?P<completed>.)'
 PRIORITY = r'(?P<priority>!{1,3})'
 
