@@ -193,7 +193,7 @@ class VimwikiTask(object):
             'X' if self.completed else self.completed_mark,
             '] ',
             self.text,
-            ' ' + '!' * self.priority if self.priority else ''
+            ' ' + '!' * self.priority if self.priority else '',
             '  #',
             self.uuid or 'TW-NOT_SYNCED'
         ])
