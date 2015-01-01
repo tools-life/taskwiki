@@ -15,11 +15,11 @@ It uses excellent tasklib library to communicate with TaskWarrior.
   * Description
   * Task status (completion)
   * Dependency sets (sets subtasks as dependencies of parent tasks)
+  * Due dates
+  * Priority
 
 ### Planned features
 * Updating
-  * Due dates
-  * Priority
   * Task deletion (when removed from the Vimwiki file, if it was there previously)
   * Removals from dependency sets
 
