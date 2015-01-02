@@ -43,6 +43,8 @@ GENERIC_TASK = re.compile(''.join([
     '(', UUID_COMMENT, FINAL_SEGMENT_SEPARATOR_UNNAMED, ')?'  # UUID is not there for new tasks
 ]))
 
+PROJECT_DEFINITION = re.compile(r'Project: (?P<project>.*)(?<!\s)')
+
 DATETIME_FORMAT = "(%Y-%m-%d %H:%M)"
 
 """
@@ -150,6 +152,8 @@ class VimwikiTask(object):
         if self.parent:
             self.parent.add_dependencies |= set([self])
 
+        self.project = self.find_project()
+
     @property
     def priority_from_tw_format(self):
         return convert_priority_from_tw_format(self.task['priority'])
@@ -170,6 +174,7 @@ class VimwikiTask(object):
             self.task['description'] != self.text,
             self.task['priority'] != self.priority_to_tw_format,
             self.task['due'] != self.due,
+            self.task['project'] != self.project,
         ])
 
     def save_to_tw(self):
@@ -184,6 +189,10 @@ class VimwikiTask(object):
             # TODO: this does not solve the issue of changed or removed deps (moved task)
             self.task['depends'] |= set(s.task for s in self.add_dependencies
                                         if not s.task.completed)
+            # Since project is not updated in vimwiki on change per task, push to TW only
+            # if defined
+            if self.project:
+                self.task['project'] = self.project
             self.task.save()
 
         # Load the UUID
@@ -209,6 +218,7 @@ class VimwikiTask(object):
         self.priority = self.priority_from_tw_format
         self.completed = (self.task['status'] == u'completed')
         self.due = self.task['due']
+        self.project = self.task['project']
 
     def update_in_buffer(self):
         vim.current.buffer[self.line_number] = str(self)
@@ -232,6 +242,12 @@ class VimwikiTask(object):
                 task = cache[i]
                 if len(task.indent) < len(self.indent):
                     return task
+
+    def find_project(self):
+        for i in reversed(range(0, self.line_number)):
+            match = re.search(PROJECT_DEFINITION, vim.current.buffer[i])
+            if match:
+                return match.group('project')
 
 
 def update_from_tw():
