@@ -1,4 +1,4 @@
-## vimwiki-pytasks
+## Taskwiki
 
 This is a vim plugin, which aims to provide a integration between vim and taskwarrior. It extends vimwiki plugin and provides bidirecitonal synchronization between TaskWarrior and Vimwiki file.
 
