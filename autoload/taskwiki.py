@@ -217,7 +217,7 @@ class VimwikiTask(object):
 
 
     def update_from_tw(self, refresh=False):
-        if not self.task:
+        if not self.task.saved:
             return
 
         # We refresh only if specified, since sometimes we
