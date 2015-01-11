@@ -126,8 +126,8 @@ class VimwikiTask(object):
             except Task.DoesNotExist:
                 self.task = Task(tw)
                 # If task cannot be loaded, we need to remove the UUID
-                vim.command('echom UUID not found:"%s",'
-                            'will be replaced if saved' % self.uuid)
+                vim.command('echom "UUID not found: %s,'
+                            'will be replaced if saved"' % self.uuid)
                 self.uuid = None
         else:
             self.task = Task(tw)
