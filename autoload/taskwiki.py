@@ -151,9 +151,7 @@ class VimwikiTask(object):
             due_local_datetime = local_timezone.localize(due_native_datetime)
             # Convert to UTC
             due_utc_datetime = due_local_datetime.astimezone(pytz.utc)
-            # And then convert back to native datetime, since that is what
-            # tasklib uses
-            self.due = due_utc_datetime.replace(tzinfo=None)
+            self.due = due_utc_datetime
 
         self.parent = self.find_parent_task()
 
@@ -173,8 +171,10 @@ class VimwikiTask(object):
 
     @property
     def due_local_tz_string(self):
-        due_utc_datetime = self.due.replace(tzinfo=pytz.utc)
-        due_local_datetime = due_utc_datetime.astimezone(local_timezone)
+        if not self.due:
+            return ''
+
+        due_local_datetime = self.due.astimezone(local_timezone)
         return due_local_datetime.strftime(DATETIME_FORMAT)
 
     @property
