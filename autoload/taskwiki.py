@@ -46,6 +46,7 @@ GENERIC_TASK = re.compile(''.join([
 PROJECT_DEFINITION = re.compile(r'Project: (?P<project>.*)(?<!\s)')
 
 DATETIME_FORMAT = "(%Y-%m-%d %H:%M)"
+DATE_FORMAT = "(%Y-%m-%d)"
 
 """
 How this plugin works:
@@ -136,7 +137,15 @@ class VimwikiTask(object):
         # to UTC time, since that is what tasklib (correctly) uses
         if self.due:
             # With strptime, we get a native datetime object
-            due_native_datetime = datetime.strptime(self.due, DATETIME_FORMAT)
+            try:
+                due_native_datetime = datetime.strptime(self.due, DATETIME_FORMAT)
+            except ValueError:
+                try:
+                    due_native_datetime = datetime.strptime(self.due, DATE_FORMAT)
+                except ValueError:
+                    vim.command('echom "Taskwiki: Invalid timestamp on line %s, '
+                                'ignored."' % self.line_number)
+
             # We need to interpret it as timezone aware object in user's timezone
             # This properly handles DST, timezone offset and everything
             due_local_datetime = local_timezone.localize(due_native_datetime)
