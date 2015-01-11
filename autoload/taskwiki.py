@@ -241,11 +241,10 @@ class VimwikiTask(object):
             '* [',
             'X' if self.completed else self.completed_mark,
             '] ',
-            self.text,
+            self.text if self.text else 'TEXT MISSING?',
             ' ' + '!' * self.priority if self.priority else '',
             ' ' + self.due_local_tz_string if self.due else '',
-            '  #',
-            self.uuid or 'TW-NOT_SYNCED'
+            '  #' + self.uuid if self.uuid else '',
         ])
 
     def find_parent_task(self):
