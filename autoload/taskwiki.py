@@ -204,6 +204,9 @@ class VimwikiTask(object):
                 self.task['project'] = self.project
             self.task.save()
 
+            # If we saved the task, we need to update. Hooks may have chaned data.
+            self.update_from_tw(refresh=False)
+
         # Load the UUID
         if not self.uuid:
             self.uuid = self.task['uuid']
