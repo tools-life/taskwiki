@@ -1,5 +1,6 @@
 import vim
 
+from taskwiki.task import VimwikiTask
 
 class TaskCache(object):
     """

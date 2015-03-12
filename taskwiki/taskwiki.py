@@ -1,17 +1,15 @@
-import copy
-import pytz
+import sys
 import re
 import vim
 
-from datetime import datetime
 from tasklib.task import TaskWarrior, Task
 
-vim.command("echom '%s'" % vim.eval("s:plugin_path"))
-# update the sys path to include the jedi_vim script
-sys.path.insert(0, vim.eval("s:plugin_path") + "/taskwiki")
+# Insert the taskwiki on the python path
+sys.path.insert(0, vim.eval("s:plugin_path"))
 
-from regexp import *
-from task import VimwikiTask
+from taskwiki.regexp import *
+from taskwiki.task import VimwikiTask
+from taskwiki.cache import TaskCache
 
 """
 How this plugin works:
@@ -24,8 +22,6 @@ How this plugin works:
 
 
 tw = TaskWarrior()
-local_timezone = pytz.timezone('Europe/Bratislava')
-
 cache = TaskCache(tw)
 
 
@@ -61,11 +57,6 @@ def update_to_tw():
         task.save_to_tw()
         task.update_in_buffer()
 
-
-class ViewPort(object):
-    """
-    Represents viewport with a given filter.
-    """
 
 if __name__ == '__main__':
     update_from_tw()
