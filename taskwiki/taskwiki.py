@@ -5,11 +5,11 @@ import vim
 from tasklib.task import TaskWarrior, Task
 
 # Insert the taskwiki on the python path
-sys.path.insert(0, vim.eval("s:plugin_path"))
+sys.path.insert(0, vim.eval("s:plugin_path") + '/taskwiki')
 
-from taskwiki.regexp import *
-from taskwiki.task import VimwikiTask
-from taskwiki.cache import TaskCache
+from regexp import *
+from task import VimwikiTask
+from cache import TaskCache
 
 """
 How this plugin works:

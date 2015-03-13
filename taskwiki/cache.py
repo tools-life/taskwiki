@@ -1,7 +1,7 @@
 import copy
 import vim
 
-from taskwiki.task import VimwikiTask
+from task import VimwikiTask
 
 
 class TaskCache(object):
