@@ -1,6 +1,8 @@
+import copy
 import vim
 
 from taskwiki.task import VimwikiTask
+
 
 class TaskCache(object):
     """
@@ -9,6 +11,7 @@ class TaskCache(object):
     """
 
     def __init__(self, tw):
+        self.uuid_cache = dict()
         self.cache = dict()
         self.tw = tw
 
@@ -19,16 +22,19 @@ class TaskCache(object):
             task = VimwikiTask(vim.current.buffer[key], key, self.tw, self)
             self.cache[key] = task
 
+            if task.uuid:
+                self.uuid_cache[task.uuid] = task
+
         return task
 
     def __iter__(self):
-#        iterated_cache = {
-        while self.cache.keys():
-            for key in list(self.cache.keys()):
-                task = self.cache[key]
-                if all([t.line_number not in self.cache.keys()
+        iterated_cache = copy.copy(self.cache)
+        while iterated_cache.keys():
+            for key in list(iterated_cache.keys()):
+                task = iterated_cache[key]
+                if all([t.line_number not in iterated_cache.keys()
                         for t in task.add_dependencies]):
-                    del self.cache[key]
+                    del iterated_cache[key]
                     yield task
 
     def reset(self):
