@@ -39,7 +39,16 @@ class TaskCache(object):
 
     def reset(self):
         self.cache = dict()
+        self.uuid_cache = dict()
 
-#    def update_tasks(self):
-#        tasks = [t
+    def update_tasks(self):
+        # Select all tasks in the files that have UUIDs
+        uuids = [t.uuid for t in self.cache.values() if t.uuid]
+
+        # Get them out of TaskWarrior at once
+        tasks = self.tw.filter(uuid=','.join(tasks))
+
+        # Update each task in the cache
+        for task in tasks:
+            self.uuid_cache[task['uuid']].task = task
 
