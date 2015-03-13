@@ -21,6 +21,8 @@ class VimwikiTask(object):
         self.tw = tw
         self.cache = cache
 
+        self._task = None
+
         match = re.search(GENERIC_TASK, line)
         self.indent = match.group('space')
         self.text = match.group('text')
@@ -75,13 +77,15 @@ class VimwikiTask(object):
             try:
                 self._task = self.tw.tasks.get(uuid=self.uuid)
             except Task.DoesNotExist:
-                self.task = Task(self.tw)
+                self._task = Task(self.tw)
                 # If task cannot be loaded, we need to remove the UUID
                 vim.command('echom "UUID not found: %s,'
                             'will be replaced if saved"' % self.uuid)
                 self.uuid = None
         else:
-            self.task = Task(self.tw)
+            self._task = Task(self.tw)
+
+        return self._task
 
     @task.setter
     def task(self, task):
