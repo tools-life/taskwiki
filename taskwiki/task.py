@@ -1,3 +1,4 @@
+import datetime
 import vim
 
 from regexp import *
@@ -35,21 +36,6 @@ class VimwikiTask(object):
         # We circumvent this problem by iteration order in the TaskCache
         self.add_dependencies = set()
 
-        # First set the task attribute to None, then try to load it, if possible
-        self.task = None
-
-        if self.uuid:
-            try:
-                self.task = self.tw.tasks.get(uuid=self.uuid)
-            except Task.DoesNotExist:
-                self.task = Task(self.tw)
-                # If task cannot be loaded, we need to remove the UUID
-                vim.command('echom "UUID not found: %s,'
-                            'will be replaced if saved"' % self.uuid)
-                self.uuid = None
-        else:
-            self.task = Task(self.tw)
-
         # To get local time aware timestamp, we need to convert to from local datetime
         # to UTC time, since that is what tasklib (correctly) uses
         if self.due:
@@ -77,6 +63,35 @@ class VimwikiTask(object):
             self.parent.add_dependencies |= set([self])
 
         self.project = self.find_project()
+
+    @property
+    def task(self):
+        # Return the corresponding task if alrady set
+        if self._task is not None:
+            return self._task
+
+        # Else try to load it or create a new one
+        if self.uuid:
+            try:
+                self._task = self.tw.tasks.get(uuid=self.uuid)
+            except Task.DoesNotExist:
+                self.task = Task(self.tw)
+                # If task cannot be loaded, we need to remove the UUID
+                vim.command('echom "UUID not found: %s,'
+                            'will be replaced if saved"' % self.uuid)
+                self.uuid = None
+        else:
+            self.task = Task(self.tw)
+
+    @task.setter
+    def task(self, task):
+        # Make sure we're updating by a correct task
+        if task['uuid'] != self.uuid:
+            raise ValueError("Task '%s' with '%s' cannot be updated by "
+                             "task with uuid '%s'."
+                             % (self.text, self.uuid, task['uuid']))
+
+        self._task = task
 
     @property
     def priority_from_tw_format(self):
@@ -131,7 +146,6 @@ class VimwikiTask(object):
         # Mark task as done. This works fine with already completed tasks.
         if self.completed and (self.task.pending or self.task.waiting):
             self.task.done()
-
 
     def update_from_tw(self, refresh=False):
         if not self.task.saved:
