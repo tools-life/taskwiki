@@ -31,10 +31,9 @@ def update_from_tw():
     """
 
     for i in range(len(vim.current.buffer)):
-        line = vim.current.buffer[i]
+        task = VimwikiTask.from_line(cache, i)
 
-        if re.search(GENERIC_TASK, line):
-            task = cache[i]
+        if task:
             task.update_from_tw()
             task.update_in_buffer()
 
@@ -45,15 +44,15 @@ def update_to_tw():
     """
 
     cache.reset()
+    tasks = []
 
     for i in range(len(vim.current.buffer)):
-        line = vim.current.buffer[i]
+        task = VimwikiTask.from_line(cache, i)
 
-        # First load all the tasks to the cache (this will set dependency sets)
-        if re.search(GENERIC_TASK, line):
-            task = cache[i]
+        if task:
+            tasks.append(task)
 
-    for task in cache:
+    for task in tasks:
         task.save_to_tw()
         task.update_in_buffer()
 

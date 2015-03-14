@@ -1,8 +1,6 @@
 import copy
 import vim
 
-from task import VimwikiTask
-
 
 class TaskCache(object):
     """
@@ -11,7 +9,6 @@ class TaskCache(object):
     """
 
     def __init__(self, tw):
-        self.uuid_cache = dict()
         self.cache = dict()
         self.tw = tw
 
@@ -19,11 +16,8 @@ class TaskCache(object):
         task = self.cache.get(key)
 
         if task is None:
-            task = VimwikiTask(vim.current.buffer[key], key, self.tw, self)
+            task = self.tw.tasks.get(uuid=key)
             self.cache[key] = task
-
-            if task.uuid:
-                self.uuid_cache[task.uuid] = task
 
         return task
 
@@ -39,16 +33,15 @@ class TaskCache(object):
 
     def reset(self):
         self.cache = dict()
-        self.uuid_cache = dict()
 
     def update_tasks(self):
         # Select all tasks in the files that have UUIDs
-        uuids = [t.uuid for t in self.cache.values() if t.uuid]
+        uuids = [t['uuid'] for t in self.cache.values() if t.saved]
 
         # Get them out of TaskWarrior at once
         tasks = self.tw.filter(uuid=','.join(tasks))
 
         # Update each task in the cache
         for task in tasks:
-            self.uuid_cache[task['uuid']].task = task
+            self.cache[task['uuid']] = task
 
