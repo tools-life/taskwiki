@@ -14,29 +14,36 @@ def convert_priority_to_tw_format(priority):
 
 
 class VimwikiTask(object):
-    def __init__(self, line, position, tw, cache):
+    def __init__(self, cache):
         """
         Constructs a Vimwiki task from line at given position at the buffer
         """
-        self.tw = tw
         self.cache = cache
-
+        self.tw = cache.tw
         self._task = None
 
+    @classmethod
+    def from_line(cls, cache, number):
+        """
+        Creates a Vimwiki object from given line in the buffer.
+          - If line does not contain a Vimwiki task, returns None.
+        """
+
         match = re.search(GENERIC_TASK, line)
+
+        if not match:
+            return None
+
+        self = cls(cache)
+
         self.indent = match.group('space')
         self.text = match.group('text')
         self.uuid = match.group('uuid')  # can be None for new tasks
         self.due = match.group('due')  # TODO: convert to proper timestamp
         self.completed_mark = match.group('completed')
         self.completed = self.completed_mark is 'X'
-        self.line_number = position
+        self.line_number = number
         self.priority = len(match.group('priority') or []) # This is either 0,1,2 or 3
-
-        # We need to track depedency set in a extra attribute, since
-        # this may be a new task, and hence it need not to be saved yet.
-        # We circumvent this problem by iteration order in the TaskCache
-        self.add_dependencies = set()
 
         # To get local time aware timestamp, we need to convert to from local datetime
         # to UTC time, since that is what tasklib (correctly) uses
@@ -57,6 +64,11 @@ class VimwikiTask(object):
             # Convert to UTC
             due_utc_datetime = due_local_datetime.astimezone(pytz.utc)
             self.due = due_utc_datetime
+
+        # We need to track depedency set in a extra attribute, since
+        # this may be a new task, and hence it need not to be saved yet.
+        # We circumvent this problem by iteration order in the TaskCache
+        self.add_dependencies = set()
 
         self.parent = self.find_parent_task()
 
