@@ -21,7 +21,7 @@ class VimwikiTask(object):
         self.cache = cache
         self.tw = cache.tw
         self._task = None
-        self.data = dict()
+        self.data = dict(indent='', completed_mark=' ')
 
     def __getitem__(self, key):
         return self.data.get(key)
