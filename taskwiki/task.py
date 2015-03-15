@@ -90,7 +90,7 @@ class VimwikiTask(object):
         # Else try to load it or create a new one
         if self.uuid:
             try:
-                self._task = self.tw.tasks.get(uuid=self.uuid)
+                self._task = self.cache[self.uuid]
             except Task.DoesNotExist:
                 self._task = Task(self.tw)
                 # If task cannot be loaded, we need to remove the UUID
