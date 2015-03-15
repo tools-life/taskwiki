@@ -2,7 +2,7 @@ import datetime
 import vim
 
 from regexp import *
-from tasklib.task import Task
+from tasklib.task import Task, SerializingObject
 
 
 def convert_priority_from_tw_format(priority):
@@ -50,20 +50,17 @@ class VimwikiTask(object):
         if self.due:
             # With strptime, we get a native datetime object
             try:
-                due_native_datetime = datetime.strptime(self.due, DATETIME_FORMAT)
+                parsed_due = datetime.strptime(self.due, DATETIME_FORMAT)
             except ValueError:
                 try:
-                    due_native_datetime = datetime.strptime(self.due, DATE_FORMAT)
+                    parsed_due = datetime.strptime(self.due, DATE_FORMAT)
                 except ValueError:
                     vim.command('echom "Taskwiki: Invalid timestamp on line %s, '
                                 'ignored."' % self.line_number)
 
             # We need to interpret it as timezone aware object in user's timezone
             # This properly handles DST, timezone offset and everything
-            due_local_datetime = local_timezone.localize(due_native_datetime)
-            # Convert to UTC
-            due_utc_datetime = due_local_datetime.astimezone(pytz.utc)
-            self.due = due_utc_datetime
+            self.due = SerializingObject().datetime_normalizer(parsed_due)
 
         # We need to track depedency set in a extra attribute, since
         # this may be a new task, and hence it need not to be saved yet.
@@ -116,14 +113,6 @@ class VimwikiTask(object):
     @property
     def priority_to_tw_format(self):
         return convert_priority_to_tw_format(self.priority)
-
-    @property
-    def due_local_tz_string(self):
-        if not self.due:
-            return ''
-
-        due_local_datetime = self.due.astimezone(local_timezone)
-        return due_local_datetime.strftime(DATETIME_FORMAT)
 
     @property
     def tainted(self):
@@ -190,7 +179,7 @@ class VimwikiTask(object):
             '] ',
             self.text if self.text else 'TEXT MISSING?',
             ' ' + '!' * self.priority if self.priority else '',
-            ' ' + self.due_local_tz_string if self.due else '',
+            ' ' + self.due.strftime(DATETIME_FORMAT) if self.due else '',
             '  #' + self.uuid if self.uuid else '',
         ])
 
