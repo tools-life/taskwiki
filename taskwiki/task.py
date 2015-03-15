@@ -148,7 +148,7 @@ class VimwikiTask(object):
             self.task.save()
 
             # If we saved the task, we need to update. Hooks may have chaned data.
-            self.update_from_tw(refresh=False)
+            self.update_from_task(refresh=False)
 
         # Load the UUID
         if not self.uuid:
@@ -158,7 +158,7 @@ class VimwikiTask(object):
         if self.completed and (self.task.pending or self.task.waiting):
             self.task.done()
 
-    def update_from_tw(self):
+    def update_from_task(self):
         if not self.task.saved:
             return
 
