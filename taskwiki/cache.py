@@ -42,7 +42,11 @@ class TaskCache(object):
 
     @property
     def vimwikitask_dependency_order(self):
-        iterated_cache = copy.copy(self.task_cache)
+        iterated_cache = {
+            k:v for k,v in self.vimwikitask_cache.iteritems()
+            if v is not None
+        }
+
         while iterated_cache.keys():
             for key in list(iterated_cache.keys()):
                 task = iterated_cache[key]
@@ -61,6 +65,8 @@ class TaskCache(object):
 
     def update_buffer(self):
         for task in self.vimwikitask_cache.values():
+            if task is None:
+                continue
             task.update_in_buffer()
 
     def save_tasks(self):
