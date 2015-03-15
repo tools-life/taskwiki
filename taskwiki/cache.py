@@ -25,13 +25,17 @@ class TaskCache(object):
                 self.task_cache[key] = task
 
             return task
+
         # Integer keys (line numbers) refer to the VimwikiTask objects
         elif type(key) is int:
             vimwikitask = self.vimwikitask_cache.get(key)
 
             if vimwikitask is None:
                 vimwikitask = VimwikiTask.from_line(self, key)
-                return vimwikitask  # May return None if the line has no task
+                self.vimwikitask_cache[key] = vimwikitask
+
+            return vimwikitask  # May return None if the line has no task
+
         # Anything else is wrong
         else:
             raise ValueError("Wrong key type: %s (%s)" % (key, type(key)))
