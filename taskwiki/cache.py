@@ -40,6 +40,19 @@ class TaskCache(object):
         else:
             raise ValueError("Wrong key type: %s (%s)" % (key, type(key)))
 
+    def __setitem__(self, key, value):
+        # String keys refer to the Task objects
+        if type(key) in (str, unicode):
+            task = self.task_cache[key] = value
+
+        # Integer keys (line numbers) refer to the VimwikiTask objects
+        elif type(key) is int:
+            vimwikitask = self.vimwikitask_cache[key] = value
+
+        # Anything else is wrong
+        else:
+            raise ValueError("Wrong key type: %s (%s)" % (key, type(key)))
+
     @property
     def vimwikitask_dependency_order(self):
         iterated_cache = {
