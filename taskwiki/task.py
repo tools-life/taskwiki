@@ -75,6 +75,12 @@ class VimwikiTask(object):
 
         self.project = self.find_project()
 
+    @classmethod
+    def from_task(cls, cache, task):
+        self = cls(cache)
+        self._task = task
+        self.update_from_task()
+
     @property
     def task(self):
         # Return the corresponding task if alrady set
