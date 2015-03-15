@@ -77,8 +77,12 @@ class TaskCache(object):
         # Select all tasks in the files that have UUIDs
         uuids = [t['uuid'] for t in self.task_cache.values() if t.task.saved]
 
+        # If no task in the file contains UUID, we have no job here
+        if not uuids:
+            return
+
         # Get them out of TaskWarrior at once
-        tasks = self.tw.filter(uuid=','.join(uuids))
+        tasks = self.tw.tasks.filter(uuid=','.join(uuids))
 
         # Update each task in the cache
         for task in tasks:
