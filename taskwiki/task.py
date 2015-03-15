@@ -150,7 +150,7 @@ class VimwikiTask(object):
         # Push the values to the Task only if the Vimwiki representation
         # somehow differs
         # TODO: Check more than description
-        if self.tainted:
+        if self.tainted or not self['uuid']:
             self.task['description'] = self['description']
             self.task['priority'] = self['priority']
             self.task['due'] = self['due']
