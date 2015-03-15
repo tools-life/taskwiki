@@ -85,11 +85,15 @@ class VimwikiTask(object):
 
         self['project'] = self.find_project()
 
+        return self
+
     @classmethod
     def from_task(cls, cache, task):
         self = cls(cache)
         self._task = task
         self.update_from_task()
+
+        return self
 
     @property
     def task(self):
