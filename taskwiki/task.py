@@ -184,6 +184,7 @@ class VimwikiTask(object):
             'completed': (self.task['status'] == u'completed'),
             'due': self.task['due'],
             'project': self.task['project'],
+            'uuid': self.task['uuid'],
             })
 
     def update_in_buffer(self):
