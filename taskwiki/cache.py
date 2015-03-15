@@ -1,6 +1,8 @@
 import copy
 import vim
 
+from task import VimwikiTask
+
 
 class TaskCache(object):
     """
@@ -34,7 +36,8 @@ class TaskCache(object):
         else:
             raise ValueError("Wrong key type: %s (%s)" % (key, type(key)))
 
-    def iterate_vimwiki_tasks(self):
+    @property
+    def vimwikitask_dependency_order(self):
         iterated_cache = copy.copy(self.task_cache)
         while iterated_cache.keys():
             for key in list(iterated_cache.keys()):
@@ -48,12 +51,24 @@ class TaskCache(object):
         self.task_cache = dict()
         self.vimwikitask_cache = dict()
 
+    def load_buffer(self):
+        for i in range(len(vim.current.buffer)):
+            task = self[i]
+
+    def update_buffer(self):
+        for task in self.vimwikitask_cache.values():
+            task.update_in_buffer()
+
+    def save_tasks(self):
+        for task in self.vimwikitask_dependency_order:
+            task.save_to_tw()
+
     def update_tasks(self):
         # Select all tasks in the files that have UUIDs
-        uuids = [t['uuid'] for t in self.task_cache.values() if t.saved]
+        uuids = [t['uuid'] for t in self.task_cache.values() if t.task.saved]
 
         # Get them out of TaskWarrior at once
-        tasks = self.tw.filter(uuid=','.join(tasks))
+        tasks = self.tw.filter(uuid=','.join(uuids))
 
         # Update each task in the cache
         for task in tasks:

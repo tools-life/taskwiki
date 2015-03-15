@@ -30,12 +30,9 @@ def update_from_tw():
     Updates all the incomplete tasks in the vimwiki file if the info from TW is different.
     """
 
-    for i in range(len(vim.current.buffer)):
-        task = VimwikiTask.from_line(cache, i)
-
-        if task:
-            task.update_from_tw()
-            task.update_in_buffer()
+    cache.load_buffer()
+    cache.update_tasks()
+    cache.update_buffer()
 
 
 def update_to_tw():
@@ -44,19 +41,10 @@ def update_to_tw():
     """
 
     cache.reset()
-    tasks = []
-
-    for i in range(len(vim.current.buffer)):
-        task = VimwikiTask.from_line(cache, i)
-
-        if task:
-            tasks.append(task)
-
-    for task in tasks:
-        task.save_to_tw()
-        task.update_in_buffer()
+    cache.load_buffer()
+    cache.save_tasks()
+    cache.update_buffer()
 
 
 if __name__ == '__main__':
     update_from_tw()
-
