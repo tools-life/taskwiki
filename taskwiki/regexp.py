@@ -43,3 +43,10 @@ PROJECT_DEFINITION = re.compile(r'Project: (?P<project>.*)(?<!\s)')
 DATETIME_FORMAT = "(%Y-%m-%d %H:%M)"
 DATE_FORMAT = "(%Y-%m-%d)"
 
+GENERIC_VIEWPORT = re.compile(
+    '[=]+'                 # Heading begging
+    '(?P<name>[^=\|]*)'    # Name of the viewport, all before the | sign
+    '\|'                   # Colon
+    '(?P<filter>[^=\|]*)'  # Filter
+    '[=]+'                 # Header ending
+    )

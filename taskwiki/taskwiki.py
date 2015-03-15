@@ -33,6 +33,7 @@ def update_from_tw():
     cache.load_buffer()
     cache.update_tasks()
     cache.update_buffer()
+    cache.evaluate_viewports()
 
 
 def update_to_tw():

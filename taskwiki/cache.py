@@ -2,6 +2,7 @@ import copy
 import vim
 
 from task import VimwikiTask
+from viewport import ViewPort
 
 
 class TaskCache(object):
@@ -103,3 +104,12 @@ class TaskCache(object):
         for task in tasks:
             self.task_cache[task['uuid']] = task
 
+    def evaluate_viewports(self):
+        for i in range(len(vim.current.buffer)):
+            port = ViewPort.from_line(i, self)
+
+            if port is None:
+                continue
+
+            port.load_tasks()
+            port.sync_with_taskwarrior()
