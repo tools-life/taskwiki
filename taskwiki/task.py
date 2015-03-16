@@ -198,10 +198,10 @@ class VimwikiTask(object):
 
     def find_parent_task(self):
         for i in reversed(range(0, self.line_number)):
-            if re.search(GENERIC_TASK, vim.current.buffer[i]):
-                task = self.cache[i]
-                if len(task['indent']) < len(self['indent']):
-                    return task
+            # The from_line constructor returns None if line doesn't match a task
+            task = self.__class__.from_line(self.cache, i)
+            if task and len(task['indent']) < len(self['indent']):
+                return task
 
     def find_project(self):
         for i in reversed(range(0, self.line_number)):
