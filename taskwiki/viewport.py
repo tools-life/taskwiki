@@ -60,9 +60,9 @@ class ViewPort(object):
         # the filter, and add the tasks that are new. Optionally remove the
         # tasks that are not longer belonging there.
 
-        # Use uuid filter hack to pass raw filter
+        # Split the filter into CLI tokens and filter by the expression
         matching_tasks = set(
-            task for task in self.tw.tasks.filter(uuid=self.taskfilter)
+            task for task in self.tw.tasks.filter(*self.taskfilter.split())
         )
 
         to_add = matching_tasks - self.tasks
