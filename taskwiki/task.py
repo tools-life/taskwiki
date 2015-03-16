@@ -173,11 +173,13 @@ class VimwikiTask(object):
         if not self.task.saved:
             return
 
-        self.text = self.task['description']
-        self.priority = self.priority_from_tw_format
-        self.completed = (self.task['status'] == u'completed')
-        self.due = self.task['due']
-        self.project = self.task['project']
+        self.data.update({
+            'description': self.task['description']
+            'priority': self.priority_from_tw_format
+            'completed': (self.task['status'] == u'completed')
+            'due': self.task['due']
+            'project': self.task['project']
+            })
 
     def update_in_buffer(self):
         vim.current.buffer[self.line_number] = str(self)
