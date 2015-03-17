@@ -131,3 +131,46 @@ class TaskCache(object):
 
             port.load_tasks()
             port.sync_with_taskwarrior()
+
+    def rebuild_vimwikitask_cache(self):
+        new_cache = dict()
+
+        for vimwikitask in self.vimwikitask_cache.values():
+            if vimwikitask is None:
+                continue
+            new_cache[vimwikitask['line_number']] = vimwikitask
+
+        self.vimwikitask_cache = new_cache
+
+    def insert_line(self, line, position):
+        # Insert the line
+        vim.current.buffer.append(line, position)
+
+        # Update the position of all the things shifted by the insertion
+        for vimwikitask in self.vimwikitask_cache.values():
+            if vimwikitask is None:
+                continue
+
+            if vimwikitask['line_number'] >= position:
+                vimwikitask['line_number'] += 1
+
+        # Rebuild cache keys
+        self.rebuild_vimwikitask_cache()
+
+    def remove_line(self, position):
+        # Remove the line
+        del vim.current.buffer[position]
+
+        # Remove the vimwikitask from cache
+        del self.vimwikitask_cache[position]
+
+        # Update the position of all the things shifted by the removal
+        for vimwikitask in self.vimwikitask_cache.values():
+            if vimwikitask is None:
+                continue
+
+            if vimwikitask['line_number'] >= position:
+                vimwikitask['line_number'] -= 1
+
+        # Rebuild cache keys
+        self.rebuild_vimwikitask_cache()
