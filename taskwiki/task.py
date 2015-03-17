@@ -1,3 +1,4 @@
+import copy
 import vim
 from datetime import datetime
 
@@ -178,6 +179,8 @@ class VimwikiTask(object):
         if not self.task.saved:
             return
 
+        old_data = copy.copy(self.data)
+
         self.data.update({
             'description': self.task['description'],
             'priority': self.priority_from_tw_format,
@@ -186,6 +189,9 @@ class VimwikiTask(object):
             'project': self.task['project'],
             'uuid': self.task['uuid'],
             })
+
+        changed = (old_data != self.data)
+        return changed
 
     def update_in_buffer(self):
         vim.current.buffer[self['line_number']] = str(self)

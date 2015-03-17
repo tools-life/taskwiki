@@ -94,8 +94,11 @@ class TaskCache(object):
         for task in self.vimwikitask_cache.values():
             if task is None:
                 continue
-            task.update_from_task()
-            task.update_in_buffer()
+
+            changed = task.update_from_task()
+
+            if changed:
+                task.update_in_buffer()
 
     def save_tasks(self):
         for task in self.vimwikitask_dependency_order:
