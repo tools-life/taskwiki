@@ -61,8 +61,10 @@ class ViewPort(object):
         # tasks that are not longer belonging there.
 
         # Split the filter into CLI tokens and filter by the expression
+        # By default, do not list deleted tasks
+        args = ["-DELETED"] + self.taskfilter.split()
         matching_tasks = set(
-            task for task in self.tw.tasks.filter(*self.taskfilter.split())
+            task for task in self.tw.tasks.filter(*args)
         )
 
         to_add = matching_tasks - set(t.task for t in self.tasks)
