@@ -49,7 +49,7 @@ class ViewPort(object):
             match = re.search(GENERIC_TASK, line)
 
             if match:
-                self.tasks.add(self.cache[i].task)
+                self.tasks.add(self.cache[i])
             else:
                 # If we didn't found a valid task, terminate the viewport
                 break
@@ -65,9 +65,20 @@ class ViewPort(object):
             task for task in self.tw.tasks.filter(*self.taskfilter.split())
         )
 
-        to_add = matching_tasks - self.tasks
-        #to_del = self.tasks - matching_tasks
+        to_add = matching_tasks - set(t.task for t in self.tasks)
+        to_del = set(t.task for t in self.tasks) - matching_tasks
 
+        # Remove tasks that no longer match the filter
+        for task in to_del:
+            # Find matching vimwikitask in the self.tasks set
+            [vimwikitask] = [t for t in self.tasks
+                             if t['uuid'] == task['uuid']]
+
+            # Remove the task from viewport's set and from buffer
+            self.tasks.remove(vimwikitask)
+            self.cache.remove_line(vimwikitask['line_number'])
+
+        # Add the tasks that match the filter and are not listed
         added_tasks = 0
 
         for task in to_add:
@@ -85,4 +96,4 @@ class ViewPort(object):
             self.cache[added_at] = vimwikitask
 
             # Update the buffer
-            vim.current.buffer.append(str(vimwikitask), added_at)
+            self.cache.insert_line(str(vimwikitask), added_at)
