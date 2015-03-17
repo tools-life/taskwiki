@@ -121,8 +121,10 @@ class TaskCache(object):
             self.task_cache[task['uuid']] = task
 
     def evaluate_viewports(self):
-        for i in range(len(vim.current.buffer)):
+        i = 0
+        while i < len(vim.current.buffer):
             port = ViewPort.from_line(i, self)
+            i += 1
 
             if port is None:
                 continue
