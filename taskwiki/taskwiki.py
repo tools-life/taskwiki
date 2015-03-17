@@ -43,8 +43,10 @@ def update_to_tw():
 
     cache.reset()
     cache.load_buffer()
+    cache.update_tasks()
     cache.save_tasks()
     cache.update_buffer()
+    cache.evaluate_viewports()
 
 
 if __name__ == '__main__':
