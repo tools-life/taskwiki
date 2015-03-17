@@ -44,11 +44,11 @@ class TaskCache(object):
     def __setitem__(self, key, value):
         # String keys refer to the Task objects
         if type(key) in (str, unicode):
-            task = self.task_cache[key] = value
+            self.task_cache[key] = value
 
         # Integer keys (line numbers) refer to the VimwikiTask objects
         elif type(key) is int:
-            vimwikitask = self.vimwikitask_cache[key] = value
+            self.vimwikitask_cache[key] = value
 
         # Anything else is wrong
         else:
