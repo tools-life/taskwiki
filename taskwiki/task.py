@@ -3,6 +3,7 @@ import vim
 from datetime import datetime
 
 from regexp import *
+from viewport import ViewPort
 from tasklib.task import Task, SerializingObject
 
 
@@ -84,7 +85,9 @@ class VimwikiTask(object):
         if self.parent:
             self.parent.add_dependencies |= set([self])
 
-        self['project'] = self.find_project()
+        # For new tasks, apply defaults from above viewport
+        if not self['uuid']:
+            self.apply_defaults()
 
         return self
 
@@ -215,8 +218,12 @@ class VimwikiTask(object):
             if task and len(task['indent']) < len(self['indent']):
                 return task
 
-    def find_project(self):
+    def apply_defaults(self):
         for i in reversed(range(0, self['line_number'])):
-            match = re.search(PROJECT_DEFINITION, vim.current.buffer[i])
-            if match:
-                return match.group('project')
+            port = viewport.ViewPort.from_line(i, self.cache)
+            if port and port.defaults:
+                self.data.update(port.defaults)
+                break
+            # Break on line which does not look like a task
+            elif not vim.current.buffer[i].strip().startswith("*"):
+                break
