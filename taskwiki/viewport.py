@@ -1,6 +1,7 @@
 import vim
 
 from task import VimwikiTask
+from util import parse_tw_arg_string
 from regexp import *
 
 class ViewPort(object):
@@ -19,7 +20,7 @@ class ViewPort(object):
           * [ ] Make sure the hosting is working
     """
 
-    def __init__(self, line_number, cache, taskfilter):
+    def __init__(self, line_number, cache, taskfilter, defaults):
         """
         Constructs a ViewPort out of given line.
         """
@@ -29,6 +30,7 @@ class ViewPort(object):
 
         self.line_number = line_number
         self.taskfilter = taskfilter
+        self.defaults = defaults
         self.tasks = set()
 
     @classmethod
@@ -38,7 +40,9 @@ class ViewPort(object):
         if not match:
             return None
 
-        self = cls(number, cache, match.group('filter').strip())
+        taskfilter = match.group('filter').strip()
+        defaults = parse_tw_arg_string(match.group('defaults').strip())
+        self = cls(number, cache, taskfilter, defaults)
 
         return self
 
