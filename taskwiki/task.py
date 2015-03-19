@@ -16,6 +16,10 @@ def convert_priority_to_tw_format(priority):
 
 
 class VimwikiTask(object):
+    # Lists all data keys that are reflected in Vim representation
+    buffer_keys = ('indent', 'description', 'uuid', 'completed_mark',
+                   'completed', 'line_number', 'priority', 'due')
+
     def __init__(self, cache):
         """
         Constructs a Vimwiki task from line at given position at the buffer
@@ -24,6 +28,7 @@ class VimwikiTask(object):
         self.tw = cache.tw
         self._task = None
         self.data = dict(indent='', completed_mark=' ')
+        self._buffer_data = None
 
     def __getitem__(self, key):
         return self.data.get(key)
@@ -73,6 +78,9 @@ class VimwikiTask(object):
             # We need to interpret it as timezone aware object in user's timezone
             # This properly handles DST, timezone offset and everything
             self['due'] = SerializingObject().datetime_normalizer(parsed_due)
+
+        # After all line-data parsing, save the data in the buffer
+        self._buffer_data = {key:self[key] for key in self.buffer_keys}
 
         # We need to track depedency set in a extra attribute, since
         # this may be a new task, and hence it need not to be saved yet.
@@ -182,8 +190,6 @@ class VimwikiTask(object):
         if not self.task.saved:
             return
 
-        old_data = copy.copy(self.data)
-
         self.data.update({
             'description': self.task['description'],
             'priority': self.priority_from_tw_format,
@@ -193,11 +199,13 @@ class VimwikiTask(object):
             'uuid': self.task['uuid'],
             })
 
-        changed = (old_data != self.data)
-        return changed
-
     def update_in_buffer(self):
-        vim.current.buffer[self['line_number']] = str(self)
+        # Look if any of the data that show up in Vim has changed
+        buffer_data = {key:self[key] for key in self.buffer_keys}
+        if self._buffer_data != buffer_data:
+            # If so, update the line in vim and saved buffer data
+            vim.current.buffer[self['line_number']] = str(self)
+            self._buffer_data = buffer_data
 
     def __str__(self):
         return ''.join([
