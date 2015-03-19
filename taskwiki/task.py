@@ -8,7 +8,7 @@ from tasklib.task import Task, SerializingObject
 
 
 def convert_priority_from_tw_format(priority):
-    return {None: 0, 'L': 1, 'M': 2, 'H': 3}[priority]
+    return {None: None, 'L': 1, 'M': 2, 'H': 3}[priority]
 
 
 def convert_priority_to_tw_format(priority):
