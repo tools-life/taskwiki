@@ -1,6 +1,6 @@
 import vim
 
-from task import VimwikiTask
+import task
 from util import parse_tw_arg_string
 from regexp import *
 
@@ -95,7 +95,7 @@ class ViewPort(object):
             self.cache[task['uuid']] = task
 
             # Create the VimwikiTask
-            vimwikitask = VimwikiTask.from_task(self.cache, task)
+            vimwikitask = task.VimwikiTask.from_task(self.cache, task)
             vimwikitask['line_number'] = added_at
 
             # Save it to cache

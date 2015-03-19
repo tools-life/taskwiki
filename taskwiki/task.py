@@ -3,8 +3,8 @@ import vim
 from datetime import datetime
 
 from regexp import *
-from viewport import ViewPort
 from tasklib.task import Task, SerializingObject
+import viewport
 
 
 def convert_priority_from_tw_format(priority):
