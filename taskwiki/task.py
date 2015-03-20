@@ -5,6 +5,7 @@ from datetime import datetime
 from regexp import *
 from tasklib.task import Task, SerializingObject
 import viewport
+import util
 
 
 def convert_priority_from_tw_format(priority):
@@ -35,6 +36,11 @@ class VimwikiTask(object):
 
     def __setitem__(self, key, value):
         self.data[key] = value
+
+    @classmethod
+    def from_current_line(cls, cache):
+        line_number = util.get_current_line_number()
+        return cls.from_line(cache, line_number)
 
     @classmethod
     def from_line(cls, cache, number):
