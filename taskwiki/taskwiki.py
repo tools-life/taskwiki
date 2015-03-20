@@ -7,9 +7,10 @@ from tasklib.task import TaskWarrior, Task
 # Insert the taskwiki on the python path
 sys.path.insert(0, vim.eval("s:plugin_path") + '/taskwiki')
 
+import cache
+import util
+import task
 from regexp import *
-from task import VimwikiTask
-from cache import TaskCache
 
 """
 How this plugin works:
@@ -22,7 +23,7 @@ How this plugin works:
 
 
 tw = TaskWarrior()
-cache = TaskCache(tw)
+cache = cache.TaskCache(tw)
 
 
 def update_from_tw():
