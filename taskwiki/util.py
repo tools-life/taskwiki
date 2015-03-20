@@ -1,4 +1,5 @@
 # Various utility functions
+import vim
 
 def parse_tw_arg_string(line):
     output = dict()
@@ -63,3 +64,23 @@ def parse_tw_arg_string(line):
     output[current_key] = current_value
 
     return output
+
+def get_current_line_number():
+    row, column = vim.current.window.cursor
+    return row - 1
+
+def show_in_split(lines, size=None, position="belowright"):
+    if size is None:
+        size = len(lines)
+
+    vim.command("{0} {1}split".format(position, size))
+    vim.command("edit taskinfo")
+    vim.command("setlocal noswapfile")
+    vim.command("setlocal modifiable")
+    vim.current.buffer.append(lines, 0)
+
+    vim.command("setlocal readonly")
+    vim.command("setlocal nomodifiable")
+    vim.command("setlocal buftype=nofile")
+    vim.command("setlocal nowrap")
+    vim.command("setlocal filetype=taskinfo")
