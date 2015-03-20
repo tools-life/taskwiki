@@ -49,6 +49,15 @@ def update_to_tw():
     cache.update_buffer()
     cache.evaluate_viewports()
 
+class CurrentTask(object):
+    def __init__(self):
+        self.task = task.VimwikiTask.from_current_line(cache)
+        self.tw = tw
+
+    def info(self):
+        info = self.tw.execute_command([self.task['uuid'], 'info'])
+        util.show_in_split(info)
+
 
 if __name__ == '__main__':
     update_from_tw()
