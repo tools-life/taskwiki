@@ -8,3 +8,4 @@ augroup taskwiki
 augroup END
 
 command! TaskWikiInfo :py CurrentTask().info()
+command! TaskWikiLink :py CurrentTask().link()

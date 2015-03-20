@@ -58,6 +58,10 @@ class CurrentTask(object):
         info = self.tw.execute_command([self.task['uuid'], 'info'])
         util.show_in_split(info)
 
+    def link(self):
+        path = util.get_absolute_filepath()
+        self.task.task.add_annotation("wiki: {0}".format(path))
+        print("Task \"{0}\" linked.".format(self.task['description']))
 
 if __name__ == '__main__':
     update_from_tw()

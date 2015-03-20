@@ -65,6 +65,9 @@ def parse_tw_arg_string(line):
 
     return output
 
+def get_absolute_filepath():
+    return vim.eval('expand("%:p")')
+
 def get_current_line_number():
     row, column = vim.current.window.cursor
     return row - 1
