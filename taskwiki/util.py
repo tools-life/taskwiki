@@ -84,3 +84,7 @@ def show_in_split(lines, size=None, position="belowright"):
     vim.command("setlocal buftype=nofile")
     vim.command("setlocal nowrap")
     vim.command("setlocal filetype=taskinfo")
+
+    # Make the split easily closable
+    vim.command("nnoremap <silent> <buffer> q :bd<CR>")
+    vim.command("nnoremap <silent> <buffer> <enter> :bd<CR>")
