@@ -83,7 +83,7 @@ class VimwikiTask(object):
 
             # We need to interpret it as timezone aware object in user's timezone
             # This properly handles DST, timezone offset and everything
-            self['due'] = SerializingObject().datetime_normalizer(parsed_due)
+            self['due'] = SerializingObject(self.tw).datetime_normalizer(parsed_due)
 
         # After all line-data parsing, save the data in the buffer
         self._buffer_data = {key:self[key] for key in self.buffer_keys}
