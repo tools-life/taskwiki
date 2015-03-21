@@ -120,7 +120,7 @@ def show_in_split(lines, size=None, position="belowright", vertical=False,
     vim.command("setlocal nomodifiable")
     vim.command("setlocal buftype=nofile")
     vim.command("setlocal nowrap")
-    vim.command("setlocal filetype=taskinfo")
+    vim.command("setlocal nonumber")
 
     # Make the split easily closable
     vim.command("nnoremap <silent> <buffer> q :bd<CR>")
