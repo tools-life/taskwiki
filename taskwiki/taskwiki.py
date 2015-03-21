@@ -47,19 +47,32 @@ def update_to_tw():
     cache.update_buffer()
     cache.evaluate_viewports()
 
-class CurrentTask(object):
+class SelectedTasks(object):
     def __init__(self):
-        self.task = vwtask.VimwikiTask.from_current_line(cache)
         self.tw = tw
 
+        # Reset cache, otherwise old line content may be used
+        cache.reset()
+
+        # Load the current tasks
+        range_tasks = [vwtask.VimwikiTask.from_line(cache, i)
+                       for i in util.selected_line_numbers()]
+        self.tasks = [t for t in range_tasks if t is not None]
+
+        if not self.tasks:
+            print("No tasks selected.")
+
     def info(self):
-        info = self.tw.execute_command([self.task['uuid'], 'info'])
-        util.show_in_split(info)
+        for vimwikitask in self.tasks:
+            info = self.tw.execute_command([vimwikitask['uuid'], 'info'])
+            util.show_in_split(info)
+            break  # Show only one task
 
     def link(self):
         path = util.get_absolute_filepath()
-        self.task.task.add_annotation("wiki: {0}".format(path))
-        print("Task \"{0}\" linked.".format(self.task['description']))
+        for vimwikitask in self.tasks:
+            vimwikitask.task.add_annotation("wiki: {0}".format(path))
+            print("Task \"{0}\" linked.".format(vimwikitask['description']))
 
 if __name__ == '__main__':
     update_from_tw()

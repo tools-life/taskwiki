@@ -72,6 +72,9 @@ def get_current_line_number():
     row, column = vim.current.window.cursor
     return row - 1
 
+def selected_line_numbers():
+    return range(vim.current.range.start, vim.current.range.end + 1)
+
 def show_in_split(lines, size=None, position="belowright"):
     if size is None:
         size = len(lines)

@@ -7,5 +7,5 @@ augroup taskwiki
     execute "autocmd BufWrite *.".expand('%:e')." python update_to_tw()"
 augroup END
 
-command! TaskWikiInfo :py CurrentTask().info()
-command! TaskWikiLink :py CurrentTask().link()
+command! -range TaskWikiInfo :<line1>,<line2>py SelectedTasks().info()
+command! -range TaskWikiLink :<line1>,<line2>py SelectedTasks().link()
