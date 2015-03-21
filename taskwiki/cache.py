@@ -88,7 +88,7 @@ class TaskCache(object):
         for i in range(len(vim.current.buffer)):
             self[i]  # Loads the line into the cache
 
-    def update_buffer(self):
+    def update_vwtasks_in_buffer(self):
         for task in self.vimwikitask_cache.values():
             if task is None:
                 continue

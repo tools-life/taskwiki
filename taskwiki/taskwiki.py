@@ -33,7 +33,8 @@ class WholeBuffer(object):
 
         cache.load_vwtasks()
         cache.load_tasks()
-        cache.update_buffer()
+        cache.update_vwtasks_from_tasks()
+        cache.update_vwtasks_in_buffer()
         cache.evaluate_viewports()
 
     @staticmethod
@@ -46,7 +47,7 @@ class WholeBuffer(object):
         cache.load_vwtasks()
         cache.load_tasks()
         cache.save_tasks()
-        cache.update_buffer()
+        cache.update_vwtasks_in_buffer()
         cache.evaluate_viewports()
 
 
