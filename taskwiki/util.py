@@ -88,8 +88,14 @@ def selected_line_numbers():
     return range(vim.current.range.start, vim.current.range.end + 1)
 
 def show_in_split(lines, size=None, position="belowright", vertical=False):
+    # Compute the size of the split
     if size is None:
-        size = len(lines)
+        if vertical:
+            # Maximum number of columns used + small offset
+            size = max([len(l) for l in lines]) + 5
+        else:
+            # Number of lines
+            size = len(lines)
 
     # Call 'vsplit' for vertical, otherwise 'split'
     vertical_prefix = 'v' if vertical else ''
