@@ -87,7 +87,7 @@ class TaskCache(object):
 
     def load_buffer(self):
         for i in range(len(vim.current.buffer)):
-            task = self[i]
+            self[i]  # Loads the line into the cache
 
     def update_buffer(self):
         for task in self.vimwikitask_cache.values():
