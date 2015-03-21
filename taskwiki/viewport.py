@@ -77,13 +77,16 @@ class ViewPort(object):
 
         # Remove tasks that no longer match the filter
         for task in to_del:
-            # Find matching vimwikitask in the self.tasks set
-            [vimwikitask] = [t for t in self.tasks
-                             if t['uuid'] == task['uuid']]
+            # Find matching vimwikitasks in the self.tasks set
+            # There might be more if the viewport contained multiple
+            # representations of the same task
+            matching_vimwikitasks= [t for t in self.tasks
+                                    if t['uuid'] == task['uuid']]
 
-            # Remove the task from viewport's set and from buffer
-            self.tasks.remove(vimwikitask)
-            self.cache.remove_line(vimwikitask['line_number'])
+            # Remove the tasks from viewport's set and from buffer
+            for vimwikitask in matching_vimwikitasks:
+                self.tasks.remove(vimwikitask)
+                self.cache.remove_line(vimwikitask['line_number'])
 
         # Add the tasks that match the filter and are not listed
         added_tasks = 0
