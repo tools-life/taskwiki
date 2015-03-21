@@ -8,7 +8,7 @@ sys.path.insert(0, vim.eval("s:plugin_path") + '/taskwiki')
 
 import cache
 import util
-import task
+import vwtask
 
 """
 How this plugin works:
@@ -49,7 +49,7 @@ def update_to_tw():
 
 class CurrentTask(object):
     def __init__(self):
-        self.task = task.VimwikiTask.from_current_line(cache)
+        self.task = vwtask.VimwikiTask.from_current_line(cache)
         self.tw = tw
 
     def info(self):
