@@ -115,6 +115,13 @@ class TaskCache(object):
         for task in tasks:
             self.task_cache[task['uuid']] = task
 
+    def update_vwtasks_from_tasks(self):
+        for task in self.vimwikitask_cache.values():
+            if task is None:
+                continue
+
+            task.update_from_task()
+
     def evaluate_viewports(self):
         i = 0
         while i < len(vim.current.buffer):
