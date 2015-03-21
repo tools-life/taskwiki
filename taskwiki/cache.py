@@ -1,8 +1,7 @@
 import vim
 
-from task import VimwikiTask
-from viewport import ViewPort
-
+import vwtask
+import viewport
 
 class TaskCache(object):
     """
@@ -31,7 +30,7 @@ class TaskCache(object):
             vimwikitask = self.vimwikitask_cache.get(key)
 
             if vimwikitask is None:
-                vimwikitask = VimwikiTask.from_line(self, key)
+                vimwikitask = vwtask.VimwikiTask.from_line(self, key)
                 self.vimwikitask_cache[key] = vimwikitask
 
             return vimwikitask  # May return None if the line has no task
@@ -119,7 +118,7 @@ class TaskCache(object):
     def evaluate_viewports(self):
         i = 0
         while i < len(vim.current.buffer):
-            port = ViewPort.from_line(i, self)
+            port = viewport.ViewPort.from_line(i, self)
             i += 1
 
             if port is None:
