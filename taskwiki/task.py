@@ -1,4 +1,3 @@
-import copy
 import vim
 from datetime import datetime
 

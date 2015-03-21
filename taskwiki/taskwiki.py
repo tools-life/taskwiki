@@ -1,5 +1,4 @@
 import sys
-import re
 import vim
 
 from tasklib.task import TaskWarrior, Task
@@ -10,7 +9,6 @@ sys.path.insert(0, vim.eval("s:plugin_path") + '/taskwiki')
 import cache
 import util
 import task
-from regexp import *
 
 """
 How this plugin works:
