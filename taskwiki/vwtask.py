@@ -198,6 +198,16 @@ class VimwikiTask(object):
         if self['completed'] and (self.task.pending or self.task.waiting):
             self.task.done()
 
+    @property
+    def completed_mark(self):
+        if self['completed']:
+            self['completed_mark'] = 'X'
+        else:
+            if self['completed_mark'] == 'X':
+                self['completed_mark'] = ' '
+
+        return self['completed_mark']
+
     def update_from_task(self):
         if not self.task.saved:
             return
@@ -223,7 +233,7 @@ class VimwikiTask(object):
         return ''.join([
             self['indent'],
             '* [',
-            'X' if self['completed'] else self['completed_mark'],
+            self.completed_mark,
             '] ',
             self['description'] if self['description'] else 'TEXT MISSING?',
             ' ' + '!' * self.priority_from_tw_format if self['priority'] else '',
