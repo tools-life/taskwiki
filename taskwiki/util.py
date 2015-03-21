@@ -130,7 +130,17 @@ def show_in_split(lines, size=None, position="belowright", vertical=False,
         vim.command("AnsiEsc")
 
 def tw_execute_colorful(tw, *args, **kwargs):
+    override = kwargs.setdefault('config_override', {})
+    maxwidth = kwargs.pop('maxwidth', False)
+    maxheight = kwargs.pop('maxheight', False)
+
     if ANSI_ESC_AVAILABLE:
-        override = kwargs.setdefault('config_override', {})
         override['_forcecolor'] = "yes"
+
+    if maxheight:
+        override['defaultheight'] = vim.current.window.height
+
+    if maxwidth:
+        override['defaultwidth'] = vim.current.window.width
+
     return tw.execute_command(*args, **kwargs)
