@@ -72,6 +72,11 @@ def tw_modstring_to_kwargs(line):
 
     return output
 
+def get_input(prompt="Enter: "):
+    value = vim.eval('input("%s")' % prompt)
+    vim.command('redraw')
+    return value
+
 def get_absolute_filepath():
     return vim.eval('expand("%:p")')
 

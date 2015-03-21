@@ -86,10 +86,22 @@ class SelectedTasks(object):
             print("Task \"{0}\" deleted.".format(vimwikitask['description']))
 
     def modify(self, modstring):
+        # If no modstring was passed as argument, ask the user interactively
+        if not modstring:
+            modstring = util.get_input("Enter modifications: ")
+
+        # We might have two same tasks in the range, make sure we do not pass the
+        # same uuid twice
         unique_tasks = set(vimwikitask.task['uuid'] for vimwikitask in self.tasks)
         uuids = ','.join(unique_tasks)
+
+        # Generate the arguments from the modstring
         args = util.tw_modstring_to_args(modstring)
+
+        # Modify all tasks at once
         output = self.tw.execute_command([uuids, 'mod'] + args)
+
+        # Output the feedback from TW
         if output:
             print(output[-1])
 
