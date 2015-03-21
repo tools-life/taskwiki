@@ -62,6 +62,11 @@ class Splits(object):
         output = util.tw_execute_colorful(tw, ['summary'])
         util.show_in_split(output, name="summary", vertical=True)
 
+    @staticmethod
+    def burndown():
+        output = util.tw_execute_colorful(tw, ['burndown'], maxwidth=True)
+        util.show_in_split(output, name="burndown")
+
 
 class SelectedTasks(object):
     def __init__(self):
