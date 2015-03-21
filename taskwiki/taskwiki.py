@@ -57,6 +57,11 @@ class Splits(object):
         output = tw.execute_command(['projects'])
         util.show_in_split(output, name="projects", vertical=True)
 
+    @staticmethod
+    def summary():
+        output = util.tw_execute_colorful(tw, ['summary'])
+        util.show_in_split(output, name="summary", vertical=True)
+
 
 class SelectedTasks(object):
     def __init__(self):

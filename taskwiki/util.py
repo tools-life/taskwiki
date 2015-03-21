@@ -1,5 +1,10 @@
 # Various utility functions
 import vim  # pylint: disable=F0401
+import regexp
+
+# Detect if command AnsiEsc is available
+ANSI_ESC_AVAILABLE = vim.eval('exists(":AnsiEsc")') == '2'
+
 
 def tw_modstring_to_args(line):
     output = []
@@ -87,13 +92,17 @@ def get_current_line_number():
 def selected_line_numbers():
     return range(vim.current.range.start, vim.current.range.end + 1)
 
+def strip_ansi_escape_sequence(string):
+    return regexp.ANSI_ESCAPE_SEQ.sub("", string)
+
 def show_in_split(lines, size=None, position="belowright", vertical=False,
                   name="taskwiki"):
     # Compute the size of the split
     if size is None:
         if vertical:
             # Maximum number of columns used + small offset
-            size = max([len(l) for l in lines]) + 5
+            # Strip the color codes, since they do not show up in the split
+            size = max([len(strip_ansi_escape_sequence(l)) for l in lines]) + 5
         else:
             # Number of lines
             size = len(lines)
@@ -116,3 +125,12 @@ def show_in_split(lines, size=None, position="belowright", vertical=False,
     # Make the split easily closable
     vim.command("nnoremap <silent> <buffer> q :bd<CR>")
     vim.command("nnoremap <silent> <buffer> <enter> :bd<CR>")
+
+    if ANSI_ESC_AVAILABLE:
+        vim.command("AnsiEsc")
+
+def tw_execute_colorful(tw, *args, **kwargs):
+    if ANSI_ESC_AVAILABLE:
+        override = kwargs.setdefault('config_override', {})
+        override['_forcecolor'] = "yes"
+    return tw.execute_command(*args, **kwargs)

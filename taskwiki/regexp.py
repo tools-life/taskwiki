@@ -54,3 +54,10 @@ GENERIC_VIEWPORT = re.compile(
     ')?'
     '[=]+'                 # Header ending
     )
+
+ANSI_ESCAPE_SEQ = re.compile(
+    '\x1b'     # literal ESC
+    '\['       # literal [
+    '[;\d]*'   # zero or more digits or semicolons
+    '[A-Za-z]' # a letter
+    )

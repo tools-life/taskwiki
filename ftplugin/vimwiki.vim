@@ -8,6 +8,7 @@ augroup taskwiki
 augroup END
 
 command! TaskWikiProjects :py Splits.projects()
+command! TaskWikiProjectsSummary :py Splits.summary()
 
 command! -range TaskWikiInfo :<line1>,<line2>py SelectedTasks().info()
 command! -range TaskWikiLink :<line1>,<line2>py SelectedTasks().link()
