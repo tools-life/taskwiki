@@ -24,28 +24,31 @@ tw = TaskWarrior()
 cache = cache.TaskCache(tw)
 
 
-def update_from_tw():
-    """
-    Updates all the incomplete tasks in the vimwiki file if the info from TW is different.
-    """
+class WholeBuffer(object):
+    @staticmethod
+    def update_from_tw():
+        """
+        Updates all the incomplete tasks in the vimwiki file if the info from TW is different.
+        """
 
-    cache.load_buffer()
-    cache.update_tasks()
-    cache.update_buffer()
-    cache.evaluate_viewports()
+        cache.load_buffer()
+        cache.update_tasks()
+        cache.update_buffer()
+        cache.evaluate_viewports()
 
+    @staticmethod
+    def update_to_tw():
+        """
+        Updates all tasks that differ from their TaskWarrior representation.
+        """
 
-def update_to_tw():
-    """
-    Updates all tasks that differ from their TaskWarrior representation.
-    """
+        cache.reset()
+        cache.load_buffer()
+        cache.update_tasks()
+        cache.save_tasks()
+        cache.update_buffer()
+        cache.evaluate_viewports()
 
-    cache.reset()
-    cache.load_buffer()
-    cache.update_tasks()
-    cache.save_tasks()
-    cache.update_buffer()
-    cache.evaluate_viewports()
 
 class SelectedTasks(object):
     def __init__(self):
@@ -107,4 +110,4 @@ class SelectedTasks(object):
 
 
 if __name__ == '__main__':
-    update_from_tw()
+    WholeBuffer.update_from_tw()

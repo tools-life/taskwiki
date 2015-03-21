@@ -4,7 +4,7 @@ execute 'pyfile ' . s:plugin_path . '/taskwiki/taskwiki.py'
 augroup taskwiki
     " when saving the file sync the tasks from vimwiki to TW
     autocmd!
-    execute "autocmd BufWrite *.".expand('%:e')." python update_to_tw()"
+    execute "autocmd BufWrite *.".expand('%:e')." py WholeBuffer.update_to_tw()"
 augroup END
 
 command! -range TaskWikiInfo :<line1>,<line2>py SelectedTasks().info()
