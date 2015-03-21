@@ -1,15 +1,13 @@
 # Various utility functions
 import vim  # pylint: disable=F0401
 
-def parse_tw_arg_string(line):
-    output = dict()
+def tw_modstring_to_args(line):
+    output = []
     escape_global_chars = ('"', "'")
     line = line.strip()
 
     current_escape = None
     current_part = ''
-    current_key = ''
-    current_value = ''
     local_escape_pos = None
 
     for i in range(len(line)):
@@ -42,29 +40,35 @@ def parse_tw_arg_string(line):
         elif char == ' ':
             ignored = True
             process_next_part = True
-        elif char == ':':
-            ignored = True
-            process_next_part = True
 
         if not ignored:
             current_part += char
 
         if process_next_part:
-            if current_key:
-                current_value = current_part
-                output[current_key] = current_value
-                current_part = ''
-                current_key = ''
-                current_value = ''
-            else:
-                current_key = current_part
-                current_part = ''
+            output.append(current_part)
+            current_part = ''
 
-    # Process the last key:value pair
-    # This is necessary since the last arg is not followed by a space
-    if current_key:
-        current_value = current_part
-        output[current_key] = current_value
+    if current_part:
+        output.append(current_part)
+
+    return output
+
+def tw_modstring_to_kwargs(line):
+    output = dict()
+    escape_global_chars = ('"', "'")
+    line = line.strip()
+
+    args = tw_modstring_to_args(line)
+
+    for arg in args:
+        # If the argument contains :, then it's a key/value pair
+        if ':' in arg:
+            key, value = arg.split(':', 1)
+            output[key] = value
+        # Tag addition
+        elif arg.startswith('+'):
+            value = arg[1:]
+            output.setdefault('tags', []).append(value)
 
     return output
 

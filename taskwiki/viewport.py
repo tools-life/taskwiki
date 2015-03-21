@@ -3,7 +3,7 @@ import vim  # pylint: disable=F0401
 
 import vwtask
 import regexp
-from util import parse_tw_arg_string
+from util import tw_modstring_to_kwargs
 
 class ViewPort(object):
     """
@@ -42,7 +42,7 @@ class ViewPort(object):
             return None
 
         taskfilter = match.group('filter').strip()
-        defaults = parse_tw_arg_string((match.group('defaults') or '').strip())
+        defaults = tw_modstring_to_kwargs((match.group('defaults') or '').strip())
         self = cls(number, cache, taskfilter, defaults)
 
         return self
