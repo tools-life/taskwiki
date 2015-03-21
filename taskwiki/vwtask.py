@@ -48,6 +48,8 @@ class VimwikiTask(object):
         Creates a Vimwiki object from given line in the buffer.
           - If line does not contain a Vimwiki task, returns None.
         """
+        # Protected access is ok here
+        # pylint: disable=W0212
 
         match = re.search(regexp.GENERIC_TASK, vim.current.buffer[number])
 
