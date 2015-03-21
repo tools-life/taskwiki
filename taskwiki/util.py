@@ -82,6 +82,9 @@ def get_input(prompt="Enter: "):
     vim.command('redraw')
     return value
 
+def get_buffer_shortname():
+    return vim.eval('expand("%")')
+
 def get_absolute_filepath():
     return vim.eval('expand("%:p")')
 
@@ -112,6 +115,19 @@ def show_in_split(lines, size=None, position="belowright", vertical=False,
 
     vim.command("{0} {1}{2}split".format(position, size, vertical_prefix))
     vim.command("edit {0}".format(name))
+
+    # For some weird reason, edit does not work for some users, but
+    # enew + file <name> does. Use as fallback.
+    if get_buffer_shortname() != name:
+        vim.command("enew")
+        vim.command("file {0}".format(name))
+
+    # If we were still unable to open the buffer, bail out
+    if get_buffer_shortname() != name:
+        print("Unable to open a new buffer with name: {0}".format(name))
+        return
+
+    # We're good to go!
     vim.command("setlocal noswapfile")
     vim.command("setlocal modifiable")
     vim.current.buffer.append(lines, 0)
