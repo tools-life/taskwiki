@@ -99,7 +99,7 @@ class TaskCache(object):
         for task in self.vimwikitask_dependency_order:
             task.save_to_tw()
 
-    def update_tasks(self):
+    def load_tasks(self):
         # Select all tasks in the files that have UUIDs
         uuids = [t['uuid'] for t in self.vimwikitask_cache.values()
                  if t is not None and t['uuid'] is not None]

@@ -32,7 +32,7 @@ class WholeBuffer(object):
         """
 
         cache.load_buffer()
-        cache.update_tasks()
+        cache.load_tasks()
         cache.update_buffer()
         cache.evaluate_viewports()
 
@@ -44,7 +44,7 @@ class WholeBuffer(object):
 
         cache.reset()
         cache.load_buffer()
-        cache.update_tasks()
+        cache.load_tasks()
         cache.save_tasks()
         cache.update_buffer()
         cache.evaluate_viewports()
