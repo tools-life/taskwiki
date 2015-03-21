@@ -27,9 +27,9 @@ class VimwikiTask(object):
         """
         self.cache = cache
         self.tw = cache.tw
-        self._task = None
         self.data = dict(indent='', completed_mark=' ')
         self._buffer_data = None
+        self.__unsaved_task = None
 
     def __getitem__(self, key):
         return self.data.get(key)
@@ -110,7 +110,7 @@ class VimwikiTask(object):
     @classmethod
     def from_task(cls, cache, task):
         self = cls(cache)
-        self._task = task
+        self.data['uuid'] = task['uuid']
         self.update_from_task()
 
         return self
@@ -118,23 +118,20 @@ class VimwikiTask(object):
     @property
     def task(self):
         # Return the corresponding task if alrady set
-        if self._task is not None:
-            return self._task
-
         # Else try to load it or create a new one
         if self['uuid']:
             try:
-                self._task = self.cache[self['uuid']]
+                return self.cache[self['uuid']]
             except Task.DoesNotExist:
-                self._task = Task(self.tw)
+                self.__unsaved_task = Task(self.tw)
                 # If task cannot be loaded, we need to remove the UUID
                 vim.command('echom "UUID not found: %s,'
                             'will be replaced if saved"' % self['uuid'])
                 self['uuid'] = None
         else:
-            self._task = Task(self.tw)
+            self.__unsaved_task = Task(self.tw)
 
-        return self._task
+        return self.__unsaved_task
 
     @task.setter
     def task(self, task):
@@ -146,7 +143,8 @@ class VimwikiTask(object):
                                 self['uuid'],
                                 task['uuid']))
 
-        self._task = task
+
+        self.data['uuid'] = task['uuid']
 
     @property
     def priority_from_tw_format(self):
@@ -182,6 +180,12 @@ class VimwikiTask(object):
             if self['project']:
                 self.task['project'] = self['project']
             self.task.save()
+
+            # If task was first time saved now, add it to the cache and remove
+            # the temporary reference
+            if self.__unsaved_task is not None:
+                self.cache[self.__unsaved_task['uuid']] = self.__unsaved_task
+                self.__unsaved_task = None
 
             # If we saved the task, we need to update. Hooks may have chaned data.
             self.update_from_task()
