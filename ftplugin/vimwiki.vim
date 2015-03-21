@@ -7,6 +7,8 @@ augroup taskwiki
     execute "autocmd BufWrite *.".expand('%:e')." py WholeBuffer.update_to_tw()"
 augroup END
 
+command! TaskWikiProjects :py Splits.projects()
+
 command! -range TaskWikiInfo :<line1>,<line2>py SelectedTasks().info()
 command! -range TaskWikiLink :<line1>,<line2>py SelectedTasks().link()
 command! -range TaskWikiDelete :<line1>,<line2>py SelectedTasks().delete()

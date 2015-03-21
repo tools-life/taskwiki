@@ -50,6 +50,14 @@ class WholeBuffer(object):
         cache.evaluate_viewports()
 
 
+class Splits(object):
+
+    @staticmethod
+    def projects():
+        output = tw.execute_command(['projects'])
+        util.show_in_split(output, name="projects", vertical=True)
+
+
 class SelectedTasks(object):
     def __init__(self):
         self.tw = tw
