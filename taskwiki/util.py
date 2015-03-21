@@ -60,8 +60,11 @@ def parse_tw_arg_string(line):
                 current_key = current_part
                 current_part = ''
 
-    current_value = current_part
-    output[current_key] = current_value
+    # Process the last key:value pair
+    # This is necessary since the last arg is not followed by a space
+    if current_key:
+        current_value = current_part
+        output[current_key] = current_value
 
     return output
 
