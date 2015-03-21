@@ -1,8 +1,8 @@
 import vim
 
 import task
+import regexp
 from util import parse_tw_arg_string
-from regexp import *
 
 class ViewPort(object):
     """
@@ -35,7 +35,7 @@ class ViewPort(object):
 
     @classmethod
     def from_line(cls, number, cache):
-        match = re.search(GENERIC_VIEWPORT, vim.current.buffer[number])
+        match = re.search(regexp.GENERIC_VIEWPORT, vim.current.buffer[number])
 
         if not match:
             return None
@@ -50,7 +50,7 @@ class ViewPort(object):
         # Load all tasks below the viewport
         for i in range(self.line_number + 1, len(vim.current.buffer)):
             line = vim.current.buffer[i]
-            match = re.search(GENERIC_TASK, line)
+            match = re.search(regexp.GENERIC_TASK, line)
 
             if match:
                 self.tasks.add(self.cache[i])

@@ -1,8 +1,8 @@
 import vim
 from datetime import datetime
 
-from regexp import *
 from tasklib.task import Task, SerializingObject
+import regexp
 import viewport
 import util
 
@@ -48,7 +48,7 @@ class VimwikiTask(object):
           - If line does not contain a Vimwiki task, returns None.
         """
 
-        match = re.search(GENERIC_TASK, vim.current.buffer[number])
+        match = re.search(regexp.GENERIC_TASK, vim.current.buffer[number])
 
         if not match:
             return None
@@ -72,10 +72,10 @@ class VimwikiTask(object):
         if due:
             # With strptime, we get a native datetime object
             try:
-                parsed_due = datetime.strptime(due, DATETIME_FORMAT)
+                parsed_due = datetime.strptime(due, regexp.DATETIME_FORMAT)
             except ValueError:
                 try:
-                    parsed_due = datetime.strptime(due, DATE_FORMAT)
+                    parsed_due = datetime.strptime(due, regexp.DATE_FORMAT)
                 except ValueError:
                     vim.command('echom "Taskwiki: Invalid timestamp on line %s, '
                                 'ignored."' % self['line_number'])
@@ -220,7 +220,7 @@ class VimwikiTask(object):
             '] ',
             self['description'] if self['description'] else 'TEXT MISSING?',
             ' ' + '!' * self.priority_from_tw_format if self['priority'] else '',
-            ' ' + self['due'].strftime(DATETIME_FORMAT) if self['due'] else '',
+            ' ' + self['due'].strftime(regexp.DATETIME_FORMAT) if self['due'] else '',
             '  #' + self['uuid'] if self['uuid'] else '',
         ])
 
