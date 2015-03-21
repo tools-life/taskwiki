@@ -55,8 +55,7 @@ class SelectedTasks(object):
         cache.reset()
 
         # Load the current tasks
-        range_tasks = [vwtask.VimwikiTask.from_line(cache, i)
-                       for i in util.selected_line_numbers()]
+        range_tasks = [cache[i] for i in util.selected_line_numbers()]
         self.tasks = [t for t in range_tasks if t is not None]
 
         if not self.tasks:
@@ -73,6 +72,18 @@ class SelectedTasks(object):
         for vimwikitask in self.tasks:
             vimwikitask.task.add_annotation("wiki: {0}".format(path))
             print("Task \"{0}\" linked.".format(vimwikitask['description']))
+
+    def delete(self):
+        # Delete the tasks in TaskWarrior
+        # Multiple VimwikiTasks might refer to the same task, so make sure
+        # we do not delete one task twice
+        for task in set(vimwikitask.task for vimwikitask in self.tasks):
+            task.delete()
+
+        # Remove the lines in the buffer
+        for vimwikitask in self.tasks:
+            cache.remove_line(vimwikitask['line_number'])
+            print("Task \"{0}\" deleted.".format(vimwikitask['description']))
 
 if __name__ == '__main__':
     update_from_tw()

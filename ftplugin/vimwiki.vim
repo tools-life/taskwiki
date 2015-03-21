@@ -9,3 +9,4 @@ augroup END
 
 command! -range TaskWikiInfo :<line1>,<line2>py SelectedTasks().info()
 command! -range TaskWikiLink :<line1>,<line2>py SelectedTasks().link()
+command! -range TaskWikiDelete :<line1>,<line2>py SelectedTasks().delete()
