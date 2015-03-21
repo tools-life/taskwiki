@@ -1,5 +1,5 @@
 import sys
-import vim
+import vim  # pylint: disable=F0401
 
 from tasklib.task import TaskWarrior, Task
 

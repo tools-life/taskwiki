@@ -1,5 +1,5 @@
 # Various utility functions
-import vim
+import vim  # pylint: disable=F0401
 
 def parse_tw_arg_string(line):
     output = dict()
