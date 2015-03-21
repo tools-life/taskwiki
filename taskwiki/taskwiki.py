@@ -85,5 +85,14 @@ class SelectedTasks(object):
             cache.remove_line(vimwikitask['line_number'])
             print("Task \"{0}\" deleted.".format(vimwikitask['description']))
 
+    def modify(self, modstring):
+        unique_tasks = set(vimwikitask.task['uuid'] for vimwikitask in self.tasks)
+        uuids = ','.join(unique_tasks)
+        args = util.tw_modstring_to_args(modstring)
+        output = self.tw.execute_command([uuids, 'mod'] + args)
+        if output:
+            print(output[-1])
+
+
 if __name__ == '__main__':
     update_from_tw()
