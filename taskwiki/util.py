@@ -87,7 +87,8 @@ def get_current_line_number():
 def selected_line_numbers():
     return range(vim.current.range.start, vim.current.range.end + 1)
 
-def show_in_split(lines, size=None, position="belowright", vertical=False):
+def show_in_split(lines, size=None, position="belowright", vertical=False,
+                  name="taskwiki"):
     # Compute the size of the split
     if size is None:
         if vertical:
@@ -101,7 +102,7 @@ def show_in_split(lines, size=None, position="belowright", vertical=False):
     vertical_prefix = 'v' if vertical else ''
 
     vim.command("{0} {1}{2}split".format(position, size, vertical_prefix))
-    vim.command("edit taskinfo")
+    vim.command("edit {0}".format(name))
     vim.command("setlocal noswapfile")
     vim.command("setlocal modifiable")
     vim.current.buffer.append(lines, 0)
