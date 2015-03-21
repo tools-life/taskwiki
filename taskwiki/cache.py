@@ -84,7 +84,7 @@ class TaskCache(object):
         self.task_cache = dict()
         self.vimwikitask_cache = dict()
 
-    def load_buffer(self):
+    def load_vwtasks(self):
         for i in range(len(vim.current.buffer)):
             self[i]  # Loads the line into the cache
 
