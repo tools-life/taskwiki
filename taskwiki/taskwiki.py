@@ -123,6 +123,11 @@ class SelectedTasks(object):
         # Modify all tasks at once
         output = self.tw.execute_command([uuids, 'mod'] + args)
 
+        # Update the touched tasks in buffer, if needed
+        cache.load_tasks()
+        cache.update_vwtasks_from_tasks()
+        cache.update_vwtasks_in_buffer()
+
         # Output the feedback from TW
         if output:
             print(output[-1])
