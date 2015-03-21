@@ -87,11 +87,14 @@ def get_current_line_number():
 def selected_line_numbers():
     return range(vim.current.range.start, vim.current.range.end + 1)
 
-def show_in_split(lines, size=None, position="belowright"):
+def show_in_split(lines, size=None, position="belowright", vertical=False):
     if size is None:
         size = len(lines)
 
-    vim.command("{0} {1}split".format(position, size))
+    # Call 'vsplit' for vertical, otherwise 'split'
+    vertical_prefix = 'v' if vertical else ''
+
+    vim.command("{0} {1}{2}split".format(position, size, vertical_prefix))
     vim.command("edit taskinfo")
     vim.command("setlocal noswapfile")
     vim.command("setlocal modifiable")
