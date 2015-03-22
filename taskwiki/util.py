@@ -138,6 +138,10 @@ def show_in_split(lines, size=None, position="belowright", vertical=False,
     vim.command("setlocal nowrap")
     vim.command("setlocal nonumber")
 
+    # Keep window size fixed despite resizing
+    vim.command("setlocal winfixheight")
+    vim.command("setlocal winfixwidth")
+
     # Make the split easily closable
     vim.command("nnoremap <silent> <buffer> q :bd<CR>")
     vim.command("nnoremap <silent> <buffer> <enter> :bd<CR>")
