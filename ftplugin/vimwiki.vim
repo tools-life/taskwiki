@@ -9,7 +9,9 @@ augroup END
 
 command! -nargs=* TaskWikiProjects :py SplitProjects(<q-args>).execute()
 command! -nargs=* TaskWikiProjectsSummary :py SplitSummary(<q-args>).execute()
-command! -nargs=* TaskWikiBurndown :py SplitBurndown(<q-args>).execute()
+command! -nargs=* TaskWikiBurndownDaily :py SplitBurndownDaily(<q-args>).execute()
+command! -nargs=* TaskWikiBurndownMonthly :py SplitBurndownMonthly(<q-args>).execute()
+command! -nargs=* TaskWikiBurndownWeekly :py SplitBurndownWeekly(<q-args>).execute()
 command! -nargs=* TaskWikiCalendar :py SplitCalendar(<q-args>).execute()
 
 command! -range TaskWikiInfo :<line1>,<line2>py SelectedTasks().info()

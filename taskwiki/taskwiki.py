@@ -110,8 +110,20 @@ class SplitSummary(Split):
     colorful = True
 
 
-class SplitBurndown(Split):
-    command = 'burndown'
+class SplitBurndownDaily(Split):
+    command = 'burndown.daily'
+    colorful = True
+    maxwidth = True
+
+
+class SplitBurndownWeekly(Split):
+    command = 'burndown.weekly'
+    colorful = True
+    maxwidth = True
+
+
+class SplitBurndownMonthly(Split):
+    command = 'burndown.monthly'
     colorful = True
     maxwidth = True
 
