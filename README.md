@@ -35,6 +35,14 @@ Install this plugin like any other; using pathogen or copying the files and fold
   * Dependency sets (sets subtasks as dependencies of parent tasks)
   * Due dates
   * Priority
+* Commands
+  * TaskWikiBurndown 
+  * TaskWikiDelete
+  * TaskWikiInfo
+  * TaskWikiLink
+  * TaskWikiMod
+  * TaskWikiProjects
+  * TaskWikiProjectsSummary 
 
 ### Planned features
 * Updating
