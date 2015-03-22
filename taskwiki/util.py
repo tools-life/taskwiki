@@ -149,8 +149,8 @@ def show_in_split(lines, size=None, position="belowright", vertical=False,
     vim.command("setlocal winfixwidth")
 
     # Make the split easily closable
-    vim.command("nnoremap <silent> <buffer> q :bd<CR>")
-    vim.command("nnoremap <silent> <buffer> <enter> :bd<CR>")
+    vim.command("nnoremap <silent> <buffer> q :bwipe<CR>")
+    vim.command("nnoremap <silent> <buffer> <enter> :bwipe<CR>")
 
     if ANSI_ESC_AVAILABLE:
         vim.command("AnsiEsc")
