@@ -164,6 +164,7 @@ class Split(object):
         args = self.args + [self.command] + self.tw_extra_args
         if self.colorful:
             output = util.tw_execute_colorful(tw, args,
+                                              allow_failure=False,
                                               maxwidth=self.maxwidth,
                                               maxheight=self.maxheight)
         else:
