@@ -1,7 +1,9 @@
 # Various utility functions
+from __future__ import print_function
 import vim  # pylint: disable=F0401
 import regexp
 import random
+import sys
 import os
 
 # Detect if command AnsiEsc is available
@@ -108,6 +110,10 @@ def strip_ansi_escape_sequence(string):
 
 def show_in_split(lines, size=None, position="belowright", vertical=False,
                   name="taskwiki", replace_opened=True):
+    # If there is no output, bail
+    if not lines:
+        print("No output.", file=sys.stderr)
+        return
 
     # If the multiple buffers with this name are not desired
     # cloase all the old ones in this tabpage
