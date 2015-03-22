@@ -33,7 +33,7 @@ and after saving the file, TaskWiki generates a full list of matching tasks.
 <pre>
 == Foo task list | project:foo | project:foo +bar ==
 </pre>
-so that any tasks created under this header will automatically be assigned these defaults
+so that any tasks created under this header will automatically be assigned "project:foo +bar"
 * Bidirecitonal updates:
   * TW -> Vimwiki (upon file loading)
   * Vimwiki -> TW (upon saving)
