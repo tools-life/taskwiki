@@ -1,0 +1,51 @@
+*taskwiki.txt*     |Taskwarrior| tasks in |Vimwiki|
+                _____         _   __        ___ _    _ 
+               |_   _|_ _ ___| | _\ \      / (_) | _(_)
+                 | |/ _` / __| |/ /\ \ /\ / /| | |/ / |
+                 | | (_| \__ \   <  \ V  V / | |   <| |
+                 |_|\__,_|___/_|\_\  \_/\_/  |_|_|\_\_|
+                                                        
+=============================================================================
+CONTENTS
+
+=============================================================================
+INTRODUCTION
+
+TaskWiki is a vim plugin that enhances vimwiki (another vim plugin) replacing
+vimwiki's Todo functionality with Taskwarrior tasks. 
+=============================================================================
+PREREQUISITES
+
+This plugin requires: 
+- vim 7.4 or greater, with python bindings (use :version in vim, to check)
+- vimwiki dev branch (https://github.com/vimwiki/vimwiki)
+- taskwarrior 2.1.1+ (http://taskwarrior.org/download/)
+- tasklib develop branch (https://github.com/tbabej/tasklib/tree/develop)
+
+and can be enhanced with:
+- vim-plugin-AnsiEsc (https://github.com/powerman/vim-plugin-AnsiEsc) for color
+- tagbar(https://github.com/majutsushi/tagbar) for taskwiki file navigation
+- 
+
+=============================================================================
+INSTALLING
+
+=============================================================================
+MAPPING
+
+=============================================================================
+COMMANDS
+
+=============================================================================
+CUSTOMIZATION
+
+=============================================================================
+TROUBLESHOOTING
+
+=============================================================================
+CONTRIBUTIONS
+
+=============================================================================
+LICENSE
+
+
