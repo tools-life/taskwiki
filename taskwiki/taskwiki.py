@@ -23,6 +23,9 @@ How this plugin works:
 tw = TaskWarrior()
 cache = cache.TaskCache(tw)
 
+# Make sure context is not respected
+tw.config.update({'context':''})
+
 
 class WholeBuffer(object):
     @staticmethod
