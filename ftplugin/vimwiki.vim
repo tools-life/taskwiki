@@ -15,3 +15,10 @@ command! -range TaskWikiInfo :<line1>,<line2>py SelectedTasks().info()
 command! -range TaskWikiLink :<line1>,<line2>py SelectedTasks().link()
 command! -range TaskWikiDelete :<line1>,<line2>py SelectedTasks().delete()
 command! -range -nargs=* TaskWikiMod :<line1>,<line2>py SelectedTasks().modify(<q-args>)
+
+" Disable <CR> as VimwikIFollowLink
+if !hasmapto('<Plug>VimwikiFollowLink')
+  nmap <Plug>NoVimwikiFollowLink <Plug>VimwikiFollowLink
+endif
+
+nmap <silent><buffer> <CR> :py Mappings.task_info_or_vimwiki_follow_link()<CR>

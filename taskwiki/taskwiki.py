@@ -136,5 +136,17 @@ class SelectedTasks(object):
             print(output[-1])
 
 
+class Mappings(object):
+
+    @staticmethod
+    def task_info_or_vimwiki_follow_link():
+        # If the line under cursor contains task, toggle info
+        # otherwise do the default VimwikiFollowLink
+        if cache[util.get_current_line_number()] is not None:
+            SelectedTasks().info()
+        else:
+            vim.command('VimwikiFollowLink')
+
+
 if __name__ == '__main__':
     WholeBuffer.update_from_tw()
