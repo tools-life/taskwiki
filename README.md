@@ -11,11 +11,11 @@ This allows you to define your tasks in your vimwiki files and still have proces
 * vim v7.4+
    (with python bindings) (see :version, within vim, to see what version you are using)
 * [vimwiki](https://github.com/vimwiki/vimwiki/tree/dev)
-   (the dev version)
+   (the dev branch)
 * [taskwarrior](http://taskwarrior.org)
    (version 2.2.0 or newer)
 * [tasklib](https://github.com/tbabej/tasklib/tree/develop)
-   (the "develop" version)
+   (the develop branch)
 
 ### Install
 
