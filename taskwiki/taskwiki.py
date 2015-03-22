@@ -242,5 +242,18 @@ class SplitHistoryAnnual(Split):
     colorful = True
     vertical = True
 
+
+class SplitStats(Split):
+    command = 'stats'
+    colorful = True
+    vertical = True
+
+
+class SplitTags(Split):
+    command = 'tags'
+    colorful = True
+    vertical = True
+
+
 if __name__ == '__main__':
     WholeBuffer.update_from_tw()

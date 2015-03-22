@@ -18,6 +18,8 @@ command! -nargs=* TaskWikiGhistoryAnnual :py SplitGhistoryAnnual(<q-args>).execu
 command! -nargs=* TaskWikiGhistoryMonthly :py SplitGhistoryMonthly(<q-args>).execute()
 command! -nargs=* TaskWikiHistoryAnnual :py SplitGhistoryAnnual(<q-args>).execute()
 command! -nargs=* TaskWikiHistoryMonthly :py SplitGhistoryMonthly(<q-args>).execute()
+command! -nargs=* TaskWikiStats :py SplitStats(<q-args>).execute()
+command! -nargs=* TaskWikiTags :py SplitTags(<q-args>).execute()
 
 " Commands that operate on tasks in the buffer
 command! -range TaskWikiInfo :<line1>,<line2>py SelectedTasks().info()
