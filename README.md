@@ -1,6 +1,6 @@
 ## Taskwiki
 
-_Use [taskwarrior](http://taskwarrior.org) task-management in [vimwiki](https://github.com/vimwiki/vimwiki/tree/dev)_
+_Use [taskwarrior](http://taskwarrior.org) task-management in [vimwiki](https://github.com/vimwiki/vimwiki/tree/dev) files_
 
 This is a vim plugin, which aims to provide a integration between vim and taskwarrior. It extends vimwiki plugin, replacing the rudimentary Todo lists, and provides bidirecitonal synchronization between TaskWarrior and Vimwiki files.
 
@@ -14,7 +14,7 @@ This allows you to define your tasks in your vimwiki files and still have proces
    (the dev version)
 * [taskwarrior](http://taskwarrior.org)
    version (2.2.0 or newer)
-* tasklib
+* [tasklib](https://github.com/tbabej/tasklib/tree/develop)
    (the "develop" version)
 
 ### Install
