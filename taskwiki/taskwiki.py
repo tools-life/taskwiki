@@ -9,6 +9,7 @@ sys.path.insert(0, vim.eval("s:plugin_path") + '/taskwiki')
 import cache
 import util
 import vwtask
+import viewport
 
 """
 How this plugin works:
@@ -54,10 +55,20 @@ class WholeBuffer(object):
         cache.evaluate_viewports()
 
 
-class Splits(object):
+class Split(object):
+    command = None
+    split_name = None
+    colorful = False
+    maxwidth = False
+    maxheight = False
+    vertical = False
+    tw_extra_args = []
 
-    @staticmethod
-    def _process_args(args):
+    def __init__(self, args):
+        self.args = self._process_args(args)
+        self.split_name = self.split_name or self.command
+
+    def _process_args(self, args):
         tw_args = util.tw_modstring_to_args(args)
 
         # If only 'global' argument has been passed, then no
@@ -70,22 +81,39 @@ class Splits(object):
         # If no argument has been passed, locate the closest viewport
         # and use its filter
         else:
-            return viewport.ViewPort.find_closest().taskfilter or []
+            return viewport.ViewPort.find_closest(cache).taskfilter or []
 
-    @staticmethod
-    def projects(args):
-        output = tw.execute_command(_process_args(args) + ['projects'])
-        util.show_in_split(output, name="projects", vertical=True)
+    def execute(self):
+        args = self.args + [self.command] + self.tw_extra_args
+        if self.colorful:
+            output = util.tw_execute_colorful(tw, args,
+                                              maxwidth=self.maxwidth,
+                                              maxheight=self.maxheight)
+        else:
+            output = tw.execute_command(args)
 
-    @staticmethod
-    def summary(args):
-        output = util.tw_execute_colorful(tw, _process_args(args) + ['summary'])
-        util.show_in_split(output, name="summary", vertical=True)
+        util.show_in_split(
+            output,
+            name=self.split_name,
+            vertical=self.vertical,
+        )
 
-    @staticmethod
-    def burndown(args):
-        output = util.tw_execute_colorful(tw, _process_args(args) + ['burndown'], maxwidth=True)
-        util.show_in_split(output, name="burndown")
+
+class SplitProjects(Split):
+    command = 'projects'
+    vertical = True
+
+
+class SplitSummary(Split):
+    command = 'summary'
+    vertical = True
+    colorful = True
+
+
+class SplitBurndown(Split):
+    command = 'burndown'
+    colorful = True
+    maxwidth = True
 
 
 class SelectedTasks(object):
