@@ -13,7 +13,7 @@ This allows you to define your tasks in your vimwiki files and still have proces
 * [vimwiki](https://github.com/vimwiki/vimwiki/tree/dev)
    (the dev version)
 * [taskwarrior](http://taskwarrior.org)
-   version (2.2.0 or newer)
+   (version 2.2.0 or newer)
 * [tasklib](https://github.com/tbabej/tasklib/tree/develop)
    (the "develop" version)
 
