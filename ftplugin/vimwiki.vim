@@ -7,6 +7,7 @@ augroup taskwiki
     execute "autocmd BufWrite *.".expand('%:e')." py WholeBuffer.update_to_tw()"
 augroup END
 
+" Split reports commands
 command! -nargs=* TaskWikiProjects :py SplitProjects(<q-args>).execute()
 command! -nargs=* TaskWikiProjectsSummary :py SplitSummary(<q-args>).execute()
 command! -nargs=* TaskWikiBurndownDaily :py SplitBurndownDaily(<q-args>).execute()
@@ -15,7 +16,10 @@ command! -nargs=* TaskWikiBurndownWeekly :py SplitBurndownWeekly(<q-args>).execu
 command! -nargs=* TaskWikiCalendar :py SplitCalendar(<q-args>).execute()
 command! -nargs=* TaskWikiGhistoryAnnual :py SplitGhistoryAnnual(<q-args>).execute()
 command! -nargs=* TaskWikiGhistoryMonthly :py SplitGhistoryMonthly(<q-args>).execute()
+command! -nargs=* TaskWikiHistoryAnnual :py SplitGhistoryAnnual(<q-args>).execute()
+command! -nargs=* TaskWikiHistoryMonthly :py SplitGhistoryMonthly(<q-args>).execute()
 
+" Commands that operate on tasks in the buffer
 command! -range TaskWikiInfo :<line1>,<line2>py SelectedTasks().info()
 command! -range TaskWikiLink :<line1>,<line2>py SelectedTasks().link()
 command! -range TaskWikiDelete :<line1>,<line2>py SelectedTasks().delete()

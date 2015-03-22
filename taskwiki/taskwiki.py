@@ -217,16 +217,29 @@ class SplitCalendar(Split):
         self.tw_extra_args = util.tw_modstring_to_args(args)
         self.split_name = self.split_name or self.command
 
+
 class SplitGhistoryMonthly(Split):
     command = 'ghistory.monthly'
     colorful = True
     maxwidth = True
+
 
 class SplitGhistoryAnnual(Split):
     command = 'ghistory.annual'
     colorful = True
     maxwidth = True
 
+
+class SplitHistoryMonthly(Split):
+    command = 'history.monthly'
+    colorful = True
+    vertical = True
+
+
+class SplitHistoryAnnual(Split):
+    command = 'history.annual'
+    colorful = True
+    vertical = True
 
 if __name__ == '__main__':
     WholeBuffer.update_from_tw()
