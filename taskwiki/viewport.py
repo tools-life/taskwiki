@@ -3,7 +3,7 @@ import vim  # pylint: disable=F0401
 
 import vwtask
 import regexp
-from util import tw_modstring_to_kwargs
+import util
 
 class ViewPort(object):
     """
@@ -41,8 +41,8 @@ class ViewPort(object):
         if not match:
             return None
 
-        taskfilter = match.group('filter').strip()
-        defaults = tw_modstring_to_kwargs((match.group('defaults') or '').strip())
+        taskfilter = util.tw_modstring_to_args(match.group('filter') or '')
+        defaults = util.tw_modstring_to_kwargs((match.group('defaults') or ''))
         self = cls(number, cache, taskfilter, defaults)
 
         return self
@@ -67,7 +67,7 @@ class ViewPort(object):
 
         # Split the filter into CLI tokens and filter by the expression
         # By default, do not list deleted tasks
-        args = ["-DELETED"] + self.taskfilter.split()
+        args = ["-DELETED"] + self.taskfilter
         matching_tasks = set(
             task for task in self.tw.tasks.filter(*args)
         )
