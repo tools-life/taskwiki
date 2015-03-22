@@ -1,6 +1,7 @@
 # Various utility functions
 import vim  # pylint: disable=F0401
 import regexp
+import random
 
 # Detect if command AnsiEsc is available
 ANSI_ESC_AVAILABLE = vim.eval('exists(":AnsiEsc")') == '2'
@@ -100,6 +101,11 @@ def strip_ansi_escape_sequence(string):
 
 def show_in_split(lines, size=None, position="belowright", vertical=False,
                   name="taskwiki"):
+
+    # Generate a random suffix for the buffer name
+    random_suffix = random.randint(1,100000)
+    name = '{0}.{1}'.format(name, random_suffix)
+
     # Compute the size of the split
     if size is None:
         if vertical:
