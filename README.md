@@ -12,10 +12,11 @@ This allows you to define your tasks in your vimwiki files and still have proces
    (with python bindings) (see :version, within vim, to see what version you are using)
 * [vimwiki](https://github.com/vimwiki/vimwiki/tree/dev)
    (the dev branch)
-* [taskwarrior](http://taskwarrior.org)
+* [taskwarrior](http://taskwarrior.org) 
    (version 2.2.0 or newer)
 * [tasklib](https://github.com/tbabej/tasklib/tree/develop)
-   (the develop branch)
+   (the develop branch) taskwarrior python bindings
+* [vim-plugin-AnsiEsc](https://github.com/powerman/vim-plugin-AnsiEsc) for color support
 
 ### Install
 
@@ -46,8 +47,10 @@ so that any tasks created under this heading will automatically be assigned "pro
   * Due dates
   * Priority
 * Commands
-  * TaskWikiBurndown 
+  * TaskWikiBurndown(Daily, Monthly, Weekly)
+  * TaskWikiCalendar
   * TaskWikiDelete
+  * TaskWikiGhistory(Annual, Monthly)
   * TaskWikiInfo
   * TaskWikiLink
   * TaskWikiMod
