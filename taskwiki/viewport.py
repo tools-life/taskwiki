@@ -1,3 +1,4 @@
+import itertools
 import re
 import vim  # pylint: disable=F0401
 
@@ -46,6 +47,21 @@ class ViewPort(object):
         self = cls(number, cache, taskfilter, defaults)
 
         return self
+
+    @classmethod
+    def find_closest(cls, cache=None):
+        current_line = util.get_current_line_number()
+
+        # Search lines in order: first all above, than all below
+        line_numbers = itertools.chain(
+            reversed(range(0, current_line + 1)),
+            range(current_line + 1, len(vim.current.buffer))
+            )
+
+        for i in line_numbers:
+            port = cls.from_line(i, cache)
+            if port:
+                return port
 
     def load_tasks(self):
         # Load all tasks below the viewport
