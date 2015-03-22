@@ -116,6 +116,19 @@ class SplitBurndown(Split):
     maxwidth = True
 
 
+class SplitCalendar(Split):
+    command = 'calendar'
+    colorful = True
+    maxwidth = True
+
+    # Task calendar does not take fitler and in general uses
+    # command-suffix syntax
+    def __init__(self, args):
+        self.args = []
+        self.tw_extra_args = util.tw_modstring_to_args(args)
+        self.split_name = self.split_name or self.command
+
+
 class SelectedTasks(object):
     def __init__(self):
         self.tw = tw
