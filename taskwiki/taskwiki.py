@@ -57,18 +57,34 @@ class WholeBuffer(object):
 class Splits(object):
 
     @staticmethod
-    def projects():
-        output = tw.execute_command(['projects'])
+    def _process_args(args):
+        tw_args = util.tw_modstring_to_args(args)
+
+        # If only 'global' argument has been passed, then no
+        # filter should be applied
+        if tw_args == ['global']:
+            return []
+        # If unempty filter has been passed, then use that
+        elif tw_args != []:
+            return tw_args
+        # If no argument has been passed, locate the closest viewport
+        # and use its filter
+        else:
+            return viewport.ViewPort.find_closest().taskfilter or []
+
+    @staticmethod
+    def projects(args):
+        output = tw.execute_command(_process_args(args) + ['projects'])
         util.show_in_split(output, name="projects", vertical=True)
 
     @staticmethod
-    def summary():
-        output = util.tw_execute_colorful(tw, ['summary'])
+    def summary(args):
+        output = util.tw_execute_colorful(tw, _process_args(args) + ['summary'])
         util.show_in_split(output, name="summary", vertical=True)
 
     @staticmethod
-    def burndown():
-        output = util.tw_execute_colorful(tw, ['burndown'], maxwidth=True)
+    def burndown(args):
+        output = util.tw_execute_colorful(tw, _process_args(args) + ['burndown'], maxwidth=True)
         util.show_in_split(output, name="burndown")
 
 
