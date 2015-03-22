@@ -2,7 +2,7 @@
 
 _Use [taskwarrior](http://taskwarrior.org) task-management in [vimwiki](https://github.com/vimwiki/vimwiki/tree/dev) files_
 
-This is a vim plugin, which aims to provide a integration between vim and taskwarrior. It extends vimwiki plugin, replacing the rudimentary Todo lists, and provides bidirecitonal synchronization between TaskWarrior and Vimwiki files.
+This is a vim plugin, which aims to provide integration between vimwiki and taskwarrior. It extends vimwiki by replacing the rudimentary Todo lists, and provides bidirecitonal synchronization between TaskWarrior and Vimwiki files.
 
 This allows you to define your tasks in your vimwiki files and still have processing power of TaskWarrior at your disposal. If you use taskwarrior, and you use vimwiki, you want this plugin.
 
@@ -24,8 +24,16 @@ Install this plugin like any other; using pathogen or copying the files and fold
 ### Features
 
 * ViewPorts
-  * Create a header that contains a taskwarrior filter, and after saving the file, TaskWiki generates a full list of matching tasks.
-  * Define defaults, so that any tasks created under this header will automatically be assigned these defaults
+  * Create a header that contains a taskwarrior filter, that looks like this;
+<pre>
+== Foo task list | project:foo ==
+</pre>
+and after saving the file, TaskWiki generates a full list of matching tasks.
+  * Define defaults, by extending that header like this;
+<pre>
+== Foo task list | project:foo | project:foo +bar ==
+</pre>
+so that any tasks created under this header will automatically be assigned these defaults
 * Bidirecitonal updates:
   * TW -> Vimwiki (upon file loading)
   * Vimwiki -> TW (upon saving)
