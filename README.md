@@ -54,7 +54,6 @@ so that any tasks created under this header will automatically be assigned these
 
 ### Planned features
 * Updating
-  * Task deletion (when removed from the Vimwiki file, if it was there previously)
   * Removals from dependency sets
 
 ### Credits
