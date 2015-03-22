@@ -117,18 +117,24 @@ class VimwikiTask(object):
 
     @property
     def task(self):
+        # New task object accessed second or later time
+        if self.__unsaved_task is not None:
+            return self.__unsaved_task
+
         # Return the corresponding task if alrady set
         # Else try to load it or create a new one
         if self['uuid']:
             try:
                 return self.cache[self['uuid']]
             except Task.DoesNotExist:
+                # Task with stale uuid, recreate
                 self.__unsaved_task = Task(self.tw)
                 # If task cannot be loaded, we need to remove the UUID
                 vim.command('echom "UUID not found: %s,'
                             'will be replaced if saved"' % self['uuid'])
                 self['uuid'] = None
         else:
+            # New task object accessed first time
             self.__unsaved_task = Task(self.tw)
 
         return self.__unsaved_task
@@ -184,15 +190,12 @@ class VimwikiTask(object):
             # If task was first time saved now, add it to the cache and remove
             # the temporary reference
             if self.__unsaved_task is not None:
+                self['uuid'] = self.__unsaved_task['uuid']
                 self.cache[self.__unsaved_task['uuid']] = self.__unsaved_task
                 self.__unsaved_task = None
 
             # If we saved the task, we need to update. Hooks may have chaned data.
             self.update_from_task()
-
-        # Load the UUID
-        if not self['uuid']:
-            self['uuid'] = self.task['uuid']
 
         # Mark task as done. This works fine with already completed tasks.
         if self['completed'] and (self.task.pending or self.task.waiting):
