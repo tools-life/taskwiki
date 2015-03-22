@@ -1,3 +1,5 @@
+from __future__ import print_function
+import itertools
 import sys
 import vim  # pylint: disable=F0401
 
@@ -69,10 +71,28 @@ class SelectedTasks(object):
         if not self.tasks:
             print("No tasks selected.")
 
+    def _execute_safely(self, *args, **kwargs):
+        kwargs['allow_failure'] = False
+        kwargs['return_all'] = True
+
+        out, err, rc = self.tw.execute_command(*args, **kwargs)
+
+        if rc == 0:
+            return out
+        else:
+            # In case of failure, print everything as os output
+            # Left for debug mode
+            # for line in itertools.chain(out, err[:-1]):
+            #    print(line)
+            # Display the last line as failure
+            if err:
+                print(err[-1], file=sys.stderr)
+
     def info(self):
         for vimwikitask in self.tasks:
-            info = self.tw.execute_command([vimwikitask['uuid'], 'info'])
-            util.show_in_split(info)
+            out = self._execute_safely([vimwikitask['uuid'], 'info'])
+            if out:
+                util.show_in_split(out)
             break  # Show only one task
 
     def link(self):
