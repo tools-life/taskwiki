@@ -154,10 +154,11 @@ class Split(object):
         # If unempty filter has been passed, then use that
         elif tw_args != []:
             return tw_args
-        # If no argument has been passed, locate the closest viewport
-        # and use its filter
+        # If no argument has been passed, locate the closest viewport,
+        # if any exists, and use its filter.
         else:
-            return viewport.ViewPort.find_closest(cache).taskfilter or []
+            port = viewport.ViewPort.find_closest(cache)
+            return port.taskfilter if port is not None else []
 
     def execute(self):
         args = self.args + [self.command] + self.tw_extra_args
