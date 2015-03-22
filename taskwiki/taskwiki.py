@@ -55,6 +55,82 @@ class WholeBuffer(object):
         cache.evaluate_viewports()
 
 
+class SelectedTasks(object):
+    def __init__(self):
+        self.tw = tw
+
+        # Reset cache, otherwise old line content may be used
+        cache.reset()
+
+        # Load the current tasks
+        range_tasks = [cache[i] for i in util.selected_line_numbers()]
+        self.tasks = [t for t in range_tasks if t is not None]
+
+        if not self.tasks:
+            print("No tasks selected.")
+
+    def info(self):
+        for vimwikitask in self.tasks:
+            info = self.tw.execute_command([vimwikitask['uuid'], 'info'])
+            util.show_in_split(info)
+            break  # Show only one task
+
+    def link(self):
+        path = util.get_absolute_filepath()
+        for vimwikitask in self.tasks:
+            vimwikitask.task.add_annotation("wiki: {0}".format(path))
+            print("Task \"{0}\" linked.".format(vimwikitask['description']))
+
+    def delete(self):
+        # Delete the tasks in TaskWarrior
+        # Multiple VimwikiTasks might refer to the same task, so make sure
+        # we do not delete one task twice
+        for task in set(vimwikitask.task for vimwikitask in self.tasks):
+            task.delete()
+
+        # Remove the lines in the buffer
+        for vimwikitask in self.tasks:
+            cache.remove_line(vimwikitask['line_number'])
+            print("Task \"{0}\" deleted.".format(vimwikitask['description']))
+
+    def modify(self, modstring):
+        # If no modstring was passed as argument, ask the user interactively
+        if not modstring:
+            modstring = util.get_input("Enter modifications: ")
+
+        # We might have two same tasks in the range, make sure we do not pass the
+        # same uuid twice
+        unique_tasks = set(vimwikitask.task['uuid'] for vimwikitask in self.tasks)
+        uuids = ','.join(unique_tasks)
+
+        # Generate the arguments from the modstring
+        args = util.tw_modstring_to_args(modstring)
+
+        # Modify all tasks at once
+        output = self.tw.execute_command([uuids, 'mod'] + args)
+
+        # Update the touched tasks in buffer, if needed
+        cache.load_tasks()
+        cache.update_vwtasks_from_tasks()
+        cache.update_vwtasks_in_buffer()
+
+        # Output the feedback from TW
+        if output:
+            print(output[-1])
+
+
+class Mappings(object):
+
+    @staticmethod
+    def task_info_or_vimwiki_follow_link():
+        # If the line under cursor contains task, toggle info
+        # otherwise do the default VimwikiFollowLink
+        if cache[util.get_current_line_number()] is not None:
+            SelectedTasks().info()
+        else:
+            vim.command('VimwikiFollowLink')
+
+
 class Split(object):
     command = None
     split_name = None
@@ -139,82 +215,6 @@ class SplitCalendar(Split):
         self.args = []
         self.tw_extra_args = util.tw_modstring_to_args(args)
         self.split_name = self.split_name or self.command
-
-
-class SelectedTasks(object):
-    def __init__(self):
-        self.tw = tw
-
-        # Reset cache, otherwise old line content may be used
-        cache.reset()
-
-        # Load the current tasks
-        range_tasks = [cache[i] for i in util.selected_line_numbers()]
-        self.tasks = [t for t in range_tasks if t is not None]
-
-        if not self.tasks:
-            print("No tasks selected.")
-
-    def info(self):
-        for vimwikitask in self.tasks:
-            info = self.tw.execute_command([vimwikitask['uuid'], 'info'])
-            util.show_in_split(info)
-            break  # Show only one task
-
-    def link(self):
-        path = util.get_absolute_filepath()
-        for vimwikitask in self.tasks:
-            vimwikitask.task.add_annotation("wiki: {0}".format(path))
-            print("Task \"{0}\" linked.".format(vimwikitask['description']))
-
-    def delete(self):
-        # Delete the tasks in TaskWarrior
-        # Multiple VimwikiTasks might refer to the same task, so make sure
-        # we do not delete one task twice
-        for task in set(vimwikitask.task for vimwikitask in self.tasks):
-            task.delete()
-
-        # Remove the lines in the buffer
-        for vimwikitask in self.tasks:
-            cache.remove_line(vimwikitask['line_number'])
-            print("Task \"{0}\" deleted.".format(vimwikitask['description']))
-
-    def modify(self, modstring):
-        # If no modstring was passed as argument, ask the user interactively
-        if not modstring:
-            modstring = util.get_input("Enter modifications: ")
-
-        # We might have two same tasks in the range, make sure we do not pass the
-        # same uuid twice
-        unique_tasks = set(vimwikitask.task['uuid'] for vimwikitask in self.tasks)
-        uuids = ','.join(unique_tasks)
-
-        # Generate the arguments from the modstring
-        args = util.tw_modstring_to_args(modstring)
-
-        # Modify all tasks at once
-        output = self.tw.execute_command([uuids, 'mod'] + args)
-
-        # Update the touched tasks in buffer, if needed
-        cache.load_tasks()
-        cache.update_vwtasks_from_tasks()
-        cache.update_vwtasks_in_buffer()
-
-        # Output the feedback from TW
-        if output:
-            print(output[-1])
-
-
-class Mappings(object):
-
-    @staticmethod
-    def task_info_or_vimwiki_follow_link():
-        # If the line under cursor contains task, toggle info
-        # otherwise do the default VimwikiFollowLink
-        if cache[util.get_current_line_number()] is not None:
-            SelectedTasks().info()
-        else:
-            vim.command('VimwikiFollowLink')
 
 
 if __name__ == '__main__':
