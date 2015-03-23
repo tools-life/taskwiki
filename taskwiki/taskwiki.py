@@ -151,6 +151,19 @@ class SelectedTasks(object):
             print("Task \"{0}\" started.".format(vimwikitask['description']))
 
 
+    def stop(self):
+        # Multiple VimwikiTasks might refer to the same task, so make sure
+        # we do not stop one task twice
+        for task in set(vimwikitask.task for vimwikitask in self.tasks):
+            task.stop()
+
+        # Update the lines in the buffer
+        for vimwikitask in self.tasks:
+            vimwikitask.update_from_task()
+            vimwikitask.update_in_buffer()
+            print("Task \"{0}\" stopped.".format(vimwikitask['description']))
+
+
 class Mappings(object):
 
     @staticmethod
