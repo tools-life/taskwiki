@@ -25,6 +25,7 @@ command! -nargs=* TaskWikiTags :py SplitTags(<q-args>).execute()
 command! -range TaskWikiInfo :<line1>,<line2>py SelectedTasks().info()
 command! -range TaskWikiLink :<line1>,<line2>py SelectedTasks().link()
 command! -range TaskWikiDelete :<line1>,<line2>py SelectedTasks().delete()
+command! -range TaskWikiStart :<line1>,<line2>py SelectedTasks().start()
 command! -range -nargs=* TaskWikiMod :<line1>,<line2>py SelectedTasks().modify(<q-args>)
 
 " Disable <CR> as VimwikIFollowLink

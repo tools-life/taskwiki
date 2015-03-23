@@ -138,6 +138,18 @@ class SelectedTasks(object):
         if output:
             print(output[-1])
 
+    def start(self):
+        # Multiple VimwikiTasks might refer to the same task, so make sure
+        # we do not start one task twice
+        for task in set(vimwikitask.task for vimwikitask in self.tasks):
+            task.start()
+
+        # Update the lines in the buffer
+        for vimwikitask in self.tasks:
+            vimwikitask.update_from_task()
+            vimwikitask.update_in_buffer()
+            print("Task \"{0}\" started.".format(vimwikitask['description']))
+
 
 class Mappings(object):
 
