@@ -201,15 +201,20 @@ class VimwikiTask(object):
         if self['completed'] and (self.task.pending or self.task.waiting):
             self.task.done()
 
-    @property
-    def completed_mark(self):
-        if self['completed']:
-            self['completed_mark'] = 'X'
-        else:
-            if self['completed_mark'] == 'X':
-                self['completed_mark'] = ' '
+    def get_completed_mark(self):
+        mark = self['completed_mark']
 
-        return self['completed_mark']
+        if self['completed']:
+            mark = 'X'
+        elif mark == 'X':
+            mark = ' '
+
+        if self.task.active:
+            mark = 'S'
+        elif mark == 'S':
+            mark = ' '
+
+        return mark
 
     def update_from_task(self):
         if not self.task.saved:
@@ -224,6 +229,8 @@ class VimwikiTask(object):
             'uuid': self.task['uuid'],
             })
 
+        self['completed_mark'] = self.get_completed_mark()
+
     def update_in_buffer(self):
         # Look if any of the data that show up in Vim has changed
         buffer_data = {key:self[key] for key in self.buffer_keys}
@@ -236,7 +243,7 @@ class VimwikiTask(object):
         return ''.join([
             self['indent'],
             '* [',
-            self.completed_mark,
+            self['completed_mark'],
             '] ',
             self['description'] if self['description'] else 'TEXT MISSING?',
             ' ' + '!' * self.priority_from_tw_format if self['priority'] else '',
