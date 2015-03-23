@@ -24,31 +24,31 @@ Install this plugin like any other; using pathogen or copying the files and fold
 
 ### Features
 
-* ViewPorts
+#### ViewPorts
   * Create a heading that contains a taskwarrior filter, that looks like this;
 <pre>
 == Foo task list | project:foo ==
 </pre>
 and after saving the file, TaskWiki generates a full list of matching tasks.
 
-  * Define defaults, by extending that heading like this;
+#### Define defaults, by extending that heading like this;
 <pre>
 == Foo task list | project:foo | project:foo +bar ==
 </pre>
 so that any tasks created under this heading will automatically be assigned "project:foo +bar"
 
-* Bidirecitonal updates:
+#### Bidirecitonal updates:
   * TW -> Vimwiki (upon file loading)
   * Vimwiki -> TW (upon saving)
 
-* Updated information
+#### Updated information
   * Description
   * Task status (completion)
   * Dependency sets (sets subtasks as dependencies of parent tasks)
   * Due dates
   * Priority
 
-* Commands
+### Commands
   * TaskWikiBurndown(Daily, Monthly, Weekly)
   * TaskWikiCalendar
   * TaskWikiDelete
