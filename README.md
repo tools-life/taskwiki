@@ -40,22 +40,29 @@ so that any tasks created under this heading will automatically be assigned "pro
 * Bidirecitonal updates:
   * TW -> Vimwiki (upon file loading)
   * Vimwiki -> TW (upon saving)
+
 * Updated information
   * Description
   * Task status (completion)
   * Dependency sets (sets subtasks as dependencies of parent tasks)
   * Due dates
   * Priority
+
 * Commands
   * TaskWikiBurndown(Daily, Monthly, Weekly)
   * TaskWikiCalendar
   * TaskWikiDelete
   * TaskWikiGhistory(Annual, Monthly)
+  * TaskWikiHistory(Annual, Monthly)
   * TaskWikiInfo
   * TaskWikiLink
   * TaskWikiMod
   * TaskWikiProjects
-  * TaskWikiProjectsSummary 
+  * TaskWikiProjectsSummary
+  * TaskWikiStart
+  * TaskWikiStats
+  * TaskWikiStop
+  * TaskWikiTags
 
 ### Planned features
 * Updating
