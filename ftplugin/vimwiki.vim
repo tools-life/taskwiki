@@ -35,3 +35,4 @@ if !hasmapto('<Plug>VimwikiFollowLink')
 endif
 
 nmap <silent><buffer> <CR> :py Mappings.task_info_or_vimwiki_follow_link()<CR>
+
