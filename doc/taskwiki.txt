@@ -11,8 +11,18 @@ CONTENTS
 =============================================================================
 INTRODUCTION
 
+TaskWiki is a vim-plugin that enhances vimwiki (another vim plugin) replacing
+vimwiki's Todo functionality with Taskwarrior tasks. 
 =============================================================================
 PREREQUISITES
+
+This plugin requires: 
+- vim 7.4 or greater (with python bindings)
+- vimwiki dev branch (https://github.com/vimwiki/vimwiki)
+- taskwarrior 2.4.3+ (http://taskwarrior.org/download/)
+
+and can be enhanced with:
+- 
 
 =============================================================================
 MAPPING
