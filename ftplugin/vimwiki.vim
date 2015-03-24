@@ -23,6 +23,7 @@ command! -nargs=* TaskWikiTags :py SplitTags(<q-args>).execute()
 
 " Commands that operate on tasks in the buffer
 command! -range TaskWikiInfo :<line1>,<line2>py SelectedTasks().info()
+command! -range TaskWikiEdit :<line1>,<line2>py SelectedTasks().edit()
 command! -range TaskWikiLink :<line1>,<line2>py SelectedTasks().link()
 command! -range TaskWikiDelete :<line1>,<line2>py SelectedTasks().delete()
 command! -range TaskWikiStart :<line1>,<line2>py SelectedTasks().start()
