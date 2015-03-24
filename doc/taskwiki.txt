@@ -20,9 +20,11 @@ This plugin requires:
 - vim 7.4 or greater, with python bindings (use :version in vim, to check)
 - vimwiki dev branch (https://github.com/vimwiki/vimwiki)
 - taskwarrior 2.4.3+ (http://taskwarrior.org/download/)
-- tasklib 
+- tasklib develop branch (https://github.com/tbabej/tasklib/tree/develop)
 
 and can be enhanced with:
+- vim-plugin-AnsiEsc (https://github.com/powerman/vim-plugin-AnsiEsc) for color
+- tagbar(https://github.com/majutsushi/tagbar) for taskwiki file navigation
 - 
 
 =============================================================================
