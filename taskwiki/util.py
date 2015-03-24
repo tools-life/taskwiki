@@ -73,11 +73,19 @@ def tw_modstring_to_kwargs(line):
         # If the argument contains :, then it's a key/value pair
         if ':' in arg:
             key, value = arg.split(':', 1)
-            output[key] = value
+            # Ignore anything which is not one-word string of alpha chars
+            # This will skip over constructs with attribute modifiers
+            if key.isalpha():
+                output[key] = value
         # Tag addition
         elif arg.startswith('+'):
             value = arg[1:]
-            output.setdefault('tags', []).append(value)
+            # Ignore virtual tags
+            if not value.isupper():
+                output.setdefault('tags', []).append(value)
+        elif arg.startswith('-'):
+            # Ignore tag removal
+            pass
 
     return output
 
