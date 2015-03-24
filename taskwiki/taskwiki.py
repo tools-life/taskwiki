@@ -81,7 +81,6 @@ class SelectedTasks(object):
     def edit(self):
         for vimwikitask in self.tasks:
             vim.command('! task {0} edit'.format(vimwikitask['uuid']))
-            break  # Show only one task
 
     def link(self):
         path = util.get_absolute_filepath()
