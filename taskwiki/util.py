@@ -53,7 +53,7 @@ def tw_modstring_to_args(line):
         if not ignored:
             current_part += char
 
-        if process_next_part:
+        if process_next_part and current_part:
             output.append(current_part)
             current_part = ''
 
