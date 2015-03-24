@@ -16,7 +16,10 @@ This allows you to define your tasks in your vimwiki files and still have proces
    (version 2.4.3 or newer)
 * [tasklib](https://github.com/tbabej/tasklib/tree/develop)
    (the develop branch) taskwarrior python bindings
+
+### Enhancements
 * [vim-plugin-AnsiEsc](https://github.com/powerman/vim-plugin-AnsiEsc) for color support
+* [tagbar](https://github.com/majutsushi/tagbar) for taskwiki file navigation
 
 ### Install
 
