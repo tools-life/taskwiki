@@ -15,6 +15,8 @@ def test_modstring_to_args():
     assert util.tw_modstring_to_args("project:Random") == ["project:Random"]
     assert util.tw_modstring_to_args("project:Random area:admin") == ["project:Random", "area:admin"]
     assert util.tw_modstring_to_args("project:Random +test") == ["project:Random", "+test"]
+    assert util.tw_modstring_to_args("project:Random  +test") == ["project:Random", "+test"]
+    assert util.tw_modstring_to_args("project:Random    due:now") == ["project:Random", "due:now"]
     assert util.tw_modstring_to_args("project:'Random +test'") == ["project:Random +test"]
 
 def test_modstring_to_kwargs():
