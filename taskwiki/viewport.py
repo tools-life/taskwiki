@@ -43,7 +43,9 @@ class ViewPort(object):
             return None
 
         taskfilter = util.tw_modstring_to_args(match.group('filter') or '')
-        defaults = util.tw_modstring_to_kwargs((match.group('defaults') or ''))
+        defaults = util.tw_modstring_to_kwargs(
+            match.group('filter') + ' ' + (match.group('defaults') or ''))
+
         self = cls(number, cache, taskfilter, defaults)
 
         return self
