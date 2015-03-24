@@ -17,7 +17,7 @@ vimwiki's Todo functionality with Taskwarrior tasks.
 PREREQUISITES
 
 This plugin requires: 
-- vim 7.4 or greater (with python bindings)
+- vim 7.4 or greater, with python bindings (use :version in vim, to check)
 - vimwiki dev branch (https://github.com/vimwiki/vimwiki)
 - taskwarrior 2.4.3+ (http://taskwarrior.org/download/)
 - tasklib 
