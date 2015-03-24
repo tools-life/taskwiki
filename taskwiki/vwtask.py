@@ -63,7 +63,6 @@ class VimwikiTask(object):
             'description': match.group('text'),
             'uuid': match.group('uuid'),  # can be None for new tasks
             'completed_mark': match.group('completed'),
-            'completed': match.group('completed') is 'X',
             'line_number': number,
             'priority': convert_priority_to_tw_format(
                 len(match.group('priority') or [])) # This is either 0,1,2 or 3
@@ -194,17 +193,18 @@ class VimwikiTask(object):
                 self.cache[self.__unsaved_task['uuid']] = self.__unsaved_task
                 self.__unsaved_task = None
 
+            # Mark task as done.
+            is_not_completed = self.task.pending or self.task.waiting
+            if self['completed_mark'] == 'X' and is_not_completed:
+                self.task.done()
+
             # If we saved the task, we need to update. Hooks may have chaned data.
             self.update_from_task()
-
-        # Mark task as done. This works fine with already completed tasks.
-        if self['completed'] and (self.task.pending or self.task.waiting):
-            self.task.done()
 
     def get_completed_mark(self):
         mark = self['completed_mark']
 
-        if self['completed']:
+        if self.task.completed:
             mark = 'X'
         elif mark == 'X':
             mark = ' '
@@ -223,7 +223,6 @@ class VimwikiTask(object):
         self.data.update({
             'description': self.task['description'],
             'priority': self.priority_from_tw_format,
-            'completed': (self.task['status'] == u'completed'),
             'due': self.task['due'],
             'project': self.task['project'],
             'uuid': self.task['uuid'],
