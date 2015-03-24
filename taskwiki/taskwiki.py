@@ -71,26 +71,9 @@ class SelectedTasks(object):
         if not self.tasks:
             print("No tasks selected.")
 
-    def _execute_safely(self, *args, **kwargs):
-        kwargs['allow_failure'] = False
-        kwargs['return_all'] = True
-
-        out, err, rc = self.tw.execute_command(*args, **kwargs)
-
-        if rc == 0:
-            return out
-        else:
-            # In case of failure, print everything as os output
-            # Left for debug mode
-            # for line in itertools.chain(out, err[:-1]):
-            #    print(line)
-            # Display the last line as failure
-            if err:
-                print(err[-1], file=sys.stderr)
-
     def info(self):
         for vimwikitask in self.tasks:
-            out = self._execute_safely([vimwikitask['uuid'], 'info'])
+            out = util.tw_execute_safely(self.tw, [vimwikitask['uuid'], 'info'])
             if out:
                 util.show_in_split(out)
             break  # Show only one task
@@ -127,7 +110,7 @@ class SelectedTasks(object):
         args = util.tw_modstring_to_args(modstring)
 
         # Modify all tasks at once
-        output = self.tw.execute_command([uuids, 'mod'] + args)
+        output = util.tw_execute_safely(self.tw, [uuids, 'mod'] + args)
 
         # Update the touched tasks in buffer, if needed
         cache.load_tasks()
@@ -213,7 +196,7 @@ class Split(object):
                                               maxwidth=self.maxwidth,
                                               maxheight=self.maxheight)
         else:
-            output = tw.execute_command(args)
+            output = util.tw_execute_safely(tw, args)
 
         util.show_in_split(
             output,

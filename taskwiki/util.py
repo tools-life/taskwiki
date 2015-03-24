@@ -193,4 +193,21 @@ def tw_execute_colorful(tw, *args, **kwargs):
     if maxwidth:
         override['defaultwidth'] = vim.current.window.width
 
-    return tw.execute_command(*args, **kwargs)
+    return tw_execute_safely(tw, *args, **kwargs)
+
+def tw_execute_safely(tw, *args, **kwargs):
+    kwargs['allow_failure'] = False
+    kwargs['return_all'] = True
+
+    out, err, rc = tw.execute_command(*args, **kwargs)
+
+    if rc == 0:
+        return out
+    else:
+        # In case of failure, print everything as os output
+        # Left for debug mode
+        # for line in itertools.chain(out, err[:-1]):
+        #    print(line)
+        # Display the last line as failure
+        if err:
+            print(err[-1], file=sys.stderr)
