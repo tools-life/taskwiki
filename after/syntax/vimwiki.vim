@@ -10,7 +10,7 @@ for s:i in range(1,6)
 endfor
 
 " Highlight active tasks
-syntax match VimwikiCheckBoxActive /\*\s*\[S\]\s.*$/
+syntax match VimwikiCheckBoxActive /\s*\*\s*\[S\]\s.*$/
 hi def link VimwikiCheckBoxActive Type
 
 " Highlight the UUID as comment
