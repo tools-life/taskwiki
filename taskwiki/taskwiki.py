@@ -88,6 +88,13 @@ class SelectedTasks(object):
             vimwikitask.task.add_annotation("wiki: {0}".format(path))
             print("Task \"{0}\" linked.".format(vimwikitask['description']))
 
+    def grid(self):
+        port = viewport.ViewPort.find_closest(cache)
+        if port:
+            vim.command("TW rc.context: {0}".format(port.raw_filter))
+        else:
+            print("No viewport detected.", file=sys.stderr)
+
     def delete(self):
         # Delete the tasks in TaskWarrior
         # Multiple VimwikiTasks might refer to the same task, so make sure
