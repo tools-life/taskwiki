@@ -65,6 +65,10 @@ class ViewPort(object):
             if port:
                 return port
 
+    @property
+    def raw_filter(self):
+        return ' '.join(self.taskfilter)
+
     def load_tasks(self):
         # Load all tasks below the viewport
         for i in range(self.line_number + 1, len(vim.current.buffer)):
