@@ -51,7 +51,7 @@ class ViewPort(object):
         return self
 
     @classmethod
-    def find_closest(cls, cache=None):
+    def find_closest(cls, cache):
         current_line = util.get_current_line_number()
 
         # Search lines in order: first all above, than all below
