@@ -73,6 +73,14 @@ class SelectedTasks(object):
         if not self.tasks:
             print("No tasks selected.")
 
+    def annotate(self, annotation):
+        if not annotation:
+            annotation = util.get_input("Enter annotation: ")
+
+        for vimwikitask in self.tasks:
+            vimwikitask.task.add_annotation(annotation)
+            print("Task \"{0}\" annotated.".format(vimwikitask['description']))
+
     def info(self):
         for vimwikitask in self.tasks:
             out = util.tw_execute_safely(self.tw, [vimwikitask['uuid'], 'info'])
