@@ -103,14 +103,16 @@ class IntegrationTest(object):
         if self.output:
             assert self.read_buffer() == self.output
 
-    def test_focus_burndown_daily(self):
+class TestBurndown(IntegrationTest):
+
+    def execute(self):
         self.command("TaskWikiBurndownDaily")
         assert self.command(":py print vim.current.buffer").startswith("<buffer burndown.daily")
         assert "Daily Burndown" in self.read_buffer()[0]
 
-class TestViewports(TestIntegration):
+class TestViewports(IntegrationTest):
 
-    def test_viewport_filling(self):
+    def execute(self):
         lines = ["=== Work tasks | +work ==="]
         self.write_buffer(lines)
         self.command("w")
