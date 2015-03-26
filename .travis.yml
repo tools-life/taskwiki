@@ -16,7 +16,9 @@ before_install:
   - export DISPLAY=:99.0
   - sh -e /etc/init.d/xvfb start
 install:
+  # Install testing tools
   - pip install pytest pytest-cov coveralls
+  # Setup TaskWarrior
   - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
   - sudo apt-get update -qq
   - sudo apt-get install -qq build-essential cmake uuid-dev g++-4.8
@@ -29,7 +31,9 @@ install:
   - make
   - sudo make install
   - task --version
+  # Setup Gvim
   = sudo apt-get install -qq vim-gnome
+  # Setup vimwiki
   - mkdir -p ~/.vim/bundle
   - pushd ~/.vim/bundle
   - git clone https://github.com/vimwiki/vimwiki.git
@@ -37,6 +41,7 @@ install:
   - pushd ~/.vim/bundle/vimwiki/
   - git checkout dev
   - popd
+  # Setup taskwiki
   - cp -r $TRAVIS_BUILD_DIR ~/.vim/bundle/taskwiki
 before_script:
   - cd $TRAVIS_BUILD_DIR
