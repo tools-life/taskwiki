@@ -6,7 +6,10 @@ from tasklib.task import TaskWarrior, Task
 
 server = vimrunner.Server()
 
-class TestIntegration(object):
+class IntegrationTest(object):
+
+    input = None
+    output = None
 
     def add_plugin(self, name):
         plugin_base = os.path.expanduser('~/.vim/bundle/')
@@ -53,7 +56,52 @@ class TestIntegration(object):
     def command(self, command):
         return self.client.command(command)
 
-class TestBurndown(TestIntegration):
+    def check_sanity(self):
+        """
+        Makes sanity checks upon the vim instance.
+        """
+
+        # Assert all the important files were loaded
+        scriptnames = self.client.command('scriptnames').splitlines()
+        expected_loaded_files = [
+            'vimwiki/autoload/vimwiki/base.vim',
+            'vimwiki/ftplugin/vimwiki.vim',
+            'vimwiki/autoload/vimwiki/u.vim',
+            'vimwiki/syntax/omnipresent_syntax.vim',
+            'vimwiki/syntax/vimwiki.vim',
+            'taskwiki/ftplugin/vimwiki.vim',
+        ]
+
+        # Do a partial match for each line from scriptnames
+        for scriptfile in expected_loaded_files:
+            assert any([scriptfile in line for line in scriptnames])
+
+        # Assert only note about Bram being maintainer is in messages
+        bramline = u'Messages maintainer: Bram Moolenaar <Bram@vim.org>'
+        assert self.client.command('messages') == bramline
+
+        # Assert that TW and cache objects exist
+        tw_class = self.client.command('py print(tw.__class__.__name__)')
+        cache_class = self.client.command('py print(cache.__class__.__name__)')
+
+        assert tw_class == 'TaskWarrior'
+        assert cache_class == 'TaskCache'
+
+    def test_execute(self):
+
+        # First, run sanity checks
+        self.check_sanity()
+
+        # Then load the input
+        if self.input:
+            self.write_buffer(input)
+
+        # Do the stuff
+        self.execute()
+
+        # Check expected output
+        if self.output:
+            assert self.read_buffer() == self.output
 
     def test_focus_burndown_daily(self):
         self.command("TaskWikiBurndownDaily")
