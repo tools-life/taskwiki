@@ -17,7 +17,7 @@ before_install:
   - sh -e /etc/init.d/xvfb start
 install:
   # Install testing tools
-  - pip install pytest pytest-cov coveralls
+  - pip install pytest pytest-cov coveralls vimrunner
   # Setup TaskWarrior
   - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
   - sudo apt-get update -qq
