@@ -9,8 +9,8 @@ server = vimrunner.Server()
 
 class IntegrationTest(object):
 
-    input = None
-    output = None
+    viminput = None
+    vimoutput = None
 
     def add_plugin(self, name):
         plugin_base = os.path.expanduser('~/.vim/bundle/')
@@ -110,15 +110,31 @@ class IntegrationTest(object):
         self.check_sanity()
 
         # Then load the input
-        if self.input:
-            self.write_buffer(input)
+        if self.viminput:
+            # Unindent the lines
+            lines = [l[4:] for l in self.viminput.strip('\n').splitlines()]
+            self.write_buffer(lines)
 
         # Do the stuff
         self.execute()
 
+        def fill_uuid(line):
+            # Tasks in testing can have only alphanumerical descriptions
+            match = re.match(r'\s*\* \[ \] (?P<desc>[a-zA-Z0-9 ]*)(?<!\s)', line)
+            if not match:
+                return line
+
+            # Find the task and fill in its uuid
+            tasks = self.tw.tasks.filter(description=match.group('desc'))
+            return line.format(uuid=tasks[0]['uuid']) if tasks else line
+
         # Check expected output
-        if self.output:
-            assert self.read_buffer() == self.output
+        if self.vimoutput:
+            lines = [fill_uuid(l[4:])
+                     for l in self.vimoutput.strip('\n').splitlines()
+                     if l[4:]]
+            assert self.read_buffer() == lines
+
 
 class TestBurndown(IntegrationTest):
 
@@ -127,31 +143,35 @@ class TestBurndown(IntegrationTest):
         assert self.command(":py print vim.current.buffer", silent=False).startswith("<buffer burndown.daily")
         assert "Daily Burndown" in self.read_buffer()[0]
 
+
 class TestViewports(IntegrationTest):
 
+    viminput = """
+    === Work tasks | +work ===
+    """
+
+    vimoutput = """
+    === Work tasks | +work ===
+    * [ ] tag work task 1  #{uuid}
+    """
+
     def execute(self):
-        lines = ["=== Work tasks | +work ==="]
-        self.write_buffer(lines)
         self.command("w", regex="written$", lines=1)
-        assert self.read_buffer() == [
-            "=== Work tasks | +work ===",
-            "* [ ] tag work task 1  #{0}".format(self.tasks[3]['uuid'])
-            ]
 
 
 class TestSimpleTask(IntegrationTest):
 
+    viminput = """
+    * [ ] This is a test task
+    """
+
+    vimoutput = """
+    * [ ] This is a test task  #{uuid}
+    """
+
     def execute(self):
-        lines = ["* [ ] This is a test task"]
-        self.write_buffer(lines)
         self.command("w", regex="written$", lines=1)
 
         # Check that only one tasks with this description exists
         matching = self.tw.tasks.filter(description="This is a test task")
         assert len(matching) == 1
-
-        expected = [
-            "* [ ] This is a test task  #{0}".format(matching[0]['uuid'])
-        ]
-
-        assert expected == self.read_buffer()
