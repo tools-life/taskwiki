@@ -32,7 +32,7 @@ install:
   - sudo make install
   - task --version
   # Setup Gvim
-  = sudo apt-get install -qq vim-gnome
+  - sudo apt-get install -qq vim-gnome
   # Setup vimwiki
   - mkdir -p ~/.vim/bundle
   - pushd ~/.vim/bundle
