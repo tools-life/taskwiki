@@ -18,6 +18,7 @@ before_install:
 install:
   # Install testing tools
   - pip install pytest pytest-cov coveralls vimrunner
+  - pip install git+git://github.com/robgolding63/tasklib@develop
   # Setup TaskWarrior
   - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
   - sudo apt-get update -qq
