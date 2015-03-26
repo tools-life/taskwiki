@@ -1,4 +1,5 @@
 import os
+import re
 import tempfile
 import vimrunner
 
@@ -48,13 +49,29 @@ class IntegrationTest(object):
         self.add_plugin('vimwiki')
         self.command('let g:taskwiki_data_location="{0}"'.format(self.dir))
         self.client.edit(os.path.join(self.dir, 'testwiki.txt'))
-        self.command('set filetype=vimwiki')
+        self.command('set filetype=vimwiki', silent=False)  # TODO: fix these vimwiki loading errors
 
     def teardown(self):
         self.client.quit()
 
-    def command(self, command):
-        return self.client.command(command)
+    def command(self, command, silent=True, regex=None, lines=None):
+        result = self.client.command(command)
+
+        # Specifying regex or lines cancels expectations of silence
+        if regex or lines:
+            silent = False
+
+        # For silent commands, there should be no output
+        assert silent == bool(not result)
+
+        # Multiline-evaluate the regex
+        if regex:
+            assert re.search(regex, result, re.MULTILINE)
+
+        if lines:
+            assert lines == len(result.splitlines())
+
+        return result
 
     def check_sanity(self):
         """
@@ -107,7 +124,7 @@ class TestBurndown(IntegrationTest):
 
     def execute(self):
         self.command("TaskWikiBurndownDaily")
-        assert self.command(":py print vim.current.buffer").startswith("<buffer burndown.daily")
+        assert self.command(":py print vim.current.buffer", silent=False).startswith("<buffer burndown.daily")
         assert "Daily Burndown" in self.read_buffer()[0]
 
 class TestViewports(IntegrationTest):
@@ -115,7 +132,7 @@ class TestViewports(IntegrationTest):
     def execute(self):
         lines = ["=== Work tasks | +work ==="]
         self.write_buffer(lines)
-        self.command("w")
+        self.command("w", regex="written$", lines=1)
         assert self.read_buffer() == [
             "=== Work tasks | +work ===",
             "* [ ] tag work task 1  #{0}".format(self.tasks[3]['uuid'])
@@ -127,7 +144,7 @@ class TestSimpleTask(IntegrationTest):
     def execute(self):
         lines = ["* [ ] This is a test task"]
         self.write_buffer(lines)
-        self.command("w")
+        self.command("w", regex="written$", lines=1)
 
         # Check that only one tasks with this description exists
         matching = self.tw.tasks.filter(description="This is a test task")
