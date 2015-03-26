@@ -1,9 +1,5 @@
 language: python
 env:
-  - TASK_VERSION=v2.1.1
-  - TASK_VERSION=v2.1.2
-  - TASK_VERSION=v2.2.0
-  - TASK_VERSION=v2.3.0
   - TASK_VERSION=v2.4.0
   - TASK_VERSION=v2.4.1
   - TASK_VERSION=v2.4.2
@@ -34,6 +30,7 @@ install:
   - task --version
   # Setup Gvim
   - sudo apt-get install -qq vim-gnome
+  - gvim --version
   # Setup vimwiki
   - mkdir -p ~/.vim/bundle
   - pushd ~/.vim/bundle
