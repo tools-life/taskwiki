@@ -26,13 +26,13 @@ class TestIntegration(object):
 
     def generate_data(self):
         self.dir = tempfile.mkdtemp(dir='/tmp/')
-        tw = TaskWarrior(data_location=self.dir)
+        self.tw = TaskWarrior(data_location=self.dir)
         self.tasks = [
-            Task(tw, description="project random task 1", project="Random"),
-            Task(tw, description="project random task 2", project="Random"),
-            Task(tw, description="tag home task 1", tags=["home"]),
-            Task(tw, description="tag work task 1", tags=["work"]),
-            Task(tw, description="today task 1", due="now"),
+            Task(self.tw, description="project random task 1", project="Random"),
+            Task(self.tw, description="project random task 2", project="Random"),
+            Task(self.tw, description="tag home task 1", tags=["home"]),
+            Task(self.tw, description="tag work task 1", tags=["work"]),
+            Task(self.tw, description="today task 1", due="now"),
         ]
 
         for task in self.tasks:
