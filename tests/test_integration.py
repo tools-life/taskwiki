@@ -121,3 +121,20 @@ class TestViewports(IntegrationTest):
             "* [ ] tag work task 1  #{0}".format(self.tasks[3]['uuid'])
             ]
 
+
+class TestSimpleTask(IntegrationTest):
+
+    def execute(self):
+        lines = ["* [ ] This is a test task"]
+        self.write_buffer(lines)
+        self.command("w")
+
+        # Check that only one tasks with this description exists
+        matching = self.tw.tasks.filter(description="This is a test task")
+        assert len(matching) == 1
+
+        expected = [
+            "* [ ] This is a test task  #{0}".format(matching[0]['uuid'])
+        ]
+
+        assert expected == self.read_buffer()
