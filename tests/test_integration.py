@@ -158,6 +158,28 @@ class TestViewports(IntegrationTest):
         self.command("w", regex="written$", lines=1)
 
 
+class TestViewportDefaults(IntegrationTest):
+
+    viminput = """
+    === Work tasks | +work ===
+    * [ ] tag work task
+    """
+
+    vimoutput = """
+    === Work tasks | +work ===
+    * [ ] tag work task  #{uuid}
+    """
+
+    def execute(self):
+        self.command("w", regex="written$", lines=1)
+        assert len(self.tw.tasks.pending()) == 1
+
+        task = self.tw.tasks.pending()[0]
+        assert task['description'] == 'tag work task'
+        assert task['status'] == 'pending'
+        assert task['tags'] == ['work']
+
+
 class TestSimpleTask(IntegrationTest):
 
     viminput = """
@@ -172,5 +194,8 @@ class TestSimpleTask(IntegrationTest):
         self.command("w", regex="written$", lines=1)
 
         # Check that only one tasks with this description exists
-        matching = self.tw.tasks.filter(description="This is a test task")
-        assert len(matching) == 1
+        assert len(self.tw.tasks.pending()) == 1
+
+        task = self.tw.tasks.pending()[0]
+        assert task['description'] == 'This is a test task'
+        assert task['status'] == 'pending'
