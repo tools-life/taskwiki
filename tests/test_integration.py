@@ -100,18 +100,6 @@ class IntegrationTest(object):
 
     def test_execute(self):
 
-        # First, run sanity checks
-        self.check_sanity()
-
-        # Then load the input
-        if self.viminput:
-            # Unindent the lines
-            lines = [l[4:] for l in self.viminput.strip('\n').splitlines()]
-            self.write_buffer(lines)
-
-        # Do the stuff
-        self.execute()
-
         # Helper function that fills in {uuid} placeholders with correct UUIDs
         def fill_uuid(line):
             # Tasks in testing can have only alphanumerical descriptions
@@ -122,6 +110,19 @@ class IntegrationTest(object):
             # Find the task and fill in its uuid
             tasks = self.tw.tasks.filter(description=match.group('desc'))
             return line.format(uuid=tasks[0]['uuid']) if tasks else line
+
+        # First, run sanity checks
+        self.check_sanity()
+
+        # Then load the input
+        if self.viminput:
+            # Unindent the lines
+            lines = [fill_uuid(l[4:])
+                     for l in self.viminput.strip('\n').splitlines()]
+            self.write_buffer(lines)
+
+        # Do the stuff
+        self.execute()
 
         # Check expected output
         if self.vimoutput:
