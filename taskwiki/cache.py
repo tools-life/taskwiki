@@ -17,10 +17,13 @@ class TaskCache(object):
     def __getitem__(self, key):
         # String keys refer to the Task objects
         if type(key) in (str, unicode):
+            key = vwtask.ShortUUID(key)
+
+        if type(key) == vwtask.ShortUUID:
             task = self.task_cache.get(key)
 
             if task is None:
-                task = self.tw.tasks.get(uuid=key)
+                task = self.tw.tasks.get(uuid=key.value)
                 self.task_cache[key] = task
 
             return task
@@ -42,6 +45,7 @@ class TaskCache(object):
     def __setitem__(self, key, value):
         # String keys refer to the Task objects
         if type(key) in (str, unicode):
+            key = vwtask.ShortUUID(key)
             self.task_cache[key] = value
 
         # Integer keys (line numbers) refer to the VimwikiTask objects

@@ -16,6 +16,26 @@ def convert_priority_to_tw_format(priority):
     return {0: None, 1: 'L', 2: 'M', 3: 'H'}[priority]
 
 
+class ShortUUID(object):
+    def __init__(self, value):
+        # Use str reprentation of the value, first 8 chars
+        self.value = str(value)[:8]
+
+    def __eq__(self, other):
+        # For full UUIDs, our value is shorter
+        # For short, the lengths are the same
+        return other.startswith(self.value)
+
+    def __str__(self):
+        return self.value
+
+    def __hash__(self):
+        return self.value.__hash__()
+
+    def startswith(self, part):
+        return self.value.startswith(part)
+
+
 class VimwikiTask(object):
     # Lists all data keys that are reflected in Vim representation
     buffer_keys = ('indent', 'description', 'uuid', 'completed_mark',
@@ -30,6 +50,7 @@ class VimwikiTask(object):
         self.vim_data = dict(indent='', completed_mark=' ', line_number=None)
         self._buffer_data = None
         self.__unsaved_task = None
+        self.uuid = ShortUUID(uuid) if uuid is not None else None
 
     def __getitem__(self, key):
         if key in self.vim_data.keys():
