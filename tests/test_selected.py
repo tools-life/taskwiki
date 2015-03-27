@@ -1,3 +1,5 @@
+import re
+
 from tests.base import IntegrationTest
 from time import sleep
 
@@ -171,3 +173,90 @@ class TestDeleteActionRange(IntegrationTest):
 
         assert self.tasks[1]['status'] == "deleted"
         assert self.tasks[0]['status'] == "deleted"
+
+
+class TestInfoAction(IntegrationTest):
+
+    viminput = """
+    * [ ] test task 1  #{uuid}
+    * [ ] test task 2  #{uuid}
+    """
+
+    tasks = [
+        dict(description="test task 1"),
+        dict(description="test task 2"),
+    ]
+
+    def execute(self):
+        self.command("TaskWikiInfo")
+
+        assert self.command(":py print vim.current.buffer", silent=False).startswith("<buffer info")
+        output = '\n'.join(self.read_buffer())
+
+        header = r'\s*'.join(['Name', 'Value'])
+        data = r'\s*'.join(['Description', 'test task 1'])
+        data2 = r'\s*'.join(['Status', 'Pending'])
+
+        assert re.search(header, output, re.MULTILINE)
+        assert re.search(data, output, re.MULTILINE)
+        assert re.search(data2, output, re.MULTILINE)
+
+
+
+class TestInfoActionMoved(IntegrationTest):
+
+    viminput = """
+    * [ ] test task 1  #{uuid}
+    * [ ] test task 2  #{uuid}
+    """
+
+    tasks = [
+        dict(description="test task 1"),
+        dict(description="test task 2"),
+    ]
+
+    def execute(self):
+        self.client.type('2gg')  # Go to the second line
+        self.command("TaskWikiInfo")
+
+        assert self.command(":py print vim.current.buffer", silent=False).startswith("<buffer info")
+        output = '\n'.join(self.read_buffer())
+
+        header = r'\s*'.join(['Name', 'Value'])
+        data = r'\s*'.join(['Description', 'test task 2'])
+        data2 = r'\s*'.join(['Status', 'Pending'])
+
+        assert re.search(header, output, re.MULTILINE)
+        assert re.search(data, output, re.MULTILINE)
+        assert re.search(data2, output, re.MULTILINE)
+
+
+class TestInfoActionRange(IntegrationTest):
+
+    viminput = """
+    * [ ] test task 1  #{uuid}
+    * [ ] test task 2  #{uuid}
+    """
+
+    tasks = [
+        dict(description="test task 1"),
+        dict(description="test task 2"),
+    ]
+
+    def execute(self):
+        self.client.type('V2gg')  # Go to the second line
+        self.client.feedkeys(":TaskWikiInfo")
+        self.client.type('<Enter>')
+
+        sleep(1)
+
+        assert self.command(":py print vim.current.buffer", silent=False).startswith("<buffer info")
+        output = '\n'.join(self.read_buffer())
+
+        header = r'\s*'.join(['Name', 'Value'])
+        data = r'\s*'.join(['Description', 'test task 1'])
+        data2 = r'\s*'.join(['Status', 'Pending'])
+
+        assert re.search(header, output, re.MULTILINE)
+        assert re.search(data, output, re.MULTILINE)
+        assert re.search(data2, output, re.MULTILINE)
