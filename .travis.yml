@@ -16,6 +16,7 @@ install:
   - pip install git+git://github.com/robgolding63/tasklib@develop
   # Install to both virtualenv and outside it, vim needs it too
   - sudo pip install git+git://github.com/robgolding63/tasklib@develop
+  - sudo pip install pytest pytest-cov coveralls vimrunner
   # Setup TaskWarrior
   - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
   - sudo add-apt-repository ppa:pi-rho/dev -y
