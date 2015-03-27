@@ -146,3 +146,55 @@ class TestHistoryMonthlySimple(IntegrationTest):
 
         assert re.search(header, output, re.MULTILINE)
         assert re.search(year, output, re.MULTILINE)
+
+
+class TestProjectsSimple(IntegrationTest):
+
+    tasks = [
+        dict(description="home task", project="Home"),
+        dict(description="home chore task 1", project="Home.Chores"),
+        dict(description="home chore task 2", project="Home.Chores"),
+        dict(description="work task 1", project="Work"),
+        dict(description="work task 2", project="Work"),
+    ]
+
+    def execute(self):
+        self.command("TaskWikiProjects")
+        assert self.command(":py print vim.current.buffer", silent=False).startswith("<buffer projects")
+        output = '\n'.join(self.read_buffer())
+
+        header = r'\s*'.join(['Project', 'Tasks'])
+        home = r'\s*'.join(['Home', '3'])
+        chores = r'\s*'.join(['Chores', '2'])
+        work = r'\s*'.join(['Work', '2'])
+
+        assert re.search(header, output, re.MULTILINE)
+        assert re.search(home, output, re.MULTILINE)
+        assert re.search(chores, output, re.MULTILINE)
+        assert re.search(work, output, re.MULTILINE)
+
+
+class TestSummarySimple(IntegrationTest):
+
+    tasks = [
+        dict(description="home task", project="Home"),
+        dict(description="home chore task 1", project="Home.Chores"),
+        dict(description="home chore task 2", project="Home.Chores"),
+        dict(description="work task 1", project="Work"),
+        dict(description="work task 2", project="Work"),
+    ]
+
+    def execute(self):
+        self.command("TaskWikiProjectsSummary")
+        assert self.command(":py print vim.current.buffer", silent=False).startswith("<buffer summary")
+        output = '\n'.join(self.read_buffer())
+
+        header = r'\s*'.join(['Project', 'Remaining', 'Avg age', 'Complete'])
+        home = r'\s*'.join(['Home', '3'])
+        chores = r'\s*'.join(['Chores', '2'])
+        work = r'\s*'.join(['Work', '2'])
+
+        assert re.search(header, output, re.MULTILINE)
+        assert re.search(home, output, re.MULTILINE)
+        assert re.search(chores, output, re.MULTILINE)
+        assert re.search(work, output, re.MULTILINE)
