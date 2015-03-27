@@ -260,3 +260,89 @@ class TestInfoActionRange(IntegrationTest):
         assert re.search(header, output, re.MULTILINE)
         assert re.search(data, output, re.MULTILINE)
         assert re.search(data2, output, re.MULTILINE)
+
+
+class TestLinkAction(IntegrationTest):
+
+    viminput = """
+    * [ ] test task 1  #{uuid}
+    * [ ] test task 2  #{uuid}
+    """
+
+    tasks = [
+        dict(description="test task 1"),
+        dict(description="test task 2"),
+    ]
+
+    def execute(self):
+        self.command(
+            "TaskWikiLink",
+            regex="Task \"test task 1\" linked.$",
+            lines=1)
+
+        backlink = "wiki: {0}".format(self.filepath)
+
+        self.tasks[0].refresh()
+        annotation = self.tasks[0]['annotations']
+        assert annotation != []
+        assert annotation[0]['description'] == backlink
+
+
+class TestLinkActionMoved(IntegrationTest):
+
+    viminput = """
+    * [ ] test task 1  #{uuid}
+    * [ ] test task 2  #{uuid}
+    """
+
+    tasks = [
+        dict(description="test task 1"),
+        dict(description="test task 2"),
+    ]
+
+    def execute(self):
+        self.client.type('2gg')  # Go to the second line
+        self.command(
+            "TaskWikiLink",
+            regex="Task \"test task 2\" linked.$",
+            lines=1)
+
+        backlink = "wiki: {0}".format(self.filepath)
+
+        self.tasks[1].refresh()
+        annotation = self.tasks[1]['annotations']
+        assert annotation != []
+        assert annotation[0]['description'] == backlink
+
+
+class TestLinkActionRange(IntegrationTest):
+
+    viminput = """
+    * [ ] test task 1  #{uuid}
+    * [ ] test task 2  #{uuid}
+    """
+
+    tasks = [
+        dict(description="test task 1"),
+        dict(description="test task 2"),
+    ]
+
+    def execute(self):
+        self.client.type('V2gg')  # Go to the second line
+        self.client.feedkeys(":TaskWikiLink")
+        self.client.type('<Enter>')
+
+        backlink = "wiki: {0}".format(self.filepath)
+
+        sleep(2)
+
+        for task in self.tasks:
+            task.refresh()
+
+        annotation = self.tasks[0]['annotations']
+        assert annotation != []
+        assert annotation[0]['description'] == backlink
+
+        annotation = self.tasks[1]['annotations']
+        assert annotation != []
+        assert annotation[0]['description'] == backlink

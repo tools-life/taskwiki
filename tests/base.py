@@ -48,7 +48,8 @@ class IntegrationTest(object):
         self.command('let g:taskwiki_data_location="{0}"'.format(self.dir))
         self.add_plugin('taskwiki')
         self.add_plugin('vimwiki')
-        self.client.edit(os.path.join(self.dir, 'testwiki.txt'))
+        self.filepath = os.path.join(self.dir, 'testwiki.txt')
+        self.client.edit(self.filepath)
         self.command('set filetype=vimwiki', silent=None)  # TODO: fix these vimwiki loading errors
 
     def teardown(self):
