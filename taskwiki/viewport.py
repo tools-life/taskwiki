@@ -103,7 +103,7 @@ class ViewPort(object):
             # There might be more if the viewport contained multiple
             # representations of the same task
             matching_vimwikitasks= [t for t in self.tasks
-                                    if t['uuid'] == task['uuid']]
+                                    if t.uuid == task['uuid']]
 
             # Remove the tasks from viewport's set and from buffer
             for vimwikitask in matching_vimwikitasks:

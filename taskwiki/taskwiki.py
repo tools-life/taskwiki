@@ -98,14 +98,14 @@ class SelectedTasks(object):
 
     def info(self):
         for vimwikitask in self.tasks:
-            out = util.tw_execute_safely(self.tw, [vimwikitask['uuid'], 'info'])
+            out = util.tw_execute_safely(self.tw, [vimwikitask.uuid, 'info'])
             if out:
                 util.show_in_split(out)
             break  # Show only one task
 
     def edit(self):
         for vimwikitask in self.tasks:
-            vim.command('! task {0} edit'.format(vimwikitask['uuid']))
+            vim.command('! task {0} edit'.format(vimwikitask.uuid))
 
     def link(self):
         path = util.get_absolute_filepath()
@@ -139,7 +139,7 @@ class SelectedTasks(object):
 
         # We might have two same tasks in the range, make sure we do not pass the
         # same uuid twice
-        unique_tasks = set(vimwikitask.task['uuid'] for vimwikitask in self.tasks)
+        unique_tasks = set(vimwikitask.task.uuid for vimwikitask in self.tasks)
         uuids = ','.join(unique_tasks)
 
         # Generate the arguments from the modstring
