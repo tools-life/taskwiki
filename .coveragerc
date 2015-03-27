@@ -1,0 +1,2 @@
+[report]
+omit = */python2.7/*,*/test_*
