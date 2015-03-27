@@ -49,7 +49,7 @@ class IntegrationTest(object):
         self.add_plugin('taskwiki')
         self.add_plugin('vimwiki')
         self.client.edit(os.path.join(self.dir, 'testwiki.txt'))
-        self.command('set filetype=vimwiki', silent=False)  # TODO: fix these vimwiki loading errors
+        self.command('set filetype=vimwiki', silent=None)  # TODO: fix these vimwiki loading errors
 
     def teardown(self):
         self.client.quit()
@@ -63,14 +63,15 @@ class IntegrationTest(object):
             silent = False
 
         # For silent commands, there should be no output
-        assert silent == bool(not result)
+        if silent is not None:
+            assert silent == bool(not result)
 
-        # Multiline-evaluate the regex
-        if regex:
-            assert re.search(regex, result, re.MULTILINE)
+            # Multiline-evaluate the regex
+            if regex:
+                assert re.search(regex, result, re.MULTILINE)
 
-        if lines:
-            assert lines == len(result.splitlines())
+            if lines:
+                assert lines == len(result.splitlines())
 
         return result
 
