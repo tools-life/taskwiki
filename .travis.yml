@@ -47,5 +47,7 @@ before_script:
   - cd $TRAVIS_BUILD_DIR
 script:
   - py.test --cov . --cov-report term-missing
+  - mv ~/taskwiki-coverage/.coverage.* .
+  - coverage combine
 after_success:
   - coveralls
