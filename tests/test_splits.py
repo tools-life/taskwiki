@@ -198,3 +198,49 @@ class TestSummarySimple(IntegrationTest):
         assert re.search(home, output, re.MULTILINE)
         assert re.search(chores, output, re.MULTILINE)
         assert re.search(work, output, re.MULTILINE)
+
+
+class TestStatsSimple(IntegrationTest):
+
+    tasks = [
+        dict(description="home task"),
+        dict(description="home chore task 1", tags=['chore']),
+        dict(description="home chore task 2", tags=['chore']),
+        dict(description="work task 1", tags=['work']),
+        dict(description="work task 2", tags=['work']),
+    ]
+
+    def execute(self):
+        self.command("TaskWikiStats")
+        assert self.command(":py print vim.current.buffer", silent=False).startswith("<buffer stats")
+        output = '\n'.join(self.read_buffer())
+
+        header = r'\s*'.join(['Category', 'Data'])
+        data = r'\s*'.join(['Pending', '5'])
+
+        assert re.search(header, output, re.MULTILINE)
+        assert re.search(data, output, re.MULTILINE)
+
+
+class TestTagsSimple(IntegrationTest):
+
+    tasks = [
+        dict(description="home task"),
+        dict(description="home chore task 1", tags=['chore']),
+        dict(description="home chore task 2", tags=['chore']),
+        dict(description="work task 1", tags=['work']),
+        dict(description="work task 2", tags=['work']),
+    ]
+
+    def execute(self):
+        self.command("TaskWikiTags")
+        assert self.command(":py print vim.current.buffer", silent=False).startswith("<buffer tags")
+        output = '\n'.join(self.read_buffer())
+
+        header = r'\s*'.join(['Tag', 'Count'])
+        chores = r'\s*'.join(['chore', '2'])
+        work = r'\s*'.join(['work', '2'])
+
+        assert re.search(header, output, re.MULTILINE)
+        assert re.search(chores, output, re.MULTILINE)
+        assert re.search(work, output, re.MULTILINE)
