@@ -143,7 +143,7 @@ def show_in_split(lines, size=None, position="belowright", vertical=False,
         if vertical:
             # Maximum number of columns used + small offset
             # Strip the color codes, since they do not show up in the split
-            size = max([len(strip_ansi_escape_sequence(l)) for l in lines]) + 5
+            size = max([len(strip_ansi_escape_sequence(l)) for l in lines]) + 1
         else:
             # Number of lines
             size = len(lines)
