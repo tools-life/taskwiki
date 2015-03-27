@@ -44,6 +44,7 @@ install:
   - popd
   # Setup taskwiki
   - cp -r $TRAVIS_BUILD_DIR ~/.vim/bundle/taskwiki
+  - mkdir ~/taskwiki-coverage
 before_script:
   - cd $TRAVIS_BUILD_DIR
 script:
