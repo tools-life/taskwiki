@@ -33,8 +33,12 @@ class IntegrationTest(object):
         self.dir = tempfile.mkdtemp(dir='/tmp/')
         self.tw = TaskWarrior(data_location=self.dir)
 
-        for task_kwargs in self.tasks:
-            Task(self.tw, **task_kwargs).save()
+        new_tasks = [Task(self.tw, **task_kwargs)
+                     for task_kwargs in self.tasks]
+
+        self.tasks = new_tasks
+        for task in self.tasks:
+            task.save()
 
     def setup(self):
         self.generate_data()
