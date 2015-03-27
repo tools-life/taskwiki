@@ -11,6 +11,7 @@ class IntegrationTest(object):
 
     viminput = None
     vimoutput = None
+    tasks = []
 
     def add_plugin(self, name):
         plugin_base = os.path.expanduser('~/.vim/bundle/')
@@ -31,16 +32,9 @@ class IntegrationTest(object):
     def generate_data(self):
         self.dir = tempfile.mkdtemp(dir='/tmp/')
         self.tw = TaskWarrior(data_location=self.dir)
-        self.tasks = [
-            Task(self.tw, description="project random task 1", project="Random"),
-            Task(self.tw, description="project random task 2", project="Random"),
-            Task(self.tw, description="tag home task 1", tags=["home"]),
-            Task(self.tw, description="tag work task 1", tags=["work"]),
-            Task(self.tw, description="today task 1", due="now"),
-        ]
 
-        for task in self.tasks:
-            task.save()
+        for task_kwargs in self.tasks:
+            Task(self.tw, **task_kwargs).save()
 
     def setup(self):
         self.generate_data()
@@ -118,6 +112,7 @@ class IntegrationTest(object):
         # Do the stuff
         self.execute()
 
+        # Helper function that fills in {uuid} placeholders with correct UUIDs
         def fill_uuid(line):
             # Tasks in testing can have only alphanumerical descriptions
             match = re.match(r'\s*\* \[ \] (?P<desc>[a-zA-Z0-9 ]*)(?<!\s)', line)
@@ -152,8 +147,12 @@ class TestViewports(IntegrationTest):
 
     vimoutput = """
     === Work tasks | +work ===
-    * [ ] tag work task 1  #{uuid}
+    * [ ] tag work task  #{uuid}
     """
+
+    tasks = [
+        dict(description="tag work task", tags=['work']),
+    ]
 
     def execute(self):
         self.command("w", regex="written$", lines=1)
