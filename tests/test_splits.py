@@ -164,7 +164,7 @@ class TestProjectsSimple(IntegrationTest):
         output = '\n'.join(self.read_buffer())
 
         header = r'\s*'.join(['Project', 'Tasks'])
-        home = r'\s*'.join(['Home', '3'])
+        home = r'\s*'.join(['Home', '3' if self.tw.version >= '2.4.2' else '1'])
         chores = r'\s*'.join(['Chores', '2'])
         work = r'\s*'.join(['Work', '2'])
 
@@ -190,7 +190,7 @@ class TestSummarySimple(IntegrationTest):
         output = '\n'.join(self.read_buffer())
 
         header = r'\s*'.join(['Project', 'Remaining', 'Avg age', 'Complete'])
-        home = r'\s*'.join(['Home', '3'])
+        home = r'\s*'.join(['Home', '3' if self.tw.version >= '2.4.2' else '1'])
         chores = r'\s*'.join(['Chores', '2'])
         work = r'\s*'.join(['Work', '2'])
 
