@@ -104,3 +104,45 @@ class TestGhistoryMonthlySimple(IntegrationTest):
 
         assert str(current_year()) in '\n'.join(output)
         assert current_month() in '\n'.join(output)
+
+
+class TestHistoryAnnualSimple(IntegrationTest):
+
+    tasks = [
+        dict(description="test task"),
+        dict(description="completed task 1", status="completed", end="now"),
+        dict(description="completed task 2", status="completed", end="now"),
+        dict(description="deleted task", status="deleted"),
+    ]
+
+    def execute(self):
+        self.command("TaskWikiHistoryAnnual")
+        assert self.command(":py print vim.current.buffer", silent=False).startswith("<buffer history.annual")
+        output = '\n'.join(self.read_buffer())
+
+        header = r'\s*'.join(['Year', 'Added', 'Completed', 'Deleted', 'Net'])
+        year = r'\s*'.join(map(str, [current_year(), 4, 2, 1, 1]))
+
+        assert re.search(header, output, re.MULTILINE)
+        assert re.search(year, output, re.MULTILINE)
+
+
+class TestHistoryMonthlySimple(IntegrationTest):
+
+    tasks = [
+        dict(description="test task"),
+        dict(description="completed task 1", status="completed", end="now"),
+        dict(description="completed task 2", status="completed", end="now"),
+        dict(description="deleted task", status="deleted"),
+    ]
+
+    def execute(self):
+        self.command("TaskWikiHistoryMonthly")
+        assert self.command(":py print vim.current.buffer", silent=False).startswith("<buffer history.monthly")
+        output = '\n'.join(self.read_buffer())
+
+        header = r'\s*'.join(['Year', 'Month', 'Added', 'Completed', 'Deleted', 'Net'])
+        year = r'\s*'.join(map(str, [current_year(), current_month(), 4, 2, 1, 1]))
+
+        assert re.search(header, output, re.MULTILINE)
+        assert re.search(year, output, re.MULTILINE)
