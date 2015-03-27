@@ -100,7 +100,7 @@ class SelectedTasks(object):
         for vimwikitask in self.tasks:
             out = util.tw_execute_safely(self.tw, [vimwikitask.uuid, 'info'])
             if out:
-                util.show_in_split(out)
+                util.show_in_split(out, name='info')
             break  # Show only one task
 
     def edit(self):
