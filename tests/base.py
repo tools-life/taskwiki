@@ -39,9 +39,10 @@ class IntegrationTest(object):
     def setup(self):
         self.generate_data()
         self.client = server.start_gvim()
+        self.command('let g:taskwiki_measure_coverage="yes"')
+        self.command('let g:taskwiki_data_location="{0}"'.format(self.dir))
         self.add_plugin('taskwiki')
         self.add_plugin('vimwiki')
-        self.command('let g:taskwiki_data_location="{0}"'.format(self.dir))
         self.client.edit(os.path.join(self.dir, 'testwiki.txt'))
         self.command('set filetype=vimwiki', silent=False)  # TODO: fix these vimwiki loading errors
 
