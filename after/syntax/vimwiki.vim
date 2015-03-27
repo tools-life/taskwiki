@@ -2,7 +2,8 @@
 let s:conceal = exists("+conceallevel") ? ' conceal': ''
 
 " Conceal the UUID
-execute 'syn match VimwikiTaskUuid containedin=VimwikiCheckBoxDone,VimwikiCheckBoxActive /\v#[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}/'.s:conceal
+execute 'syn match VimwikiTaskUuid containedin=VimwikiCheckBoxDone,VimwikiCheckBoxActive /\v#[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/'.s:conceal
+execute 'syn match VimwikiTaskUuid containedin=VimwikiCheckBoxDone,VimwikiCheckBoxActive /\v#[0-9a-fA-F]{8}$/'.s:conceal
 
 " Conceal header definitions
 for s:i in range(1,6)
