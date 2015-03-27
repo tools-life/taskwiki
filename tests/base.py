@@ -1,5 +1,6 @@
 import os
 import re
+import subprocess
 import tempfile
 import vimrunner
 
@@ -52,6 +53,7 @@ class IntegrationTest(object):
 
     def teardown(self):
         self.client.quit()
+        subprocess.call(['killall', 'gvim'])
 
     def command(self, command, silent=True, regex=None, lines=None):
         result = self.client.command(command)
