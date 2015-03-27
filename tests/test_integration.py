@@ -109,7 +109,11 @@ class IntegrationTest(object):
 
             # Find the task and fill in its uuid
             tasks = self.tw.tasks.filter(description=match.group('desc'))
-            return line.format(uuid=tasks[0]['uuid']) if tasks else line
+            if tasks:
+                # Return {uuid} replaced by short form UUID
+                return line.format(uuid=tasks[0]['uuid'].split('-')[0])
+            else:
+                return line
 
         # First, run sanity checks
         self.check_sanity()

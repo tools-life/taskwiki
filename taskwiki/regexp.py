@@ -2,6 +2,7 @@ import re
 
 # Unnamed building blocks
 UUID_UNNAMED = r'[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}'
+UUID_UNNAMED_SHORT = r'[0-9a-fA-F]{8}'
 DUE_UNNAMED = r'\(\d{4}-\d\d-\d\d( \d\d:\d\d)?\)'
 SPACE_UNNAMED = r'\s*'
 NONEMPTY_SPACE_UNNAMED = r'\s+'
@@ -13,13 +14,14 @@ TEXT_FORBIDDEN_SUFFIXES = (
     r'\(\d{4}-\d\d-\d\d\)', r'\(\d{4}-\d\d-\d\d \d\d:\d\d\)',  # Any datetime value
     r'\(\d{4}-\d\d-\d\d',  # Any datetime value
     UUID_UNNAMED,  # Text cannot end with UUID
+    UUID_UNNAMED_SHORT,
 )
 
 # Building blocks
 BRACKET_OPENING = re.escape('* [')
 BRACKET_CLOSING = re.escape('] ')
 EMPTY_SPACE = r'(?P<space>\s*)'
-UUID = r'(?P<uuid>{0})'.format(UUID_UNNAMED)
+UUID = r'(?P<uuid>{0}|{1})'.format(UUID_UNNAMED, UUID_UNNAMED_SHORT)
 DUE = r'(?P<due>{0})'.format(DUE_UNNAMED)
 UUID_COMMENT = '#{0}'.format(UUID)
 TEXT = r'(?P<text>.+' + ''.join(['(?<!%s)' % suffix for suffix in TEXT_FORBIDDEN_SUFFIXES]) + ')'

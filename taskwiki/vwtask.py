@@ -247,7 +247,7 @@ class VimwikiTask(object):
             self['description'] if self['description'] else 'TEXT MISSING?',
             ' ' + '!' * self.priority_from_tw_format if self['priority'] else '',
             ' ' + self['due'].strftime(regexp.DATETIME_FORMAT) if self['due'] else '',
-            '  #' + self['uuid'] if self['uuid'] else '',
+            '  #' + self['uuid'].split('-')[0] if self['uuid'] else '',
         ])
 
     def find_parent_task(self):
