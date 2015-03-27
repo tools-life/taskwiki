@@ -46,7 +46,7 @@ install:
   - cp -r $TRAVIS_BUILD_DIR ~/.vim/bundle/taskwiki
   - mkdir ~/taskwiki-coverage
 before_script:
-  - cd $TRAVIS_BUILD_DIR
+  - cd ~/.vim/bundle/taskwiki
 script:
   - py.test -vv --cov .
   - mv ~/taskwiki-coverage/.coverage.* .
