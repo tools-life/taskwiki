@@ -140,7 +140,7 @@ class TestBurndown(IntegrationTest):
         assert "Daily Burndown" in self.read_buffer()[0]
 
 
-class TestViewports(IntegrationTest):
+class TestViewportsTaskGeneration(IntegrationTest):
 
     viminput = """
     === Work tasks | +work ===
@@ -159,7 +159,26 @@ class TestViewports(IntegrationTest):
         self.command("w", regex="written$", lines=1)
 
 
-class TestViewportDefaults(IntegrationTest):
+class TestViewportsTaskRemoval(IntegrationTest):
+
+    viminput = """
+    === Work tasks | -work ===
+    * [ ] tag work task  #{uuid}
+    """
+
+    vimoutput = """
+    === Work tasks | -work ===
+    """
+
+    tasks = [
+        dict(description="tag work task", tags=['work']),
+    ]
+
+    def execute(self):
+        self.command("w", regex="written$", lines=1)
+
+
+class TestViewportDefaultsAssigment(IntegrationTest):
 
     viminput = """
     === Work tasks | +work ===
