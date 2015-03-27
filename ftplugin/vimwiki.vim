@@ -16,8 +16,8 @@ command! -nargs=* TaskWikiBurndownWeekly :py SplitBurndownWeekly(<q-args>).execu
 command! -nargs=* TaskWikiCalendar :py SplitCalendar(<q-args>).execute()
 command! -nargs=* TaskWikiGhistoryAnnual :py SplitGhistoryAnnual(<q-args>).execute()
 command! -nargs=* TaskWikiGhistoryMonthly :py SplitGhistoryMonthly(<q-args>).execute()
-command! -nargs=* TaskWikiHistoryAnnual :py SplitGhistoryAnnual(<q-args>).execute()
-command! -nargs=* TaskWikiHistoryMonthly :py SplitGhistoryMonthly(<q-args>).execute()
+command! -nargs=* TaskWikiHistoryAnnual :py SplitHistoryAnnual(<q-args>).execute()
+command! -nargs=* TaskWikiHistoryMonthly :py SplitHistoryMonthly(<q-args>).execute()
 command! -nargs=* TaskWikiStats :py SplitStats(<q-args>).execute()
 command! -nargs=* TaskWikiTags :py SplitTags(<q-args>).execute()
 
