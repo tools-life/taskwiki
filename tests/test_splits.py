@@ -5,6 +5,19 @@ from tasklib.task import local_zone
 from datetime import datetime
 
 
+def current_year():
+    return local_zone.localize(datetime.now()).year
+
+
+def current_month():
+    current_month_number = local_zone.localize(datetime.now()).month
+    months = ["January", "February", "March", "April",
+              "May", "June", "July", "August",
+              "September", "October", "November", "December"]
+
+    return months[current_month_number - 1]
+
+
 class TestBurndownDailySimple(IntegrationTest):
 
     def execute(self):
@@ -63,8 +76,7 @@ class TestGhistoryAnnualSimple(IntegrationTest):
         for word in legend_words:
             assert re.search(word, output[-1], re.IGNORECASE)
 
-        current_year = local_zone.localize(datetime.now()).year
-        assert str(current_year) in '\n'.join(output)
+        assert str(current_year()) in '\n'.join(output)
 
 
 class TestGhistoryMonthlySimple(IntegrationTest):
@@ -89,11 +101,6 @@ class TestGhistoryMonthlySimple(IntegrationTest):
         for word in legend_words:
             assert re.search(word, output[-1], re.IGNORECASE)
 
-        current_year = local_zone.localize(datetime.now()).year
-        current_month_number = local_zone.localize(datetime.now()).month
-        months = ["January", "February", "March", "April",
-                  "May", "June", "July", "August",
-                  "September", "October", "November", "December"]
 
-        assert str(current_year) in '\n'.join(output)
-        assert str(months[current_month_number - 1]) in '\n'.join(output)
+        assert str(current_year()) in '\n'.join(output)
+        assert current_month() in '\n'.join(output)
