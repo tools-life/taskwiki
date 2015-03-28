@@ -577,3 +577,166 @@ class TestStopActionRange(IntegrationTest):
 
         assert self.tasks[0]['start'] == None
         assert self.tasks[1]['start'] == None
+
+
+class TestModAction(IntegrationTest):
+
+    viminput = """
+    * [ ] test task 1  #{uuid}
+    * [ ] test task 2  #{uuid}
+    """
+
+    vimoutput = """
+    * [ ] test task 1  #{uuid}
+    * [ ] test task 2  #{uuid}
+    """
+
+    tasks = [
+        dict(description="test task 1"),
+        dict(description="test task 2"),
+    ]
+
+    def execute(self):
+        self.command(
+            "TaskWikiMod project:Home",
+            regex="Modified 1 task.$",
+            lines=1)
+
+        for task in self.tasks:
+            task.refresh()
+
+        assert self.tasks[0]['project'] == "Home"
+        assert self.tasks[1]['project'] == None
+
+
+class TestModInteractiveAction(IntegrationTest):
+
+    viminput = """
+    * [ ] test task 1  #{uuid}
+    * [ ] test task 2  #{uuid}
+    """
+
+    vimoutput = """
+    * [ ] test task 1  #{uuid}
+    * [ ] test task 2  #{uuid}
+    """
+
+    tasks = [
+        dict(description="test task 1"),
+        dict(description="test task 2"),
+    ]
+
+    def execute(self):
+        self.client.feedkeys(":TaskWikiMod")
+        sleep(1)
+        self.client.type('<Enter>')
+        sleep(1)
+        self.client.feedkeys("+work")
+        self.client.type('<Enter>')
+        sleep(1)
+
+        for task in self.tasks:
+            task.refresh()
+
+        assert self.tasks[0]['tags'] == ["work"]
+        assert self.tasks[1]['tags'] == []
+
+
+class TestModVisibleAction(IntegrationTest):
+
+    viminput = """
+    * [ ] test task 1  #{uuid}
+    * [ ] test task 2  #{uuid}
+    """
+
+    tasks = [
+        dict(description="test task 1"),
+        dict(description="test task 2"),
+    ]
+
+    def execute(self):
+        today = local_zone.localize(
+            datetime.now().replace(hour=0,minute=0,second=0,microsecond=0))
+
+        self.command(
+            "TaskWikiMod due:today",
+            regex="Modified 1 task.$",
+            lines=1)
+
+        for task in self.tasks:
+            task.refresh()
+
+        assert self.tasks[0]['due'] == today
+        assert self.tasks[1]['due'] == None
+
+        assert self.tasks[0]['status'] == "pending"
+        assert self.tasks[1]['status'] == "pending"
+
+
+class TestModActionMoved(IntegrationTest):
+
+    viminput = """
+    * [ ] test task 1  #{uuid}
+    * [ ] test task 2  #{uuid}
+    """
+
+    vimoutput = """
+    * [ ] test task 1  #{uuid}
+    * [ ] test task 2  #{uuid}
+    """
+
+    tasks = [
+        dict(description="test task 1"),
+        dict(description="test task 2"),
+    ]
+
+    def execute(self):
+        self.client.type('2gg')
+        self.command(
+            "TaskWikiMod project:Home",
+            regex="Modified 1 task.$",
+            lines=1)
+
+        sleep(1)
+
+        for task in self.tasks:
+            task.refresh()
+
+        assert self.tasks[0]['project'] == None
+        assert self.tasks[1]['project'] == "Home"
+
+
+class TestModActionRange(IntegrationTest):
+
+    viminput = """
+    * [ ] test task 1  #{uuid}
+    * [ ] test task 2  #{uuid}
+    """
+
+    vimoutput = """
+    * [ ] test task 1  #{uuid}
+    * [ ] test task 2  #{uuid}
+    """
+
+    tasks = [
+        dict(description="test task 1"),
+        dict(description="test task 2"),
+    ]
+
+    def execute(self):
+        self.client.normal('1gg')
+        sleep(1)
+        self.client.normal('VG')
+        sleep(1)
+        self.client.feedkeys(":TaskWikiMod project:Home")
+        self.client.type('<Enter>')
+        sleep(1)
+
+        for task in self.tasks:
+            task.refresh()
+
+        assert self.tasks[0]['status'] == "pending"
+        assert self.tasks[1]['status'] == "pending"
+
+        assert self.tasks[0]['project'] == "Home"
+        assert self.tasks[1]['project'] == "Home"
