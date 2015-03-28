@@ -26,6 +26,10 @@ class TestParsingModstrings(object):
         assert util.tw_modstring_to_args('project:"Random test" +test') == ["project:Random test", "+test"]
         assert util.tw_modstring_to_args("project:'Random test' +test") == ["project:Random test", "+test"]
 
+    def test_modstring_to_args_with_nested_quotes(self):
+        assert util.tw_modstring_to_args('project:"Random\'test" +test') == ["project:Random'test", "+test"]
+        assert util.tw_modstring_to_args("project:'Random\"test' +test") == ["project:Random\"test", "+test"]
+
     def test_modstring_to_args_with_esacpe(self):
         assert util.tw_modstring_to_args(r'project:Random\ test +test') == ["project:Random test", "+test"]
         assert util.tw_modstring_to_args(r"project:Random\ test +test") == ["project:Random test", "+test"]
