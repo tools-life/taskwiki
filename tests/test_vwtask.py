@@ -189,3 +189,70 @@ class TestSimpleTaskWithPriorityModification(IntegrationTest):
         assert task['description'] == 'This is a test task'
         assert task['status'] == 'pending'
         assert task['priority'] == "L"
+
+
+class TestChildTaskCreation(IntegrationTest):
+
+    viminput = """
+    * [ ] This is parent task
+      * [ ] This is child task
+    """
+
+    vimoutput = """
+    * [ ] This is parent task  #{uuid}
+      * [ ] This is child task  #{uuid}
+    """
+
+    def execute(self):
+        self.command("w", regex="written$", lines=1)
+
+        # Check that only one tasks with this description exists
+        assert len(self.tw.tasks.pending()) == 2
+
+        parent = self.tw.tasks.filter(description="This is parent task")[0]
+        child = self.tw.tasks.filter(description="This is child task")[0]
+
+        assert child['description'] == 'This is child task'
+        assert parent['description'] == 'This is parent task'
+        assert parent['depends'] == set([child])
+
+
+class TestChildTaskModification(IntegrationTest):
+
+    viminput = """
+    * [ ] This is parent task  #{uuid}
+    * [ ] This is child task  #{uuid}
+    """
+
+    vimoutput = """
+    * [ ] This is parent task  #{uuid}
+      * [ ] This is child task  #{uuid}
+    """
+
+    tasks = [
+        dict(description="This is parent task"),
+        dict(description="This is child task"),
+    ]
+
+    def execute(self):
+        # Check that only two tasks are in the data files
+        assert len(self.tw.tasks.pending()) == 2
+
+        parent = self.tw.tasks.filter(description="This is parent task")[0]
+        child = self.tw.tasks.filter(description="This is child task")[0]
+
+        assert parent['depends'] == set()
+
+        # Indent the task in the buffer
+        buffer_content = self.read_buffer()
+        self.write_buffer(["  " + buffer_content[1]], 1)
+
+        self.command("w", regex="written$", lines=1)
+
+        # Check that only two tasks are in the data files
+        assert len(self.tw.tasks.pending()) == 2
+
+        parent = self.tw.tasks.filter(description="This is parent task")[0]
+        child = self.tw.tasks.filter(description="This is child task")[0]
+
+        assert parent['depends'] == set([child])
