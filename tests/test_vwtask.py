@@ -105,3 +105,57 @@ class TestSimpleTaskWithDueDatetimeModification(IntegrationTest):
         assert task['description'] == 'This is a test task'
         assert task['status'] == 'pending'
         assert task['due'] == local_zone.localize(due)
+
+
+class TestSimpleTaskWithPriorityCreation(IntegrationTest):
+
+    viminput = """
+    * [ ] This is a test task !!
+    """
+
+    vimoutput = """
+    * [ ] This is a test task !!  #{uuid}
+    """
+
+    def execute(self):
+        self.command("w", regex="written$", lines=1)
+
+        # Check that only one task matches
+        assert len(self.tw.tasks.pending()) == 1
+
+        task = self.tw.tasks.pending()[0]
+        assert task['description'] == 'This is a test task'
+        assert task['status'] == 'pending'
+        assert task['priority'] == "M"
+
+
+class TestSimpleTaskWithPriorityModification(IntegrationTest):
+
+    viminput = """
+    * [ ] This is a test task !!!  #{uuid}
+    """
+
+    vimoutput = """
+    * [ ] This is a test task !  #{uuid}
+    """
+
+    tasks = [
+        dict(description="This is a test task", priority="H")
+    ]
+
+    def execute(self):
+        # Change the current line's priority
+        current_data = self.read_buffer()
+        current_data[0] = current_data[0].replace('!!!', '!')
+        self.write_buffer(current_data)
+
+        # Save the changes
+        self.command("w", regex="written$", lines=1)
+
+        # Check that only one task exists
+        assert len(self.tw.tasks.pending()) == 1
+
+        task = self.tw.tasks.pending()[0]
+        assert task['description'] == 'This is a test task'
+        assert task['status'] == 'pending'
+        assert task['priority'] == "L"
