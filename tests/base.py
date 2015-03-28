@@ -42,9 +42,18 @@ class IntegrationTest(object):
         for task in self.tasks:
             task.save()
 
+    def start_client(self, retry=3):
+        try:
+            self.client = server.start_gvim()
+        except RuntimeError:
+            if retry > 0:
+                self.start(client, retry=retry-1)
+            else:
+                raise
+
     def setup(self):
         self.generate_data()
-        self.client = server.start_gvim()
+        self.start_client()  # Start client with 3 chances
         self.command('let g:taskwiki_measure_coverage="yes"')
         self.command('let g:taskwiki_data_location="{0}"'.format(self.dir))
         self.add_plugin('taskwiki')
