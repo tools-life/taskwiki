@@ -49,8 +49,10 @@ class IntegrationTest(object):
         self.command('let g:taskwiki_data_location="{0}"'.format(self.dir))
         self.add_plugin('taskwiki')
         self.add_plugin('vimwiki')
+        sleep(0.5)
         self.filepath = os.path.join(self.dir, 'testwiki.txt')
         self.client.edit(self.filepath)
+        sleep(0.5)
         self.command('set filetype=vimwiki', silent=None)  # TODO: fix these vimwiki loading errors
         sleep(1)  # Give vim some time to load the scripts
 
