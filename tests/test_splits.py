@@ -244,3 +244,18 @@ class TestTagsSimple(IntegrationTest):
         assert re.search(header, output, re.MULTILINE)
         assert re.search(chores, output, re.MULTILINE)
         assert re.search(work, output, re.MULTILINE)
+
+
+class TestSplitReplacement(IntegrationTest):
+
+    def execute(self):
+        self.command("TaskWikiBurndownDaily")
+        assert self.command(":py print vim.current.buffer", silent=False).startswith("<buffer burndown.daily")
+        assert "Daily Burndown" in self.read_buffer()[0]
+
+        self.command("TaskWikiBurndownDaily")
+        assert self.command(":py print vim.current.buffer", silent=False).startswith("<buffer burndown.daily")
+        assert "Daily Burndown" in self.read_buffer()[0]
+
+        # Assert that there are only two buffers in the window
+        self.command(":py print len(vim.buffers)", regex='2$', lines=1)
