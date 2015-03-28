@@ -37,6 +37,9 @@ class TestParsingModstrings(object):
     def test_modstring_to_kwargs_with_simple_tag(self):
         assert util.tw_modstring_to_kwargs("+test ") == {"tags":["test"]}
 
+    def test_modstring_to_kwargs_with_removal(self):
+        assert util.tw_modstring_to_kwargs("project: +work") == {"tags":["work"], "project":None}
+
     def test_modstring_to_kwargs_with_spaces(self):
         assert util.tw_modstring_to_kwargs("project:Random area:admin") == {"project":"Random", "area":"admin"}
         assert util.tw_modstring_to_kwargs("project:Random +test") == {"project":"Random", "tags":["test"]}
