@@ -5,6 +5,7 @@ import tempfile
 import vimrunner
 
 from tasklib.task import TaskWarrior, Task
+from time import sleep
 
 server = vimrunner.Server()
 
@@ -51,6 +52,7 @@ class IntegrationTest(object):
         self.filepath = os.path.join(self.dir, 'testwiki.txt')
         self.client.edit(self.filepath)
         self.command('set filetype=vimwiki', silent=None)  # TODO: fix these vimwiki loading errors
+        sleep(1)  # Give vim some time to load the scripts
 
     def teardown(self):
         self.client.quit()
