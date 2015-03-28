@@ -22,6 +22,17 @@ class TestParsingModstrings(object):
         assert util.tw_modstring_to_args("project:Random  +test") == ["project:Random", "+test"]
         assert util.tw_modstring_to_args("project:Random    due:now") == ["project:Random", "due:now"]
 
+    def test_modstring_to_args_with_quotes(self):
+        assert util.tw_modstring_to_args('project:"Random test" +test') == ["project:Random test", "+test"]
+        assert util.tw_modstring_to_args("project:'Random test' +test") == ["project:Random test", "+test"]
+
+    def test_modstring_to_args_with_esacpe(self):
+        assert util.tw_modstring_to_args(r'project:Random\ test +test') == ["project:Random test", "+test"]
+        assert util.tw_modstring_to_args(r"project:Random\ test +test") == ["project:Random test", "+test"]
+
+    def test_modstring_to_args_with_esacped_escape(self):
+        assert util.tw_modstring_to_args(r'project:Random\\ +test') == ['project:Random\\', "+test"]
+
     def test_modstring_to_args_overriding(self):
         assert util.tw_modstring_to_args("project:Random project:Home") == ["project:Random", "project:Home"]
         assert util.tw_modstring_to_args("project:Random due:now due:today") == ["project:Random", "due:now", "due:today"]
