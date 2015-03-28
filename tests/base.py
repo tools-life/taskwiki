@@ -59,6 +59,8 @@ class IntegrationTest(object):
     def teardown(self):
         self.client.quit()
         subprocess.call(['killall', 'gvim'])
+        sleep(0.5)  # Killing takes some time
+        self.tasks = self.__class__.tasks  # Reset the task list
 
     def command(self, command, silent=True, regex=None, lines=None):
         result = self.client.command(command)
@@ -80,7 +82,7 @@ class IntegrationTest(object):
 
         return result
 
-    def check_sanity(self):
+    def check_sanity(self, soft=True):
         """
         Makes sanity checks upon the vim instance.
         """
@@ -98,18 +100,30 @@ class IntegrationTest(object):
 
         # Do a partial match for each line from scriptnames
         for scriptfile in expected_loaded_files:
-            assert any([scriptfile in line for line in scriptnames])
+            if not soft:
+                assert any([scriptfile in line for line in scriptnames])
+            elif not any([scriptfile in line for line in scriptnames]):
+                return False
 
         # Assert only note about Bram being maintainer is in messages
         bramline = u'Messages maintainer: Bram Moolenaar <Bram@vim.org>'
-        assert self.client.command('messages') == bramline
+        if not soft:
+            assert self.client.command('messages') == bramline
+        elif not self.client.command('messages') == bramline:
+            return False
 
         # Assert that TW and cache objects exist
         tw_class = self.client.command('py print(tw.__class__.__name__)')
         cache_class = self.client.command('py print(cache.__class__.__name__)')
 
-        assert tw_class == 'TaskWarrior'
-        assert cache_class == 'TaskCache'
+        if not soft:
+            assert tw_class == 'TaskWarrior'
+            assert cache_class == 'TaskCache'
+        elif tw_class != 'TaskWarrior' or cache_class != 'TaskCache':
+            return False
+
+        # Success in the sanity check
+        return True
 
     def test_execute(self):
 
@@ -129,7 +143,18 @@ class IntegrationTest(object):
                 return line
 
         # First, run sanity checks
-        self.check_sanity()
+        success = False
+
+        for i in range(5):
+            if self.check_sanity(soft=True):
+                success = True
+                break
+            else:
+                self.teardown()
+                self.setup()
+
+        if not success:
+            self.check_sanity(soft=False)
 
         # Then load the input
         if self.viminput:
