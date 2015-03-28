@@ -1,5 +1,7 @@
 import re
 
+from datetime import datetime
+from tasklib.task import local_zone
 from tests.base import IntegrationTest
 from time import sleep
 
@@ -346,3 +348,120 @@ class TestLinkActionRange(IntegrationTest):
         annotation = self.tasks[1]['annotations']
         assert annotation != []
         assert annotation[0]['description'] == backlink
+
+
+class TestStartAction(IntegrationTest):
+
+    viminput = """
+    * [ ] test task 1  #{uuid}
+    * [ ] test task 2  #{uuid}
+    """
+
+    vimoutput = """
+    * [S] test task 1  #{uuid}
+    * [ ] test task 2  #{uuid}
+    """
+
+    tasks = [
+        dict(description="test task 1"),
+        dict(description="test task 2"),
+    ]
+
+    def execute(self):
+        self.command(
+            "TaskWikiStart",
+            regex="Task \"test task 1\" started.$",
+            lines=1)
+
+        for task in self.tasks:
+            task.refresh()
+
+        now = local_zone.localize(datetime.now())
+
+        assert self.tasks[0]['status'] == "pending"
+        assert self.tasks[1]['status'] == "pending"
+
+        assert (now - self.tasks[0]['start']).total_seconds() < 5
+        assert (self.tasks[0]['start'] - now).total_seconds() < 5
+
+        assert self.tasks[1]['start'] == None
+
+
+class TestStartActionMoved(IntegrationTest):
+
+    viminput = """
+    * [ ] test task 1  #{uuid}
+    * [ ] test task 2  #{uuid}
+    """
+
+    vimoutput = """
+    * [ ] test task 1  #{uuid}
+    * [S] test task 2  #{uuid}
+    """
+
+    tasks = [
+        dict(description="test task 1"),
+        dict(description="test task 2"),
+    ]
+
+    def execute(self):
+        self.client.type('2gg')
+        self.command(
+            "TaskWikiStart",
+            regex="Task \"test task 2\" started.$",
+            lines=1)
+        sleep(1)
+
+        for task in self.tasks:
+            task.refresh()
+
+        now = local_zone.localize(datetime.now())
+
+        assert self.tasks[0]['status'] == "pending"
+        assert self.tasks[1]['status'] == "pending"
+
+        assert (now - self.tasks[1]['start']).total_seconds() < 5
+        assert (self.tasks[1]['start'] - now).total_seconds() < 5
+
+        assert self.tasks[0]['start'] == None
+
+
+class TestStartActionRange(IntegrationTest):
+
+    viminput = """
+    * [ ] test task 1  #{uuid}
+    * [ ] test task 2  #{uuid}
+    """
+
+    vimoutput = """
+    * [S] test task 1  #{uuid}
+    * [S] test task 2  #{uuid}
+    """
+
+    tasks = [
+        dict(description="test task 1"),
+        dict(description="test task 2"),
+    ]
+
+    def execute(self):
+        self.client.normal('1gg')
+        sleep(1)
+        self.client.normal('VG')
+        sleep(1)
+        self.client.feedkeys(":TaskWikiStart")
+        self.client.type('<Enter>')
+        sleep(1)
+
+        for task in self.tasks:
+            task.refresh()
+
+        now = local_zone.localize(datetime.now())
+
+        assert self.tasks[0]['status'] == "pending"
+        assert self.tasks[1]['status'] == "pending"
+
+        assert (now - self.tasks[0]['start']).total_seconds() < 5
+        assert (self.tasks[0]['start'] - now).total_seconds() < 5
+
+        assert (now - self.tasks[1]['start']).total_seconds() < 5
+        assert (self.tasks[1]['start'] - now).total_seconds() < 5
