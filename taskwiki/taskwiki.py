@@ -139,7 +139,7 @@ class SelectedTasks(object):
 
         # We might have two same tasks in the range, make sure we do not pass the
         # same uuid twice
-        unique_tasks = set(vimwikitask.task.uuid for vimwikitask in self.tasks)
+        unique_tasks = set(vimwikitask.task['uuid'] for vimwikitask in self.tasks)
         uuids = ','.join(unique_tasks)
 
         # Generate the arguments from the modstring
