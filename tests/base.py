@@ -112,7 +112,7 @@ class IntegrationTest(object):
         # Helper function that fills in {uuid} placeholders with correct UUIDs
         def fill_uuid(line):
             # Tasks in testing can have only alphanumerical descriptions
-            match = re.match(r'\s*\* \[ \] (?P<desc>[a-zA-Z0-9 ]*)(?<!\s)', line)
+            match = re.match(r'\s*\* \[.\] (?P<desc>[a-zA-Z0-9 ]*)(?<!\s)', line)
             if not match:
                 return line
 
