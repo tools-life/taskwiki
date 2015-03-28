@@ -465,3 +465,115 @@ class TestStartActionRange(IntegrationTest):
 
         assert (now - self.tasks[1]['start']).total_seconds() < 5
         assert (self.tasks[1]['start'] - now).total_seconds() < 5
+
+
+class TestStopAction(IntegrationTest):
+
+    viminput = """
+    * [S] test task 1  #{uuid}
+    * [S] test task 2  #{uuid}
+    """
+
+    vimoutput = """
+    * [ ] test task 1  #{uuid}
+    * [S] test task 2  #{uuid}
+    """
+
+    tasks = [
+        dict(description="test task 1", start="now"),
+        dict(description="test task 2", start="now"),
+    ]
+
+    def execute(self):
+        self.command(
+            "TaskWikiStop",
+            regex="Task \"test task 1\" stopped.$",
+            lines=1)
+
+        for task in self.tasks:
+            task.refresh()
+
+        now = local_zone.localize(datetime.now())
+
+        assert self.tasks[0]['status'] == "pending"
+        assert self.tasks[1]['status'] == "pending"
+
+        assert (now - self.tasks[1]['start']).total_seconds() < 30
+        assert (self.tasks[1]['start'] - now).total_seconds() < 30
+
+        assert self.tasks[0]['start'] == None
+
+
+class TestStopActionMoved(IntegrationTest):
+
+    viminput = """
+    * [S] test task 1  #{uuid}
+    * [S] test task 2  #{uuid}
+    """
+
+    vimoutput = """
+    * [S] test task 1  #{uuid}
+    * [ ] test task 2  #{uuid}
+    """
+
+    tasks = [
+        dict(description="test task 1", start="now"),
+        dict(description="test task 2", start="now"),
+    ]
+
+    def execute(self):
+        self.client.type('2gg')
+        self.command(
+            "TaskWikiStop",
+            regex="Task \"test task 2\" stopped.$",
+            lines=1)
+        sleep(1)
+
+        for task in self.tasks:
+            task.refresh()
+
+        now = local_zone.localize(datetime.now())
+
+        assert self.tasks[0]['status'] == "pending"
+        assert self.tasks[1]['status'] == "pending"
+
+        assert (now - self.tasks[0]['start']).total_seconds() < 30
+        assert (self.tasks[0]['start'] - now).total_seconds() < 30
+
+        assert self.tasks[1]['start'] == None
+
+
+class TestStopActionRange(IntegrationTest):
+
+    viminput = """
+    * [S] test task 1  #{uuid}
+    * [S] test task 2  #{uuid}
+    """
+
+    vimoutput = """
+    * [ ] test task 1  #{uuid}
+    * [ ] test task 2  #{uuid}
+    """
+
+    tasks = [
+        dict(description="test task 1", start="now"),
+        dict(description="test task 2", start="now"),
+    ]
+
+    def execute(self):
+        self.client.normal('1gg')
+        sleep(1)
+        self.client.normal('VG')
+        sleep(1)
+        self.client.feedkeys(":TaskWikiStop")
+        self.client.type('<Enter>')
+        sleep(1)
+
+        for task in self.tasks:
+            task.refresh()
+
+        assert self.tasks[0]['status'] == "pending"
+        assert self.tasks[1]['status'] == "pending"
+
+        assert self.tasks[0]['start'] == None
+        assert self.tasks[1]['start'] == None
