@@ -1,34 +1,64 @@
-*taskwiki.txt*        |Taskwarrior| tasks in |Vimwiki|                      ~
-                 _____         _   __        ___ _    _                     ~
-                 |_   _|_ _ ___| | _\ \      / (_) | _(_)                   ~
+*taskwiki.txt*        |Taskwarrior| tasks in |Vimwiki|               v0.7.2 ~
+                  _____         _   __        ___ _    _                    ~
+        a        |_   _|_ _ ___| | _\ \      / (_) | _(_)         a         ~
    command-line    | |/ _` / __| |/ /\ \ /\ / /| | |/ / |   personal wiki   ~
-    todo list      | | (_| \__ \   <  \ V  V / | |   <| |     for vim       ~
+    todo list      | | (_| \__ \   <  \ V  V / | |   <| |      for vim      ~
      manager       |_|\__,_|___/_|\_\  \_/\_/  |_|_|\_\_|                   ~
                                                                             ~
 =============================================================================
 CONTENTS
     1. Introduction 				|taskwiki|
-    2. Prerequisites				|taskwiki-prerequisites|
+    2. Prerequisites				|taskwiki-prereq|
     3. Installing				|taskwiki-install|
     4. Mapping					|taskwiki-mapping|
     5. Commands					|taskwiki-commands|
     6. Customization				|taskwiki-customize|
     7. Troubleshooting				|taskwiki-trouble|
     8. Contributing				|taskwiki-contribute|
-    9. License					|taskwiki- license|
+    9. License					|taskwiki-license|
 
 =============================================================================
 INTRODUCTION
 
 TaskWiki is a vim plugin that enhances vimwiki (another vim plugin) replacing
-vimwiki's Todo functionality with Taskwarrior tasks. 
+    vimwiki's Todo functionality with Taskwarrior tasks. 
+
+Key Features:
+- ViewPorts: a vimwiki heading with a task query (filter) embedded, generates
+    a corresponding list of tasks. These tasks can be modified and changes
+    will be synced back to task data. Defaults are used from the filter
+    (where possible) and user-defaults can be added after the filter, so 
+    that new tasks automatically take these default values. A ViewPort
+    heading like this:
+  == Project Foo Tasks | project:foo | +bar ==
+         title ^          filter ^       ^ user defaults
+    The filter and defaults are concealed in normal mode
+
+- Individual Todos: tasks can be used anywhere in a vimwiki, looking like:
+  * [ ] Install TaskWiki plugin
+    and the task will be synced with the task data on saving 
+
+- Task info: hitting <CR> with the cursor over a task shows all task info
+
+- Reports: burndown, calendar, history, projects, summary, stats and tags
+    reports can all be invoked, opening in a split window
+
+- Grid view: the TaskWikiGrid command will open a new buffer with a grid
+    view of task details, of the nearest ViewPort (like vim-taskwarrior)
+
+- Back-links: The command TaskWikiLink will add an annotation to the selected
+    task(s) with the ~/path/to/file.wiki
+
+- Tests: TaskWiki is well tested in development to ensure data integrity
+    **DISCLAIMER** This is free software, it comes with absolutely NO
+    warranty and no promise of fitness for any purpose! (back up your data!)
 =============================================================================
 PREREQUISITES
 
 This plugin requires: 
 - vim 7.4 or greater, with python bindings (use :version in vim, to check)
 - vimwiki dev branch (https://github.com/vimwiki/vimwiki)
-- taskwarrior 2.1.1+ (http://taskwarrior.org/download/)
+- taskwarrior 2.4.0+ (http://taskwarrior.org/download/)
 - tasklib develop branch (https://github.com/tbabej/tasklib/tree/develop)
 
 and can be enhanced with:
@@ -45,20 +75,55 @@ MAPPING
 =============================================================================
 COMMANDS
 
+*:TaskWikiAnnotate
+    Opens a prompt to add annotation to selected task(s)
+
 *:TaskWikiBurndown(Daily, Monthly, Weekly)
+    Opens a window with the burndown report (close with <CR> or "q")
+
 *:TaskWikiCalendar
+    Opens a window with the calendar report (close with <CR> or "q")
+
 *:TaskWikiDelete
+    Deletes the selected task(s)
+
 *:TaskWikiGhistory(Annual, Monthly)
+    Opens a window with the ghistory report (close with <CR> or "q")
+
+*:TasburndownkwikiGrid
+    Opens a window with the selected ViewPort displayed as a grid,
+    similar to vim-taskwarrior  (close with <CR> or "q")
+
 *:TaskWikiHistory(Annual, Monthly)
+    Opens a window with the history report (close with <CR> or "q")
+
 *:TaskWikiInfo
+    (or <CR>) Opens a window with the info report of task under the cursor
+    <CR> again closes the window
+
 *:TaskWikiLink
+    Adds an annotation to selected task(s) with ~/path/to/file.wiki
+
 *:TaskWikiMod
+    Opens a prompt for task modification, for task under the cursor
+
 *:TaskWikiProjects
+    Opens a window with the projects report (close with <CR> or "q")
+
 *:TaskWikiProjectsSummary
+    Opens a window with the summary report (close with <CR> or "q")
+
 *:TaskWikiStart
+    "Starts" the selected task(s) 
+
 *:TaskWikiStats
+    Opens a window with the stats report (close with <CR> or "q")
+
 *:TaskWikiStop
+    "Stops" the selected task(s) 
+
 *:TaskWikiTags
+    Opens a window with the tags report (close with <CR> or "q")
 
 =============================================================================
 CUSTOMIZATION
@@ -71,5 +136,4 @@ CONTRIBUTIONS
 
 =============================================================================
 LICENSE
-
 
