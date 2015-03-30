@@ -69,6 +69,10 @@ and can be enhanced with:
 =============================================================================
 INSTALLING
 
+- plugins the vim way: http://vimdoc.sourceforge.net/htmldoc/usr_05.html#05.4
+- plugins the easy way: https://github.com/tpope/vim-pathogen
+Other "vim plugin managers" will probably work, but have not been tested 
+
 =============================================================================
 MAPPING
 
