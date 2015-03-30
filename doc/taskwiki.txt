@@ -1,4 +1,4 @@
-*taskwiki.txt*        |Taskwarrior| tasks in |Vimwiki|               v0.7.2 ~
+*taskwiki.txt*         Taskwarrior tasks in Vimwiki                  v0.7.2 ~
                   _____         _   __        ___ _    _                    ~
         a        |_   _|_ _ ___| | _\ \      / (_) | _(_)         a         ~
    command-line    | |/ _` / __| |/ /\ \ /\ / /| | |/ / |   personal wiki   ~
