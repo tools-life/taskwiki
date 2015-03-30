@@ -90,7 +90,7 @@ COMMANDS
 *:TaskWikiGhistory(Annual, Monthly)
     Opens a window with the ghistory report (close with <CR> or "q")
 
-*:TasburndownkwikiGrid
+*:TaskWikiGrid
     Opens a window with the selected ViewPort displayed as a grid
     (requires vim-taskwarrior plugin)  (close with <CR> or "q")
 
