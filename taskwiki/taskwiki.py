@@ -37,7 +37,7 @@ How this plugin works:
         a) if task is marked as subtask by indentation, the dependency is created between
 """
 
-taskrc = vim.vars.get('taskwiki_taskrc_location') or' ~/.taskrc'
+taskrc = vim.vars.get('taskwiki_taskrc_location') or '~/.taskrc'
 data = vim.vars.get('taskwiki_data_location') or '~/.task'
 
 tw = TaskWarrior(data_location=data, taskrc_location=taskrc)
