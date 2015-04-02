@@ -1,4 +1,4 @@
-*taskwiki.txt*         Taskwarrior tasks in Vimwiki                  v0.7.3 ~
+*taskwiki.txt*         Taskwarrior tasks in Vimwiki                  v0.7.4 ~
                   _____         _   __        ___ _    _                    ~
         a        |_   _|_ _ ___| | _\ \      / (_) | _(_)         a         ~
    command-line    | |/ _` / __| |/ /\ \ /\ / /| | |/ / |   personal wiki   ~
@@ -30,23 +30,26 @@ Key Features:
   == Project Foo Tasks | project:foo | +bar ==
          title ^          filter ^       ^ user defaults
     The filter and defaults are concealed in normal mode.
-    Defaults for new tasks are derived from the filter (where possible).
-        These simple attributes will be passed as defaults to new tasks:
-	    project:foo
-	    +tag
+
+    Defaults for new tasks added under a ViewPort are derived from the filter 
+    	(where possible) and from user-defaults (if any)
+	User-defaults will be added to, and will override, filter-defaults. 
+	Only simpler elements will work as defaults defaults to new tasks:
+	    - attribute:value (project:foo)
+	    - +tag
 	Complex filter elements, or dates, like these, will _not_ be used:
 	    - nothing with attribute modifiers (project.not:foo)
 	    - due: sched: wait: until: values (?)
 	    - nothing in parentheses (project:foo or project:bar)
 	    - no negative tags (-foo)
-	user-defaults can be added after the filter, and will override 
+	    - no virtual tags (+PENDING +TODAY +OVERDUE etc.)
 	filter-defaults, so that any new tasks will be have these values.
 
 - Individual Todos: tasks can be used anywhere in a vimwiki, looking like:
   * [ ] Install TaskWiki plugin
     and the task will be synced with the task data on saving.
 
-- Task Info: hitting <CR> with the cursor over a task shows all task info
+- Task Info: hitting <CR> with the cursor over a task shows all task info.
 
 - Reports: burndown, calendar, history, projects, summary, stats and tags
     reports can all be invoked, opening in a split window.
