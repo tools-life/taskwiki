@@ -68,6 +68,7 @@ def tw_modstring_to_kwargs(line):
     line = line.strip()
 
     args = tw_modstring_to_args(line)
+    meta = dict()  # Store meta attributes
 
     for arg in args:
         # If the argument contains :, then it's a key/value pair
@@ -84,10 +85,12 @@ def tw_modstring_to_kwargs(line):
             if not value.isupper():
                 output.setdefault('tags', []).append(value)
         elif arg.startswith('-'):
+            if arg == "-VISIBLE":
+                meta['visible'] = False
             # Ignore tag removal
             pass
 
-    return output
+    return output, meta
 
 def get_input(prompt="Enter: "):
     value = vim.eval('input("%s")' % prompt)

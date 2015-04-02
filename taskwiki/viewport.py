@@ -22,7 +22,7 @@ class ViewPort(object):
           * [ ] Make sure the hosting is working
     """
 
-    def __init__(self, line_number, cache, taskfilter, defaults):
+    def __init__(self, line_number, cache, taskfilter, defaults, meta=None):
         """
         Constructs a ViewPort out of given line.
         """
@@ -34,6 +34,7 @@ class ViewPort(object):
         self.taskfilter = ["-DELETED"] + taskfilter
         self.defaults = defaults
         self.tasks = set()
+        self.meta = meta or dict()
 
     @classmethod
     def from_line(cls, number, cache):
@@ -43,10 +44,10 @@ class ViewPort(object):
             return None
 
         taskfilter = util.tw_modstring_to_args(match.group('filter') or '')
-        defaults = util.tw_modstring_to_kwargs(
+        defaults, meta = util.tw_modstring_to_kwargs(
             match.group('filter') + ' ' + (match.group('defaults') or ''))
 
-        self = cls(number, cache, taskfilter, defaults)
+        self = cls(number, cache, taskfilter, defaults, meta)
 
         return self
 
@@ -70,21 +71,43 @@ class ViewPort(object):
         return ' '.join(self.taskfilter)
 
     @property
+    def viewport_tasks(self):
+        return set(t.task for t in self.tasks)
+
+    @property
     def matching_tasks(self):
         # Split the filter into CLI tokens and filter by the expression
         # By default, do not list deleted tasks
         args = self.taskfilter
-        return set(
-            task for task in self.tw.tasks.filter(*args)
-        )
+        # Visibility tag not set
+        if self.meta.get('visible') is None:
+            return set(
+                task for task in self.tw.tasks.filter(*args)
+            )
+        # -VISIBLE virtual tag used
+        elif self.meta.get('visible') is False:
+            # Determine which tasks are outside the viewport
+            all_vwtasks = set(self.cache.vimwikitask_cache.values())
+            vwtasks_outside_viewport = all_vwtasks - set(self.tasks)
+            tasks_outside_viewport = set(
+                t.task for t in vwtasks_outside_viewport
+                if t is not None
+            )
+
+            # Return only those that are not duplicated outside
+            # of the viewport
+            return set(
+                task for task in self.tw.tasks.filter(*args)
+                if task not in tasks_outside_viewport
+            )
 
     def get_tasks_to_add_and_del(self):
         # Find the tasks that are new and tasks that are no longer
         # supposed to show up in the viewport
         matching_tasks = self.matching_tasks
 
-        to_add = matching_tasks - set(t.task for t in self.tasks)
-        to_del = set(t.task for t in self.tasks) - matching_tasks
+        to_add = matching_tasks - self.viewport_tasks
+        to_del = self.viewport_tasks - matching_tasks
 
         return to_add, to_del
 
