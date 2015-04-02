@@ -1,11 +1,11 @@
 from __future__ import print_function
 import itertools
+import os
 import sys
 import vim  # pylint: disable=F0401
 
 # Start measuring coverage if in testing
 if vim.vars.get('taskwiki_measure_coverage'):
-    import os
     import atexit
     import coverage
     coverage_path = os.path.expanduser('~/taskwiki-coverage/.coverage.{0}'.format(os.getpid()))
@@ -21,7 +21,8 @@ if vim.vars.get('taskwiki_measure_coverage'):
 from tasklib.task import TaskWarrior, Task
 
 # Insert the taskwiki on the python path
-sys.path.insert(0, vim.eval("s:plugin_path") + '/taskwiki')
+BASE_DIR = vim.eval("s:plugin_path")
+sys.path.insert(0, os.path.join(BASE_DIR, 'taskwiki'))
 
 import cache
 import regexp
@@ -236,6 +237,19 @@ class Meta(object):
             lines = template_formatted.splitlines()
             util.show_in_split(lines)
 
+    def integrate_tagbar(self):
+        tagbar_available = vim.eval('exists(":Tagbar")') == '2'
+        if tagbar_available:
+            vim.vars['tagbar_type_vimwiki'] = {
+                'ctagstype': 'default',
+                'kinds': ['h:header', 'i:inside', 'v:viewport'],
+                'sro': '&&&',
+                'kind2scope': {'h':'header', 'v':'viewport'},
+                'sort': 0,
+                'ctagsbin': os.path.join(BASE_DIR, 'extra/vwtags.py'),
+                'ctagsargs': 'default'
+                }
+
 
 class Split(object):
     command = None
@@ -363,3 +377,4 @@ class SplitTags(Split):
 
 if __name__ == '__main__':
     WholeBuffer.update_from_tw()
+    Meta().integrate_tagbar()
