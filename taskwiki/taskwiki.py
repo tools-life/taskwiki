@@ -208,6 +208,12 @@ class Meta(object):
     def inspect_viewport(self):
         position = util.get_current_line_number()
         port = viewport.ViewPort.from_line(position, cache)
+
+        if port.meta.get('visible') is False:
+            cache.reset()
+            cache.load_vwtasks()
+            cache.load_tasks()
+
         template = (
             "ViewPort inspection:\n"
             "--------------------\n"
