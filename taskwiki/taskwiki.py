@@ -24,6 +24,7 @@ from tasklib.task import TaskWarrior, Task
 sys.path.insert(0, vim.eval("s:plugin_path") + '/taskwiki')
 
 import cache
+import regexp
 import util
 import vwtask
 import viewport
@@ -189,10 +190,16 @@ class Mappings(object):
     def task_info_or_vimwiki_follow_link():
         # If the line under cursor contains task, toggle info
         # otherwise do the default VimwikiFollowLink
-        if cache[util.get_current_line_number()] is not None:
+        position = util.get_current_line_number()
+
+        if cache[position] is not None:
             SelectedTasks().info()
         else:
-            vim.command('VimwikiFollowLink')
+            port = viewport.ViewPort.from_line(position, cache)
+            if port is not None:
+                Meta().inspect_viewport()
+            else:
+                vim.command('VimwikiFollowLink')
 
 
 class Split(object):
