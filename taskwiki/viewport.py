@@ -69,6 +69,15 @@ class ViewPort(object):
     def raw_filter(self):
         return ' '.join(self.taskfilter)
 
+    @property
+    def matching_tasks(self):
+        # Split the filter into CLI tokens and filter by the expression
+        # By default, do not list deleted tasks
+        args = ["-DELETED"] + self.taskfilter
+        return set(
+            task for task in self.tw.tasks.filter(*args)
+        )
+
     def load_tasks(self):
         # Load all tasks below the viewport
         for i in range(self.line_number + 1, len(vim.current.buffer)):
@@ -87,12 +96,7 @@ class ViewPort(object):
         # the filter, and add the tasks that are new. Optionally remove the
         # tasks that are not longer belonging there.
 
-        # Split the filter into CLI tokens and filter by the expression
-        # By default, do not list deleted tasks
-        args = ["-DELETED"] + self.taskfilter
-        matching_tasks = set(
-            task for task in self.tw.tasks.filter(*args)
-        )
+        matching_tasks = self.matching_tasks
 
         to_add = matching_tasks - set(t.task for t in self.tasks)
         to_del = set(t.task for t in self.tasks) - matching_tasks
