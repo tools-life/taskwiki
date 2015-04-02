@@ -22,7 +22,7 @@ class ViewPort(object):
           * [ ] Make sure the hosting is working
     """
 
-    def __init__(self, line_number, cache, taskfilter, defaults, meta=None):
+    def __init__(self, line_number, cache, name, taskfilter, defaults, meta=None):
         """
         Constructs a ViewPort out of given line.
         """
@@ -30,6 +30,7 @@ class ViewPort(object):
         self.cache = cache
         self.tw = cache.tw
 
+        self.name = name
         self.line_number = line_number
         self.taskfilter = ["-DELETED"] + taskfilter
         self.defaults = defaults
@@ -46,8 +47,9 @@ class ViewPort(object):
         taskfilter = util.tw_modstring_to_args(match.group('filter') or '')
         defaults, meta = util.tw_modstring_to_kwargs(
             match.group('filter') + ' ' + (match.group('defaults') or ''))
+        name = match.group('name').strip()
 
-        self = cls(number, cache, taskfilter, defaults, meta)
+        self = cls(number, cache, name, taskfilter, defaults, meta)
 
         return self
 

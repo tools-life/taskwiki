@@ -217,12 +217,13 @@ class Meta(object):
         template = (
             "ViewPort inspection:\n"
             "--------------------\n"
-            "Filter used: {0}\n"
-            "Defaults used: {5}\n"
-            "Matching taskwarrior tasks: {1}\n"
-            "Displayed tasks: {2}\n"
-            "Tasks to be added: {3}\n"
-            "Tasks to be deleted: {4}\n"
+            "Name: {0}\n"
+            "Filter used: {1}\n"
+            "Defaults used: {2}\n"
+            "Matching taskwarrior tasks: {3}\n"
+            "Displayed tasks: {4}\n"
+            "Tasks to be added: {5}\n"
+            "Tasks to be deleted: {6}\n"
         )
 
         if port is not None:
@@ -233,12 +234,13 @@ class Meta(object):
 
             # Fill in the interesting info in the template
             template_formatted = template.format(
+                port.name,
                 port.raw_filter,
+                port.raw_defaults,
                 len(port.matching_tasks),
                 len(port.tasks),
                 ', '.join(map(unicode, to_add)),
                 ', '.join(map(unicode, to_del)),
-                port.raw_defaults,
             )
 
             # Show in the split
