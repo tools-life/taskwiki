@@ -71,6 +71,13 @@ class ViewPort(object):
         return ' '.join(self.taskfilter)
 
     @property
+    def raw_defaults(self):
+        return ', '.join(
+            '{0}:{1}'.format(key, value)
+            for key, value in self.defaults.iteritems()
+            )
+
+    @property
     def viewport_tasks(self):
         return set(t.task for t in self.tasks)
 

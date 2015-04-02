@@ -218,6 +218,7 @@ class Meta(object):
             "ViewPort inspection:\n"
             "--------------------\n"
             "Filter used: {0}\n"
+            "Defaults used: {5}\n"
             "Matching taskwarrior tasks: {1}\n"
             "Displayed tasks: {2}\n"
             "Tasks to be added: {3}\n"
@@ -237,6 +238,7 @@ class Meta(object):
                 len(port.tasks),
                 ', '.join(map(unicode, to_add)),
                 ', '.join(map(unicode, to_del)),
+                port.raw_defaults,
             )
 
             # Show in the split
