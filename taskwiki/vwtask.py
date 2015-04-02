@@ -97,6 +97,13 @@ class VimwikiTask(object):
         self.task['priority'] = convert_priority_to_tw_format(
             len(match.group('priority') or [])) # This is either 0,1,2 or 3
 
+        # Also make sure changes in the progress field are reflected
+        if self['completed_mark'] is 'X':
+            self.task['status'] = 'completed'
+        elif self['completed_mark'] is 'S':
+            self.task['status'] = 'pending'
+            self.task['start'] = self.task['start'] or 'now'
+
         # To get local time aware timestamp, we need to convert to from local datetime
         # to UTC time, since that is what tasklib (correctly) uses
         due = match.group('due')
