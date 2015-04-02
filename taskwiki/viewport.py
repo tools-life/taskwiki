@@ -31,7 +31,7 @@ class ViewPort(object):
         self.tw = cache.tw
 
         self.line_number = line_number
-        self.taskfilter = taskfilter
+        self.taskfilter = ["-DELETED"] + taskfilter
         self.defaults = defaults
         self.tasks = set()
 
@@ -73,10 +73,20 @@ class ViewPort(object):
     def matching_tasks(self):
         # Split the filter into CLI tokens and filter by the expression
         # By default, do not list deleted tasks
-        args = ["-DELETED"] + self.taskfilter
+        args = self.taskfilter
         return set(
             task for task in self.tw.tasks.filter(*args)
         )
+
+    def get_tasks_to_add_and_del(self):
+        # Find the tasks that are new and tasks that are no longer
+        # supposed to show up in the viewport
+        matching_tasks = self.matching_tasks
+
+        to_add = matching_tasks - set(t.task for t in self.tasks)
+        to_del = set(t.task for t in self.tasks) - matching_tasks
+
+        return to_add, to_del
 
     def load_tasks(self):
         # Load all tasks below the viewport
@@ -96,10 +106,8 @@ class ViewPort(object):
         # the filter, and add the tasks that are new. Optionally remove the
         # tasks that are not longer belonging there.
 
-        matching_tasks = self.matching_tasks
-
-        to_add = matching_tasks - set(t.task for t in self.tasks)
-        to_del = set(t.task for t in self.tasks) - matching_tasks
+        # Get sets of tasks to add and to delete
+        to_add, to_del = self.get_tasks_to_add_and_del()
 
         # Remove tasks that no longer match the filter
         for task in to_del:
