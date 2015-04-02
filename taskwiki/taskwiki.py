@@ -1,5 +1,4 @@
 from __future__ import print_function
-import itertools
 import os
 import sys
 import vim  # pylint: disable=F0401
@@ -18,16 +17,14 @@ if vim.vars.get('taskwiki_measure_coverage'):
 
     atexit.register(save_coverage)
 
-from tasklib.task import TaskWarrior, Task
+from tasklib.task import TaskWarrior
 
 # Insert the taskwiki on the python path
 BASE_DIR = vim.eval("s:plugin_path")
 sys.path.insert(0, os.path.join(BASE_DIR, 'taskwiki'))
 
 import cache
-import regexp
 import util
-import vwtask
 import viewport
 
 """
