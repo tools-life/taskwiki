@@ -202,6 +202,30 @@ class Mappings(object):
                 vim.command('VimwikiFollowLink')
 
 
+class Meta(object):
+
+    def inspect_viewport(self):
+        position = util.get_current_line_number()
+        port = viewport.ViewPort.from_line(position, cache)
+        template = (
+            "ViewPort inspection:\n"
+            "--------------------\n"
+            "Filter used: {0}\n"
+            "Matching tasks: {1}\n"
+        )
+
+        if port is not None:
+            # Fill in the interesting info in the template
+            template_formatted = template.format(
+                port.raw_filter,
+                len(port.matching_tasks),
+            )
+
+            # Show in the split
+            lines = template_formatted.splitlines()
+            util.show_in_split(lines)
+
+
 class Split(object):
     command = None
     split_name = None

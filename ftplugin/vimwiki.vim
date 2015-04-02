@@ -32,6 +32,9 @@ command! -range TaskWikiStop :<line1>,<line2>py SelectedTasks().stop()
 command! -range -nargs=* TaskWikiMod :<line1>,<line2>py SelectedTasks().modify(<q-args>)
 command! -range -nargs=* TaskWikiAnnotate :<line1>,<line2>py SelectedTasks().annotate(<q-args>)
 
+" Meta commands
+command! TaskWikiInspect :py Meta().inspect_viewport()
+
 " Disable <CR> as VimwikIFollowLink
 if !hasmapto('<Plug>VimwikiFollowLink')
   nmap <Plug>NoVimwikiFollowLink <Plug>VimwikiFollowLink
