@@ -54,6 +54,37 @@ class TestSimpleTaskModification(IntegrationTest):
         assert task['status'] == 'pending'
 
 
+class TestSimpleTaskCompletion(IntegrationTest):
+
+    viminput = """
+    * [ ] This is a test task  #{uuid}
+    """
+
+    vimoutput = """
+    * [X] This is a modified task  #{uuid}
+    """
+
+    tasks = [
+        dict(description="This is a test task")
+    ]
+
+    def execute(self):
+        # Change the current line's due date
+        current_data = self.read_buffer()
+        current_data[0] = current_data[0].replace('[ ]', '[X]')
+        self.write_buffer(current_data)
+
+        self.command("w", regex="written$", lines=1)
+
+        # Check that the task was completed
+        assert len(self.tw.tasks.pending()) == 0
+        assert len(self.tw.tasks.completed()) == 1
+
+        task = self.tw.tasks.completed()[0]
+        assert task['description'] == 'This is a test task'
+        assert task['status'] == 'completed'
+
+
 class TestSimpleTaskWithDueDatetimeCreation(IntegrationTest):
 
     viminput = """
