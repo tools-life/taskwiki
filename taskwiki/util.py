@@ -69,7 +69,6 @@ def tw_modstring_to_args(line):
 
 def tw_modstring_to_kwargs(line):
     output = dict()
-    escape_global_chars = ('"', "'")
     line = line.strip()
 
     args = tw_modstring_to_args(line)
@@ -93,7 +92,6 @@ def tw_modstring_to_kwargs(line):
             if arg == "-VISIBLE":
                 meta['visible'] = False
             # Ignore tag removal
-            pass
 
     return output, meta
 
