@@ -10,6 +10,11 @@ import os
 ANSI_ESC_AVAILABLE = vim.eval('exists(":AnsiEsc")') == '2'
 
 
+class TaskWikiException(Exception):
+    """Used to interrupt a TaskWiki command/event and notify the user."""
+    pass
+
+
 def tw_modstring_to_args(line):
     output = []
     escape_global_chars = ('"', "'")
