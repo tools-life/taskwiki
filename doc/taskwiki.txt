@@ -1,4 +1,4 @@
-*taskwiki.txt*         Taskwarrior tasks in Vimwiki                  v0.7.2 ~
+*taskwiki.txt*         Taskwarrior tasks in Vimwiki                  v0.7.3 ~
                   _____         _   __        ___ _    _                    ~
         a        |_   _|_ _ ___| | _\ \      / (_) | _(_)         a         ~
    command-line    | |/ _` / __| |/ /\ \ /\ / /| | |/ / |   personal wiki   ~
@@ -26,22 +26,30 @@ TaskWiki is a vim plugin that enhances vimwiki (another vim plugin) replacing
 Key Features:
 - ViewPorts: a vimwiki heading with a task query (filter) embedded, generates
     a corresponding list of tasks. These tasks can be modified and changes
-    will be synced back to task data. Defaults are used from the filter
-    (where possible) and user-defaults can be added after the filter, so 
-    that new tasks automatically take these default values. A ViewPort
-    heading looks like this:
+    will be synced back to task data.  A ViewPort heading looks like this:
   == Project Foo Tasks | project:foo | +bar ==
          title ^          filter ^       ^ user defaults
-    The filter and defaults are concealed in normal mode
+    The filter and defaults are concealed in normal mode.
+    Defaults for new tasks are derived from the filter (where possible).
+        These simple attributes will be passed as defaults to new tasks:
+	    project:foo
+	    +tag
+	Complex filter elements, or dates, like these, will _not_ be used:
+	    - nothing with attribute modifiers (project.not:foo)
+	    - due: sched: wait: until: values (?)
+	    - nothing in parentheses (project:foo or project:bar)
+	    - no negative tags (-foo)
+	user-defaults can be added after the filter, and will override 
+	filter-defaults, so that any new tasks will be have these values.
 
 - Individual Todos: tasks can be used anywhere in a vimwiki, looking like:
   * [ ] Install TaskWiki plugin
-    and the task will be synced with the task data on saving 
+    and the task will be synced with the task data on saving.
 
-- Task info: hitting <CR> with the cursor over a task shows all task info
+- Task Info: hitting <CR> with the cursor over a task shows all task info
 
 - Reports: burndown, calendar, history, projects, summary, stats and tags
-    reports can all be invoked, opening in a split window
+    reports can all be invoked, opening in a split window.
 
 - Grid view: the TaskWikiGrid command will open a new buffer with a grid
     view of task details, of the nearest ViewPort (using vim-taskwarrior)
@@ -49,7 +57,7 @@ Key Features:
 - Back-links: The command TaskWikiLink will add an annotation to the selected
     task(s) with the ~/path/to/file.wiki
 
-- Tests: TaskWiki is well tested in development to ensure data integrity
+- Tests: TaskWiki is well tested in development to ensure data integrity.
     **DISCLAIMER** This is free software, it comes with absolutely NO
     warranty and no promise of fitness for any purpose! (back up your data!)
 =============================================================================
@@ -97,21 +105,21 @@ COMMANDS
     Opens a window with the ghistory report (close with <CR> or "q")
 
 *:TaskWikiGrid
-    Opens a window with the selected ViewPort displayed as a grid
-    (requires vim-taskwarrior plugin)  (close with <CR> or "q")
+    Opens a new buffer with the selected ViewPort displayed as a grid
+    (requires vim-taskwarrior plugin)  
 
 *:TaskWikiHistory(Annual, Monthly)
     Opens a window with the history report (close with <CR> or "q")
 
 *:TaskWikiInfo
     (or <CR>) Opens a window with the info report of task under the cursor
-    <CR> again closes the window
+    ("q" or <CR> again, closes the window)
 
 *:TaskWikiLink
     Adds an annotation to selected task(s) with ~/path/to/file.wiki
 
 *:TaskWikiMod
-    Opens a prompt for task modification, for task under the cursor
+    Opens a prompt for task modification, for selected task(s)
 
 *:TaskWikiProjects
     Opens a window with the projects report (close with <CR> or "q")
@@ -140,11 +148,17 @@ none yet!?
 TROUBLESHOOTING
 
 - Are requirements met? 
+	-Vim
+	-TaskWiki (this plugin)
+	-Taskwarrior
+	-Tasklib
+	-vim-taskwarrior
 
 =============================================================================
 CONTRIBUTIONS
 
- https://github.com/tbabej/taskwiki
+Clone, fork, contribute and learn more at https://github.com/tbabej/taskwiki
+Good ideas, well formed bug reports and thoughtful pull-requests welcome. 
 
 =============================================================================
 LICENSE
