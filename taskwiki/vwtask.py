@@ -2,7 +2,7 @@ import re
 import vim  # pylint: disable=F0401
 from datetime import datetime
 
-from tasklib.task import Task, SerializingObject
+from tasklib.task import Task
 import regexp
 import viewport
 import util
