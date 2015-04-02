@@ -97,9 +97,14 @@ def tw_modstring_to_kwargs(line):
 
     return output, meta
 
-def get_input(prompt="Enter: "):
+def get_input(prompt="Enter: ", allow_empty=False):
     value = vim.eval('input("%s")' % prompt)
     vim.command('redraw')
+
+    # Check for empty value and bail out if not allowed
+    if not value and not allow_empty:
+        raise TaskWikiException("Input must be provided.")
+
     return value
 
 def get_buffer_shortname():
