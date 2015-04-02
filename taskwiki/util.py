@@ -123,6 +123,9 @@ def show_in_split(lines, size=None, position="belowright", vertical=False,
         print("No output.", file=sys.stderr)
         return
 
+    # Sanitaze the output
+    lines = [l.rstrip() for l in lines]
+
     # If the multiple buffers with this name are not desired
     # cloase all the old ones in this tabpage
     if replace_opened:
