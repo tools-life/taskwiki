@@ -61,7 +61,7 @@ class TestSimpleTaskCompletion(IntegrationTest):
     """
 
     vimoutput = """
-    * [X] This is a modified task  #{uuid}
+    * [X] This is a test task  #{uuid}
     """
 
     tasks = [
