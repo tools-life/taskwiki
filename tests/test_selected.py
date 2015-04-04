@@ -30,6 +30,31 @@ class TestAnnotateAction(IntegrationTest):
         assert annotation[0]['description'] == "This is annotation."
 
 
+class TestAnnotateActionManually(IntegrationTest):
+
+    viminput = """
+    * [ ] test task 1  #{uuid}
+    * [ ] test task 2  #{uuid}
+    """
+
+    tasks = [
+        dict(description="test task 1"),
+        dict(description="test task 2"),
+    ]
+
+    def execute(self):
+        self.client.feedkeys(":TaskWikiAnnotate")
+        self.client.type("<Enter>")
+        sleep(0.5)
+        self.client.feedkeys("This is typed annotation.")
+        self.client.type("<Enter>")
+        sleep(0.5)
+
+        self.tasks[0].refresh()
+        annotation = self.tasks[0]['annotations']
+        assert annotation != []
+        assert annotation[0]['description'] == "This is typed annotation."
+
 class TestAnnotateActionMoved(IntegrationTest):
 
     viminput = """
