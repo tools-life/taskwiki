@@ -63,7 +63,7 @@ class WholeBuffer(object):
 
 class SelectedTasks(object):
     def __init__(self):
-        self.tw = tw
+        self.tw = cache.get_relevant_tw()
 
         # Reset cache, otherwise old line content may be used
         cache.reset()
@@ -258,6 +258,7 @@ class Split(object):
     def __init__(self, args):
         self.args = self._process_args(args)
         self.split_name = self.split_name or self.command
+        self.tw = cache.get_relevant_tw()
 
     def _process_args(self, args):
         tw_args = util.tw_modstring_to_args(args)
@@ -278,12 +279,12 @@ class Split(object):
     def execute(self):
         args = self.args + [self.command] + self.tw_extra_args
         if self.colorful:
-            output = util.tw_execute_colorful(tw, args,
+            output = util.tw_execute_colorful(self.tw, args,
                                               allow_failure=False,
                                               maxwidth=self.maxwidth,
                                               maxheight=self.maxheight)
         else:
-            output = util.tw_execute_safely(tw, args)
+            output = util.tw_execute_safely(self.tw, args)
 
         util.show_in_split(
             output,
@@ -326,12 +327,13 @@ class SplitCalendar(Split):
     colorful = True
     maxwidth = True
 
-    # Task calendar does not take fitler and in general uses
+    # Task calendar does not take filter and in general uses
     # command-suffix syntax
     def __init__(self, args):
         self.args = []
         self.tw_extra_args = util.tw_modstring_to_args(args)
         self.split_name = self.split_name or self.command
+        self.tw = cache.get_relevant_tw()
 
 
 class SplitGhistoryMonthly(Split):

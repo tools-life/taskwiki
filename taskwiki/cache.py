@@ -226,3 +226,8 @@ class TaskCache(object):
 
         # Rebuild cache keys
         self.rebuild_vimwikitask_cache()
+
+    def get_relevant_tw(self):
+        # Find closest task
+        task = vwtask.VimwikiTask.find_closest(self)
+        return task.tw if task else self.warriors['default']
