@@ -38,6 +38,12 @@ class WarriorStore(object):
     def __setitem__(self, key, value):
         self.warriors[key] = value
 
+    def values(self):
+        return self.warriors.values()
+
+    def iteritems(self):
+        return self.warriors.iteritems()
+
 
 class TaskCache(object):
     """
