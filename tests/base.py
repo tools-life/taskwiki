@@ -122,8 +122,9 @@ class IntegrationTest(object):
             return False
 
         # Assert that TW and cache objects exist
-        tw_class = self.client.command('py print(tw.__class__.__name__)')
         cache_class = self.client.command('py print(cache.__class__.__name__)')
+        tw_class = self.client.command(
+            'py print(cache.warriors["default"].__class__.__name__)')
 
         if not soft:
             assert tw_class == 'TaskWarrior'
