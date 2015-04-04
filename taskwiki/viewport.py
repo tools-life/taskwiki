@@ -28,7 +28,7 @@ class ViewPort(object):
         """
 
         self.cache = cache
-        self.tw = cache.tw
+        self.tw = cache.warriors['default']
 
         self.name = name
         self.line_number = line_number
@@ -146,8 +146,10 @@ class ViewPort(object):
             # Find matching vimwikitasks in the self.tasks set
             # There might be more if the viewport contained multiple
             # representations of the same task
-            matching_vimwikitasks= [t for t in self.tasks
-                                    if t.uuid == task['uuid']]
+            matching_vimwikitasks= [
+                t for t in self.tasks
+                if t.uuid == vwtask.ShortUUID(task['uuid'], self.tw)
+            ]
 
             # Remove the tasks from viewport's set and from buffer
             for vimwikitask in matching_vimwikitasks:
@@ -162,7 +164,7 @@ class ViewPort(object):
             added_at = self.line_number + len(self.tasks) + added_tasks
 
             # Add the task object to cache
-            self.cache[task['uuid']] = task
+            self.cache[vwtask.ShortUUID(task['uuid'], self.tw)] = task
 
             # Create the VimwikiTask
             vimwikitask = vwtask.VimwikiTask.from_task(self.cache, task)

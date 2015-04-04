@@ -3,6 +3,8 @@ import vim  # pylint: disable=F0401
 import vwtask
 import viewport
 
+from tasklib.task import TaskWarrior
+
 
 class WarriorStore(object):
     """
@@ -83,8 +85,7 @@ class TaskCache(object):
 
     def __setitem__(self, key, value):
         # String keys refer to the Task objects
-        if type(key) in (str, unicode):
-            key = vwtask.ShortUUID(key)
+        if type(key) is vwtask.ShortUUID:
             self.task_cache[key] = value
 
         # Integer keys (line numbers) refer to the VimwikiTask objects
@@ -148,8 +149,8 @@ class TaskCache(object):
 
             # Select all tasks in the files that have UUIDs
             uuids = [
-                t.uuid for t in self.vimwikitask_cache.values()
-                if t is not None and t.uuid is not None and t.warrior = tw
+                t.uuid.value for t in self.vimwikitask_cache.values()
+                if t is not None and t.uuid is not None and t.tw == tw
             ]
 
             # If no task in the file contains UUID, we have no job here
@@ -161,7 +162,7 @@ class TaskCache(object):
 
             # Update each task in the cache
             for task in tasks:
-                key = ShortUUID(task['uuid'], tw)
+                key = vwtask.ShortUUID(task['uuid'], tw)
                 self.task_cache[key] = task
 
     def update_vwtasks_from_tasks(self):
