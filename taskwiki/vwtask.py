@@ -1,4 +1,5 @@
 import re
+import itertools
 import vim  # pylint: disable=F0401
 from datetime import datetime
 
@@ -78,6 +79,21 @@ class VimwikiTask(object):
             self.vim_data[key] = value
         else:
             self.task[key] = value
+
+    @classmethod
+    def find_closest(cls, cache):
+        current_line = util.get_current_line_number()
+
+        # Search lines in order: first all above, than all below
+        line_numbers = itertools.chain(
+            reversed(range(0, current_line + 1)),
+            range(current_line + 1, len(vim.current.buffer))
+            )
+
+        for i in line_numbers:
+            vwtask = cls.from_line(cache, i)
+            if vwtask:
+                return vwtask
 
     @classmethod
     def from_current_line(cls, cache):
