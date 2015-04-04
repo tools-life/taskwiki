@@ -7,6 +7,7 @@ DUE_UNNAMED = r'\(\d{4}-\d\d-\d\d( \d\d:\d\d)?\)'
 SPACE_UNNAMED = r'\s*'
 NONEMPTY_SPACE_UNNAMED = r'\s+'
 FINAL_SEGMENT_SEPARATOR_UNNAMED = r'(\s+|$)'
+SOURCE_INDICATOR = r'(?P<source>[A-Z]):'
 
 TEXT_FORBIDDEN_SUFFIXES = (
     r'\s',  # Text cannot end with whitespace
@@ -15,13 +16,14 @@ TEXT_FORBIDDEN_SUFFIXES = (
     r'\(\d{4}-\d\d-\d\d',  # Any datetime value
     UUID_UNNAMED,  # Text cannot end with UUID
     UUID_UNNAMED_SHORT,
+    r'#[A-Z]:',
 )
 
 # Building blocks
 BRACKET_OPENING = re.escape('* [')
 BRACKET_CLOSING = re.escape('] ')
 EMPTY_SPACE = r'(?P<space>\s*)'
-UUID = r'(?P<uuid>{0}|{1})'.format(UUID_UNNAMED, UUID_UNNAMED_SHORT)
+UUID = r'({2})?(?P<uuid>{0}|{1})'.format(UUID_UNNAMED, UUID_UNNAMED_SHORT, SOURCE_INDICATOR)
 DUE = r'(?P<due>{0})'.format(DUE_UNNAMED)
 UUID_COMMENT = '#{0}'.format(UUID)
 TEXT = r'(?P<text>.+' + ''.join(['(?<!%s)' % suffix for suffix in TEXT_FORBIDDEN_SUFFIXES]) + ')'
