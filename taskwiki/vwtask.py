@@ -36,6 +36,20 @@ class ShortUUID(object):
     def __hash__(self):
         return self.value.__hash__() * 17 + self.tw.__hash__() * 7
 
+    def vim_representation(self, cache):
+        """
+        Return 'H:<uuid>' for TW with indicator 'H',
+        '<uuid>' for default instance.
+        """
+
+        # Determine the key of the TW instance
+        [key] = [key for key, value in cache.warriors.iteritems()
+                 if value == self.tw]
+        prefix = '{0}:'.format(key) if key is not 'default' else ''
+
+        # Return the H:<uuid> or <uuid> value
+        return '{0}{1}'.format(prefix, self.value)
+
 
 class VimwikiTask(object):
     # Lists all data keys that are reflected in Vim representation
@@ -264,7 +278,7 @@ class VimwikiTask(object):
             self['description'] if self['description'] else 'TEXT MISSING?',
             ' ' + '!' * self.priority_from_tw_format if self['priority'] else '',
             ' ' + self['due'].strftime(regexp.DATETIME_FORMAT) if self['due'] else '',
-            '  #' + self['uuid'].split('-')[0] if self['uuid'] else '',
+            '  #' + self.uuid.vim_representation(self.cache) if self.uuid else '',
         ])
 
     def find_parent_task(self):
