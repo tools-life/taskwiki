@@ -1,4 +1,9 @@
 let s:plugin_path = escape(expand('<sfile>:p:h:h'), '\')
+
+if exists("g:taskwiki_measure_coverage")
+  execute 'pyfile ' . s:plugin_path . '/taskwiki/coverage.py'
+endif
+
 execute 'pyfile ' . s:plugin_path . '/taskwiki/taskwiki.py'
 
 augroup taskwiki
