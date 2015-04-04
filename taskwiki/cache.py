@@ -3,16 +3,52 @@ import vim  # pylint: disable=F0401
 import vwtask
 import viewport
 
+
+class WarriorStore(object):
+    """
+    Stores all instances of TaskWarrior objects.
+    """
+
+    def __init__(self):
+        # Determine defaults
+        default_rc = vim.vars.get('taskwiki_taskrc_location') or '~/.taskrc'
+        default_data = vim.vars.get('taskwiki_data_location') or '~/.task'
+
+        default_kwargs = dict(
+            data_location=default_data,
+            taskrc_location=default_rc,
+        )
+
+        # Setup the store of TaskWarrior objects
+        self.warriors = {'default': TaskWarrior(**default_kwargs)}
+        extra_warrior_defs = vim.vars.get('taskwiki_extra_warriors', {})
+
+        for key, value in extra_warrior_defs.iteritems():
+            current_kwargs = default_kwargs.copy()
+            current_kwargs.update(value)
+            self.warriors[key] = TaskWarrior(**current_kwargs)
+
+        # Make sure context is not respected in any TaskWarrior
+        for tw in self.warriors.values():
+            tw.config.update({'context':''})
+
+    def __getitem__(self, key):
+        return self.warriors.get(key)
+
+    def __setitem__(self, key, value):
+        self.warriors[key] = value
+
+
 class TaskCache(object):
     """
     A cache that holds all the tasks in the given file and prevents
     multiple redundant taskwarrior calls.
     """
 
-    def __init__(self, tw):
+    def __init__(self):
         self.task_cache = dict()
         self.vimwikitask_cache = dict()
-        self.tw = tw
+        self.warriors = WarriorStore()
 
     def __getitem__(self, key):
         # String keys refer to the Task objects
