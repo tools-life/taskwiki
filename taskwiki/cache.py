@@ -1,7 +1,9 @@
 import vim  # pylint: disable=F0401
+import re
 
 import vwtask
 import viewport
+import regexp
 
 from tasklib.task import TaskWarrior
 
@@ -144,14 +146,22 @@ class TaskCache(object):
             task.save_to_tw()
 
     def load_tasks(self):
-        # Load the tasks in batch, all in given TaskWarrior instance
-        for tw in self.warriors.values():
+        raw_task_info = []
 
+        # Load the tasks in batch, all in given TaskWarrior instance
+        for line in vim.current.buffer:
+            match = re.search(regexp.GENERIC_TASK, line)
+            if not match:
+                continue
+
+            tw = self.warriors[match.group('source') or 'default']
+            uuid = match.group('uuid')
+
+            raw_task_info.append((uuid, tw))
+
+        for tw in self.warriors.values():
             # Select all tasks in the files that have UUIDs
-            uuids = [
-                t.uuid.value for t in self.vimwikitask_cache.values()
-                if t is not None and t.uuid is not None and t.tw == tw
-            ]
+            uuids = [uuid for uuid, task_tw in raw_task_info if task_tw == tw]
 
             # If no task in the file contains UUID, we have no job here
             if not uuids:

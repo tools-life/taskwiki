@@ -41,8 +41,8 @@ class WholeBuffer(object):
         Updates all the incomplete tasks in the vimwiki file if the info from TW is different.
         """
 
-        cache.load_vwtasks()
         cache.load_tasks()
+        cache.load_vwtasks()
         cache.update_vwtasks_from_tasks()
         cache.update_vwtasks_in_buffer()
         cache.evaluate_viewports()
@@ -54,8 +54,8 @@ class WholeBuffer(object):
         """
 
         cache.reset()
-        cache.load_vwtasks()
         cache.load_tasks()
+        cache.load_vwtasks()
         cache.save_tasks()
         cache.update_vwtasks_in_buffer()
         cache.evaluate_viewports()
