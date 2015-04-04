@@ -51,21 +51,8 @@ class TaskCache(object):
         self.warriors = WarriorStore()
 
     def __getitem__(self, key):
-        # String keys refer to the Task objects
-        if type(key) in (str, unicode):
-            key = vwtask.ShortUUID(key)
-
-        if type(key) == vwtask.ShortUUID:
-            task = self.task_cache.get(key)
-
-            if task is None:
-                task = self.tw.tasks.get(uuid=key.value)
-                self.task_cache[key] = task
-
-            return task
-
         # Integer keys (line numbers) refer to the VimwikiTask objects
-        elif type(key) is int:
+        if type(key) is int:
             vimwikitask = self.vimwikitask_cache.get(key)
 
             if vimwikitask is None:
@@ -73,6 +60,16 @@ class TaskCache(object):
                 self.vimwikitask_cache[key] = vimwikitask
 
             return vimwikitask  # May return None if the line has no task
+
+        # ShortUUID objects refer to Task cache
+        elif type(key) == vwtask.ShortUUID:
+            task = self.task_cache.get(key)
+
+            if task is None:
+                task = key.tw.tasks.get(uuid=key.value)
+                self.task_cache[key] = task
+
+            return task
 
         # Anything else is wrong
         else:
