@@ -37,6 +37,9 @@ class ShortUUID(object):
     def __hash__(self):
         return self.value.__hash__() * 17 + self.tw.__hash__() * 7
 
+    def __str__(self):
+        return self.value
+
     def vim_representation(self, cache):
         """
         Return 'H:<uuid>' for TW with indicator 'H',
