@@ -137,20 +137,26 @@ class TaskCache(object):
             task.save_to_tw()
 
     def load_tasks(self):
-        # Select all tasks in the files that have UUIDs
-        uuids = [t['uuid'] for t in self.vimwikitask_cache.values()
-                 if t is not None and t['uuid'] is not None]
+        # Load the tasks in batch, all in given TaskWarrior instance
+        for tw in self.warriors.values():
 
-        # If no task in the file contains UUID, we have no job here
-        if not uuids:
-            return
+            # Select all tasks in the files that have UUIDs
+            uuids = [
+                t.uuid for t in self.vimwikitask_cache.values()
+                if t is not None and t.uuid is not None and t.warrior = tw
+            ]
 
-        # Get them out of TaskWarrior at once
-        tasks = self.tw.tasks.filter(uuid=','.join(uuids))
+            # If no task in the file contains UUID, we have no job here
+            if not uuids:
+                continue
 
-        # Update each task in the cache
-        for task in tasks:
-            self.task_cache[task['uuid']] = task
+            # Get them out of TaskWarrior at once
+            tasks = tw.tasks.filter(uuid=','.join(uuids))
+
+            # Update each task in the cache
+            for task in tasks:
+                key = ShortUUID(task['uuid'], tw)
+                self.task_cache[key] = task
 
     def update_vwtasks_from_tasks(self):
         for task in self.vimwikitask_cache.values():

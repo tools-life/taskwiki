@@ -17,23 +17,24 @@ def convert_priority_to_tw_format(priority):
 
 
 class ShortUUID(object):
-    def __init__(self, value):
-        # Use str reprentation of the value, first 8 chars
-        self.value = str(value)[:8]
+    def __init__(self, value, tw):
+        # Extract the UUID from the given object. Support both
+        # strings and ShortUUID instances.
+        if type(value) in (str, unicode):
+            # Use str reprentation of the value, first 8 chars
+            self.value = str(value)[:8]
+        elif type(value) is ShortUUID:
+            self.value = value.value
+
+        self.tw = tw
 
     def __eq__(self, other):
         # For full UUIDs, our value is shorter
         # For short, the lengths are the same
-        return other.startswith(self.value)
-
-    def __str__(self):
-        return self.value
+        return other.value == self.value and self.tw == other.tw
 
     def __hash__(self):
-        return self.value.__hash__()
-
-    def startswith(self, part):
-        return self.value.startswith(part)
+        return self.value.__hash__() * 17 + self.tw.__hash__() * 7
 
 
 class VimwikiTask(object):
@@ -41,16 +42,16 @@ class VimwikiTask(object):
     buffer_keys = ('indent', 'description', 'uuid', 'completed_mark',
                    'line_number', 'priority', 'due')
 
-    def __init__(self, cache, uuid):
+    def __init__(self, cache, uuid, tw):
         """
         Constructs a Vimwiki task from line at given position at the buffer
         """
         self.cache = cache
-        self.tw = cache.tw
+        self.tw = tw
         self.vim_data = dict(indent='', completed_mark=' ', line_number=None)
         self._buffer_data = None
         self.__unsaved_task = None
-        self.uuid = ShortUUID(uuid) if uuid is not None else None
+        self.uuid = ShortUUID(uuid, self.tw) if uuid is not None else None
 
     def __getitem__(self, key):
         if key in self.vim_data.keys():
@@ -83,7 +84,8 @@ class VimwikiTask(object):
         if not match:
             return None
 
-        self = cls(cache, match.group('uuid'))
+        tw = cache.warriors[match.group('source') or 'default']
+        self = cls(cache, match.group('uuid'), tw)
 
         # Save vim-only related data
         self.vim_data.update({
@@ -144,7 +146,7 @@ class VimwikiTask(object):
 
     @classmethod
     def from_task(cls, cache, task):
-        self = cls(cache, task['uuid'])
+        self = cls(cache, task['uuid'], task.warrior)
         self.update_from_task()
 
         return self
@@ -184,7 +186,7 @@ class VimwikiTask(object):
                                 task['uuid']))
 
 
-        self.uuid = task['uuid']
+        self.uuid = ShortUUID(task['uuid'], self.tw)
 
     @property
     def priority_from_tw_format(self):
@@ -211,8 +213,8 @@ class VimwikiTask(object):
             # If task was first time saved now, add it to the cache and remove
             # the temporary reference
             if self.__unsaved_task is not None:
-                self.uuid = self.__unsaved_task['uuid']
-                self.cache[self.__unsaved_task['uuid']] = self.__unsaved_task
+                self.uuid = ShortUUID(self.__unsaved_task['uuid'], self.tw)
+                self.cache[self.uuid] = self.__unsaved_task
                 self.__unsaved_task = None
 
             # Mark task as done.
@@ -242,7 +244,7 @@ class VimwikiTask(object):
         if not self.task.saved:
             return
 
-        self.uuid = self.task['uuid']
+        self.uuid = ShortUUID(self.task['uuid'], self.tw)
         self['completed_mark'] = self.get_completed_mark()
 
     def update_in_buffer(self):
