@@ -185,3 +185,51 @@ class IntegrationTest(object):
                      for l in self.vimoutput.strip('\n').splitlines()
                      if l[4:]]
             assert self.read_buffer() == lines
+
+
+class MultipleSourceTest(IntegrationTest):
+
+    extra_tasks = []
+
+    def generate_data(self):
+        super(MultipleSourceTest, self).generate_data()
+
+        self.extra_dir = tempfile.mkdtemp(dir='/tmp/')
+
+        self.extra_tw = TaskWarrior(
+            data_location=self.extra_dir,
+            taskrc_location='/'
+        )
+
+        extra_tasks = [Task(self.extra_tw, **task_kwargs)
+                      for task_kwargs in self.extra_tasks]
+
+        self.extra_tasks = extra_tasks
+        for task in self.extra_tasks:
+            task.save()
+
+    def configure_global_varialbes(self):
+        super(MultipleSourceTest, self).configure_global_varialbes()
+
+        self.client.feedkeys(':let g:taskwiki_extra_warriors={0}'.format(
+            {'H': dict(data_location=str(self.extra_dir), taskrc_location='/')}
+        ))
+        self.client.feedkeys('\<CR>')
+        self.client.feedkeys('\<CR>')
+
+    def fill_uuid(self, line):
+        # Tasks in testing can have only alphanumerical descriptions
+        match = re.match(r'\s*\* \[.\] (?P<desc>[a-zA-Z0-9 ]*)(?<!\s)', line)
+        if not match:
+            return line
+
+        # Find the task and fill in its uuid
+        tasks = self.tw.tasks.filter(description=match.group('desc'))
+        extra_tasks = self.extra_tw.tasks.filter(description=match.group('desc'))
+        if tasks:
+            # Return {uuid} replaced by short form UUID
+            return line.format(uuid=tasks[0]['uuid'].split('-')[0])
+        elif extra_tasks:
+            return line.format(uuid=tasks[0]['uuid'].split('-')[0])
+        else:
+            return line
