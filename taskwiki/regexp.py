@@ -46,8 +46,6 @@ GENERIC_TASK = re.compile(''.join([
     ')?' # UUID is not there for new tasks
 ]))
 
-PROJECT_DEFINITION = re.compile(r'Project: (?P<project>.*)(?<!\s)')
-
 DATETIME_FORMAT = "(%Y-%m-%d %H:%M)"
 DATE_FORMAT = "(%Y-%m-%d)"
 
