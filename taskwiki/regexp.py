@@ -53,11 +53,14 @@ GENERIC_VIEWPORT = re.compile(
     '[=]+'                 # Heading begging
     '(?P<name>[^=\|]*)'    # Name of the viewport, all before the | sign
     '\|'                   # Colon
-    '(?P<filter>[^=\|]*)'  # Filter
+    '(?P<filter>[^=#\|]*)'  # Filter
     '('                    # Optional defaults
       '\|'                   # Colon
-      '(?P<defaults>[^=\|]*)' # Default attrs
+      '(?P<defaults>[^=#\|]*)' # Default attrs
     ')?'
+    '\s*'                  # Any whitespace
+    '(#(?P<source>[A-Z]))?' # Optional source indicator
+    '\s*'                  # Any whitespace
     '[=]+'                 # Header ending
     )
 
