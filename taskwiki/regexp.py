@@ -50,6 +50,7 @@ DATETIME_FORMAT = "(%Y-%m-%d %H:%M)"
 DATE_FORMAT = "(%Y-%m-%d)"
 
 GENERIC_VIEWPORT = re.compile(
+    '^'                    # Starts at the begging of the line
     '[=]+'                 # Heading begging
     '(?P<name>[^=\|]*)'    # Name of the viewport, all before the | sign
     '\|'                   # Colon
