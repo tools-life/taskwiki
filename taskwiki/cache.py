@@ -27,9 +27,9 @@ class WarriorStore(object):
         self.warriors = {'default': TaskWarrior(**default_kwargs)}
         extra_warrior_defs = vim.vars.get('taskwiki_extra_warriors', {})
 
-        for key, value in extra_warrior_defs.iteritems():
+        for key in extra_warrior_defs.keys():
             current_kwargs = default_kwargs.copy()
-            current_kwargs.update(value)
+            current_kwargs.update(extra_warrior_defs[key])
             self.warriors[key] = TaskWarrior(**current_kwargs)
 
         # Make sure context is not respected in any TaskWarrior
