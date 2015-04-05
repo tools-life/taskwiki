@@ -157,6 +157,9 @@ class TaskCache(object):
             tw = self.warriors[match.group('source') or 'default']
             uuid = match.group('uuid')
 
+            if not uuid:
+                continue
+
             raw_task_info.append((uuid, tw))
 
         for tw in self.warriors.values():
