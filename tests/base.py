@@ -51,11 +51,14 @@ class IntegrationTest(object):
             else:
                 raise
 
+    def configure_global_varialbes(self):
+        self.command('let g:taskwiki_measure_coverage="yes"')
+        self.command('let g:taskwiki_data_location="{0}"'.format(self.dir))
+
     def setup(self):
         self.generate_data()
         self.start_client()  # Start client with 3 chances
-        self.command('let g:taskwiki_measure_coverage="yes"')
-        self.command('let g:taskwiki_data_location="{0}"'.format(self.dir))
+        self.configure_global_varialbes()
         self.add_plugin('taskwiki')
         self.add_plugin('vimwiki')
         sleep(0.5)
@@ -135,23 +138,23 @@ class IntegrationTest(object):
         # Success in the sanity check
         return True
 
+    # Helper function that fills in {uuid} placeholders with correct UUIDs
+    def fill_uuid(self, line):
+        # Tasks in testing can have only alphanumerical descriptions
+        match = re.match(r'\s*\* \[.\] (?P<desc>[a-zA-Z0-9 ]*)(?<!\s)', line)
+        if not match:
+            return line
+
+        # Find the task and fill in its uuid
+        tasks = self.tw.tasks.filter(description=match.group('desc'))
+        if tasks:
+            # Return {uuid} replaced by short form UUID
+            return line.format(uuid=tasks[0]['uuid'].split('-')[0])
+        else:
+            return line
+
+
     def test_execute(self):
-
-        # Helper function that fills in {uuid} placeholders with correct UUIDs
-        def fill_uuid(line):
-            # Tasks in testing can have only alphanumerical descriptions
-            match = re.match(r'\s*\* \[.\] (?P<desc>[a-zA-Z0-9 ]*)(?<!\s)', line)
-            if not match:
-                return line
-
-            # Find the task and fill in its uuid
-            tasks = self.tw.tasks.filter(description=match.group('desc'))
-            if tasks:
-                # Return {uuid} replaced by short form UUID
-                return line.format(uuid=tasks[0]['uuid'].split('-')[0])
-            else:
-                return line
-
         # First, run sanity checks
         success = False
 
@@ -169,7 +172,7 @@ class IntegrationTest(object):
         # Then load the input
         if self.viminput:
             # Unindent the lines
-            lines = [fill_uuid(l[4:])
+            lines = [self.fill_uuid(l[4:])
                      for l in self.viminput.strip('\n').splitlines()]
             self.write_buffer(lines)
 
@@ -178,7 +181,7 @@ class IntegrationTest(object):
 
         # Check expected output
         if self.vimoutput:
-            lines = [fill_uuid(l[4:])
+            lines = [self.fill_uuid(l[4:])
                      for l in self.vimoutput.strip('\n').splitlines()
                      if l[4:]]
             assert self.read_buffer() == lines
