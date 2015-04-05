@@ -1,6 +1,7 @@
 import vim  # pylint: disable=F0401
 import re
 
+import util
 import vwtask
 import viewport
 import regexp
@@ -37,7 +38,13 @@ class WarriorStore(object):
             tw.config.update({'context':''})
 
     def __getitem__(self, key):
-        return self.warriors.get(key)
+        try:
+            return self.warriors[key]
+        except KeyError as e:
+            raise util.TaskWikiException(
+                "Taskwarrior with key '{0}' not available."
+                .format(key))
+
 
     def __setitem__(self, key, value):
         self.warriors[key] = value
