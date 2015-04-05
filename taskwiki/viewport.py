@@ -161,7 +161,10 @@ class ViewPort(object):
         # Add the tasks that match the filter and are not listed
         added_tasks = 0
 
-        for task in to_add:
+        sorted_to_add = list(to_add)
+        sorted_to_add.sort(key=lambda x:x['entry'])
+
+        for task in sorted_to_add:
             added_tasks += 1
             added_at = self.line_number + len(self.tasks) + added_tasks
 
