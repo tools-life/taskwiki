@@ -22,13 +22,14 @@ class ViewPort(object):
           * [ ] Make sure the hosting is working
     """
 
-    def __init__(self, line_number, cache, name, taskfilter, defaults, meta=None):
+    def __init__(self, line_number, cache, tw,
+                 name, taskfilter, defaults, meta=None):
         """
         Constructs a ViewPort out of given line.
         """
 
         self.cache = cache
-        self.tw = cache.warriors['default']
+        self.tw = tw
 
         self.name = name
         self.line_number = line_number
@@ -48,8 +49,9 @@ class ViewPort(object):
         defaults, meta = util.tw_modstring_to_kwargs(
             match.group('filter') + ' ' + (match.group('defaults') or ''))
         name = match.group('name').strip()
+        tw = cache.warriors[match.group('source') or 'default']
 
-        self = cls(number, cache, name, taskfilter, defaults, meta)
+        self = cls(number, cache, tw, name, taskfilter, defaults, meta)
 
         return self
 
@@ -148,7 +150,7 @@ class ViewPort(object):
             # representations of the same task
             matching_vimwikitasks= [
                 t for t in self.tasks
-                if t.uuid == vwtask.ShortUUID(task['uuid'], self.tw)
+                if t.uuid == vwtask.ShortUUID(task['uuid'], task.warrior)
             ]
 
             # Remove the tasks from viewport's set and from buffer
