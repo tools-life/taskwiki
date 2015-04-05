@@ -32,6 +32,9 @@ class ShortUUID(object):
     def __eq__(self, other):
         # For full UUIDs, our value is shorter
         # For short, the lengths are the same
+        if not isinstance(other, ShortUUID):
+            return False
+
         return other.value == self.value and self.tw == other.tw
 
     def __hash__(self):
