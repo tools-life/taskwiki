@@ -23,9 +23,8 @@ TEXT_FORBIDDEN_SUFFIXES = (
 BRACKET_OPENING = re.escape('* [')
 BRACKET_CLOSING = re.escape('] ')
 EMPTY_SPACE = r'(?P<space>\s*)'
-UUID = r'({2})?(?P<uuid>{0}|{1})'.format(UUID_UNNAMED, UUID_UNNAMED_SHORT, SOURCE_INDICATOR)
+UUID = r'(?P<uuid>{0}|{1})'.format(UUID_UNNAMED, UUID_UNNAMED_SHORT)
 DUE = r'(?P<due>{0})'.format(DUE_UNNAMED)
-UUID_COMMENT = '#{0}'.format(UUID)
 TEXT = r'(?P<text>.+' + ''.join(['(?<!%s)' % suffix for suffix in TEXT_FORBIDDEN_SUFFIXES]) + ')'
 COMPLETION_MARK = r'(?P<completed>.)'
 PRIORITY = r'(?P<priority>!{1,3})'
@@ -37,9 +36,14 @@ GENERIC_TASK = re.compile(''.join([
     BRACKET_CLOSING,
     TEXT,
     FINAL_SEGMENT_SEPARATOR_UNNAMED,
-    '(', PRIORITY, FINAL_SEGMENT_SEPARATOR_UNNAMED, ')?'
-    '(', DUE, FINAL_SEGMENT_SEPARATOR_UNNAMED, ')?'
-    '(', UUID_COMMENT, FINAL_SEGMENT_SEPARATOR_UNNAMED, ')?'  # UUID is not there for new tasks
+    '(', PRIORITY, FINAL_SEGMENT_SEPARATOR_UNNAMED, ')?',
+    '(', DUE, FINAL_SEGMENT_SEPARATOR_UNNAMED, ')?',
+    '(',
+        '#',
+        '(', SOURCE_INDICATOR, ')?',
+        '(', UUID, ')?',
+        FINAL_SEGMENT_SEPARATOR_UNNAMED,
+    ')?' # UUID is not there for new tasks
 ]))
 
 PROJECT_DEFINITION = re.compile(r'Project: (?P<project>.*)(?<!\s)')
