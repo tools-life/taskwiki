@@ -313,10 +313,17 @@ class VimwikiTask(object):
     def apply_defaults(self):
         for i in reversed(range(0, self['line_number'])):
             port = viewport.ViewPort.from_line(i, self.cache)
-            if port and port.defaults:
-                for key in port.defaults.keys():
-                    self[key] = port.defaults[key]
-                break
+            if port:
+                # The task should have the same source as the viewport has
+                self.tw = port.tw
+                self.task.warrior = port.tw
+
+                # Any defaults specified should be inherited
+                if port.defaults:
+                    for key in port.defaults.keys():
+                        self[key] = port.defaults[key]
+                    break
+
             # Break on line which does not look like a task
             elif not vim.current.buffer[i].strip().startswith("*"):
                 break
