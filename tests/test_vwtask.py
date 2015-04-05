@@ -1,6 +1,6 @@
 from datetime import datetime
 from tasklib.task import local_zone
-from tests.base import IntegrationTest
+from tests.base import IntegrationTest, MultipleSourceTest
 
 
 class TestSimpleTaskCreation(IntegrationTest):
@@ -287,3 +287,17 @@ class TestChildTaskModification(IntegrationTest):
         child = self.tw.tasks.filter(description="This is child task")[0]
 
         assert parent['depends'] == set([child])
+
+
+class TestCreationDifferentTaskSource(MultipleSourceTest):
+
+    viminput = """
+    * [ ] This is first data source task  #H:
+    """
+
+    def execute(self):
+        self.command('w', regex='written')
+
+        # Check that corect data store has been used
+        assert len(self.tw.tasks.all()) == 0
+        assert len(self.extra_tw.tasks.all()) == 1
