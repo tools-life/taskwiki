@@ -117,7 +117,7 @@ class TestViewportInspection(IntegrationTest):
     ViewPort inspection:
     --------------------
     Name: Work tasks
-    Filter used: -DELETED +work
+    Filter used: -DELETED -PARENT +work
     Defaults used: tags:['work']
     Matching taskwarrior tasks: 1
     Displayed tasks: 1
