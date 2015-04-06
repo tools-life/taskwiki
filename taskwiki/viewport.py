@@ -33,7 +33,7 @@ class ViewPort(object):
 
         self.name = name
         self.line_number = line_number
-        self.taskfilter = ["-DELETED"] + taskfilter
+        self.taskfilter = ["-DELETED", "-PARENT"] + taskfilter
         self.defaults = defaults
         self.tasks = set()
         self.meta = meta or dict()
