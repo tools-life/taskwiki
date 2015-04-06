@@ -83,6 +83,18 @@ class SelectedTasks(object):
             vimwikitask.task.add_annotation(annotation)
             print("Task \"{0}\" annotated.".format(vimwikitask['description']))
 
+    def done(self):
+        # Multiple VimwikiTasks might refer to the same task, so make sure
+        # we do not complete one task twice
+        for task in set(vimwikitask.task for vimwikitask in self.tasks):
+            task.done()
+
+        # Update the lines in the buffer
+        for vimwikitask in self.tasks:
+            vimwikitask.update_from_task()
+            vimwikitask.update_in_buffer()
+            print("Task \"{0}\" completed.".format(vimwikitask['description']))
+
     def info(self):
         for vimwikitask in self.tasks:
             out = util.tw_execute_safely(self.tw, [vimwikitask.uuid, 'info'])
