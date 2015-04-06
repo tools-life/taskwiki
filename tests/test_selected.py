@@ -259,7 +259,6 @@ class TestInfoAction(IntegrationTest):
         assert re.search(data2, output, re.MULTILINE)
 
 
-
 class TestInfoActionMoved(IntegrationTest):
 
     viminput = """
@@ -795,3 +794,120 @@ class TestModActionRange(IntegrationTest):
 
         assert self.tasks[0]['project'] == "Home"
         assert self.tasks[1]['project'] == "Home"
+
+
+class TestDoneAction(IntegrationTest):
+
+    viminput = """
+    * [ ] test task 1  #{uuid}
+    * [ ] test task 2  #{uuid}
+    """
+
+    vimoutput = """
+    * [X] test task 1  #{uuid}
+    * [ ] test task 2  #{uuid}
+    """
+
+    tasks = [
+        dict(description="test task 1"),
+        dict(description="test task 2"),
+    ]
+
+    def execute(self):
+        self.command(
+            "TaskWikiDone",
+            regex="Task \"test task 1\" completed.$",
+            lines=1)
+
+        for task in self.tasks:
+            task.refresh()
+
+        now = local_zone.localize(datetime.now())
+
+        assert self.tasks[0]['status'] == "completed"
+        assert self.tasks[1]['status'] == "pending"
+
+        assert (now - self.tasks[0]['end']).total_seconds() < 5
+        assert (self.tasks[0]['end'] - now).total_seconds() < 5
+
+        assert self.tasks[1]['end'] == None
+
+
+class TestDoneActionMoved(IntegrationTest):
+
+    viminput = """
+    * [ ] test task 1  #{uuid}
+    * [ ] test task 2  #{uuid}
+    """
+
+    vimoutput = """
+    * [ ] test task 1  #{uuid}
+    * [X] test task 2  #{uuid}
+    """
+
+    tasks = [
+        dict(description="test task 1"),
+        dict(description="test task 2"),
+    ]
+
+    def execute(self):
+        self.client.type('2gg')
+        self.command(
+            "TaskWikiDone",
+            regex="Task \"test task 2\" completed.$",
+            lines=1)
+        sleep(1)
+
+        for task in self.tasks:
+            task.refresh()
+
+        now = local_zone.localize(datetime.now())
+
+        assert self.tasks[0]['status'] == "pending"
+        assert self.tasks[1]['status'] == "completed"
+
+        assert (now - self.tasks[1]['end']).total_seconds() < 5
+        assert (self.tasks[1]['end'] - now).total_seconds() < 5
+
+        assert self.tasks[0]['end'] == None
+
+
+class TestDoneActionRange(IntegrationTest):
+
+    viminput = """
+    * [ ] test task 1  #{uuid}
+    * [ ] test task 2  #{uuid}
+    """
+
+    vimoutput = """
+    * [X] test task 1  #{uuid}
+    * [X] test task 2  #{uuid}
+    """
+
+    tasks = [
+        dict(description="test task 1"),
+        dict(description="test task 2"),
+    ]
+
+    def execute(self):
+        self.client.normal('1gg')
+        sleep(1)
+        self.client.normal('VG')
+        sleep(1)
+        self.client.feedkeys(":TaskWikiDone")
+        self.client.type('<Enter>')
+        sleep(1)
+
+        for task in self.tasks:
+            task.refresh()
+
+        now = local_zone.localize(datetime.now())
+
+        assert self.tasks[0]['status'] == "completed"
+        assert self.tasks[1]['status'] == "completed"
+
+        assert (now - self.tasks[0]['end']).total_seconds() < 5
+        assert (self.tasks[0]['end'] - now).total_seconds() < 5
+
+        assert (now - self.tasks[1]['end']).total_seconds() < 5
+        assert (self.tasks[1]['end'] - now).total_seconds() < 5
