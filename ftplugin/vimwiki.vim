@@ -48,3 +48,26 @@ endif
 
 nmap <silent><buffer> <CR> :py Mappings.task_info_or_vimwiki_follow_link()<CR>
 
+" Leader-related mappings. Mostly <Leader>t + <first letter of the action>
+nmap <silent><buffer> <Leader>ta :TaskWikiAnnotate<CR>
+nmap <silent><buffer> <Leader>tbd :TaskWikiBurndownDaily<CR>
+nmap <silent><buffer> <Leader>tbw :TaskWikiBurndownWeekly<CR>
+nmap <silent><buffer> <Leader>tbm :TaskWikiBurndownMonthly<CR>
+nmap <silent><buffer> <Leader>tc :TaskWikiAnnotate<CR>
+nmap <silent><buffer> <Leader>td :TaskWikiDone<CR>
+nmap <silent><buffer> <Leader>tD :TaskWikiDelete<CR>
+nmap <silent><buffer> <Leader>te :TaskWikiEdit<CR>
+nmap <silent><buffer> <Leader>tg :TaskWikiGrid<CR>
+nmap <silent><buffer> <Leader>tGm :TaskWikiGhistoryMonthly<CR>
+nmap <silent><buffer> <Leader>tGa :TaskWikiGhistoryAnnual<CR>
+nmap <silent><buffer> <Leader>thm :TaskWikiHistoryMonthly<CR>
+nmap <silent><buffer> <Leader>tha :TaskWikiHistoryAnnual<CR>
+nmap <silent><buffer> <Leader>ti :TaskWikiInfo<CR>
+nmap <silent><buffer> <Leader>tl :TaskWikiLink<CR>
+nmap <silent><buffer> <Leader>tm :TaskWikiMod<CR>
+nmap <silent><buffer> <Leader>tp :TaskWikiProjects<CR>
+nmap <silent><buffer> <Leader>ts :TaskWikiProjectsSummary<CR>
+nmap <silent><buffer> <Leader>tS :TaskWikiStats<CR>
+nmap <silent><buffer> <Leader>tt :TaskWikiTags<CR>
+nmap <silent><buffer> <Leader>t+ :TaskWikiStart<CR>
+nmap <silent><buffer> <Leader>t- :TaskWikiStop<CR>
