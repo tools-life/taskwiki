@@ -274,6 +274,11 @@ class VimwikiTask(object):
         elif mark == 'S':
             mark = ' '
 
+        if self.task.deleted:
+            mark = 'D'
+        elif mark == 'D':
+            mark = ' '
+
         return mark
 
     def update_from_task(self):
