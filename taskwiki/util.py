@@ -209,9 +209,18 @@ def show_in_split(lines, size=None, position="belowright", vertical=False,
             # Maximum number of columns used + small offset
             # Strip the color codes, since they do not show up in the split
             size = max([len(strip_ansi_escape_sequence(l)) for l in lines]) + 1
+
+            # If absolute maximum width was set, do not exceed it
+            if vim.vars.get('taskwiki_split_max_width'):
+                size = min(size, vim.vars.get('taskwiki_split_max_width'))
+
         else:
             # Number of lines
             size = len(lines)
+
+            # If absolute maximum height was set, do not exceed it
+            if vim.vars.get('taskwiki_split_max_height'):
+                size = min(size, vim.vars.get('taskwiki_split_max_height'))
 
     # Set cursorline in the window
     cursorline_activated_in_window = None
