@@ -114,8 +114,25 @@ def convert_colorstring_for_vim(string):
 
     EFFECTS = ['bold']
 
-    is_color = lambda c: c.startswith('color') or c in BASIC_COLORS
-    parse_color = lambda c: c[5:] if c.startswith('color') else c
+    def is_color(c):
+        return any([
+            c.startswith('color'),
+            c.startswith('rgb'),
+            c in BASIC_COLORS
+        ])
+
+    def parse_color(c):
+        if c.startswith('color'):
+            return c[5:]
+        elif c.startswith('rgb'):
+            # TaskWarrior color cube notation, see 'task color'
+            red = int(c[3])
+            green = int(c[4])
+            blue = int(c[5])
+            index = 16 + red * 36 + green * 6 + blue;
+            return str(index)
+        else:
+            return c
 
     foreground = None
     background = None
