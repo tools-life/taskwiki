@@ -99,7 +99,7 @@ class SelectedTasks(object):
         for vimwikitask in self.tasks:
             out = util.tw_execute_safely(self.tw, [vimwikitask.uuid, 'info'])
             if out:
-                util.show_in_split(out, name='info')
+                util.show_in_split(out, name='info', activate_cursorline=True)
             break  # Show only one task
 
     def edit(self):
@@ -242,7 +242,7 @@ class Meta(object):
 
             # Show in the split
             lines = template_formatted.splitlines()
-            util.show_in_split(lines)
+            util.show_in_split(lines, activate_cursorline=True)
 
     def integrate_tagbar(self):
         tagbar_available = vim.eval('exists(":Tagbar")') == '2'
@@ -290,6 +290,7 @@ class Split(object):
     maxwidth = False
     maxheight = False
     vertical = False
+    cursorline = True
     tw_extra_args = []
 
     def __init__(self, args):
@@ -327,6 +328,7 @@ class Split(object):
             output,
             name=self.split_name,
             vertical=self.vertical,
+            activate_cursorline=self.cursorline,
         )
 
 
