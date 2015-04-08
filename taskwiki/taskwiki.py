@@ -257,6 +257,31 @@ class Meta(object):
                 'ctagsargs': 'default'
                 }
 
+    def source_tw_colors(self):
+        colors = {
+            'VimwikiCheckBoxActive': 'color.active',
+            'VimwikiCheckBoxDone': 'color.completed',
+            'VimwikiCheckBoxDeleted': 'color.active',
+        }
+
+        links = {
+            'VimwikiCheckBoxActive': 'Type',
+            'VimwikiCheckBoxDone': 'Comment',
+            'VimwikiCheckBoxDeleted': 'Error',
+        }
+
+        tw = cache.get_relevant_tw()
+        config = tw.get_config()
+
+        for syntax in colors.keys():
+            tw_def = config.get(colors[syntax])
+
+            if tw_def:
+                vim_def = util.convert_colorstring_for_vim(tw_def)
+                vim.command('hi def {0} {1}'.format(syntax, vim_def))
+            else:
+                vim.command('hi def link {0} {1}'.format(syntax, links[syntax]))
+
 
 class Split(object):
     command = None
@@ -387,3 +412,4 @@ class SplitTags(Split):
 if __name__ == '__main__':
     WholeBuffer.update_from_tw()
     Meta().integrate_tagbar()
+    Meta().source_tw_colors()
