@@ -1,5 +1,6 @@
 # Various utility functions
 from __future__ import print_function
+import contextlib
 import vim  # pylint: disable=F0401
 import regexp
 import random
@@ -279,3 +280,17 @@ def tw_execute_safely(tw, *args, **kwargs):
         # Display the last line as failure
         if err:
             print(err[-1], file=sys.stderr)
+
+@contextlib.contextmanager
+def current_line_highlighted():
+    original_value = vim.current.window.options['cursorline']
+    original_window_number = vim.current.window.number - 1
+    vim.current.window.options['cursorline'] = True
+
+    vim.command('redraw')
+
+    try:
+        yield
+    finally:
+        original_window = vim.windows[original_window_number]
+        original_window.options['cursorline'] = original_value
