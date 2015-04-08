@@ -261,15 +261,15 @@ class Meta(object):
 
     def source_tw_colors(self):
         colors = {
-            'VimwikiCheckBoxActive': 'color.active',
-            'VimwikiCheckBoxDone': 'color.completed',
-            'VimwikiCheckBoxDeleted': 'color.active',
+            'TaskWikiTaskActive': 'color.active',
+            'TaskWikiTaskCompleted': 'color.completed',
+            'TaskWikiTaskDeleted': 'color.deleted',
         }
 
         links = {
-            'VimwikiCheckBoxActive': 'Type',
-            'VimwikiCheckBoxDone': 'Comment',
-            'VimwikiCheckBoxDeleted': 'Error',
+            'TaskWikiTaskActive': 'Type',
+            'TaskWikiTaskCompleted': 'Comment',
+            'TaskWikiTaskDeleted': 'Error',
         }
 
         tw = cache.get_relevant_tw()
