@@ -77,7 +77,8 @@ class SelectedTasks(object):
 
     def annotate(self, annotation):
         if not annotation:
-            annotation = util.get_input("Enter annotation: ")
+            with util.current_line_highlighted():
+                annotation = util.get_input("Enter annotation: ")
 
         for vimwikitask in self.tasks:
             vimwikitask.task.add_annotation(annotation)
@@ -134,7 +135,8 @@ class SelectedTasks(object):
     def modify(self, modstring):
         # If no modstring was passed as argument, ask the user interactively
         if not modstring:
-            modstring = util.get_input("Enter modifications: ")
+            with util.current_line_highlighted():
+                modstring = util.get_input("Enter modifications: ")
 
         # We might have two same tasks in the range, make sure we do not pass the
         # same uuid twice
