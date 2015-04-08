@@ -159,7 +159,9 @@ def strip_ansi_escape_sequence(string):
     return regexp.ANSI_ESCAPE_SEQ.sub("", string)
 
 def show_in_split(lines, size=None, position="belowright", vertical=False,
-                  name="taskwiki", replace_opened=True):
+                  name="taskwiki", replace_opened=True,
+                  activate_cursorline=False):
+
     # If there is no output, bail
     if not lines:
         print("No output.", file=sys.stderr)
@@ -192,6 +194,13 @@ def show_in_split(lines, size=None, position="belowright", vertical=False,
         else:
             # Number of lines
             size = len(lines)
+
+    # Set cursorline in the window
+    cursorline_activated_in_window = None
+
+    if activate_cursorline and not vim.current.window.options['cursorline']:
+        vim.current.window.options['cursorline'] = True
+        cursorline_activated_in_window = vim.current.window.number - 1
 
     # Call 'vsplit' for vertical, otherwise 'split'
     vertical_prefix = 'v' if vertical else ''
@@ -228,6 +237,12 @@ def show_in_split(lines, size=None, position="belowright", vertical=False,
     # Make the split easily closable
     vim.command("nnoremap <silent> <buffer> q :bwipe<CR>")
     vim.command("nnoremap <silent> <buffer> <enter> :bwipe<CR>")
+
+    # Remove cursorline in original window if it was this split which set it
+    if cursorline_activated_in_window is not None:
+        vim.command("au BufLeave,BufDelete,BufWipeout <buffer> "
+                    ":py vim.windows[{0}].options['cursorline']=False"
+                    .format(cursorline_activated_in_window))
 
     if ANSI_ESC_AVAILABLE:
         vim.command("AnsiEsc")
