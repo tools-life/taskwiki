@@ -10,16 +10,10 @@ for s:i in range(1,6)
   execute 'syn match TaskWikiHeaderDef containedin=VimwikiHeader'.s:i.' /|[^=]*/'.s:conceal
 endfor
 
-" Highlight active tasks
+" Define active and deleted task regions
+" Will be colored dynamically by Meta().source_tw_colors()
 syntax match VimwikiCheckBoxActive /\s*\*\s*\[S\]\s.*$/
-hi def link VimwikiCheckBoxActive Type
-
-" Highlight deleted tasks
 syntax match VimwikiCheckBoxDeleted /\s*\*\s*\[D\]\s.*$/
-hi def link VimwikiCheckBoxDeleted Error
-
-" Highlight the UUID as comment
-hi link VimwikiTaskUuid Comment
 
 " Set concealed parts as really concealed in normal mode, and with cursor over
 setlocal conceallevel=3
