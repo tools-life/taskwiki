@@ -105,6 +105,37 @@ def get_input(prompt="Enter: ", allow_empty=False):
 
     return value
 
+def convert_colorstring_for_vim(string):
+    BASIC_COLORS = [
+        "blue", "yellow", "green", "red",
+        "magneta", "yellow", "white", "black"
+        ]
+
+    EFFECTS = ['bold']
+
+    is_color = lambda c: c.startswith('color') or c in BASIC_COLORS
+    parse_color = lambda c: c[5:] if c.startswith('color') else c
+
+    foreground = None
+    background = None
+    effect = None
+
+    for part in string.split():
+        if is_color(part) and foreground is None:
+            foreground = parse_color(part)
+        elif is_color(part) and background is None:
+            background = parse_color(part)
+        elif part in EFFECTS:
+            effect = part
+
+    result = ''.join([
+        'cterm={0} '.format(effect) if effect else '',
+        'ctermfg={0} '.format(foreground) if foreground else '',
+        'ctermbg={0}'.format(background) if background else '',
+        ])
+
+    return result
+
 def get_buffer_shortname():
     return vim.eval('expand("%")')
 
