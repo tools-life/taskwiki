@@ -264,19 +264,13 @@ class Meta(object):
             'TaskWikiTaskActive': 'color.active',
             'TaskWikiTaskCompleted': 'color.completed',
             'TaskWikiTaskDeleted': 'color.deleted',
-            'TaskWikiTaskPriorityLow': 'color.uda.priority.L',
-            'TaskWikiTaskPriorityMedium': 'color.uda.priority.M',
-            'TaskWikiTaskPriorityHigh': 'color.uda.priority.H',
-
         }
 
         taskwiki_native_colors = {
             'TaskWikiTaskActive': 'Type',
             'TaskWikiTaskCompleted': 'Comment',
             'TaskWikiTaskDeleted': 'Error',
-            'TaskWikiTaskPriorityLow': 'Constant',
-            'TaskWikiTaskPriorityMedium': 'Statement',
-            'TaskWikiTaskPriorityHigh': 'PreProc',
+            'TaskWikiTaskPriority': 'Error',
         }
 
         # If tw support is enabled, try to find definition in TW first
