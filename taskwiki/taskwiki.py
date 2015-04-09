@@ -259,8 +259,8 @@ class Meta(object):
                 'ctagsargs': 'default'
                 }
 
-    def source_tw_colors(self):
-        colors = {
+    def set_proper_colors(self):
+        tw_color_counterparts = {
             'TaskWikiTaskActive': 'color.active',
             'TaskWikiTaskCompleted': 'color.completed',
             'TaskWikiTaskDeleted': 'color.deleted',
@@ -270,7 +270,7 @@ class Meta(object):
 
         }
 
-        links = {
+        taskwiki_native_colors = {
             'TaskWikiTaskActive': 'Type',
             'TaskWikiTaskCompleted': 'Comment',
             'TaskWikiTaskDeleted': 'Error',
@@ -279,17 +279,24 @@ class Meta(object):
             'TaskWikiTaskPriorityHigh': 'PreProc',
         }
 
-        tw = cache.get_relevant_tw()
-        config = tw.get_config()
+        # If tw support is enabled, try to find definition in TW first
+        if vim.vars.get('taskwiki_source_tw_colors'):
 
-        for syntax in colors.keys():
-            tw_def = config.get(colors[syntax])
+            tw = cache.get_relevant_tw()
+            config = tw.get_config()
 
-            if tw_def:
-                vim_def = util.convert_colorstring_for_vim(tw_def)
-                vim.command('hi def {0} {1}'.format(syntax, vim_def))
-            else:
-                vim.command('hi def link {0} {1}'.format(syntax, links[syntax]))
+            for syntax in tw_color_counterparts.keys():
+                tw_def = config.get(tw_color_counterparts[syntax])
+
+                if tw_def:
+                    vim_def = util.convert_colorstring_for_vim(tw_def)
+                    vim.command('hi def {0} {1}'.format(syntax, vim_def))
+
+        # Define taskwiki (native) color. This can be overriden by user
+        # by using :hi <group name> <color> command.
+        for syntax in taskwiki_native_colors.keys():
+            vim.command('hi def link {0} {1}'
+                        .format(syntax, taskwiki_native_colors[syntax]))
 
 
 class Split(object):
@@ -423,4 +430,4 @@ class SplitTags(Split):
 if __name__ == '__main__':
     WholeBuffer.update_from_tw()
     Meta().integrate_tagbar()
-    Meta().source_tw_colors()
+    Meta().set_proper_colors()
