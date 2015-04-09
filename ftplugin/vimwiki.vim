@@ -53,7 +53,7 @@ nmap <silent><buffer> <Leader>ta :TaskWikiAnnotate<CR>
 nmap <silent><buffer> <Leader>tbd :TaskWikiBurndownDaily<CR>
 nmap <silent><buffer> <Leader>tbw :TaskWikiBurndownWeekly<CR>
 nmap <silent><buffer> <Leader>tbm :TaskWikiBurndownMonthly<CR>
-nmap <silent><buffer> <Leader>tc :TaskWikiAnnotate<CR>
+nmap <silent><buffer> <Leader>tc :TaskWikiCalendar<CR>
 nmap <silent><buffer> <Leader>td :TaskWikiDone<CR>
 nmap <silent><buffer> <Leader>tD :TaskWikiDelete<CR>
 nmap <silent><buffer> <Leader>te :TaskWikiEdit<CR>
