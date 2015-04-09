@@ -1,11 +1,12 @@
 " Detect if conceal feature is available
 let s:conceal = exists("+conceallevel") ? ' conceal': ''
 
-syntax match TaskWikiTask /\s*\* \[.\]\s.*$/
+syntax match TaskWikiTask contains=VimwikiListTodo /\s*\* \[.\]\s.*$/
 
 " Conceal the UUID
-execute 'syn match VimwikiTaskUuid containedin=TaskWikiTask /\v#([A-Z]:)?[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/'.s:conceal
-execute 'syn match VimwikiTaskUuid containedin=TaskWikiTask /\v#([A-Z]:)?[0-9a-fA-F]{8}$/'.s:conceal
+execute 'syn match TaskWikiTaskUuid containedin=TaskWikiTask /\v#([A-Z]:)?[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/'.s:conceal
+execute 'syn match TaskWikiTaskUuid containedin=TaskWikiTask /\v#([A-Z]:)?[0-9a-fA-F]{8}$/'.s:conceal
+highlight link TaskWikiTaskUuid Comment
 
 " Conceal header definitions
 for s:i in range(1,6)
@@ -14,9 +15,12 @@ endfor
 
 " Define active and deleted task regions
 " Will be colored dynamically by Meta().source_tw_colors()
-syntax match TaskWikiTaskActive containedin=TaskWikiTask /\s*\*\s\[S\]\s.*$/
-syntax match TaskWikiTaskCompleted containedin=TaskWikiTask /\s*\*\s\[X\]\s.*$/
-syntax match TaskWikiTaskDeleted containedin=TaskWikiTask /\s*\*\s*\[D\]\s.*$/
+syntax match TaskWikiTaskActive containedin=TaskWikiTask /\s*\*\s\[S\]\s[^#]*/
+syntax match TaskWikiTaskCompleted containedin=TaskWikiTask /\s*\*\s\[X\]\s[^#]*/
+syntax match TaskWikiTaskDeleted containedin=TaskWikiTask /\s*\*\s*\[D\]\s[^#]*/
+syntax match TaskWikiTaskPriorityLow containedin=TaskWikiTask /\(\*\s\[.\]\s\)\@<=[^#]* ! [^#]*/
+syntax match TaskWikiTaskPriorityMedum containedin=TaskWikiTask /\(\*\s\[.\]\s\)\@<=[^#]* !! [^#]*/
+syntax match TaskWikiTaskPriorityHigh containedin=TaskWikiTask /\(\*\s\[.\]\s\)\@<=[^#]* !!! [^#]*/
 
 " Set concealed parts as really concealed in normal mode, and with cursor over
 setlocal conceallevel=3

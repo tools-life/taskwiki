@@ -264,12 +264,19 @@ class Meta(object):
             'TaskWikiTaskActive': 'color.active',
             'TaskWikiTaskCompleted': 'color.completed',
             'TaskWikiTaskDeleted': 'color.deleted',
+            'TaskWikiTaskPriorityLow': 'color.uda.priority.L',
+            'TaskWikiTaskPriorityMedium': 'color.uda.priority.M',
+            'TaskWikiTaskPriorityHigh': 'color.uda.priority.H',
+
         }
 
         links = {
             'TaskWikiTaskActive': 'Type',
             'TaskWikiTaskCompleted': 'Comment',
             'TaskWikiTaskDeleted': 'Error',
+            'TaskWikiTaskPriorityLow': 'Constant',
+            'TaskWikiTaskPriorityMedium': 'Statement',
+            'TaskWikiTaskPriorityHigh': 'PreProc',
         }
 
         tw = cache.get_relevant_tw()
