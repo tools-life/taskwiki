@@ -22,15 +22,6 @@ import cache
 import util
 import viewport
 
-"""
-How this plugin works:
-
-    1.) On startup, it reads all the tasks and syncs info TW -> Vimwiki file. Task is identified by their
-        uuid.
-    2.) When saving, the opposite sync is performed (Vimwiki -> TW direction).
-        a) if task is marked as subtask by indentation, the dependency is created between
-"""
-
 cache = cache.TaskCache()
 
 
