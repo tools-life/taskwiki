@@ -173,6 +173,13 @@ def buffer_shortname(buffer):
 def selected_line_numbers():
     return range(vim.current.range.start, vim.current.range.end + 1)
 
+def get_lines_above(including_current=True):
+    # Add 1 to the current line number if we want to include this line
+    bonus = 1 if including_current else 0
+
+    for line in reversed(range(0, get_current_line_number() + bonus)):
+        yield vim.current.buffer[line]
+
 def strip_ansi_escape_sequence(string):
     return regexp.ANSI_ESCAPE_SEQ.sub("", string)
 
