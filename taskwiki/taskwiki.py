@@ -1,5 +1,7 @@
 from __future__ import print_function
+import re
 import os
+import pickle
 import sys
 import vim  # pylint: disable=F0401
 
@@ -331,6 +333,41 @@ class Split(object):
             vertical=self.vertical,
             activate_cursorline=self.cursorline,
         )
+
+
+class CallbackSplitMixin(object):
+
+    split_cursorline = False
+
+    def __init__(self, args):
+        super(CallbackSplitMixin, self).__init__(args)
+        self.selected = SelectedTasks()
+
+    def execute(self):
+        super(CallbackSplitMixin, self).execute()
+
+        # Close the split if the user leaves it
+        vim.command('au BufLeave <buffer> :bwipe')
+
+        # We can't save the current instance in vim variable
+        # so save the pickled version
+        vim.current.buffer.vars['taskwiki_callback'] = pickle.dumps(self)
+
+        # Remap <CR> to calling the callback and wiping the buffer
+        vim.command(
+            "nnoremap <silent> <buffer> <enter> :py "
+            "callback = pickle.loads("
+                "vim.current.buffer.vars['taskwiki_callback']); "
+            "callback.callback(); "
+            "vim.command('bwipe') <CR>"
+        )
+
+        # Show cursorline in split if required
+        if self.split_cursorline:
+            vim.current.window.options['cursorline'] = True
+
+    def callback(self):
+        raise NotImplementedError("No callback defined.")
 
 
 class SplitProjects(Split):
