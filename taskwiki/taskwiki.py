@@ -375,6 +375,36 @@ class SplitProjects(Split):
     vertical = True
 
 
+class ChooseSplitProjects(CallbackSplitMixin, SplitProjects):
+    split_cursorline = True
+
+    def get_selected_project(self):
+        project_re = re.compile(r'^(?P<indent>\s*)(?P<name>[^\s]+)\s+[0-9]+$')
+
+        project_parts = []
+        current_indent = None
+        indented_less = lambda s: (current_indent is None or
+                                   len(s) < current_indent)
+
+        for line in util.get_lines_above():
+            match = project_re.match(line)
+
+            if match and indented_less(match.group('indent')):
+                current_indent = len(match.group('indent'))
+                project_parts.append(match.group('name'))
+
+        # Properly handle selected (none)
+        if project_parts == ['(none)']:
+            project_parts = []
+
+        project_parts.reverse()
+        return '.'.join(project_parts)
+
+    def callback(self):
+        project = self.get_selected_project()
+        self.selected.modify("project:{0}".format(project))
+
+
 class SplitSummary(Split):
     command = 'summary'
     vertical = True
