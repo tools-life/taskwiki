@@ -18,7 +18,7 @@ endfor
 syntax match TaskWikiTaskActive containedin=TaskWikiTask /\s*\*\s\[S\]\s[^#]*/
 syntax match TaskWikiTaskCompleted containedin=TaskWikiTask /\s*\*\s\[X\]\s[^#]*/
 syntax match TaskWikiTaskDeleted containedin=TaskWikiTask /\s*\*\s*\[D\]\s[^#]*/
-syntax match TaskWikiTaskPriority containedin=TaskWikiTask /\( ! \| !! \| !!! \)/
+syntax match TaskWikiTaskPriority containedin=TaskWikiTask /\( !\| !!\| !!!\)/
 
 " Set concealed parts as really concealed in normal mode, and with cursor over
 setlocal conceallevel=3
