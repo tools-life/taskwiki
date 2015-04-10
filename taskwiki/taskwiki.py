@@ -479,6 +479,23 @@ class SplitTags(Split):
     vertical = True
 
 
+class ChooseSplitTags(CallbackSplitMixin, SplitTags):
+    split_cursorline = True
+
+    def get_selected_tag(self):
+        tag_re = re.compile(r'^(?P<name>[^\s]+)\s+[0-9]+$')
+        match = tag_re.match(vim.current.line)
+
+        if match:
+            return match.group('name')
+        else:
+            raise util.TaskWikiException("No tag selected.")
+
+    def callback(self):
+        tag = self.get_selected_tag()
+        self.selected.modify("+{0}".format(tag))
+
+
 if __name__ == '__main__':
     WholeBuffer.update_from_tw()
     Meta().integrate_tagbar()
