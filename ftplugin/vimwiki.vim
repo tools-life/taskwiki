@@ -38,6 +38,9 @@ command! -range TaskWikiDone :<line1>,<line2>py SelectedTasks().done()
 command! -range -nargs=* TaskWikiMod :<line1>,<line2>py SelectedTasks().modify(<q-args>)
 command! -range -nargs=* TaskWikiAnnotate :<line1>,<line2>py SelectedTasks().annotate(<q-args>)
 
+" Interactive commands
+command! -range TaskWikiChooseProject :<line1>,<line2>py ChooseSplitProjects("global").execute()
+
 " Meta commands
 command! TaskWikiInspect :py Meta().inspect_viewport()
 
@@ -53,7 +56,8 @@ nmap <silent><buffer> <Leader>ta :TaskWikiAnnotate<CR>
 nmap <silent><buffer> <Leader>tbd :TaskWikiBurndownDaily<CR>
 nmap <silent><buffer> <Leader>tbw :TaskWikiBurndownWeekly<CR>
 nmap <silent><buffer> <Leader>tbm :TaskWikiBurndownMonthly<CR>
-nmap <silent><buffer> <Leader>tc :TaskWikiCalendar<CR>
+nmap <silent><buffer> <Leader>tcp :TaskWikiChooseProject<CR>
+nmap <silent><buffer> <Leader>tC :TaskWikiCalendar<CR>
 nmap <silent><buffer> <Leader>td :TaskWikiDone<CR>
 nmap <silent><buffer> <Leader>tD :TaskWikiDelete<CR>
 nmap <silent><buffer> <Leader>te :TaskWikiEdit<CR>
