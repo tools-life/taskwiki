@@ -9,6 +9,7 @@ from time import sleep
 
 server = vimrunner.Server()
 
+
 class IntegrationTest(object):
 
     viminput = None
@@ -33,7 +34,16 @@ class IntegrationTest(object):
 
     def generate_data(self):
         self.dir = tempfile.mkdtemp(dir='/tmp/')
-        self.tw = TaskWarrior(data_location=self.dir, taskrc_location='/')
+
+        # Create an actual taskrc file where we can write later
+        self.taskrc_path = os.path.join(self.dir, "taskrc")
+        with open(self.taskrc_path, 'w') as f:
+            f.write("#testing taskrc\n")
+
+        self.tw = TaskWarrior(
+            data_location=self.dir,
+            taskrc_location=self.taskrc_path
+        )
 
         new_tasks = [Task(self.tw, **task_kwargs)
                      for task_kwargs in self.tasks]
@@ -54,6 +64,7 @@ class IntegrationTest(object):
     def configure_global_varialbes(self):
         self.command('let g:taskwiki_measure_coverage="yes"')
         self.command('let g:taskwiki_data_location="{0}"'.format(self.dir))
+        self.command('let g:taskwiki_taskrc_location="{0}"'.format(self.taskrc_path))
 
     def setup(self):
         self.generate_data()
