@@ -10,15 +10,15 @@ highlight link TaskWikiTaskUuid Comment
 
 " Conceal header definitions
 for s:i in range(1,6)
-  execute 'syn match TaskWikiHeaderDef containedin=VimwikiHeader'.s:i.' /|[^=]*/'.s:conceal
+  execute 'syn match TaskWikiHeaderDef containedin=VimwikiHeader'.s:i.' contained /|[^=]*/'.s:conceal
 endfor
 
 " Define active and deleted task regions
 " Will be colored dynamically by Meta().source_tw_colors()
-syntax match TaskWikiTaskActive containedin=TaskWikiTask /\s*\*\s\[S\]\s[^#]*/
-syntax match TaskWikiTaskCompleted containedin=TaskWikiTask /\s*\*\s\[X\]\s[^#]*/
-syntax match TaskWikiTaskDeleted containedin=TaskWikiTask /\s*\*\s*\[D\]\s[^#]*/
-syntax match TaskWikiTaskPriority containedin=TaskWikiTask /\( !\| !!\| !!!\)\( \)\@=/
+syntax match TaskWikiTaskActive containedin=TaskWikiTask contained /\s*\*\s\[S\]\s[^#]*/
+syntax match TaskWikiTaskCompleted containedin=TaskWikiTask contained /\s*\*\s\[X\]\s[^#]*/
+syntax match TaskWikiTaskDeleted containedin=TaskWikiTask contained /\s*\*\s*\[D\]\s[^#]*/
+syntax match TaskWikiTaskPriority containedin=TaskWikiTask contained /\( !\| !!\| !!!\)\( \)\@=/
 
 " Set concealed parts as really concealed in normal mode, and with cursor over
 setlocal conceallevel=3
