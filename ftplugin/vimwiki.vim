@@ -1,13 +1,21 @@
+" Disable taskwiki if taskwiki_disable variable set
+if exists("g:taskwiki_disable")
+  finish
+endif
+
+" Determine the plugin path
 let s:plugin_path = escape(expand('<sfile>:p:h:h'), '\')
 
+" Run the measure parts first, if desired
 if exists("g:taskwiki_measure_coverage")
   execute 'pyfile ' . s:plugin_path . '/taskwiki/coverage.py'
 endif
 
+" Execute the main body of taskwiki source
 execute 'pyfile ' . s:plugin_path . '/taskwiki/taskwiki.py'
 
+" Update to TW upon saving
 augroup taskwiki
-    " when saving the file sync the tasks from vimwiki to TW
     autocmd!
     execute "autocmd BufWrite *.".expand('%:e')." py WholeBuffer.update_to_tw()"
 augroup END

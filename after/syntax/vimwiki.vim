@@ -1,3 +1,8 @@
+" Disable taskwiki if taskwiki_disable variable set
+if exists("g:taskwiki_disable")
+  finish
+endif
+
 " Detect if conceal feature is available
 let s:conceal = exists("+conceallevel") ? ' conceal': ''
 
