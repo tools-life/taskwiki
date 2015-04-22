@@ -178,6 +178,26 @@ class VimwikiTask(object):
         if not self.uuid:
             self.apply_defaults()
 
+            # If -- is in description, assume it's separator for metadata
+            # * [ ] this is new task -- project:home
+            # should turn into
+            # * [ ] this is new task
+            # with project:home applied
+
+            if '--' in self['description']:
+                first_part, second_part = self['description'].split('--', 1)
+
+                new_description = first_part.strip()
+                modstring = second_part.strip()
+
+                # Convert the modstring and apply it, ignore meta part
+                modifications = util.tw_modstring_to_kwargs(modstring)[0]
+                for key in modifications.keys():
+                    self[key] = modifications[key]
+
+                # Apply the new description
+                self['description'] = new_description
+
         return self
 
     @classmethod
