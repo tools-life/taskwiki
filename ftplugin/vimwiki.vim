@@ -85,3 +85,17 @@ nmap <silent><buffer> <Leader>tS :TaskWikiStats<CR>
 nmap <silent><buffer> <Leader>tt :TaskWikiTags<CR>
 nmap <silent><buffer> <Leader>t+ :TaskWikiStart<CR>
 nmap <silent><buffer> <Leader>t- :TaskWikiStop<CR>
+
+" Mappings for visual mode.
+vmap <silent><buffer> <Leader>ta :TaskWikiAnnotate<CR>
+vmap <silent><buffer> <Leader>tcp :TaskWikiChooseProject<CR>
+vmap <silent><buffer> <Leader>tct :TaskWikiChooseTag<CR>
+vmap <silent><buffer> <Leader>td :TaskWikiDone<CR>
+vmap <silent><buffer> <Leader>tD :TaskWikiDelete<CR>
+vmap <silent><buffer> <Leader>te :TaskWikiEdit<CR>
+vmap <silent><buffer> <Leader>tg :TaskWikiGrid<CR>
+vmap <silent><buffer> <Leader>ti :TaskWikiInfo<CR>
+vmap <silent><buffer> <Leader>tl :TaskWikiLink<CR>
+vmap <silent><buffer> <Leader>tm :TaskWikiMod<CR>
+vmap <silent><buffer> <Leader>t+ :TaskWikiStart<CR>
+vmap <silent><buffer> <Leader>t- :TaskWikiStop<CR>
