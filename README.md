@@ -50,15 +50,15 @@ QUICK-REFERENCE   --   use "<leader>t" and one of:   --    *taskwiki-quickref*
 
 ### Features
 
-- ViewPorts: a vimwiki header with a task query (filter) embedded, generates
-    a corresponding list of tasks. These tasks can be modified and changes
-    will be synced back to task data.  A ViewPort heading looks like this:
+- ViewPorts: a vimwiki header with a task query (filter) embedded, generate
+a corresponding list of tasks. These tasks can be modified and changes
+will be synced back to task data.  A ViewPort heading looks like this:
 
 <pre>
     == Project Foo Tasks | +PENDING project:foo | +bar pri:H ==
          title ^^^            filter ^^^             ^^^ user defaults
 </pre>
-    title can be any text, and the filter elements are concealed in normal mode.
+title can be any text, and the filter elements are concealed in normal mode.
 
 - Individual Todos: tasks can be used anywhere in a vimwiki, looking like:
 
@@ -72,19 +72,19 @@ and when adding a new task, any other metadata can be added after "--" like
 * [ ] test taskwiki todos and viewports -- proj:tw.wiki +foo due:tomorrow
 </pre>
 
-    and the task will be synced with the task data on saving. After syncing,
-    all tasks end with a concealed uuid (eg.  #541c5b57) don't edit this!
+and the task will be synced with the task data on saving. After syncing,
+all tasks end with a concealed uuid (eg.  #541c5b57) don't edit this!
 
 - Task Info: hitting <CR> with the cursor over a task shows all task info.
 
 - Reports: burndown, calendar, history, projects, summary, stats and tags
-    reports can all be invoked, opening in a split window.
+reports can all be invoked, opening in a split window.
 
 - Grid view: the TaskWikiGrid command will open a new buffer with a grid
-    view of task details, of the nearest ViewPort (using vim-taskwarrior)
+view of task details, of the nearest ViewPort (using vim-taskwarrior)
 
 - Back-links: The command TaskWikiLink will add an annotation to the selected
-    task(s) with the ~/path/to/file.wiki
+task(s) with the ~/path/to/file.wiki
 
 
 #### Define defaults, by extending that heading like this;
@@ -94,35 +94,35 @@ and when adding a new task, any other metadata can be added after "--" like
 so that any tasks created under this heading will automatically be assigned "project:foo +bar"
 
 #### Bidirecitonal updates:
-  * TW -> Vimwiki (upon file loading)
-  * Vimwiki -> TW (upon saving)
+* TW -> Vimwiki (upon file loading)
+* Vimwiki -> TW (upon saving)
 
 #### Updated information
-  * Description
-  * Task status (completion)
-  * Dependency sets (sets subtasks as dependencies of parent tasks)
-  * Due dates
-  * Priority
+* Description
+* Task status (completion)
+* Dependency sets (sets subtasks as dependencies of parent tasks)
+* Due dates
+* Priority
 
 ### Commands
-  * TaskWikiBurndown(Daily, Monthly, Weekly)
-  * TaskWikiCalendar
-  * TaskWikiDelete
-  * TaskWikiGhistory(Annual, Monthly)
-  * TaskWikiHistory(Annual, Monthly)
-  * TaskWikiInfo
-  * TaskWikiLink
-  * TaskWikiMod
-  * TaskWikiProjects
-  * TaskWikiProjectsSummary
-  * TaskWikiStart
-  * TaskWikiStats
-  * TaskWikiStop
-  * TaskWikiTags
+* TaskWikiBurndown(Daily, Monthly, Weekly)
+* TaskWikiCalendar
+* TaskWikiDelete
+* TaskWikiGhistory(Annual, Monthly)
+* TaskWikiHistory(Annual, Monthly)
+* TaskWikiInfo
+* TaskWikiLink
+* TaskWikiMod
+* TaskWikiProjects
+* TaskWikiProjectsSummary
+* TaskWikiStart
+* TaskWikiStats
+* TaskWikiStop
+* TaskWikiTags
 
 ### Planned features
 * Updating
-  * Removals from dependency sets
+* Removals from dependency sets
 
 ### Credits
 
