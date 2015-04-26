@@ -46,8 +46,7 @@ QUICK-REFERENCE   --   use "<leader>t" and one of:   --    *taskwiki-quickref*
 ### Install
 
 - plugins the vim way: http://vimdoc.sourceforge.net/htmldoc/usr_05.html#05.4
-- plugins the easy way: https://github.com/tpope/vim-pathogen.
-    Other "vim plugin managers" will probably work, but have not been tested
+- plugins the easy way: https://github.com/tpope/vim-pathogen. Other "vim plugin managers" will probably work, but have not been tested
 
 ### Features
 
@@ -56,6 +55,7 @@ QUICK-REFERENCE   --   use "<leader>t" and one of:   --    *taskwiki-quickref*
 - ViewPorts: a vimwiki header with a task query (filter) embedded, generates
     a corresponding list of tasks. These tasks can be modified and changes
     will be synced back to task data.  A ViewPort heading looks like this:
+
 <pre>    
     == Project Foo Tasks | +PENDING project:foo | +bar pri:H ==
          title ^^^            filter ^^^             ^^^ user defaults
@@ -63,12 +63,16 @@ QUICK-REFERENCE   --   use "<leader>t" and one of:   --    *taskwiki-quickref*
     title can be any text, and the filter elements are concealed in normal mode.
 
 - Individual Todos: tasks can be used anywhere in a vimwiki, looking like:
+
 <pre>
  * [ ] Install TaskWiki plugin
+
 </pre>
 and when adding a new task, any other metadata can be added after "--" like
+
 <pre>
 * [ ] test taskwiki todos and viewports -- proj:tw.wiki +foo due:tomorrow
+
 </pre>
 
     and the task will be synced with the task data on saving. After syncing,
