@@ -1,4 +1,4 @@
-*taskwiki.txt*          Taskwarrior tasks in Vimwiki                  v0.8.0 ~
+*taskwiki.txt*          Taskwarrior tasks in Vimwiki                  v0.8.1 ~
                    _____         _   __        ___ _    _                    ~
         a         |_   _|_ _ ___| | _\ \      / (_) | _(_)         a         ~
    command-line     | |/ _` / __| |/ /\ \ /\ / /| | |/ / |   personal wiki   ~
@@ -6,8 +6,7 @@
      manager        |_|\__,_|___/_|\_\  \_/\_/  |_|_|\_\_|                   ~
                                                                              ~
 ==============================================================================
-QUICK-REFERENCE    --   use "<leader>t" and one of:   --     taskwiki-quickref
-
+QUICK-REFERENCE   --   use "<leader>t" and one of:   --    *taskwiki-quickref*
 | a  annotate         | C  calendar       | Ga ghistory annual | p  projects |
 | bd burndown daily   | d  done           | hm history month   | s  summary  |
 | bw burndown weekly  | D  delete         | ha history annual  | S  stats    |
@@ -16,7 +15,7 @@ QUICK-REFERENCE    --   use "<leader>t" and one of:   --     taskwiki-quickref
 | cp choose tag       | Gm ghistory month | m  modify          | -  stop     |
 
 ==============================================================================
-CONTENTS
+CONTENTS						   *taskwiki-contents*
 
     1. Introduction 						    |taskwiki|
     2. Prerequisites					     |taskwiki-prereq|
@@ -29,7 +28,7 @@ CONTENTS
     9. License						    |taskwiki-license|
 
 =============================================================================
-INTRODUCTION							   *taskwiki*
+1. INTRODUCTION							   *taskwiki*
 
 TaskWiki is a vim plugin that enhances vimwiki (another vim plugin) replacing
     vimwiki's Todo functionality with Taskwarrior tasks.
@@ -79,7 +78,7 @@ Key Features:
     warranty and no promise of fitness for any purpose! (back up your data!)
 
 =============================================================================
-PREREQUISITES						    *taskwiki-prereq*
+2. PREREQUISITES					    *taskwiki-prereq*
 
 This plugin requires:
 - vim 7.4 or greater, with python bindings (use :version in vim, to check)
@@ -93,14 +92,14 @@ and can be enhanced with:
 - vim-taskwarrior (https://github.com/farseer90718/vim-taskwarrior) for Grid
 
 =============================================================================
-INSTALLING						   *taskwiki-install*
+3. INSTALLING						   *taskwiki-install*
 
 - plugins the vim way: http://vimdoc.sourceforge.net/htmldoc/usr_05.html#05.4
 - plugins the easy way: https://github.com/tpope/vim-pathogen
     Other "vim plugin managers" will probably work, but have not been tested
 
 =============================================================================
-MAPPING							   *taskwiki-mapping*
+4. MAPPING						   *taskwiki-mapping*
 
 n	<CR> 	is mapped to show task info, VP details or follow vimwiki link.
 		After editing a task in insert mode, <CR> starts a new task.
@@ -133,7 +132,7 @@ vn	+ 	:TaskWikiStart
 vn	- 	:TaskWikiStop
 
 =============================================================================
-COMMANDS						 *taskwiki-customize*
+5. COMMANDS						 *taskwiki-customize*
 
 -----------------------------------------------------------------------------
     Split reports commands (that open taskwarrior reports in a window split)
@@ -211,13 +210,13 @@ COMMANDS						 *taskwiki-customize*
     ("q" or <CR> again, closes the window)
 
 =============================================================================
-SETTINGS						  *taskwiki-settings*
+6. SETTINGS						  *taskwiki-settings*
 
 g:taskwiki_disable=
-    Disable taskwiki if ANY taskwiki_disable variable set
+    Disable taskwiki if ANY taskwiki_disable variable set (the "off" switch)
 
 =============================================================================
-TROUBLESHOOTING						   *taskwiki-trouble*
+7. TROUBLESHOOTING					   *taskwiki-trouble*
 - Are requirements met? 
 	-Vim
 	-TaskWiki (this plugin)
@@ -226,13 +225,13 @@ TROUBLESHOOTING						   *taskwiki-trouble*
 	-vim-taskwarrior
 
 =============================================================================
-CONTRIBUTIONS						*taskwiki-contribute*
+9. CONTRIBUTIONS					*taskwiki-contribute*
 
 Clone, fork, contribute and learn more at https://github.com/tbabej/taskwiki
 Good ideas, well formed bug reports and thoughtful pull-requests welcome. 
 
 =============================================================================
-LICENSE							   *taskwiki-license*
+0. LICENSE						   *taskwiki-license*
 
 MIT?
 
