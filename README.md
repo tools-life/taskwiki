@@ -3,7 +3,7 @@
 _Use [taskwarrior](http://taskwarrior.org) task-management in [vimwiki](https://github.com/vimwiki/vimwiki/tree/dev) files_
 
 <pre>
-		   _____         _   __        ___ _    _                    ~
+                   _____         _   __        ___ _    _                    ~
         a         |_   _|_ _ ___| | _\ \      / (_) | _(_)         a         ~
    command-line     | |/ _` / __| |/ /\ \ /\ / /| | |/ / |   personal wiki   ~
     todo list       | | (_| \__ \   <  \ V  V / | |   <| |      for vim      ~
@@ -26,7 +26,7 @@ QUICK-REFERENCE   --   use "<leader>t" and one of:   --    *taskwiki-quickref*
 [![Coverage Status](https://coveralls.io/repos/tbabej/taskwiki/badge.svg?branch=master)](https://coveralls.io/r/tbabej/taskwiki?branch=master)
 [![Code Health](https://landscape.io/github/tbabej/taskwiki/master/landscape.svg?style=flat)](https://landscape.io/github/tbabej/taskwiki/master)
 
-    TaskWiki is a vim plugin that enhances vimwiki (another vim plugin) replacing vimwiki's Todo functionality with Taskwarrior tasks.
+	    TaskWiki is a vim plugin that enhances vimwiki (another vim plugin) replacing vimwiki's Todo functionality with Taskwarrior tasks.
 
 ### Requirements
 
@@ -50,13 +50,11 @@ QUICK-REFERENCE   --   use "<leader>t" and one of:   --    *taskwiki-quickref*
 
 ### Features
 
-#### ViewPorts
-
 - ViewPorts: a vimwiki header with a task query (filter) embedded, generates
     a corresponding list of tasks. These tasks can be modified and changes
     will be synced back to task data.  A ViewPort heading looks like this:
 
-<pre>    
+<pre>
     == Project Foo Tasks | +PENDING project:foo | +bar pri:H ==
          title ^^^            filter ^^^             ^^^ user defaults
 </pre>
@@ -65,14 +63,13 @@ QUICK-REFERENCE   --   use "<leader>t" and one of:   --    *taskwiki-quickref*
 - Individual Todos: tasks can be used anywhere in a vimwiki, looking like:
 
 <pre>
- * [ ] Install TaskWiki plugin
-
+* [ ] Install TaskWiki plugin
 </pre>
+
 and when adding a new task, any other metadata can be added after "--" like
 
 <pre>
 * [ ] test taskwiki todos and viewports -- proj:tw.wiki +foo due:tomorrow
-
 </pre>
 
     and the task will be synced with the task data on saving. After syncing,
