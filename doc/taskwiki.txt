@@ -132,7 +132,7 @@ vn	+ 	:TaskWikiStart
 vn	- 	:TaskWikiStop
 
 =============================================================================
-5. COMMANDS						 *taskwiki-customize*
+5. COMMANDS						  *taskwiki-commands*
 
 -----------------------------------------------------------------------------
     Split reports commands (that open taskwarrior reports in a window split)
