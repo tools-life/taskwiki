@@ -1,6 +1,11 @@
 ## Taskwiki
 
 _Use [taskwarrior](http://taskwarrior.org) task-management in [vimwiki](https://github.com/vimwiki/vimwiki/tree/dev) files_
+_TaskWiki is a vim plugin that enhances vimwiki (another vim plugin) replacing vimwiki's Todo functionality with Taskwarrior tasks._
+
+[![Travis build status](https://travis-ci.org/tbabej/taskwiki.svg?branch=master)](https://travis-ci.org/tbabej/taskwiki)
+[![Coverage Status](https://coveralls.io/repos/tbabej/taskwiki/badge.svg?branch=master)](https://coveralls.io/r/tbabej/taskwiki?branch=master)
+[![Code Health](https://landscape.io/github/tbabej/taskwiki/master/landscape.svg?style=flat)](https://landscape.io/github/tbabej/taskwiki/master)
 
 <pre>
                    _____         _   __        ___ _    _                    ~
@@ -20,13 +25,6 @@ QUICK-REFERENCE   --   use "<leader>t" and one of:   --    *taskwiki-quickref*
 | cp choose tag       | Gm ghistory month | m  modify          | -  stop     |
 
 </pre>
-
-
-[![Travis build status](https://travis-ci.org/tbabej/taskwiki.svg?branch=master)](https://travis-ci.org/tbabej/taskwiki)
-[![Coverage Status](https://coveralls.io/repos/tbabej/taskwiki/badge.svg?branch=master)](https://coveralls.io/r/tbabej/taskwiki?branch=master)
-[![Code Health](https://landscape.io/github/tbabej/taskwiki/master/landscape.svg?style=flat)](https://landscape.io/github/tbabej/taskwiki/master)
-
-_TaskWiki is a vim plugin that enhances vimwiki (another vim plugin) replacing vimwiki's Todo functionality with Taskwarrior tasks._
 
 ### Requirements
 
