@@ -192,6 +192,9 @@ Commands that operate on tasks in the buffer
 *:TaskWikiLink
     Adds an annotation to selected task(s) with ~/path/to/file.wiki
 
+*:TaskWikiStart
+    "Starts" the selected task(s)
+
 *:TaskWikiStop
     "Stops" the selected task(s)
 
@@ -230,13 +233,13 @@ Are requirements met?
 	-vim-taskwarrior
 
 =============================================================================
-9. CONTRIBUTIONS					*taskwiki-contribute*
+8. CONTRIBUTIONS					*taskwiki-contribute*
 
 Clone, fork, contribute and learn more at https://github.com/tbabej/taskwiki
 Good ideas, well formed bug reports and thoughtful pull-requests welcome.
 
 =============================================================================
-0. LICENSE						   *taskwiki-license*
+9. LICENSE						   *taskwiki-license*
 
 MIT?
 
