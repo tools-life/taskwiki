@@ -15,7 +15,7 @@ QUICK-REFERENCE   --   use "<leader>t" and one of:   --    *taskwiki-quickref*
 | a  annotate         | C  calendar       | Ga ghistory annual | p  projects |
 | bd burndown daily   | d  done           | hm history month   | s  summary  |
 | bw burndown weekly  | D  delete         | ha history annual  | S  stats    |
-| bm burndown monthly | e  edit           | i  (or <CR>) info  | t  tags     |
+| bm burndown monthly | e  edit           | i  (or  CR ) info  | t  tags     |
 | cp choose project   | g  grid           | l  back-link       | +  start    |
 | cp choose tag       | Gm ghistory month | m  modify          | -  stop     |
 
@@ -90,8 +90,6 @@ task(s) with the ~/path/to/file.wiki
     **DISCLAIMER** This is free software, it comes with absolutely NO
     warranty and no promise of fitness for any purpose! (back up your data!)
 
-see more in doc/taskwiki.txt
-
 ### Commands
 * TaskWikiBurndown(Daily, Monthly, Weekly)
 * TaskWikiCalendar
@@ -111,3 +109,6 @@ see more in doc/taskwiki.txt
 ### Credits
 
 Inspired by vimwiki-tasks plugin.
+
+see more in doc/taskwiki.txt
+
