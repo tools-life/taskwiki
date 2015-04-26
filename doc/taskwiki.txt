@@ -1,4 +1,4 @@
-*taskwiki.txt*          Taskwarrior tasks in Vimwiki                  v0.8.3 ~
+*taskwiki.txt*          Taskwarrior tasks in Vimwiki                  v0.8.4 ~
                    _____         _   __        ___ _    _                    ~
         a         |_   _|_ _ ___| | _\ \      / (_) | _(_)         a         ~
    command-line     | |/ _` / __| |/ /\ \ /\ / /| | |/ / |   personal wiki   ~
@@ -140,7 +140,7 @@ vn	- 	:TaskWikiStop
 5. COMMANDS						  *taskwiki-commands*
 
 -----------------------------------------------------------------------------
-    Split reports commands (that open taskwarrior reports in a window split)
+Split reports commands (that open taskwarrior reports in a window split)
 
 *:TaskWikiBurndown(Daily, Monthly, Weekly) [args]
     Opens a split window with the burndown report (close with <CR> or "q")
@@ -167,7 +167,7 @@ vn	- 	:TaskWikiStop
     Opens a vsplit window with the tags report (close with <CR> or "q")
 
 -----------------------------------------------------------------------------
-    Commands that operate on tasks in the buffer
+Commands that operate on tasks in the buffer
 
 *:TaskWikiAnnotate
     Opens a prompt to add annotation to selected task(s)
@@ -199,7 +199,7 @@ vn	- 	:TaskWikiStop
     Opens a prompt for task modification, for selected task(s)
 
 ----------------------------------------------------------------------------
-    Interactive commands
+Interactive commands
 
 *:TaskWikiChooseProject
     Interactively choose project
@@ -208,7 +208,7 @@ vn	- 	:TaskWikiStop
     Interactively choose tag
 
 ----------------------------------------------------------------------------
-    Meta commands
+Meta commands
 
 *:TaskWikiInspect
     (or <CR>) Opens window with details of ViewPort under the cursor
