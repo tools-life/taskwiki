@@ -26,7 +26,7 @@ QUICK-REFERENCE   --   use "<leader>t" and one of:   --    *taskwiki-quickref*
 [![Coverage Status](https://coveralls.io/repos/tbabej/taskwiki/badge.svg?branch=master)](https://coveralls.io/r/tbabej/taskwiki?branch=master)
 [![Code Health](https://landscape.io/github/tbabej/taskwiki/master/landscape.svg?style=flat)](https://landscape.io/github/tbabej/taskwiki/master)
 
-	    TaskWiki is a vim plugin that enhances vimwiki (another vim plugin) replacing vimwiki's Todo functionality with Taskwarrior tasks.
+_TaskWiki is a vim plugin that enhances vimwiki (another vim plugin) replacing vimwiki's Todo functionality with Taskwarrior tasks._
 
 ### Requirements
 
@@ -86,23 +86,11 @@ view of task details, of the nearest ViewPort (using vim-taskwarrior)
 - Back-links: The command TaskWikiLink will add an annotation to the selected
 task(s) with the ~/path/to/file.wiki
 
+- Tests: TaskWiki is well tested in development to ensure data integrity.
+    **DISCLAIMER** This is free software, it comes with absolutely NO
+    warranty and no promise of fitness for any purpose! (back up your data!)
 
-#### Define defaults, by extending that heading like this;
-<pre>
-== Foo task list | project:foo | project:foo +bar ==
-</pre>
-so that any tasks created under this heading will automatically be assigned "project:foo +bar"
-
-#### Bidirecitonal updates:
-* TW -> Vimwiki (upon file loading)
-* Vimwiki -> TW (upon saving)
-
-#### Updated information
-* Description
-* Task status (completion)
-* Dependency sets (sets subtasks as dependencies of parent tasks)
-* Due dates
-* Priority
+see more in doc/taskwiki.txt
 
 ### Commands
 * TaskWikiBurndown(Daily, Monthly, Weekly)
@@ -119,10 +107,6 @@ so that any tasks created under this heading will automatically be assigned "pro
 * TaskWikiStats
 * TaskWikiStop
 * TaskWikiTags
-
-### Planned features
-* Updating
-* Removals from dependency sets
 
 ### Credits
 
