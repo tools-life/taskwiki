@@ -15,7 +15,7 @@ _TaskWiki is a vim plugin that enhances vimwiki (another vim plugin) replacing v
      manager        |_|\__,_|___/_|\_\  \_/\_/  |_|_|\_\_|                   ~
                                                                              ~
 ==============================================================================
-QUICK-REFERENCE   --   use "<leader>t" and one of:   --    *taskwiki-quickref*
+QUICK-REFERENCE   --   use  "leader" + t and one of:                          
 
 | a  annotate         | C  calendar       | Ga ghistory annual | p  projects |
 | bd burndown daily   | d  done           | hm history month   | s  summary  |
