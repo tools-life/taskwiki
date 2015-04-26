@@ -1,4 +1,4 @@
-*taskwiki.txt*          Taskwarrior tasks in Vimwiki                  v0.8.1 ~
+*taskwiki.txt*          Taskwarrior tasks in Vimwiki                  v0.8.3 ~
                    _____         _   __        ___ _    _                    ~
         a         |_   _|_ _ ___| | _\ \      / (_) | _(_)         a         ~
    command-line     | |/ _` / __| |/ /\ \ /\ / /| | |/ / |   personal wiki   ~
@@ -7,6 +7,7 @@
                                                                              ~
 ==============================================================================
 QUICK-REFERENCE   --   use "<leader>t" and one of:   --    *taskwiki-quickref*
+
 | a  annotate         | C  calendar       | Ga ghistory annual | p  projects |
 | bd burndown daily   | d  done           | hm history month   | s  summary  |
 | bw burndown weekly  | D  delete         | ha history annual  | S  stats    |
@@ -58,9 +59,13 @@ Key Features:
     To see ViewPort details, like defaults used, <CR> with cursor on VP header
 
 - Individual Todos: tasks can be used anywhere in a vimwiki, looking like:
-  * [ ] Install TaskWiki plugin
-    and the task will be synced with the task data on saving. After syncing
-    a task will end a concealed uuid (eg.  #541c5b57) don't edit this!
+
+ * [ ] Install TaskWiki plugin
+   and when adding a new task, any other metadata can be added after "--" like
+ * [ ] test taskwiki todos and viewports -- proj:tw.wiki +foo due:tomorrow
+
+    and the task will be synced with the task data on saving. After syncing,
+    all tasks end with a concealed uuid (eg.  #541c5b57) don't edit this!
 
 - Task Info: hitting <CR> with the cursor over a task shows all task info.
 
@@ -217,7 +222,7 @@ g:taskwiki_disable=
 
 =============================================================================
 7. TROUBLESHOOTING					   *taskwiki-trouble*
-- Are requirements met? 
+Are requirements met?
 	-Vim
 	-TaskWiki (this plugin)
 	-Taskwarrior
@@ -228,7 +233,7 @@ g:taskwiki_disable=
 9. CONTRIBUTIONS					*taskwiki-contribute*
 
 Clone, fork, contribute and learn more at https://github.com/tbabej/taskwiki
-Good ideas, well formed bug reports and thoughtful pull-requests welcome. 
+Good ideas, well formed bug reports and thoughtful pull-requests welcome.
 
 =============================================================================
 0. LICENSE						   *taskwiki-license*
