@@ -15,7 +15,7 @@ _Use [taskwarrior](http://taskwarrior.org) task-management in [vimwiki](https://
      manager        |_|\__,_|___/_|\_\  \_/\_/  |_|_|\_\_|                   ~
                                                                              ~
 ==============================================================================
-QUICK-REFERENCE   --   use  "leader" + t and one of:                          
+QUICK-REFERENCE   --   use \<leader\> + t and one of:                          
 
 | a  annotate         | C  calendar       | Ga ghistory annual | p  projects |
 | bd burndown daily   | d  done           | hm history month   | s  summary  |
@@ -113,5 +113,5 @@ task(s) with the ~/path/to/file.wiki
 
 Inspired by vimwiki-tasks plugin.
 
-see more in doc/taskwiki.txt
+see more in doc/taskwiki.txt. run :helptags and then :he taskwiki
 
