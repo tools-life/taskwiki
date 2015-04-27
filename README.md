@@ -109,7 +109,7 @@ task(s) with the ~/path/to/file.wiki
 * TaskWikiStop
 * TaskWikiTags
 
-see more in doc/taskwiki.txt. run :helptags and then :he taskwiki
+see more in doc/taskwiki.txt. After installing, run :helptags and then :he taskwiki
 
 ### Credits
 
