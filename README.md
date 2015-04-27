@@ -2,13 +2,12 @@
 
 _Use [taskwarrior](http://taskwarrior.org) task-management in [vimwiki](https://github.com/vimwiki/vimwiki/tree/dev) files_
 
-![taskwiki demo](http://picpaste.com/pics/wz8U2Qq9.1430094451.gif)
-
 [![Travis build status](https://travis-ci.org/tbabej/taskwiki.svg?branch=master)](https://travis-ci.org/tbabej/taskwiki)
 [![Coverage Status](https://coveralls.io/repos/tbabej/taskwiki/badge.svg?branch=master)](https://coveralls.io/r/tbabej/taskwiki?branch=master)
 [![Code Health](https://landscape.io/github/tbabej/taskwiki/master/landscape.svg?style=flat)](https://landscape.io/github/tbabej/taskwiki/master)
 
 <pre>
+*taskwiki.txt*
                    _____         _   __        ___ _    _                    ~
         a         |_   _|_ _ ___| | _\ \      / (_) | _(_)         a         ~
    command-line     | |/ _` / __| |/ /\ \ /\ / /| | |/ / |   personal wiki   ~
@@ -26,6 +25,8 @@ QUICK-REFERENCE   --   use  "leader" + t and one of:
 | cp choose tag       | Gm ghistory month | m  modify          | -  stop     |
 
 </pre>
+
+![taskwiki demo](http://picpaste.com/pics/wz8U2Qq9.1430094451.gif)
 
 ### Requirements
 
