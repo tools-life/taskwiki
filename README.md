@@ -2,7 +2,7 @@
 
 _Use [taskwarrior](http://taskwarrior.org) task-management in [vimwiki](https://github.com/vimwiki/vimwiki/tree/dev) files_
 
-![taskwiki demo](http://picpaste.com/wz8U2Qq9.gif)
+![taskwiki demo](http://picpaste.com/pics/wz8U2Qq9.1430094451.gif)
 
 _TaskWiki is a vim plugin that enhances vimwiki (another vim plugin) replacing vimwiki's Todo functionality with Taskwarrior tasks._
 
