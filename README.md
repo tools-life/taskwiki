@@ -4,7 +4,7 @@ _Use [taskwarrior](http://taskwarrior.org) task-management in [vimwiki](https://
 
 ![taskwiki demo](http://picpaste.com/pics/wz8U2Qq9.1430094451.gif)
 
-_TaskWiki is a vim plugin that enhances vimwiki (another vim plugin) replacing vimwiki's Todo functionality with Taskwarrior tasks._
+_This vim plugin a vim plugin that enhances vimwiki (another vim plugin) replacing vimwiki's Todo functionality with Taskwarrior tasks._
 
 [![Travis build status](https://travis-ci.org/tbabej/taskwiki.svg?branch=master)](https://travis-ci.org/tbabej/taskwiki)
 [![Coverage Status](https://coveralls.io/repos/tbabej/taskwiki/badge.svg?branch=master)](https://coveralls.io/r/tbabej/taskwiki?branch=master)
