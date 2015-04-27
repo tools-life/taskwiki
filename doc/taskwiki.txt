@@ -67,6 +67,10 @@ Key Features:
     and the task will be synced with the task data on saving. After syncing,
     all tasks end with a concealed uuid (eg.  #541c5b57) don't edit this!
 
+    NOTE: vimwiki todos can still be used along side of taskwiki tasks, as long
+    as the leading character is "-" or "#." or "+" but not "*".
+        - [ ] This is a vimwiki todo (ignored by taskwiki)
+
 - Task Info: hitting <CR> with the cursor over a task shows all task info.
 
 - Reports: burndown, calendar, history, projects, summary, stats and tags
