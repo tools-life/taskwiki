@@ -113,7 +113,9 @@ see more in doc/taskwiki.txt. After installing, run :helptags and then :he taskw
 
 ### Credits
 
-Inspired by vimwiki-tasks plugin.
+Authored by Tomas Babej
+
+Inspired by [vimwiki-tasks plugin](https://github.com/teranex/vimwiki-tasks).
 
 ### Contributing
 
