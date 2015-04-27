@@ -1,6 +1,9 @@
 ## Taskwiki
 
 _Use [taskwarrior](http://taskwarrior.org) task-management in [vimwiki](https://github.com/vimwiki/vimwiki/tree/dev) files_
+
+![taskwiki demo](http://picpaste.com/wz8U2Qq9.gif)
+
 _TaskWiki is a vim plugin that enhances vimwiki (another vim plugin) replacing vimwiki's Todo functionality with Taskwarrior tasks._
 
 [![Travis build status](https://travis-ci.org/tbabej/taskwiki.svg?branch=master)](https://travis-ci.org/tbabej/taskwiki)
@@ -40,6 +43,7 @@ QUICK-REFERENCE   --   use  "leader" + t and one of:
 ### Enhancements
 * [vim-plugin-AnsiEsc](https://github.com/powerman/vim-plugin-AnsiEsc) for color support
 * [tagbar](https://github.com/majutsushi/tagbar) for taskwiki file navigation
+* [vim-taskwarrior](https://github.com/farseer90718/vim-taskwarrior)
 
 ### Install
 
