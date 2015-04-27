@@ -109,9 +109,16 @@ task(s) with the ~/path/to/file.wiki
 * TaskWikiStop
 * TaskWikiTags
 
+see more in doc/taskwiki.txt. run :helptags and then :he taskwiki
+
 ### Credits
 
 Inspired by vimwiki-tasks plugin.
 
-see more in doc/taskwiki.txt. run :helptags and then :he taskwiki
+### Contributing
+
+Clone, fork, contribute and learn more at https://github.com/tbabej/taskwiki
+
+Good ideas, well formed bug reports and thoughtful pull-requests welcome.
+
 
