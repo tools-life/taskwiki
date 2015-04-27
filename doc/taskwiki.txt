@@ -26,18 +26,19 @@ CONTENTS						   *taskwiki-contents*
     6. Settings						   |taskwiki-settings|
     7. Troubleshooting					    |taskwiki-trouble|
     8. Contributing					 |taskwiki-contribute|
-    9. License						    |taskwiki-license|
+    9. Credits						    |taskwiki-credits|
+    10. License						    |taskwiki-license|
 
 =============================================================================
 1. INTRODUCTION							   *taskwiki*
 
-TaskWiki is a vim plugin that enhances vimwiki (another vim plugin) replacing
-    vimwiki's Todo functionality with Taskwarrior tasks.
+TaskWiki is a vim plugin that enhances vimwiki (another vim plugin) by adding
+    Taskwarrior tasks, reports and commands, to Vimwiki's todo functionality.
 
 Key Features:
 - ViewPorts: a vimwiki header with a task query (filter) embedded, generates
     a corresponding list of tasks. These tasks can be modified and changes
-    will be synced back to task data.  A ViewPort heading looks like this:
+    will be synced back to task data.  A ViewPort header looks like this:
 
     == Project Foo Tasks | +PENDING project:foo | +bar pri:H ==
 	 title ^^^            filter ^^^             ^^^ user defaults
@@ -64,7 +65,7 @@ Key Features:
    and when adding a new task, any other metadata can be added after "--" like
  * [ ] test taskwiki todos and viewports -- proj:tw.wiki +foo due:tomorrow
 
-    and the task will be synced with the task data on saving. After syncing,
+    Task are synced with the task data on file open and on saving. After sync,
     all tasks end with a concealed uuid (eg.  #541c5b57) don't edit this!
 
     NOTE: vimwiki todos can still be used along side of taskwiki tasks, as long
@@ -76,10 +77,10 @@ Key Features:
 - Reports: burndown, calendar, history, projects, summary, stats and tags
     reports can all be invoked, opening in a split window.
 
-- Grid view: the TaskWikiGrid command will open a new buffer with a grid
+- Grid view: the :TaskWikiGrid command will open a new buffer with a grid
     view of task details, of the nearest ViewPort (using vim-taskwarrior)
 
-- Back-links: The command TaskWikiLink will add an annotation to the selected
+- Back-links: The command :TaskWikiLink will add an annotation to the selected
     task(s) with the ~/path/to/file.wiki
 
 - Tests: TaskWiki is well tested in development to ensure data integrity.
@@ -98,7 +99,7 @@ This plugin requires:
 and can be enhanced with:
 - vim-plugin-AnsiEsc (https://github.com/powerman/vim-plugin-AnsiEsc) for color
 - tagbar (https://github.com/majutsushi/tagbar) for taskwiki file navigation
-- vim-taskwarrior (https://github.com/farseer90718/vim-taskwarrior) for Grid
+- vim-taskwarrior (https://github.com/farseer90718/vim-taskwarrior) for grid
 
 =============================================================================
 3. INSTALLING						   *taskwiki-install*
@@ -110,8 +111,8 @@ and can be enhanced with:
 =============================================================================
 4. MAPPING						   *taskwiki-mapping*
 
-n	<CR> 	is mapped to show task info, VP details or follow vimwiki link.
-		After editing a task in insert mode, <CR> starts a new task.
+n	<CR> 	is mapped to show task info, VP details or follow vimwiki link
+		After editing a task in insert mode, <CR> starts a new task
 
     Normal mode key mappings (those with "v" also work in visual mode)
     <Leader>t +
@@ -226,6 +227,12 @@ Meta commands
 
 g:taskwiki_disable=
     Disable taskwiki if ANY taskwiki_disable variable set (the "off" switch)
+    
+g:taskwiki_measure_coverage (?)
+    Run the measure parts first, if desired
+    
+g:taskwiki_tw_colors (?)
+    Enable the use of the current taskwarrior color theme
 
 =============================================================================
 7. TROUBLESHOOTING					   *taskwiki-trouble*
@@ -243,7 +250,13 @@ Clone, fork, contribute and learn more at https://github.com/tbabej/taskwiki
 Good ideas, well formed bug reports and thoughtful pull-requests welcome.
 
 =============================================================================
-9. LICENSE						   *taskwiki-license*
+9. CREDITS						   *taskwiki-credits*
+
+Authored by Tomas Babej
+inspired by vimwiki-tasks
+
+=============================================================================
+10. LICENSE						   *taskwiki-license*
 
 MIT?
 
