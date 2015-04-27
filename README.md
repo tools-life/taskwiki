@@ -23,7 +23,6 @@ QUICK-REFERENCE   --   use  "leader" + t and one of:
 | bm burndown monthly | e  edit           | i  (or  CR ) info  | t  tags     |
 | cp choose project   | g  grid           | l  back-link       | +  start    |
 | cp choose tag       | Gm ghistory month | m  modify          | -  stop     |
-
 </pre>
 
 ![taskwiki demo](http://picpaste.com/pics/wz8U2Qq9.1430094451.gif)
@@ -94,10 +93,13 @@ task(s) with the ~/path/to/file.wiki
 ### Commands
 * TaskWikiBurndown(Daily, Monthly, Weekly)
 * TaskWikiCalendar
+* TaskWikiChooseProject
+* TaskWikiChooseTag
 * TaskWikiDelete
 * TaskWikiGhistory(Annual, Monthly)
 * TaskWikiHistory(Annual, Monthly)
 * TaskWikiInfo
+* TaskWikiInspect
 * TaskWikiLink
 * TaskWikiMod
 * TaskWikiProjects
