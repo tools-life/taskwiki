@@ -25,7 +25,7 @@ QUICK-REFERENCE   --   use < leader > + t and one of:
 | cp choose tag       | Gm ghistory month | m  modify          | -  stop     |
 </pre>
 
-![taskwiki demo](/doc/Taskwiki-demo.gif)
+![taskwiki demo](/doc/TaskWiki-demo.gif)
 
 ### Requirements
 
