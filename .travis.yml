@@ -3,7 +3,9 @@ env:
   - TASK_VERSION=v2.4.0
   - TASK_VERSION=v2.4.1
   - TASK_VERSION=v2.4.2
-  - TASK_VERSION=2.4.3
+  - TASK_VERSION=v2.4.3
+  - TASK_VERSION=v2.4.4
+  - TASK_VERSION=2.4.5
 python:
   - "2.7"
 before_install:
