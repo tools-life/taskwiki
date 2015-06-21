@@ -347,8 +347,6 @@ class VimwikiTask(object):
                 if port.defaults:
                     for key in port.defaults.keys():
                         self[key] = port.defaults[key]
-                    break
 
-            # Break on line which does not look like a task
-            elif not vim.current.buffer[i].strip().startswith("*"):
+                # If port was detected, break the search
                 break
