@@ -38,6 +38,11 @@ class ViewPort(object):
         self.tasks = set()
         self.meta = meta or dict()
 
+        # Correct initialization of the default taskfilter. Enumerate only
+        # parent tasks if +PARENT was specified explicitly.
+        if "-PARENT" in self.taskfilter and "+PARENT" in self.taskfilter:
+            self.taskfilter.remove("-PARENT")
+
     @classmethod
     def from_line(cls, number, cache):
         match = re.search(regexp.GENERIC_VIEWPORT, vim.current.buffer[number])
