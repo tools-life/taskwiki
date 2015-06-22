@@ -109,7 +109,11 @@ class SelectedTasks(object):
     def grid(self):
         port = viewport.ViewPort.find_closest(cache)
         if port:
-            vim.command("TW rc.context: {0}".format(port.raw_filter))
+            vim.command("TW rc:{0} rc.context: {1}"
+                        .format(port.tw.taskrc_location, port.raw_filter))
+
+            print("TW rc:{0} rc.context: {1}"
+                  .format(port.tw.taskrc_location, port.raw_filter))
         else:
             print("No viewport detected.", file=sys.stderr)
 
