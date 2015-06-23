@@ -42,6 +42,25 @@ class ViewPort(object):
         self.tasks = set()
         self.meta = meta or dict()
 
+        # Interpret !+DELETED as forcing the +DELETED token (potentionally
+        # removing the default +DELETED token from the taskfilter).
+        # Interpret !-DELETED as forcint the -DELETED token.
+        # Interpret !?DELETED as removing both +DELETED and -DELETED.
+
+        tokens_to_remove = []
+        tokens_to_add = []
+
+        for token in self.taskfliter:
+            if token.startswith('!+'):
+                tokens_to_remove.append('-' + token[2:])
+                tokens_to_add.append('+' + token[2:])
+            elif token.startswith('!-'):
+                tokens_to_remove.append('+' + token[2:])
+                tokens_to_add.append('-' + token[2:])
+            elif token.startswith('!?'):
+                tokens_to_remove.append('+' + token[2:])
+                tokens_to_remove.append('-' + token[2:])
+
         # Correct initialization of the default taskfilter. Enumerate only
         # parent tasks if +PARENT was specified explicitly.
         if "-PARENT" in self.taskfilter and "+PARENT" in self.taskfilter:
