@@ -43,6 +43,10 @@ class ViewPort(object):
         if "-PARENT" in self.taskfilter and "+PARENT" in self.taskfilter:
             self.taskfilter.remove("-PARENT")
 
+        # Apply the same logic to the DELETED virtual tag.
+        if "-DELETED" in self.taskfilter and "+DELETED" in self.taskfilter:
+            self.taskfilter.remove("-DELETED")
+
     @classmethod
     def from_line(cls, number, cache):
         match = re.search(regexp.GENERIC_VIEWPORT, vim.current.buffer[number])
