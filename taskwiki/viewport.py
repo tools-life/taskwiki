@@ -6,6 +6,10 @@ import vwtask
 import regexp
 import util
 
+
+DEFAULT_VIEWPORT_VIRTUAL_TAGS = ["-DELETED", "-PARENT"]
+
+
 class ViewPort(object):
     """
     Represents viewport with a given filter.
@@ -33,7 +37,7 @@ class ViewPort(object):
 
         self.name = name
         self.line_number = line_number
-        self.taskfilter = ["-DELETED", "-PARENT"] + taskfilter
+        self.taskfilter = DEFAULT_VIEWPORT_VIRTUAL_TAGS + taskfilter
         self.defaults = defaults
         self.tasks = set()
         self.meta = meta or dict()
