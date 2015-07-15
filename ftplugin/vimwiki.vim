@@ -1,3 +1,15 @@
+" Check VIM version
+if version < 704
+  echoerr "Taskwiki requires at least Vim 7.4. Please upgrade your environment."
+  finish
+endif
+
+" Check presence of the python support
+if ! has("python")
+  echoerr "Taskwiki requires Vim compiled with the Python support."
+  finish
+endif
+
 " Disable taskwiki if taskwiki_disable variable set
 if exists("g:taskwiki_disable")
   finish

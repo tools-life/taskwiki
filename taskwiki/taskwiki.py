@@ -24,8 +24,11 @@ import cache
 import util
 import viewport
 
+# Initialize the cache
 cache = cache.TaskCache()
 
+# Check the necessary dependencies first
+util.enforce_dependencies(cache)
 
 class WholeBuffer(object):
     @staticmethod

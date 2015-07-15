@@ -1,11 +1,14 @@
 # Various utility functions
 from __future__ import print_function
+from distutils.version import LooseVersion
+
 import contextlib
-import vim  # pylint: disable=F0401
+import pkg_resources
+import os
 import regexp
 import random
 import sys
-import os
+import vim  # pylint: disable=F0401
 
 # Detect if command AnsiEsc is available
 ANSI_ESC_AVAILABLE = vim.eval('exists(":AnsiEsc")') == '2'
@@ -327,3 +330,28 @@ def current_line_highlighted():
     finally:
         original_window = vim.windows[original_window_number]
         original_window.options['cursorline'] = original_value
+
+def enforce_dependencies(cache):
+    # Vim version is already checked in vimscript file
+    # This is done so that we avoid problems with +python
+
+    TASKLIB_VERSION = '0.9.0'
+    TASKWARRIOR_VERSION = '2.4.0'
+
+    # Check tasklib version
+    tasklib_module_info = pkg_resources.get_distribution('tasklib')
+    tasklib_installed_version = LooseVersion(tasklib_module_info.version)
+    tasklib_required_version = LooseVersion(TASKLIB_VERSION)
+
+    if tasklib_required_version > tasklib_installed_version:
+        raise TaskWikiException("Tasklib version at least %s is required."
+                                % TASKLIB_VERSION)
+
+    # Check taskwarrior version
+    tw = cache.get_relevant_tw()
+    taskwarrior_installed_version = LooseVersion(tw.version)
+    taskwarrior_required_version = LooseVersion(TASKWARRIOR_VERSION)
+
+    if taskwarrior_required_version > taskwarrior_installed_version:
+        raise TaskWikiException("Taskwarrior version at least %s is required."
+                                % TASKWARRIOR_VERSION)
