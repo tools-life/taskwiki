@@ -47,28 +47,57 @@ class ViewPort(object):
         # Interpret !-DELETED as forcint the -DELETED token.
         # Interpret !?DELETED as removing both +DELETED and -DELETED.
 
-        tokens_to_remove = []
-        tokens_to_add = []
+        tokens_to_remove = set()
+        tokens_to_add = set()
 
-        for token in self.taskfliter:
+        for token in filter(lambda x: x.isupper(), self.taskfilter):
             if token.startswith('!+'):
-                tokens_to_remove.append('-' + token[2:])
-                tokens_to_add.append('+' + token[2:])
+                tokens_to_remove.add(token)
+                tokens_to_remove.add('-' + token[2:])
+                tokens_to_add.add('+' + token[2:])
             elif token.startswith('!-'):
-                tokens_to_remove.append('+' + token[2:])
+                tokens_to_remove.add(token)
+                tokens_to_remove.add('+' + token[2:])
                 tokens_to_add.append('-' + token[2:])
             elif token.startswith('!?'):
-                tokens_to_remove.append('+' + token[2:])
-                tokens_to_remove.append('-' + token[2:])
+                tokens_to_remove.add(token)
+                tokens_to_remove.add('+' + token[2:])
+                tokens_to_remove.add('-' + token[2:])
 
-        # Correct initialization of the default taskfilter. Enumerate only
-        # parent tasks if +PARENT was specified explicitly.
-        if "-PARENT" in self.taskfilter and "+PARENT" in self.taskfilter:
-            self.taskfilter.remove("-PARENT")
+        self.taskfilter = list(tokens_to_add) + self.taskfilter
 
-        # Apply the same logic to the DELETED virtual tag.
-        if "-DELETED" in self.taskfilter and "+DELETED" in self.taskfilter:
-            self.taskfilter.remove("-DELETED")
+        for token in tokens_to_remove:
+            if token in self.taskfilter:
+                self.taskfilter.remove(token)
+
+        # Deal with the situation when both +TAG and -TAG appear in the
+        # taskfilter. If one of them is from the defaults, the explicit
+        # version wins.
+
+        def detect_virtual_tag(tag):
+            return tag.isupper() and tag[0] in ('+', '-')
+
+        def get_complement_tag(tag):
+            return ('+' if tag.startswith('-') else '-') + tag[1:]
+
+        virtual_tags = filter(detect_virtual_tag, self.taskfilter)
+        tokens_to_remove = set()
+
+        # For each virtual tag, check if its complement is in the taskfilter too.
+        # If so, remove the tag that came from defaults.
+        for token in virtual_tags:
+            complement = get_complement_tag(token)
+            if complement in virtual_tags:
+                # Both tag and its complement are in the taskfilter. Remove the
+                # one from defaults.
+                if token in DEFAULT_VIEWPORT_VIRTUAL_TAGS:
+                    tokens_to_remove.add(token)
+                if complement in DEFAULT_VIEWPORT_VIRTUAL_TAGS:
+                    tokens_to_remove.add(complement)
+
+        for token in tokens_to_remove:
+            if token in self.taskfilter:
+                self.taskfilter.remove(token)
 
     @classmethod
     def from_line(cls, number, cache):
