@@ -1,5 +1,7 @@
 ## Taskwiki
 
+[![Join the chat at https://gitter.im/tbabej/taskwiki](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/tbabej/taskwiki?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 _Use [taskwarrior](http://taskwarrior.org) task-management in [vimwiki](https://github.com/vimwiki/vimwiki/tree/dev) files_
 
 [![Travis build status](https://travis-ci.org/tbabej/taskwiki.svg?branch=master)](https://travis-ci.org/tbabej/taskwiki)
