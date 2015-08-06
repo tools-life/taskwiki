@@ -22,7 +22,7 @@ QUICK-REFERENCE   --   use < leader > + t and one of:
 | bw burndown weekly  | D  delete         | ha history annual  | S  stats    |
 | bm burndown monthly | e  edit           | i  (or  CR ) info  | t  tags     |
 | cp choose project   | g  grid           | l  back-link       | +  start    |
-| cp choose tag       | Gm ghistory month | m  modify          | -  stop     |
+| ct choose tag       | Gm ghistory month | m  modify          | -  stop     |
 </pre>
 
 ![taskwiki demo](/doc/TaskWiki-demo.gif)
