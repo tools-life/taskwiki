@@ -141,13 +141,13 @@ class SelectedTasks(object):
         # We might have two same tasks in the range, make sure we do not pass the
         # same uuid twice
         unique_tasks = set(vimwikitask.task['uuid'] for vimwikitask in self.tasks)
-        uuids = ' '.join(unique_tasks)
+        uuids = list(unique_tasks)
 
         # Generate the arguments from the modstring
         args = util.tw_modstring_to_args(modstring)
 
         # Modify all tasks at once
-        output = util.tw_execute_safely(self.tw, [uuids, 'mod'] + args)
+        output = util.tw_execute_safely(self.tw, uuids + ['mod'] + args)
 
         # Update the touched tasks in buffer, if needed
         cache.load_tasks()
