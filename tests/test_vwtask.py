@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from datetime import datetime
 from tasklib import local_zone
 from tests.base import IntegrationTest, MultipleSourceTest
@@ -301,3 +303,24 @@ class TestCreationDifferentTaskSource(MultipleSourceTest):
         # Check that corect data store has been used
         assert len(self.tw.tasks.all()) == 0
         assert len(self.extra_tw.tasks.all()) == 1
+
+
+class TestSimpleUnicodeTaskCreation(IntegrationTest):
+
+    viminput = u"""
+    * [ ] This is a test täsk
+    """
+
+    vimoutput = u"""
+    * [ ] This is a test täsk  #{uuid}
+    """
+
+    def execute(self):
+        self.command("w", regex="written$", lines=1)
+
+        # Check that only one tasks with this description exists
+        assert len(self.tw.tasks.pending()) == 1
+
+        task = self.tw.tasks.pending()[0]
+        assert task['description'] == u'This is a test täsk'
+        assert task['status'] == 'pending'

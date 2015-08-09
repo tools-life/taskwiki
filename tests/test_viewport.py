@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from tests.base import IntegrationTest
 from time import sleep
 
@@ -136,3 +137,22 @@ class TestViewportInspection(IntegrationTest):
         sleep(0.5)
 
         assert self.command(":py print vim.current.buffer", regex="<buffer taskwiki.")
+
+
+class TestViewportsUnicodeTaskGeneration(IntegrationTest):
+
+    viminput = """
+    === Work tasks | +work ===
+    """
+
+    vimoutput = u"""
+    === Work tasks | +work ===
+    * [ ] tag work täsk  #{uuid}
+    """
+
+    tasks = [
+        dict(description=u"tag work täsk", tags=['work']),
+    ]
+
+    def execute(self):
+        self.command("w", regex="written$", lines=1)
