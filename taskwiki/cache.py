@@ -6,7 +6,7 @@ import vwtask
 import viewport
 import regexp
 
-from tasklib.task import TaskWarrior
+from tasklib import TaskWarrior
 
 
 class WarriorStore(object):

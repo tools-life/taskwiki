@@ -4,7 +4,7 @@ import subprocess
 import tempfile
 import vimrunner
 
-from tasklib.task import TaskWarrior, Task
+from tasklib import TaskWarrior, Task
 from time import sleep
 
 server = vimrunner.Server()

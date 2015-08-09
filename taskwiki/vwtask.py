@@ -3,7 +3,7 @@ import itertools
 import vim  # pylint: disable=F0401
 from datetime import datetime
 
-from tasklib.task import Task
+from tasklib import Task
 import regexp
 import viewport
 import util

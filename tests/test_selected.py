@@ -1,7 +1,7 @@
 import re
 
 from datetime import datetime
-from tasklib.task import local_zone
+from tasklib import local_zone
 from tests.base import IntegrationTest
 from time import sleep
 

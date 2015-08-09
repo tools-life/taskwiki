@@ -1,7 +1,7 @@
 import re
 
 from tests.base import IntegrationTest
-from tasklib.task import local_zone
+from tasklib import local_zone
 from datetime import datetime
 
 
