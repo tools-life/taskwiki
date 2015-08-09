@@ -265,7 +265,7 @@ class TaskCache(object):
             if vimwikitask is None:
                 continue
 
-            if vimwikitask['line_number'] >= position:
+            if vimwikitask['line_number'] > position:
                 vimwikitask['line_number'] -= 1
 
         # Rebuild cache keys
