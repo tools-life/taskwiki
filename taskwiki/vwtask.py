@@ -202,7 +202,7 @@ class VimwikiTask(object):
 
     @classmethod
     def from_task(cls, cache, task):
-        self = cls(cache, task['uuid'], task.warrior)
+        self = cls(cache, task['uuid'], task.backend)
         self.update_from_task()
 
         return self
@@ -341,7 +341,7 @@ class VimwikiTask(object):
             if port:
                 # The task should have the same source as the viewport has
                 self.tw = port.tw
-                self.task.warrior = port.tw
+                self.task.backend = port.tw
 
                 # Any defaults specified should be inherited
                 if port.defaults:

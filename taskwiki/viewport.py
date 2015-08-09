@@ -211,7 +211,7 @@ class ViewPort(object):
             # representations of the same task
             matching_vimwikitasks= [
                 t for t in self.tasks
-                if t.uuid == vwtask.ShortUUID(task['uuid'], task.warrior)
+                if t.uuid == vwtask.ShortUUID(task['uuid'], task.backend)
             ]
 
             # Remove the tasks from viewport's set and from buffer
