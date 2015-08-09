@@ -322,7 +322,7 @@ class VimwikiTask(object):
             '* [',
             self['completed_mark'],
             '] ',
-            self['description'] if self['description'] else 'TEXT MISSING?',
+            self['description'].encode('utf-8') if self['description'] else 'TEXT MISSING?',
             ' ' + '!' * self.priority_from_tw_format if self['priority'] else '',
             ' ' + self['due'].strftime(regexp.DATETIME_FORMAT) if self['due'] else '',
             '  #' + self.uuid.vim_representation(self.cache) if self.uuid else '',
