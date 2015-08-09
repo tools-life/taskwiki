@@ -243,3 +243,20 @@ class ViewPort(object):
 
             # Save it to cache
             self.cache[added_at] = vimwikitask
+
+        self.sort_tasks()
+
+    def sort_tasks(self):
+        # If there's nothing to sort, we have nothing to do
+        if not self.tasks:
+            return
+
+        base_offset = min([task['line_number'] for task in self.tasks])
+
+        task_list = list(self.tasks)
+        task_list.sort(key=lambda t: t['due'])
+
+        for offset in range(len(task_list)):
+            self.cache.swap_lines(base_offset + offset, task_list[offset]['line_number'])
+
+        self.cache.rebuild_vimwikitask_cache()
