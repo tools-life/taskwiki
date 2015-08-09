@@ -131,7 +131,7 @@ class VimwikiTask(object):
             })
 
         # Save task related data into Task object directly
-        self.task['description'] = match.group('text')
+        self.task['description'] = match.group('text').decode('utf-8')
         self.task['priority'] = convert_priority_to_tw_format(
             len(match.group('priority') or [])) # This is either 0,1,2 or 3
 
