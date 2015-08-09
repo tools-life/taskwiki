@@ -271,6 +271,27 @@ class TaskCache(object):
         # Rebuild cache keys
         self.rebuild_vimwikitask_cache()
 
+    def swap_lines(self, position1, position2):
+        buffer_size = len(vim.current.buffer)
+        if position1 >= buffer_size or position2 >= buffer_size:
+            raise ValueError("Tring to swap %d with %d" % (position1, position2))
+
+        # Swap both the lines and vimwikitasks indexes
+        temp = vim.current.buffer[position2]
+        vim.current.buffer[position2] = vim.current.buffer[position1]
+        vim.current.buffer[position1] = temp
+
+        temp = self[position2]
+        self[position2] = self.vimwikitask_cache.get(position1)
+        self[position1] = temp
+
+        # Update the line numbers cached in the vimwikitasks
+        for position in (position1, position2):
+            if self[position] is not None:
+                self[position]['line_number'] = position
+
+        # Rebuild of the cache is not necessary, only those two lines are affected
+
     def get_relevant_tw(self):
         # Find closest task
         task = vwtask.VimwikiTask.find_closest(self)
