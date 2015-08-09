@@ -221,13 +221,14 @@ class ViewPort(object):
 
         # Add the tasks that match the filter and are not listed
         added_tasks = 0
+        existing_tasks = len(self.tasks)
 
         sorted_to_add = list(to_add)
         sorted_to_add.sort(key=lambda x:x['entry'])
 
         for task in sorted_to_add:
             added_tasks += 1
-            added_at = self.line_number + len(self.tasks) + added_tasks
+            added_at = self.line_number + existing_tasks + added_tasks
 
             # Add the task object to cache
             self.cache[vwtask.ShortUUID(task['uuid'], self.tw)] = task
@@ -235,9 +236,10 @@ class ViewPort(object):
             # Create the VimwikiTask
             vimwikitask = vwtask.VimwikiTask.from_task(self.cache, task)
             vimwikitask['line_number'] = added_at
-
-            # Save it to cache
-            self.cache[added_at] = vimwikitask
+            self.tasks.add(vimwikitask)
 
             # Update the buffer
             self.cache.insert_line(str(vimwikitask), added_at)
+
+            # Save it to cache
+            self.cache[added_at] = vimwikitask
