@@ -74,6 +74,9 @@ class TaskCache(object):
 
             if vimwikitask is None:
                 vimwikitask = vwtask.VimwikiTask.from_line(self, key)
+
+            # If we successfully parsed a task, save it to the cache
+            if vimwikitask is not None:
                 self.vimwikitask_cache[key] = vimwikitask
 
             return vimwikitask  # May return None if the line has no task
@@ -93,6 +96,12 @@ class TaskCache(object):
             raise ValueError("Wrong key type: %s (%s)" % (key, type(key)))
 
     def __setitem__(self, key, value):
+        # Never store None in the cache, treat it as deletion
+        if value is None:
+            if key in self:
+                del self[key]
+            return
+
         # String keys refer to the Task objects
         if type(key) is vwtask.ShortUUID:
             self.task_cache[key] = value
@@ -107,12 +116,25 @@ class TaskCache(object):
 
     def __delitem__(self, key):
         # String keys refer to the Task objects
-        if type(key) in (str, unicode):
+        if type(key) is vwtask.ShortUUID:
             del self.task_cache[key]
 
         # Integer keys (line numbers) refer to the VimwikiTask objects
         elif type(key) is int:
             del self.vimwikitask_cache[key]
+
+        # Anything else is wrong
+        else:
+            raise ValueError("Wrong key type: %s (%s)" % (key, type(key)))
+
+    def __contains__(self, key):
+        # String keys refer to the Task objects
+        if type(key) is vwtask.ShortUUID:
+            return key in self.task_cache
+
+        # Integer keys (line numbers) refer to the VimwikiTask objects
+        elif type(key) is int:
+            return key in self.vimwikitask_cache
 
         # Anything else is wrong
         else:
