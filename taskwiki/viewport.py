@@ -254,10 +254,54 @@ class ViewPort(object):
         base_offset = min([task['line_number'] for task in self.tasks])
 
         task_list = list(self.tasks)
-        task_list.sort(key=lambda t: t['due'])
 
-        for offset in range(len(task_list)):
-            self.cache.swap_lines(base_offset + offset, task_list[offset]['line_number'])
+        # Generate the empty nodes
+        node_list = [TaskCollectionNode(vwtask) for vwtask in task_list]
+
+        # Set parents and children for every node
+        for node in node_list:
+            # Find all children of this node
+            node.children = [child for child in node_list
+                             if child.vwtask.task in node.vwtask.task['depends']]
+
+            # Set the parent link in the children
+            for child in node.children:
+                child.parent = node
+
+        root_node_list = [node for node in node_list
+                          if node.parent is None]
+
+        def due_sort(task, other):
+            if task['due'] is None and other['due'] is None:
+                return 0
+            elif task['due'] is None:
+                return 1
+            elif other['due'] is None:
+                return -1
+            elif task['due'] > other['due']:
+                return 1
+            elif task['due'] == other['due']:
+                return 0
+            else:
+                return -1
+
+        root_node_list.sort(cmp=lambda x,y: due_sort(x.vwtask.task, y.vwtask.task))
+
+        for node in root_node_list:
+            node.sort(due_sort)
+
+        for node in root_node_list:
+            node.build_indentation(0)
+
+        vwtasks_sorted = []
+        for node in root_node_list:
+            vwtasks_sorted += node.full_list
+
+        for offset in range(len(vwtasks_sorted)):
+            self.cache.swap_lines(
+                base_offset + offset,
+                vwtasks_sorted[offset].vwtask['line_number']
+            )
 
         self.cache.rebuild_vimwikitask_cache()
 
