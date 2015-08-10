@@ -260,3 +260,56 @@ class ViewPort(object):
             self.cache.swap_lines(base_offset + offset, task_list[offset]['line_number'])
 
         self.cache.rebuild_vimwikitask_cache()
+
+
+class TaskCollectionNode(object):
+    """
+    Stores a collection of VimwikiTasks as tree, where links are defined
+    by dependencies.
+    """
+
+    def __init__(self, vwtask):
+        self.vwtask = vwtask
+        self._parent = None
+        self.children = []
+
+    @property
+    def parent(self):
+        return self._parent
+
+    @parent.setter
+    def parent(self, parent):
+        if self.parent is None:
+            self._parent = parent
+        else:
+            raise ValueError("TaskCollectionNode %s cannot have multiple parents" % repr(self))
+
+    def __iter__(self):
+        # First return itself
+        yield self
+
+        # Then recursilvely iterate in all the children
+        for child in self.children:
+            for yielded in child:
+                yield yielded
+
+    def build_indentation(self, indent):
+        self.vwtask['indent'] = ' ' * indent
+        self.vwtask.update_in_buffer()
+
+        for child in self.children:
+            child.build_indentation(indent + 4)
+
+    def sort(self, sort_func):
+        self.children.sort(cmp=lambda x,y: sort_func(x.vwtask.task, y.vwtask.task))
+
+        for child in self.children:
+            child.sort(sort_func)
+
+    @property
+    def full_list(self):
+        full_list = [node for node in self]
+        return full_list
+
+    def __repr__(self):
+        return u"Node for with ID: {0}".format(self.vwtask.task['id'])
