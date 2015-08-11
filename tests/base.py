@@ -255,3 +255,16 @@ class MultipleSourceTest(IntegrationTest):
             return line.format(uuid=tasks[0]['uuid'].split('-')[0])
         else:
             return line
+
+
+# Mock vim to test vim-nonrelated functions
+class MockVim(object):
+
+    def eval(*args, **kwargs):
+        return 42
+
+    class current(object):
+        buffer = ['']
+
+    vars = dict(taskwiki_sort_orders=dict(T='extra'))
+    warriors = dict()

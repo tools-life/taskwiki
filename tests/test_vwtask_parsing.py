@@ -1,15 +1,7 @@
 # -*- coding: utf-8 -*-
 from datetime import datetime
+from base import MockVim
 import sys
-
-# Mock vim to test vim-nonrelated functions
-class MockVim(object):
-
-    def eval(*args, **kwargs):
-        return 42
-
-    class current(object):
-        buffer = ['']
 
 mockvim = MockVim()
 sys.modules['vim'] = mockvim
@@ -23,8 +15,12 @@ class MockCache(object):
 cache = MockCache()
 
 class TestParsingVimwikiTask(object):
+    def setup(self):
+        self.mockvim = MockVim()
+        sys.modules['vim'] = self.mockvim
+
     def test_simple(self):
-        mockvim.current.buffer[0] = "* [ ] This is task description"
+        self.mockvim.current.buffer[0] = "* [ ] This is task description"
         vwtask = VimwikiTask.from_line(cache, 0)
 
         assert vwtask['description'] == "This is task description"
@@ -34,7 +30,7 @@ class TestParsingVimwikiTask(object):
         assert vwtask['indent'] == ''
 
     def test_simple_with_unicode(self):
-        mockvim.current.buffer[0] = "* [ ] This is täsk description"
+        self.mockvim.current.buffer[0] = "* [ ] This is täsk description"
         vwtask = VimwikiTask.from_line(cache, 0)
 
         assert vwtask['description'] == u"This is täsk description"
@@ -44,7 +40,7 @@ class TestParsingVimwikiTask(object):
         assert vwtask['indent'] == ''
 
     def test_due_full(self):
-        mockvim.current.buffer[0] = "* [ ] Random task (2015-08-08 15:15)"
+        self.mockvim.current.buffer[0] = "* [ ] Random task (2015-08-08 15:15)"
         vwtask = VimwikiTask.from_line(cache, 0)
 
         assert vwtask['description'] == u"Random task"
@@ -54,7 +50,7 @@ class TestParsingVimwikiTask(object):
         assert vwtask['indent'] == ''
 
     def test_due_short(self):
-        mockvim.current.buffer[0] = "* [ ] Random task (2015-08-08)"
+        self.mockvim.current.buffer[0] = "* [ ] Random task (2015-08-08)"
         vwtask = VimwikiTask.from_line(cache, 0)
 
         assert vwtask['description'] == u"Random task"
@@ -64,7 +60,7 @@ class TestParsingVimwikiTask(object):
         assert vwtask['indent'] == ''
 
     def test_priority_low(self):
-        mockvim.current.buffer[0] = "* [ ] Semi-Important task !"
+        self.mockvim.current.buffer[0] = "* [ ] Semi-Important task !"
         vwtask = VimwikiTask.from_line(cache, 0)
 
         assert vwtask['description'] == u"Semi-Important task"
@@ -72,7 +68,7 @@ class TestParsingVimwikiTask(object):
         assert vwtask['uuid'] == None
 
     def test_priority_medium(self):
-        mockvim.current.buffer[0] = "* [ ] Important task !!"
+        self.mockvim.current.buffer[0] = "* [ ] Important task !!"
         vwtask = VimwikiTask.from_line(cache, 0)
 
         assert vwtask['description'] == u"Important task"
@@ -80,7 +76,7 @@ class TestParsingVimwikiTask(object):
         assert vwtask['uuid'] == None
 
     def test_priority_high(self):
-        mockvim.current.buffer[0] = "* [ ] Very important task !!!"
+        self.mockvim.current.buffer[0] = "* [ ] Very important task !!!"
         vwtask = VimwikiTask.from_line(cache, 0)
 
         assert vwtask['description'] == u"Very important task"
@@ -89,7 +85,7 @@ class TestParsingVimwikiTask(object):
         assert vwtask['due'] == None
 
     def test_priority_and_due(self):
-        mockvim.current.buffer[0] = "* [ ] Due today !!! (2015-08-08)"
+        self.mockvim.current.buffer[0] = "* [ ] Due today !!! (2015-08-08)"
         vwtask = VimwikiTask.from_line(cache, 0)
 
         assert vwtask['description'] == u"Due today"
