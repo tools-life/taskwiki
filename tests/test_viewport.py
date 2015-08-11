@@ -202,3 +202,26 @@ class TestViewportsTaskSortedGeneration(IntegrationTest):
             task.save()
 
         self.command("w", regex="written$", lines=1)
+
+
+class TestViewportsTaskSortedGenerationReverse(TestViewportsTaskSortedGeneration):
+
+    vimoutput = """
+    === Work tasks | +work ===
+    * [ ] main task 3 (2015-08-09 00:00)  #{uuid}
+        * [ ] sub task 3a (2015-08-03 00:00)  #{uuid}
+        * [ ] sub task 3b  #{uuid}
+    * [ ] main task 2 (2015-08-08 00:00)  #{uuid}
+    * [ ] main task 1 (2015-08-07 00:00)  #{uuid}
+        * [ ] sub task 1a (2015-08-01 00:00)  #{uuid}
+            * [ ] sub task 1aa  #{uuid}
+        * [ ] sub task 1b  #{uuid}
+    * [ ] main task 4  #{uuid}
+    """
+
+    def execute(self):
+        # Change the ordering
+        self.command('let g:taskwiki_sort_order="due-"')
+
+        # Otherwise everything from previous test should be preserved
+        super(TestViewportsTaskSortedGenerationReverse, self).execute()
