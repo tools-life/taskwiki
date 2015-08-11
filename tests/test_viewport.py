@@ -204,7 +204,7 @@ class TestViewportsSortedGeneration(IntegrationTest):
         self.command("w", regex="written$", lines=1)
 
 
-class TestViewportsTaskSortedGenerationReverse(TestViewportsTaskSortedGeneration):
+class TestViewportsSortedGenerationReverse(TestViewportsSortedGeneration):
 
     vimoutput = """
     === Work tasks | +work ===
@@ -224,7 +224,7 @@ class TestViewportsTaskSortedGenerationReverse(TestViewportsTaskSortedGeneration
         self.command('let g:taskwiki_sort_order="due-"')
 
         # Otherwise everything from previous test should be preserved
-        super(TestViewportsTaskSortedGenerationReverse, self).execute()
+        super(TestViewportsSortedGenerationReverse, self).execute()
 
 
 class TestViewportsMultilevelSortedGeneration(IntegrationTest):
