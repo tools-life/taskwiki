@@ -8,6 +8,7 @@ import util
 
 
 DEFAULT_VIEWPORT_VIRTUAL_TAGS = ["-DELETED", "-PARENT"]
+DEFAULT_SORT_ORDER = "due+,pri-,project+,urgency-,entry-"
 
 
 class ViewPort(object):
@@ -255,8 +256,11 @@ class ViewPort(object):
 
         task_list = list(self.tasks)
 
+        # Create comparator object which will be used to sort the viewport
+        sortstring = vim.vars.get('taskwiki_sort_order', DEFAULT_SORT_ORDER)
+        comparator = CustomNodeComparator(sortstring)
+
         # Generate the empty nodes
-        comparator = CustomNodeComparator(None)
         node_list = [TaskCollectionNode(vwtask, comparator) for vwtask in task_list]
 
         # Set parents and children for every node
@@ -300,10 +304,24 @@ class CustomNodeComparator(object):
     """
 
     def __init__(self, sortformat):
-        self.sort_attrs = [('due', True), ('entry', True)]
+        self.sort_attrs = []
 
-        # Parse the sortformat string
-        # for attr in sortformat.split(','):
+        for attr_spec in sortformat.split(','):
+            # Remove whitespace
+            attr_spec = attr_spec.strip()
+
+            # Parse the entry into attr name and reverse flag
+            if attr_spec.endswith('+'):
+                attr = attr_spec[:-1]
+                reverse = False
+            elif attr_spec.endswith('-'):
+                attr = attr_spec[:-1]
+                reverse = True
+            else:
+                attr = attr_spec
+                reverse = False
+
+            self.sort_attrs.append((attr, reverse))
 
     def generic_compare(self, first, second, method):
         for sort_attr, reverse in self.sort_attrs:
