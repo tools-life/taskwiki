@@ -197,9 +197,10 @@ class IntegrationTest(object):
 
         # Check expected output
         if self.vimoutput:
-            lines = [self.fill_uuid(l[4:])
-                     for l in self.vimoutput.strip('\n').splitlines()
-                     if l[4:]]
+            lines = [
+                self.fill_uuid(l[4:])
+                for l in self.vimoutput.strip('\n').splitlines()[:-1]
+            ]
             assert self.read_buffer() == lines
 
 
