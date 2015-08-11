@@ -59,7 +59,8 @@ class IntegrationTest(object):
             self.client = server.start_gvim()
         except RuntimeError:
             if retry > 0:
-                self.start(client, retry=retry-1)
+                sleep(2)
+                self.start_client(client, retry=retry-1)
             else:
                 raise
 
