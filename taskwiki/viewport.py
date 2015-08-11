@@ -256,7 +256,8 @@ class ViewPort(object):
         task_list = list(self.tasks)
 
         # Generate the empty nodes
-        node_list = [TaskCollectionNode(vwtask) for vwtask in task_list]
+        comparator = CustomNodeComparator(None)
+        node_list = [TaskCollectionNode(vwtask, comparator) for vwtask in task_list]
 
         # Set parents and children for every node
         for node in node_list:
@@ -271,24 +272,10 @@ class ViewPort(object):
         root_node_list = [node for node in node_list
                           if node.parent is None]
 
-        def due_sort(task, other):
-            if task['due'] is None and other['due'] is None:
-                return 0
-            elif task['due'] is None:
-                return 1
-            elif other['due'] is None:
-                return -1
-            elif task['due'] > other['due']:
-                return 1
-            elif task['due'] == other['due']:
-                return 0
-            else:
-                return -1
-
-        root_node_list.sort(cmp=lambda x,y: due_sort(x.vwtask.task, y.vwtask.task))
+        root_node_list.sort()
 
         for node in root_node_list:
-            node.sort(due_sort)
+            node.sort()
 
         for node in root_node_list:
             node.build_indentation(0)
@@ -306,16 +293,75 @@ class ViewPort(object):
         self.cache.rebuild_vimwikitask_cache()
 
 
+class CustomNodeComparator(object):
+    """
+    Defines ordering on the TaskCollectionNodes according to the user
+    preferences.
+    """
+
+    def __init__(self, sortformat):
+        self.sort_attrs = [('due', True), ('entry', True)]
+
+        # Parse the sortformat string
+        # for attr in sortformat.split(','):
+
+    def generic_compare(self, first, second, method):
+        for sort_attr, reverse in self.sort_attrs:
+            # Pick the values we are supposed to sort on
+            first_value = first.vwtask.task[sort_attr]
+            second_value = second.vwtask.task[sort_attr]
+
+            # Swap the method of the sort if reversed is True
+            if method == 'gt' and reverse == True:
+                loop_method = 'lt'
+            elif method == 'lt' and reverse == True:
+                loop_method = 'gt'
+            else:
+                loop_method = method
+
+            # Equality on values, continue loop
+            if first_value is None and second_value is None:
+                continue
+
+            # None values do not respect reverse flags, use method
+            if first_value is not None and second_value is None:
+                return True if method == 'lt' else False
+
+            if first_value is None and second_value is not None:
+                return True if method == 'gt' else False
+
+            # Non-None values should respect reverse flags, use loop_method
+            if first_value < second_value:
+                return True if loop_method == 'lt' else False
+            elif first_value > second_value:
+                return True if loop_method == 'gt' else False
+            else:
+                # Values are equal, move to next distinguisher
+                continue
+
+        return True if method == 'eq' else False
+
+    def lt(self, first, second):
+        return self.generic_compare(first, second, 'lt')
+
+    def gt(self, first, second):
+        return self.generic_compare(first, second, 'gt')
+
+    def eq(self, first, second):
+        return self.generic_compare(first, second, 'eq')
+
+
 class TaskCollectionNode(object):
     """
     Stores a collection of VimwikiTasks as tree, where links are defined
     by dependencies.
     """
 
-    def __init__(self, vwtask):
+    def __init__(self, vwtask, comparator):
         self.vwtask = vwtask
         self._parent = None
         self.children = []
+        self.comparator = comparator
 
     @property
     def parent(self):
@@ -344,11 +390,11 @@ class TaskCollectionNode(object):
         for child in self.children:
             child.build_indentation(indent + 4)
 
-    def sort(self, sort_func):
-        self.children.sort(cmp=lambda x,y: sort_func(x.vwtask.task, y.vwtask.task))
+    def sort(self):
+        self.children.sort()
 
         for child in self.children:
-            child.sort(sort_func)
+            child.sort()
 
     @property
     def full_list(self):
@@ -357,3 +403,12 @@ class TaskCollectionNode(object):
 
     def __repr__(self):
         return u"Node for with ID: {0}".format(self.vwtask.task['id'])
+
+    def __lt__(self, other):
+        return self.comparator.lt(self, other)
+
+    def __gt__(self, other):
+        return self.comparator.lt(self, other)
+
+    def __eq__(self, other):
+        return self.comparator.lt(self, other)
