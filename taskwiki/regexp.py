@@ -54,6 +54,8 @@ GENERIC_VIEWPORT = re.compile(
     '\s*'                  # Any whitespace
     '(#(?P<source>[A-Z]))?' # Optional source indicator
     '\s*'                  # Any whitespace
+    '(\$(?P<sort>[A-Z]))?'  # Optional sort indicator
+    '\s*'                  # Any whitespace
     '[=]+'                 # Header ending
     )
 

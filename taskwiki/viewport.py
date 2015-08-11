@@ -1,5 +1,6 @@
 import itertools
 import re
+import sys
 import vim  # pylint: disable=F0401
 
 import vwtask
@@ -28,7 +29,7 @@ class ViewPort(object):
     """
 
     def __init__(self, line_number, cache, tw,
-                 name, taskfilter, defaults, meta=None):
+                 name, taskfilter, defaults, sort=None, meta=None):
         """
         Constructs a ViewPort out of given line.
         """
@@ -42,6 +43,11 @@ class ViewPort(object):
         self.defaults = defaults
         self.tasks = set()
         self.meta = meta or dict()
+        self.sort = (
+            sort or
+            vim.vars.get('taskwiki_sort_order') or
+            DEFAULT_SORT_ORDER
+        )
 
         # Interpret !+DELETED as forcing the +DELETED token (potentionally
         # removing the default +DELETED token from the taskfilter).
@@ -113,7 +119,22 @@ class ViewPort(object):
         name = match.group('name').strip()
         tw = cache.warriors[match.group('source') or 'default']
 
-        self = cls(number, cache, tw, name, taskfilter, defaults, meta)
+        sort_id = match.group('sort')
+        sorts_configured = vim.vars.get('taskwiki_sort_orders', {})
+
+        sortstring = None
+
+        # Perform the detection only if specific sort was set
+        if sort_id:
+            sortstring = sorts_configured.get(sort_id)
+
+            # If we failed to fetch the sortstring, warn the user
+            if sortstring is None and sort_id is not None:
+                print("Sort indicator '{0}' for viewport '{1}' is not defined,"
+                      " using default.".format(sort_id, name), sys.stderr)
+
+        self = cls(number, cache, tw, name, taskfilter,
+                   defaults, sortstring, meta)
 
         return self
 
@@ -257,8 +278,7 @@ class ViewPort(object):
         task_list = list(self.tasks)
 
         # Create comparator object which will be used to sort the viewport
-        sortstring = vim.vars.get('taskwiki_sort_order', DEFAULT_SORT_ORDER)
-        comparator = CustomNodeComparator(sortstring)
+        comparator = CustomNodeComparator(self.sort)
 
         # Generate the empty nodes
         node_list = [TaskCollectionNode(vwtask, comparator) for vwtask in task_list]
