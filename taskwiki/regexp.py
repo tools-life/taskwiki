@@ -9,27 +9,18 @@ NONEMPTY_SPACE_UNNAMED = r'\s+'
 FINAL_SEGMENT_SEPARATOR_UNNAMED = r'(\s+|$)'
 SOURCE_INDICATOR = r'(?P<source>[A-Z]):'
 
-TEXT_FORBIDDEN_SUFFIXES = (
-    r'\s',  # Text cannot end with whitespace
-    r' !', r' !!', r' !!!',  # Any priority value
-    r'\(\d{4}-\d\d-\d\d\)', r'\(\d{4}-\d\d-\d\d \d\d:\d\d\)',  # Any datetime value
-    r'\(\d{4}-\d\d-\d\d',  # Any datetime value
-    UUID_UNNAMED,  # Text cannot end with UUID
-    UUID_UNNAMED_SHORT,
-    r'#[A-Z]:',
-)
-
 # Building blocks
 BRACKET_OPENING = re.escape('* [')
 BRACKET_CLOSING = re.escape('] ')
 EMPTY_SPACE = r'(?P<space>\s*)'
 UUID = r'(?P<uuid>{0}|{1})'.format(UUID_UNNAMED, UUID_UNNAMED_SHORT)
 DUE = r'(?P<due>{0})'.format(DUE_UNNAMED)
-TEXT = r'(?P<text>.+' + ''.join(['(?<!%s)' % suffix for suffix in TEXT_FORBIDDEN_SUFFIXES]) + ')'
+TEXT = r'(?P<text>.+?)'
 COMPLETION_MARK = r'(?P<completed>.)'
 PRIORITY = r'(?P<priority>!{1,3})'
 
 GENERIC_TASK = re.compile(''.join([
+    '^',
     EMPTY_SPACE,
     BRACKET_OPENING,
     COMPLETION_MARK,
@@ -42,8 +33,9 @@ GENERIC_TASK = re.compile(''.join([
         '#',
         '(', SOURCE_INDICATOR, ')?',
         '(', UUID, ')?',
-        FINAL_SEGMENT_SEPARATOR_UNNAMED,
-    ')?' # UUID is not there for new tasks
+    ')?',  # UUID is not there for new tasks
+    FINAL_SEGMENT_SEPARATOR_UNNAMED,
+    #'$'    # Enforce match on the whole line
 ]))
 
 DATETIME_FORMAT = "(%Y-%m-%d %H:%M)"
