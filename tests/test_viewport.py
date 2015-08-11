@@ -258,3 +258,55 @@ class TestViewportsMultilevelSortedGeneration(IntegrationTest):
 
         # Generate the tasks
         self.command("w", regex="written$", lines=1)
+
+
+class TestViewportsSpecificSorting(IntegrationTest):
+
+    viminput = """
+    === Work tasks | project:Work or project:Home $T ===
+    """
+
+    vimoutput = """
+    === Work tasks | project:Work or project:Home $T ===
+    * [ ] home task 1 (2015-08-01 00:00)  #{uuid}
+    * [ ] home task 2 (2015-08-02 00:00)  #{uuid}
+    * [ ] work task 1 (2015-08-01 00:00)  #{uuid}
+    * [ ] work task 2 (2015-08-02 00:00)  #{uuid}
+    """
+
+    tasks = [
+        dict(description="home task 1", project="Home", due=datetime(2015,8,1)),
+        dict(description="home task 2", project="Home", due=datetime(2015,8,2)),
+        dict(description="work task 1", project="Work", due=datetime(2015,8,1)),
+        dict(description="work task 2", project="Work", due=datetime(2015,8,2)),
+    ]
+
+    def execute(self):
+        # Define the ordering T
+        self.command('let g:taskwiki_sort_orders={"T": "project,due"}')
+
+        # Generate the tasks
+        self.command("w", regex="written$", lines=1)
+
+
+class TestViewportsSpecificSortingCombined(TestViewportsSpecificSorting):
+
+    viminput = """
+    === Work tasks | project:Work or project:Home $T ===
+
+    === Work tasks | project:Work or project:Home ===
+    """
+
+    vimoutput = """
+    === Work tasks | project:Work or project:Home $T ===
+    * [ ] home task 1 (2015-08-01 00:00)  #{uuid}
+    * [ ] home task 2 (2015-08-02 00:00)  #{uuid}
+    * [ ] work task 1 (2015-08-01 00:00)  #{uuid}
+    * [ ] work task 2 (2015-08-02 00:00)  #{uuid}
+
+    === Work tasks | project:Work or project:Home ===
+    * [ ] home task 1 (2015-08-01 00:00)  #{uuid}
+    * [ ] work task 1 (2015-08-01 00:00)  #{uuid}
+    * [ ] home task 2 (2015-08-02 00:00)  #{uuid}
+    * [ ] work task 2 (2015-08-02 00:00)  #{uuid}
+    """
