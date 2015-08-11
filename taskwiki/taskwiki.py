@@ -219,10 +219,11 @@ class Meta(object):
             "Name: {0}\n"
             "Filter used: {1}\n"
             "Defaults used: {2}\n"
-            "Matching taskwarrior tasks: {3}\n"
-            "Displayed tasks: {4}\n"
-            "Tasks to be added: {5}\n"
-            "Tasks to be deleted: {6}\n"
+            "Ordering used: {3}\n"
+            "Matching taskwarrior tasks: {4}\n"
+            "Displayed tasks: {5}\n"
+            "Tasks to be added: {6}\n"
+            "Tasks to be deleted: {7}\n"
         )
 
         if port is not None:
@@ -236,6 +237,7 @@ class Meta(object):
                 port.name,
                 port.raw_filter,
                 port.raw_defaults,
+                port.sort,
                 len(port.matching_tasks),
                 len(port.tasks),
                 ', '.join(map(unicode, to_add)),
