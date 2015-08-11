@@ -241,6 +241,11 @@ class MultipleSourceTest(IntegrationTest):
         # Find the task and fill in its uuid
         tasks = self.tw.tasks.filter(description=match.group('desc'))
         extra_tasks = self.extra_tw.tasks.filter(description=match.group('desc'))
+
+        if len(tasks) > 1 or len(extra_tasks) > 1:
+            raise RuntimeError("Description '{0}' matches multiple tasks. "
+                "Aborting fill_uuid operation.".format(match.group('desc')))
+
         if tasks:
             # Return {uuid} replaced by short form UUID
             return line.format(uuid=tasks[0]['uuid'].split('-')[0])
