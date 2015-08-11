@@ -159,7 +159,7 @@ class TestViewportsUnicodeTaskGeneration(IntegrationTest):
         self.command("w", regex="written$", lines=1)
 
 
-class TestViewportsTaskSortedGeneration(IntegrationTest):
+class TestViewportsSortedGeneration(IntegrationTest):
 
     viminput = """
     === Work tasks | +work ===
@@ -225,3 +225,36 @@ class TestViewportsTaskSortedGenerationReverse(TestViewportsTaskSortedGeneration
 
         # Otherwise everything from previous test should be preserved
         super(TestViewportsTaskSortedGenerationReverse, self).execute()
+
+
+class TestViewportsMultilevelSortedGeneration(IntegrationTest):
+
+    viminput = """
+    === Work tasks | project:Work or project:Home ===
+    """
+
+    vimoutput = """
+    === Work tasks | project:Work or project:Home ===
+    * [ ] home task 1 (2015-08-01 00:00)  #{uuid}
+    * [ ] home task 2 (2015-08-02 00:00)  #{uuid}
+    * [ ] home task 3 (2015-08-03 00:00)  #{uuid}
+    * [ ] work task 1 (2015-08-01 00:00)  #{uuid}
+    * [ ] work task 2 (2015-08-02 00:00)  #{uuid}
+    * [ ] work task 3 (2015-08-03 00:00)  #{uuid}
+    """
+
+    tasks = [
+        dict(description="home task 1", project="Home", due=datetime(2015,8,1)),
+        dict(description="home task 2", project="Home", due=datetime(2015,8,2)),
+        dict(description="home task 3", project="Home", due=datetime(2015,8,3)),
+        dict(description="work task 1", project="Work", due=datetime(2015,8,1)),
+        dict(description="work task 2", project="Work", due=datetime(2015,8,2)),
+        dict(description="work task 3", project="Work", due=datetime(2015,8,3)),
+    ]
+
+    def execute(self):
+        # Change the ordering
+        self.command('let g:taskwiki_sort_order="project,due"')
+
+        # Generate the tasks
+        self.command("w", regex="written$", lines=1)
