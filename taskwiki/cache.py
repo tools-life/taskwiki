@@ -202,7 +202,7 @@ class TaskCache(object):
             # Get them out of TaskWarrior at once
             tasks = tw.tasks.filter()
             for uuid in uuids:
-                tasks.filter(uuid=uuid)
+                tasks = tasks.filter(uuid=uuid)
 
             # Update each task in the cache
             for task in tasks:
