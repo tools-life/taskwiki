@@ -174,9 +174,6 @@ class TaskCache(object):
 
     def update_vwtasks_in_buffer(self):
         for task in self.vimwikitask_cache.values():
-            if task is None:
-                continue
-
             task.update_in_buffer()
 
     def save_tasks(self):
@@ -220,9 +217,6 @@ class TaskCache(object):
 
     def update_vwtasks_from_tasks(self):
         for vwtask in self.vimwikitask_cache.values():
-            if vwtask is None:
-                continue
-
             vwtask.update_from_task()
 
     def evaluate_viewports(self):
@@ -241,8 +235,6 @@ class TaskCache(object):
         new_cache = dict()
 
         for vimwikitask in self.vimwikitask_cache.values():
-            if vimwikitask is None:
-                continue
             new_cache[vimwikitask['line_number']] = vimwikitask
 
         self.vimwikitask_cache = new_cache
@@ -253,9 +245,6 @@ class TaskCache(object):
 
         # Update the position of all the things shifted by the insertion
         for vimwikitask in self.vimwikitask_cache.values():
-            if vimwikitask is None:
-                continue
-
             if vimwikitask['line_number'] >= position:
                 vimwikitask['line_number'] += 1
 
@@ -271,9 +260,6 @@ class TaskCache(object):
 
         # Update the position of all the things shifted by the removal
         for vimwikitask in self.vimwikitask_cache.values():
-            if vimwikitask is None:
-                continue
-
             if vimwikitask['line_number'] > position:
                 vimwikitask['line_number'] -= 1
 
