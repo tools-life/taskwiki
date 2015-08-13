@@ -21,6 +21,7 @@ def output_exception(exception_type, value, tb):
 sys.excepthook = output_exception
 
 import cache
+import sort
 import util
 import viewport
 
@@ -183,6 +184,9 @@ class SelectedTasks(object):
             vimwikitask.update_from_task()
             vimwikitask.update_in_buffer()
             print("Task \"{0}\" stopped.".format(vimwikitask['description']))
+
+    def sort(self, sortstring):
+        sort.TaskSorter(cache, self.tasks, sortstring).execute()
 
 
 class Mappings(object):

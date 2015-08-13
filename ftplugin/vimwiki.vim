@@ -59,6 +59,7 @@ command! -range TaskWikiDelete :<line1>,<line2>py SelectedTasks().delete()
 command! -range TaskWikiStart :<line1>,<line2>py SelectedTasks().start()
 command! -range TaskWikiStop :<line1>,<line2>py SelectedTasks().stop()
 command! -range TaskWikiDone :<line1>,<line2>py SelectedTasks().done()
+command! -range -nargs=* TaskWikiSort :<line1>,<line2>py SelectedTasks().sort(<q-args>)
 command! -range -nargs=* TaskWikiMod :<line1>,<line2>py SelectedTasks().modify(<q-args>)
 command! -range -nargs=* TaskWikiAnnotate :<line1>,<line2>py SelectedTasks().annotate(<q-args>)
 
