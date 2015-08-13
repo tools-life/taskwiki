@@ -229,12 +229,21 @@ class ViewPort(object):
         # Remove tasks that no longer match the filter
         for task in to_del:
             # Find matching vimwikitasks in the self.tasks set
+
             # There might be more if the viewport contained multiple
             # representations of the same task
-            matching_vimwikitasks= [
-                t for t in self.tasks
-                if t.uuid == vwtask.ShortUUID(task['uuid'], task.backend)
-            ]
+            if task.saved:
+                matching_vimwikitasks= [
+                    t for t in self.tasks
+                    if t.uuid == vwtask.ShortUUID(task['uuid'], task.backend)
+                ]
+            else:
+                # For the tasks that are not saved yet, only one
+                # representation can exist, so use object-comparison
+                matching_vimwikitasks= [
+                    t for t in self.tasks
+                    if t.task == task
+                ]
 
             # Remove the tasks from viewport's set and from buffer
             for vimwikitask in matching_vimwikitasks:
