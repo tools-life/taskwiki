@@ -1,8 +1,15 @@
+import constants
+import vim
+
 class TaskSorter(object):
-    def __init__(self, cache, tasks, sortstring):
+    def __init__(self, cache, tasks, sortstring=None):
         self.cache = cache
         self.tasks = tasks
-        self.sortstring = sortstring
+        self.sortstring = (
+            sortstring or
+            vim.vars.get('taskwiki_sort_default') or
+            constants.DEFAULT_SORT_ORDER
+        )
 
     def execute(self):
         # If there's nothing to sort, we have nothing to do
