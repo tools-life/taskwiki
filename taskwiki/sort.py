@@ -9,7 +9,7 @@ class TaskSorter(object):
             sortstring or
             vim.vars.get('taskwiki_sort_default') or
             constants.DEFAULT_SORT_ORDER
-        )
+        ) + ',line_number+'
 
     def execute(self):
         # If there's nothing to sort, we have nothing to do
