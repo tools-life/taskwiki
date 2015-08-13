@@ -29,7 +29,7 @@ execute 'pyfile ' . s:plugin_path . '/taskwiki/taskwiki.py'
 " Update to TW upon saving
 augroup taskwiki
     autocmd!
-    execute "autocmd BufWrite *.".expand('%:e')." py WholeBuffer.update_to_tw()"
+    execute "autocmd BufWrite *.".expand('%:e')." TaskWikiBufferSave"
 augroup END
 
 " Global update commands
