@@ -7,7 +7,7 @@ mockvim = MockVim()
 sys.modules['vim'] = mockvim
 
 from taskwiki.viewport import ViewPort
-from taskwiki.viewport import DEFAULT_SORT_ORDER, DEFAULT_VIEWPORT_VIRTUAL_TAGS
+from taskwiki.constants import DEFAULT_SORT_ORDER, DEFAULT_VIEWPORT_VIRTUAL_TAGS
 
 cache = MockCache()
 
