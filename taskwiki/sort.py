@@ -89,8 +89,8 @@ class CustomNodeComparator(object):
     def generic_compare(self, first, second, method):
         for sort_attr, reverse in self.sort_attrs:
             # Pick the values we are supposed to sort on
-            first_value = first.vwtask.task[sort_attr]
-            second_value = second.vwtask.task[sort_attr]
+            first_value = first.vwtask[sort_attr]
+            second_value = second.vwtask[sort_attr]
 
             # Swap the method of the sort if reversed is True
             if method == 'gt' and reverse == True:
