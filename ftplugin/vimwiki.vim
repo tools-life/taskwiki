@@ -32,6 +32,10 @@ augroup taskwiki
     execute "autocmd BufWrite *.".expand('%:e')." py WholeBuffer.update_to_tw()"
 augroup END
 
+" Global update commands
+command! -nargs=* TaskWikiBufferSave :py WholeBuffer.update_to_tw()
+command! -nargs=* TaskWikiBufferLoad :py WholeBuffer.update_from_tw()
+
 " Split reports commands
 command! -nargs=* TaskWikiProjects :py SplitProjects(<q-args>).execute()
 command! -nargs=* TaskWikiProjectsSummary :py SplitSummary(<q-args>).execute()
