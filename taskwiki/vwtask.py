@@ -139,7 +139,6 @@ class VimwikiTask(object):
         # being loaded is not saved in TW
         if cache.buffer_has_authority or not self.task.saved:
             self.task['description'] = match.group('text').decode('utf-8')
-            print("Using buffer as authority for '%s' " % self.task['description'])
             self.task['priority'] = convert_priority_to_tw_format(
                 len(match.group('priority') or [])) # This is either 0,1,2 or 3
 
