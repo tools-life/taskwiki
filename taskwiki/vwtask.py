@@ -26,6 +26,9 @@ class ShortUUID(object):
             self.value = str(value)[:8]
         elif type(value) is ShortUUID:
             self.value = value.value
+        else:
+            raise ValueError("Incorrect type for ShortUUID: {0}"
+                             .format(type(value)))
 
         self.tw = tw
 
