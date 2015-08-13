@@ -66,6 +66,7 @@ class TaskCache(object):
         self.task_cache = dict()
         self.vimwikitask_cache = dict()
         self.warriors = WarriorStore()
+        self.buffer_has_authority = True
 
     def __getitem__(self, key):
         # Integer keys (line numbers) refer to the VimwikiTask objects
@@ -159,9 +160,17 @@ class TaskCache(object):
         self.task_cache = dict()
         self.vimwikitask_cache = dict()
 
-    def load_vwtasks(self):
+    def load_vwtasks(self, buffer_has_authority=True):
+        # Set the authority flag, which determines which data (Buffer or TW)
+        # will be considered authoritative
+        old_authority = self.buffer_has_authority
+        self.buffer_has_authority = buffer_has_authority
+
         for i in range(len(vim.current.buffer)):
             self[i]  # Loads the line into the cache
+
+        # Restore the old authority flag value
+        self.buffer_has_authority = old_authority
 
     def update_vwtasks_in_buffer(self):
         for task in self.vimwikitask_cache.values():
