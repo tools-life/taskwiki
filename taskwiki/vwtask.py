@@ -231,8 +231,12 @@ class VimwikiTask(object):
                 # Task with stale uuid, recreate
                 self.__unsaved_task = Task(self.tw)
                 # If task cannot be loaded, we need to remove the UUID
-                vim.command('echom "UUID not found: %s,'
-                            'will be replaced if saved"' % self.uuid)
+                vim.command(
+                    'echom "UUID \'{0}\' not found, Task on line {1} will be '
+                    're-created in TaskWarrior."'.format(
+                        self.uuid,
+                        self['line_number']
+                    ))
                 self.uuid = None
         else:
             # New task object accessed first time
