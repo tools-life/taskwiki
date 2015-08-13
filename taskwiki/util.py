@@ -348,7 +348,7 @@ def enforce_dependencies(cache):
                                 % TASKLIB_VERSION)
 
     # Check taskwarrior version
-    tw = cache.get_relevant_tw()
+    tw = cache.warriors['default']
     taskwarrior_installed_version = LooseVersion(tw.version)
     taskwarrior_required_version = LooseVersion(TASKWARRIOR_VERSION)
 
