@@ -7,10 +7,7 @@ import vwtask
 import regexp
 import util
 import sort
-
-
-DEFAULT_VIEWPORT_VIRTUAL_TAGS = ["-DELETED", "-PARENT"]
-DEFAULT_SORT_ORDER = "due+,pri-,project+,urgency-,entry+"
+import constants
 
 
 class ViewPort(object):
@@ -40,14 +37,14 @@ class ViewPort(object):
 
         self.name = name
         self.line_number = line_number
-        self.taskfilter = DEFAULT_VIEWPORT_VIRTUAL_TAGS + taskfilter
+        self.taskfilter = constants.DEFAULT_VIEWPORT_VIRTUAL_TAGS + taskfilter
         self.defaults = defaults
         self.tasks = set()
         self.meta = meta or dict()
         self.sort = (
             sort or
             vim.vars.get('taskwiki_sort_order') or
-            DEFAULT_SORT_ORDER
+            constants.DEFAULT_SORT_ORDER
         )
 
         # Interpret !+DELETED as forcing the +DELETED token (potentionally
@@ -98,9 +95,9 @@ class ViewPort(object):
             if complement in virtual_tags:
                 # Both tag and its complement are in the taskfilter. Remove the
                 # one from defaults.
-                if token in DEFAULT_VIEWPORT_VIRTUAL_TAGS:
+                if token in constants.DEFAULT_VIEWPORT_VIRTUAL_TAGS:
                     tokens_to_remove.add(token)
-                if complement in DEFAULT_VIEWPORT_VIRTUAL_TAGS:
+                if complement in constants.DEFAULT_VIEWPORT_VIRTUAL_TAGS:
                     tokens_to_remove.add(complement)
 
         for token in tokens_to_remove:
