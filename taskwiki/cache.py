@@ -219,11 +219,11 @@ class TaskCache(object):
                 self.task_cache[key] = task
 
     def update_vwtasks_from_tasks(self):
-        for task in self.vimwikitask_cache.values():
-            if task is None:
+        for vwtask in self.vimwikitask_cache.values():
+            if vwtask is None:
                 continue
 
-            task.update_from_task()
+            vwtask.update_from_task()
 
     def evaluate_viewports(self):
         i = 0
