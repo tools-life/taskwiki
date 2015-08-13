@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from datetime import datetime
-from base import MockVim
+from base import MockVim, MockCache
 import sys
 
 mockvim = MockVim()
@@ -8,9 +8,6 @@ sys.modules['vim'] = mockvim
 
 from taskwiki.vwtask import VimwikiTask
 from tasklib import local_zone
-
-class MockCache(object):
-    warriors = {'default': None}
 
 cache = MockCache()
 

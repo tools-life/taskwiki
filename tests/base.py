@@ -268,3 +268,9 @@ class MockVim(object):
 
     vars = dict(taskwiki_sort_orders=dict(T='extra'))
     warriors = dict()
+
+# Mock Cache object
+class MockCache(object):
+    warriors = {'default': 'default', 'T': 'extra'}
+    buffer_has_authority = True
+

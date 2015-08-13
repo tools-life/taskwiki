@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from datetime import datetime
-from base import MockVim
+from base import MockVim, MockCache
 import sys
 
 mockvim = MockVim()
@@ -8,9 +8,6 @@ sys.modules['vim'] = mockvim
 
 from taskwiki.viewport import ViewPort
 from taskwiki.viewport import DEFAULT_SORT_ORDER, DEFAULT_VIEWPORT_VIRTUAL_TAGS
-
-class MockCache(object):
-    warriors = {'default': 'default', 'T': 'extra'}
 
 cache = MockCache()
 
