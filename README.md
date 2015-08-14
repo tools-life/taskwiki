@@ -41,6 +41,8 @@ as simple as:
 
 However, make sure your box satisfies the requirements stated above.
 
+To access documentation, run :helptags and then :help taskwiki.
+
 #### Optional enhancements
 
 The following optional plugins enhance and integrate with TaskWiki.
@@ -212,27 +214,6 @@ a grid view of available tasks.
 - Interactive splits: Assign project/tags by picking a option from a split
 that lists all the already used projects/tags.
 
-
-### Commands
-* TaskWikiBurndown(Daily, Monthly, Weekly)
-* TaskWikiCalendar
-* TaskWikiChooseProject
-* TaskWikiChooseTag
-* TaskWikiDelete
-* TaskWikiGhistory(Annual, Monthly)
-* TaskWikiHistory(Annual, Monthly)
-* TaskWikiInfo
-* TaskWikiInspect
-* TaskWikiLink
-* TaskWikiMod
-* TaskWikiProjects
-* TaskWikiProjectsSummary
-* TaskWikiStart
-* TaskWikiStats
-* TaskWikiStop
-* TaskWikiTags
-
-see more in doc/taskwiki.txt. After installing, run :helptags and then :he taskwiki
 
 ### Credits
 
