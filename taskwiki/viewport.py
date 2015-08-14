@@ -49,7 +49,7 @@ class ViewPort(object):
 
         # Interpret !+DELETED as forcing the +DELETED token (potentionally
         # removing the default +DELETED token from the taskfilter).
-        # Interpret !-DELETED as forcint the -DELETED token.
+        # Interpret !-DELETED as forcing the -DELETED token.
         # Interpret !?DELETED as removing both +DELETED and -DELETED.
 
         tokens_to_remove = set()
