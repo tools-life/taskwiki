@@ -16,9 +16,9 @@ _Proper project management in vim. Standing on the shoulders of vimwiki and Task
 #### Make sure you satisfy the requirements
 
 * Vim 7.4 or newer, compiled with +python
-* [Vimwiki](https://github.com/vimwiki/vimwiki) (the dev branch)
+* [Vimwiki](https://github.com/vimwiki/vimwiki/tree/dev) (the dev branch)
 
-        git clone https://github.com/vimwiki/vimwiki ~/.vim/bundle/vimwiki --branch dev
+        git clone https://github.com/vimwiki/vimwiki ~/.vim/bundle/ --branch dev
 
 * [Taskwarrior](http://taskwarrior.org) - (version 2.4.0 or newer) install either from [sources](http://taskwarrior.org/download/) or using your [package manager](http://taskwarrior.org/download/#dist)
 
@@ -36,11 +36,21 @@ Using pathogen (or similiar vim plugin manager), the taskwiki install is as simp
 
 However, make sure your box satisfies the requirements stated above.
 
-### Enhancements
-* [vim-plugin-AnsiEsc](https://github.com/powerman/vim-plugin-AnsiEsc) for color support
-* [tagbar](https://github.com/majutsushi/tagbar) for taskwiki file navigation
-* [vim-taskwarrior](https://github.com/farseer90718/vim-taskwarrior) for grid view
+#### Optional enhancements
 
+The following optional plugins enhance and integrate with TaskWiki. At very least, I'd recommend the AnsiEsc plugin - Taskwarrior charts are much more fun when they're colorful!
+
+* [vim-plugin-AnsiEsc](https://github.com/powerman/vim-plugin-AnsiEsc) adds color support in charts.
+
+        git clone https://github.com/powerman/vim-plugin-AnsiEsc ~/.vim/bundle/
+
+* [tagbar](https://github.com/majutsushi/tagbar) provides taskwiki file navigation.
+
+        git clone https://github.com/majutsushi/tagbar ~/.vim/bundle/
+
+* [vim-taskwarrior](https://github.com/farseer90718/vim-taskwarrior) enables grid view.
+
+        git clone https://github.com/farseer90718/vim-taskwarrior ~/.vim/bundle/
 
 ### Features
 
