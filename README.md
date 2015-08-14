@@ -217,14 +217,17 @@ that lists all the already used projects/tags.
 
 ### Credits
 
-Authored by Tomas Babej
+Created by: Tomas Babej.
 
-Inspired by [vimwiki-tasks plugin](https://github.com/teranex/vimwiki-tasks).
+Design suggestions contributed by: David J Patrick.
+
+Inspired by: [vimwiki-tasks plugin](https://github.com/teranex/vimwiki-tasks).
+
+Taskwiki wouldn't be possible without all the work and support from the
+Taskwarrior community. Come hang out at #taskwarrior on Freenode.
 
 ### Contributing
 
-Clone, fork, contribute and learn more at https://github.com/tbabej/taskwiki
+Code and issue tracker is hosted at: https://github.com/tbabej/taskwiki
 
-Good ideas, well formed bug reports and thoughtful pull-requests welcome.
-
-
+Feel free to submit pull requests and/or file issues for bugs and suggestions.
