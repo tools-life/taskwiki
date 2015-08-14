@@ -129,10 +129,56 @@ In such case, you can specify the defaults explicitly:
     == Urgent tasks | +OVERDUE or +urgent | +urgent ==
                                              ^ defaults definition
 
-- Task Info: hitting <CR> with the cursor over a task shows all task info.
+Viewports can be inspected by hitting [CR] with cursor above them.
 
-- Reports: burndown, calendar, history, projects, summary, stats and tags
-reports can all be invoked, opening in a split window.
+#### Report splits
+
+Taskwiki can provide additional information reports on a task list (selected,
+or part of a viewport) and on individial tasks as well. These reports are shown
+in dynamic temporary splits.
+
+    * [ ] Tidy up the house !! (2015-08-23 00:00)
+
+For example, hitting [CR] on the above task runs :TaskWikiInfo and displays:
+
+    Name          Value
+    ------------- ---------------------------------------------------------
+    ID            6
+    Description   Tidy up the house
+                    2015-08-22 21:29:35 Tip: Use roomba for vacuum-cleaning
+    Status        Pending
+    Project       Home
+    Entered       2015-08-22 21:27:26 (2 minutes)
+    Due           2015-08-23 00:00:00
+    Last modified 2015-08-22 21:30:21 (1 second)
+    Virtual tags  ANNOTATED MONTH PENDING READY UNBLOCKED YEAR
+    UUID          448c2fa9-6a06-454e-a2bc-b0c8ae91994f
+    Urgency       9.895
+    Priority      H
+
+    Date                Modification
+    ------------------- ------------------------------------------------------------
+    2015-08-14 21:29:35 Annotation of 'Tip: Use roomba for vacuum-cleaning' added.
+    2015-08-14 21:30:11 Due set to '2015-08-23 00:00:00'.
+
+Running the :TaskWikiSummary can produce side-split like this:
+
+    Project            Remaining Avg age  Complete 0%                        100%
+    ------------------ --------- -------- -------- ------------------------------
+    Work                      18  4 weeks      74% ======================
+      Designs
+        Feature X              3  4 weeks      89% ==========================
+        Feature Y              7  2 weeks      47% =========
+      Tickets                  5  3 weeks      79% ======================
+      Blog                     1 4 months      50% ===============
+
+
+There are many more reports (burndown, calendar, history, projects, stats,
+summary, tags,..), but for the sake of brevity, they will not be described here.
+They work in a similiar fashion.
+
+
+#### Advanced
 
 - Grid view: the TaskWikiGrid command will open a new buffer with a grid
 view of task details, of the nearest ViewPort (using vim-taskwarrior)
