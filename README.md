@@ -201,15 +201,17 @@ cursor, or on a visually selected group of tasks.
 
 #### Advanced
 
-- Grid view: the TaskWikiGrid command will open a new buffer with a grid
-view of task details, of the nearest ViewPort (using vim-taskwarrior)
+- Viewport flags: Custom data sources / sort orders can be defined for
+individual viewports.
 
-- Back-links: The command TaskWikiLink will add an annotation to the selected
-task(s) with the ~/path/to/file.wiki
+- Grid view: If vim-taskwarrior is available, it can be used to display
+a grid view of available tasks.
 
-- Tests: TaskWiki is well tested in development to ensure data integrity.
-    **DISCLAIMER** This is free software, it comes with absolutely NO
-    warranty and no promise of fitness for any purpose! (back up your data!)
+- Tagbar: Can be shown to display a overview of a Taskwiki file
+
+- Interactive splits: Assign project/tags by picking a option from a split
+that lists all the already used projects/tags.
+
 
 ### Commands
 * TaskWikiBurndown(Daily, Monthly, Weekly)
