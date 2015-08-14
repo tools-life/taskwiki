@@ -37,7 +37,10 @@ class ViewPort(object):
 
         self.name = name
         self.line_number = line_number
-        self.taskfilter = constants.DEFAULT_VIEWPORT_VIRTUAL_TAGS + taskfilter
+        self.taskfilter = self.process_filter_args(
+            constants.DEFAULT_VIEWPORT_VIRTUAL_TAGS + taskfilter
+        )
+
         self.defaults = defaults
         self.tasks = set()
         self.meta = meta or dict()
@@ -47,15 +50,23 @@ class ViewPort(object):
             constants.DEFAULT_SORT_ORDER
         )
 
-        # Interpret !+DELETED as forcing the +DELETED token (potentionally
-        # removing the default +DELETED token from the taskfilter).
-        # Interpret !-DELETED as forcing the -DELETED token.
-        # Interpret !?DELETED as removing both +DELETED and -DELETED.
+    @staticmethod
+    def process_filter_args(taskfilter):
+        """
+        This method processes taskfilter in the form or args list,
+        adding or removing necessary elements.
+
+        Following syntax sugar in filter expressions is currently supported:
+
+        * Interpret !+DELETED as forcing the +DELETED token.
+        * Interpret !-DELETED as forcing the -DELETED token.
+        * Interpret !?DELETED as removing both +DELETED and -DELETED.
+        """
 
         tokens_to_remove = set()
         tokens_to_add = set()
 
-        for token in filter(lambda x: x.isupper(), self.taskfilter):
+        for token in filter(lambda x: x.isupper(), taskfilter):
             if token.startswith('!+'):
                 tokens_to_remove.add(token)
                 tokens_to_remove.add('-' + token[2:])
@@ -69,11 +80,11 @@ class ViewPort(object):
                 tokens_to_remove.add('+' + token[2:])
                 tokens_to_remove.add('-' + token[2:])
 
-        self.taskfilter = list(tokens_to_add) + self.taskfilter
+        taskfilter = list(tokens_to_add) + taskfilter
 
         for token in tokens_to_remove:
-            if token in self.taskfilter:
-                self.taskfilter.remove(token)
+            if token in taskfilter:
+                taskfilter.remove(token)
 
         # Deal with the situation when both +TAG and -TAG appear in the
         # taskfilter. If one of them is from the defaults, the explicit
@@ -85,7 +96,7 @@ class ViewPort(object):
         def get_complement_tag(tag):
             return ('+' if tag.startswith('-') else '-') + tag[1:]
 
-        virtual_tags = filter(detect_virtual_tag, self.taskfilter)
+        virtual_tags = filter(detect_virtual_tag, taskfilter)
         tokens_to_remove = set()
 
         # For each virtual tag, check if its complement is in the taskfilter too.
@@ -101,8 +112,10 @@ class ViewPort(object):
                     tokens_to_remove.add(complement)
 
         for token in tokens_to_remove:
-            if token in self.taskfilter:
-                self.taskfilter.remove(token)
+            if token in taskfilter:
+                taskfilter.remove(token)
+
+        return taskfilter
 
     @classmethod
     def from_line(cls, number, cache):
