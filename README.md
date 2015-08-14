@@ -178,6 +178,27 @@ summary, tags,..), but for the sake of brevity, they will not be described here.
 They work in a similiar fashion.
 
 
+#### Task modification commands
+
+Taskwiki provides commands for the all the traditional operation on tasks, such as
+starting, stopping, completing, deletion, annotation, generic modification, etc.
+
+    * [ ] Tidy up the house !! (2015-08-23 00:00)
+
+Say we want to postpone this task to tomorrow. This can be achieved by hitting
+[Leader]tm (:TaskWikiMod) a prompt will show up, where we enter our desired
+modification:
+
+    Enter modifications: due:tomorrow
+
+Task is instantly updated:
+
+    * [ ] Tidy up the house !! (2015-08-24 00:00)
+
+Task modification commands can be performed on a task currently below the
+cursor, or on a visually selected group of tasks.
+
+
 #### Advanced
 
 - Grid view: the TaskWikiGrid command will open a new buffer with a grid
