@@ -1,52 +1,46 @@
 ## Taskwiki
 
-_Use [taskwarrior](http://taskwarrior.org) task-management in [vimwiki](https://github.com/vimwiki/vimwiki/tree/dev) files_
+_Proper project management in vim. Standing on the shoulders of vimwiki and Taskwarrior_
 
 [![Travis build status](https://travis-ci.org/tbabej/taskwiki.svg?branch=master)](https://travis-ci.org/tbabej/taskwiki)
 [![Coverage Status](https://coveralls.io/repos/tbabej/taskwiki/badge.svg?branch=master)](https://coveralls.io/r/tbabej/taskwiki?branch=master)
 [![Code Health](https://landscape.io/github/tbabej/taskwiki/master/landscape.svg?style=flat)](https://landscape.io/github/tbabej/taskwiki/master)
 
-   \*[taskwiki.txt](/doc/taskwiki.txt)\*
-<pre>
-                   _____         _   __        ___ _    _                    ~
-        a         |_   _|_ _ ___| | _\ \      / (_) | _(_)         a         ~
-   command-line     | |/ _` / __| |/ /\ \ /\ / /| | |/ / |   personal wiki   ~
-    todo list       | | (_| \__ \   <  \ V  V / | |   <| |      for vim      ~
-     manager        |_|\__,_|___/_|\_\  \_/\_/  |_|_|\_\_|                   ~
-                                                                             ~
-==============================================================================
-QUICK-REFERENCE   --   use < leader > + t and one of:                          
+         a         |_   _|_ _ ___| | _\ \      / (_) | _(_)         a         ~
+    command-line     | |/ _` / __| |/ /\ \ /\ / /| | |/ / |   personal wiki   ~
+     todo list       | | (_| \__ \   <  \ V  V / | |   <| |      for vim      ~
+                     |_|\__,_|___/_|\_\  \_/\_/  |_|_|\_\_|                   ~
 
-| a  annotate         | C  calendar       | Ga ghistory annual | p  projects |
-| bd burndown daily   | d  done           | hm history month   | s  summary  |
-| bw burndown weekly  | D  delete         | ha history annual  | S  stats    |
-| bm burndown monthly | e  edit           | i  (or  CR ) info  | t  tags     |
-| cp choose project   | g  grid           | l  back-link       | +  start    |
-| ct choose tag       | Gm ghistory month | m  modify          | -  stop     |
-</pre>
+### Installation
 
-![taskwiki demo](/doc/TaskWiki-demo.gif)
+#### Make sure you satisfy the requirements
 
-### Requirements
+* Vim 7.4 or newer, compiled with +python
+* [Vimwiki](https://github.com/vimwiki/vimwiki) (the dev branch)
 
-* vim v7.4+
-   (with python bindings) (see :version, within vim, to see what version you are using)
-* [vimwiki](https://github.com/vimwiki/vimwiki/tree/dev)
-   (the dev branch)
-* [taskwarrior](http://taskwarrior.org) 
-   (version 2.4.3 or newer)
-* [tasklib](https://github.com/tbabej/tasklib/tree/develop)
-   (the develop branch) taskwarrior python bindings
+        git clone https://github.com/vimwiki/vimwiki ~/.vim/bundle/vimwiki --branch dev
+
+* [Taskwarrior](http://taskwarrior.org) - (version 2.4.0 or newer) install either from [sources](http://taskwarrior.org/download/) or using your [package manager](http://taskwarrior.org/download/#dist)
+
+        sudo dnf install task
+
+* [tasklib](https://github.com/tbabej/tasklib/tree/develop) (the develop branch) - Python library for Taskwarrior.
+
+        sudo pip install --upgrade git+git://github.com/tbabej/tasklib@develop
+
+#### Install taskwiki
+
+Using pathogen (or similiar vim plugin manager), the taskwiki install is as simple as:
+
+    git clone https://github.com/tbabej/taskwiki ~/.vim/bundle/taskwiki
+
+However, make sure your box satisfies the requirements stated above.
 
 ### Enhancements
 * [vim-plugin-AnsiEsc](https://github.com/powerman/vim-plugin-AnsiEsc) for color support
 * [tagbar](https://github.com/majutsushi/tagbar) for taskwiki file navigation
 * [vim-taskwarrior](https://github.com/farseer90718/vim-taskwarrior) for grid view
 
-### Install
-
-- plugins the vim way: http://vimdoc.sourceforge.net/htmldoc/usr_05.html#05.4
-- plugins the easy way: https://github.com/tpope/vim-pathogen. Other "vim plugin managers" will probably work, but have not been tested
 
 ### Features
 
