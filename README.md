@@ -62,6 +62,13 @@ enables grid view.
 
         git clone https://github.com/farseer90718/vim-taskwarrior ~/.vim/bundle/
 
+### How it works
+
+Taskwiki enhances simple vimwiki task lists by storing the task metadata in
+Taskwarrior. Taskwarrior uses plaintext data files as a backend, and taskwiki
+uses Taskwarrior as a backend. This allows taskwiki to leverage its powerful
+features, such as filtering, recurrent tasks, user defined attributes or hooks.
+
 ### Features
 
 - ViewPorts: a vimwiki header with a task query (filter) embedded, generate
