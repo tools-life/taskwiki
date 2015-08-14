@@ -71,9 +71,27 @@ features, such as filtering, recurrent tasks, user defined attributes or hooks.
 
 ### Features
 
-- ViewPorts: a vimwiki header with a task query (filter) embedded, generate
-a corresponding list of tasks. These tasks can be modified and changes
-will be synced back to task data.  A ViewPort heading looks like this:
+#### Individual tasks
+
+    * [ ] Install Taskwiki
+
+Such tasks get synced to TaskWarrior when the file is saved. Additional
+metadata, as project, tags, priority, can be stored with this task.
+
+Some of that metadata gets visually represented in vim, and is updated
+if the representation changes in vim.
+
+    * [ ] Install Taskwiki !!! (2015-08-23 19:00)
+
+#### Task lists
+
+Tasks can be grouped - simply written in one block. This has the advantage
+of any child tasks being marked as dependencies of the parent tasks.
+
+    * [ ] Get married
+        * [ ] Find a girlfriend
+        * [ ] Buy a ring
+        * [ ] Propose
 
 <pre>
     == Project Foo Tasks | +PENDING project:foo | +bar pri:H ==
