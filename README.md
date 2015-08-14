@@ -1,6 +1,7 @@
 ## Taskwiki
 
-_Proper project management in vim. Standing on the shoulders of vimwiki and Taskwarrior_
+_Proper project management in vim.
+Standing on the shoulders of vimwiki and Taskwarrior_
 
 [![Travis build status](https://travis-ci.org/tbabej/taskwiki.svg?branch=master)](https://travis-ci.org/tbabej/taskwiki)
 [![Coverage Status](https://coveralls.io/repos/tbabej/taskwiki/badge.svg?branch=master)](https://coveralls.io/r/tbabej/taskwiki?branch=master)
@@ -20,17 +21,21 @@ _Proper project management in vim. Standing on the shoulders of vimwiki and Task
 
         git clone https://github.com/vimwiki/vimwiki ~/.vim/bundle/ --branch dev
 
-* [Taskwarrior](http://taskwarrior.org) - (version 2.4.0 or newer) install either from [sources](http://taskwarrior.org/download/) or using your [package manager](http://taskwarrior.org/download/#dist)
+* [Taskwarrior](http://taskwarrior.org) (version 2.4.0 or newer)
+- install either from [sources](http://taskwarrior.org/download/)
+or using your [package manager](http://taskwarrior.org/download/#dist)
 
         sudo dnf install task
 
-* [tasklib](https://github.com/tbabej/tasklib/tree/develop) (the develop branch) - Python library for Taskwarrior.
+* [tasklib](https://github.com/tbabej/tasklib/tree/develop) (the develop branch)
+- Python library for Taskwarrior.
 
         sudo pip install --upgrade git+git://github.com/tbabej/tasklib@develop
 
 #### Install taskwiki
 
-Using pathogen (or similiar vim plugin manager), the taskwiki install is as simple as:
+Using pathogen (or similiar vim plugin manager), the taskwiki install is
+as simple as:
 
     git clone https://github.com/tbabej/taskwiki ~/.vim/bundle/taskwiki
 
@@ -38,17 +43,22 @@ However, make sure your box satisfies the requirements stated above.
 
 #### Optional enhancements
 
-The following optional plugins enhance and integrate with TaskWiki. At very least, I'd recommend the AnsiEsc plugin - Taskwarrior charts are much more fun when they're colorful!
+The following optional plugins enhance and integrate with TaskWiki.
+At very least,I'd recommend the AnsiEsc plugin - Taskwarrior
+charts are much more fun when they're colorful!
 
-* [vim-plugin-AnsiEsc](https://github.com/powerman/vim-plugin-AnsiEsc) adds color support in charts.
+* [vim-plugin-AnsiEsc](https://github.com/powerman/vim-plugin-AnsiEsc)
+adds color support in charts.
 
         git clone https://github.com/powerman/vim-plugin-AnsiEsc ~/.vim/bundle/
 
-* [tagbar](https://github.com/majutsushi/tagbar) provides taskwiki file navigation.
+* [tagbar](https://github.com/majutsushi/tagbar)
+provides taskwiki file navigation.
 
         git clone https://github.com/majutsushi/tagbar ~/.vim/bundle/
 
-* [vim-taskwarrior](https://github.com/farseer90718/vim-taskwarrior) enables grid view.
+* [vim-taskwarrior](https://github.com/farseer90718/vim-taskwarrior)
+enables grid view.
 
         git clone https://github.com/farseer90718/vim-taskwarrior ~/.vim/bundle/
 
