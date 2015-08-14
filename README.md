@@ -93,26 +93,41 @@ of any child tasks being marked as dependencies of the parent tasks.
         * [ ] Buy a ring
         * [ ] Propose
 
-<pre>
-    == Project Foo Tasks | +PENDING project:foo | +bar pri:H ==
-         title ^^^            filter ^^^             ^^^ user defaults
-</pre>
-title can be any text, and the filter elements are concealed in normal mode.
+#### Viewports
 
-- Individual Todos: tasks can be used anywhere in a vimwiki, looking like:
+Viewport is a header with a task query (filter) embedded, generating
+the corresponding task list. These tasks can be modified and changes
+will be synced back to task data.  A simple viewport can look as follows:
 
-<pre>
-* [ ] Install TaskWiki plugin
-</pre>
+    == Home tasks | project:Home ==
 
-and when adding a new task, any other metadata can be added after "--" like
+Filter query is concealed.
 
-<pre>
-* [ ] test taskwiki todos and viewports -- proj:tw.wiki +foo due:tomorrow
-</pre>
+Upon saving, this will generate the list of matching tasks, in a tree-like
+fashion (respecting dependencies).
 
-and the task will be synced with the task data on saving. After syncing,
-all tasks end with a concealed uuid (eg.  #541c5b57) don't edit this!
+    == Home tasks | project:Home ==
+    * [ ] Feed the dog (2015-08-08)
+    * [ ] Tidy up the house !!
+      * [ ] Wash the dishes
+      * [ ] Declare war on the cobwebs
+
+Tasks added (written) to the task list under the viewport inherit the defaults
+from its filter.
+
+    == Home tasks | project:Home ==
+    * [ ] Feed the dog
+    * [ ] Tidy up the house !!
+      * [ ] Wash the dishes
+      * [ ] Declare war on the cobwebs
+    * [ ] Call the landlord about rent payment (2015-08-23)
+          ^ the task above will have project:Home set automatically
+
+For some more complex filters, defaults cannot be automatically derived.
+In such case, you can specify the defaults explicitly:
+
+    == Urgent tasks | +OVERDUE or +urgent | +urgent ==
+                                             ^ defaults definition
 
 - Task Info: hitting <CR> with the cursor over a task shows all task info.
 
