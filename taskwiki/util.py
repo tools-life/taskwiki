@@ -92,12 +92,9 @@ def tw_modstring_to_kwargs(line):
             # Ignore virtual tags
             if not value.isupper():
                 output.setdefault('tags', []).append(value)
-        elif arg.startswith('-'):
-            if arg == "-VISIBLE":
-                meta['visible'] = False
             # Ignore tag removal
 
-    return output, meta
+    return output
 
 def get_input(prompt="Enter: ", allow_empty=False):
     value = vim.eval('input("%s")' % prompt)

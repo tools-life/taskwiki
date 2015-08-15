@@ -26,8 +26,10 @@ class ViewPort(object):
           * [ ] Make sure the hosting is working
     """
 
+    meta_tokens = ('-VISIBLE',)
+
     def __init__(self, line_number, cache, tw,
-                 name, filterstring, defaults, sort=None, meta=None):
+                 name, filterstring, defaultstring, sort=None):
         """
         Constructs a ViewPort out of given line.
         """
@@ -40,7 +42,6 @@ class ViewPort(object):
         self.taskfilter = self.process_filterstring(filterstring)
         self.defaults = defaults
         self.tasks = set()
-        self.meta = meta or dict()
         self.sort = (
             sort or
             vim.vars.get('taskwiki_sort_order') or
@@ -143,8 +144,18 @@ class ViewPort(object):
             if token in taskfilter_args:
                 taskfilter_args.remove(token)
 
+        # Process meta tags, remove them from filter
+        meta = dict()
+
+        for token in taskfilter_args:
+            if token == '-VISIBLE':
+                meta['visible'] = False
+
+        taskfilter_args = filter(lambda x: x not in self.meta_tokens,
+                                 taskfilter_args)
+
         # All syntactic processing done, return the resulting filter args
-        return taskfilter_args
+        return taskfilter_args, meta
 
     @classmethod
     def from_line(cls, number, cache):
@@ -174,7 +185,7 @@ class ViewPort(object):
                       " using default.".format(sort_id, name), sys.stderr)
 
         self = cls(number, cache, tw, name, filterstring,
-                   defaults, sortstring, meta)
+                   defaults, sortstring)
 
         return self
 
