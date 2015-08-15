@@ -47,14 +47,16 @@ class ViewPort(object):
             constants.DEFAULT_SORT_ORDER
         )
 
-    @staticmethod
-    def process_filterstring(filterstring):
+    def process_filterstring(self, filterstring):
         """
         This method processes taskfilter in the form or filter string,
         parses it into list of filter args, processing any syntax sugar
         as part of the process.
 
         Following syntax sugar in filter expressions is currently supported:
+
+        * Expand @name with the definition of 'context.name' TW config
+          variable
 
         * Interpret !+DELETED as forcing the +DELETED token.
         * Interpret !-DELETED as forcing the -DELETED token.
@@ -64,6 +66,30 @@ class ViewPort(object):
         # Get the initial version of the taskfilter args
         taskfilter_args = list(constants.DEFAULT_VIEWPORT_VIRTUAL_TAGS)
         taskfilter_args += util.tw_modstring_to_args(filterstring)
+
+        # Process syntactic sugar: Context expansion
+        detected_contexts = []
+        for token in filter(lambda x: x.startswith('@'), taskfilter_args):
+            context_variable_name = 'context.{0}'.format(token[1:])
+            context_definition = self.tw.config.get(context_variable_name)
+
+            if context_definition:
+                context_args = util.tw_modstring_to_args(context_definition)
+                detected_contexts.append((token, context_args))
+            else:
+                raise util.TaskWikiException("Context definition for '{0}' "
+                        "could not be found.".format(token[1:]))
+
+        for context_token, context_args in detected_contexts:
+            # Find the position of the context token
+            token_index = taskfilter_args.index(context_token)
+
+            # Replace the token at token_index by context_args list
+            taskfilter_args = (
+                taskfilter_args[:token_index] +
+                context_args +
+                taskfilter_args[(token_index+1):]
+            )
 
         # Process syntactic sugar: Forcing virtual tags
         tokens_to_remove = set()
