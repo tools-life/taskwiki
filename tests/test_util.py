@@ -42,31 +42,31 @@ class TestParsingModstrings(object):
         assert util.tw_modstring_to_args("project:Random due:now due:today") == ["project:Random", "due:now", "due:today"]
 
     def test_modstring_to_kwargs(self):
-        assert util.tw_modstring_to_kwargs("")[0] == {}
-        assert util.tw_modstring_to_kwargs("project:Random")[0]  == {"project":"Random"}
-        assert util.tw_modstring_to_kwargs("project:Random area:admin")[0]  == {"project":"Random", "area":"admin"}
-        assert util.tw_modstring_to_kwargs("project:Random +test")[0]  == {"project":"Random", "tags":["test"]}
-        assert util.tw_modstring_to_kwargs("project:Random +test +home")[0]  == {"project":"Random", "tags":["test", "home"]}
-        assert util.tw_modstring_to_kwargs("project:'Random +test'")[0]  == {"project":"Random +test"}
+        assert util.tw_modstring_to_kwargs("") == {}
+        assert util.tw_modstring_to_kwargs("project:Random")  == {"project":"Random"}
+        assert util.tw_modstring_to_kwargs("project:Random area:admin")  == {"project":"Random", "area":"admin"}
+        assert util.tw_modstring_to_kwargs("project:Random +test")  == {"project":"Random", "tags":["test"]}
+        assert util.tw_modstring_to_kwargs("project:Random +test +home")  == {"project":"Random", "tags":["test", "home"]}
+        assert util.tw_modstring_to_kwargs("project:'Random +test'")  == {"project":"Random +test"}
 
     def test_modstring_to_kwargs_with_simple_tag(self):
-        assert util.tw_modstring_to_kwargs("+test ")[0] == {"tags":["test"]}
+        assert util.tw_modstring_to_kwargs("+test ") == {"tags":["test"]}
 
     def test_modstring_to_kwargs_with_removal(self):
-        assert util.tw_modstring_to_kwargs("project: +work")[0] == {"tags":["work"], "project":None}
+        assert util.tw_modstring_to_kwargs("project: +work") == {"tags":["work"], "project":None}
 
     def test_modstring_to_kwargs_with_spaces(self):
-        assert util.tw_modstring_to_kwargs("project:Random area:admin")[0] == {"project":"Random", "area":"admin"}
-        assert util.tw_modstring_to_kwargs("project:Random +test")[0] == {"project":"Random", "tags":["test"]}
+        assert util.tw_modstring_to_kwargs("project:Random area:admin") == {"project":"Random", "area":"admin"}
+        assert util.tw_modstring_to_kwargs("project:Random +test") == {"project":"Random", "tags":["test"]}
 
     def test_modstring_to_kwargs_overriding(self):
-        assert util.tw_modstring_to_kwargs("project:Random project:Home")[0] == {"project":"Home"}
-        assert util.tw_modstring_to_kwargs("project:Random area:admin area:school")[0] == {"project":"Random", "area":"school"}
+        assert util.tw_modstring_to_kwargs("project:Random project:Home") == {"project":"Home"}
+        assert util.tw_modstring_to_kwargs("project:Random area:admin area:school") == {"project":"Random", "area":"school"}
 
     def test_modstring_to_kwargs_ignore_modifiers(self):
-        assert util.tw_modstring_to_kwargs("project.is:Random due:now")[0] == {"due":"now"}
-        assert util.tw_modstring_to_kwargs("project:Random due.before:now area:admin")[0] == {"project":"Random", "area":"admin"}
+        assert util.tw_modstring_to_kwargs("project.is:Random due:now") == {"due":"now"}
+        assert util.tw_modstring_to_kwargs("project:Random due.before:now area:admin") == {"project":"Random", "area":"admin"}
 
     def test_modstring_to_kwargs_ignore_virtual_tags(self):
-        assert util.tw_modstring_to_kwargs("project:Random +PENDING")[0] == {"project":"Random"}
-        assert util.tw_modstring_to_kwargs("project:Random -DELETED area:admin")[0] == {"project":"Random", "area":"admin"}
+        assert util.tw_modstring_to_kwargs("project:Random +PENDING") == {"project":"Random"}
+        assert util.tw_modstring_to_kwargs("project:Random -DELETED area:admin") == {"project":"Random", "area":"admin"}
