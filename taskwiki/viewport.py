@@ -39,8 +39,13 @@ class ViewPort(object):
 
         self.name = name
         self.line_number = line_number
-        self.taskfilter = self.process_filterstring(filterstring)
-        self.defaults = defaults
+        self.taskfilter, self.meta = self.process_filterstring(filterstring)
+
+        if defaultstring:
+            self.defaults = util.tw_modstring_to_kwargs(defaultstring)
+        else:
+            self.defaults = util.tw_args_to_kwargs(self.taskfilter)
+
         self.tasks = set()
         self.sort = (
             sort or
@@ -165,8 +170,7 @@ class ViewPort(object):
             return None
 
         filterstring = match.group('filter')
-        defaults, meta = util.tw_modstring_to_kwargs(
-            match.group('filter') + ' ' + (match.group('defaults') or ''))
+        defaults = match.group('defaults')
         name = match.group('name').strip()
         tw = cache.warriors[match.group('source') or 'default']
 

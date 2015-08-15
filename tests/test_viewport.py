@@ -64,7 +64,7 @@ class TestViewportDefaultsAssigment(IntegrationTest):
         assert task['tags'] == ['work']
 
 
-class TestViewportDefaultsOverriding(IntegrationTest):
+class TestViewportDefaultsExplicit(IntegrationTest):
 
     viminput = """
     === Work tasks | project:Home +home | project:Chores  ===
@@ -83,10 +83,10 @@ class TestViewportDefaultsOverriding(IntegrationTest):
         assert task['description'] == 'home task'
         assert task['status'] == 'pending'
         assert task['project'] == 'Chores'
-        assert task['tags'] == ['home']
+        assert task['tags'] == []
 
 
-class TestViewportDefaultsRemoval(IntegrationTest):
+class TestViewportDefaultsExplicitEmpty(IntegrationTest):
 
     viminput = """
     === Work tasks | project:Home +home | project:  ===
@@ -105,7 +105,7 @@ class TestViewportDefaultsRemoval(IntegrationTest):
         assert task['description'] == 'home task'
         assert task['status'] == 'pending'
         assert task['project'] == None
-        assert task['tags'] == ['home']
+        assert task['tags'] == []
 
 
 class TestViewportInspection(IntegrationTest):

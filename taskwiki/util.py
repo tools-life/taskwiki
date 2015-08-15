@@ -72,10 +72,11 @@ def tw_modstring_to_args(line):
     return output
 
 def tw_modstring_to_kwargs(line):
-    output = dict()
-    line = line.strip()
-
     args = tw_modstring_to_args(line)
+    return tw_args_to_kwargs(args)
+
+def tw_args_to_kwargs(args):
+    output = dict()
     meta = dict()  # Store meta attributes
 
     for arg in args:
