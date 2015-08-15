@@ -35,7 +35,7 @@ class WarriorStore(object):
 
         # Make sure context is not respected in any TaskWarrior
         for tw in self.warriors.values():
-            tw.config.update({'context':''})
+            tw.overrides.update({'context':''})
 
     def __getitem__(self, key):
         try:
