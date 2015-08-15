@@ -42,6 +42,77 @@ class TestViewportsTaskRemoval(IntegrationTest):
         self.command("w", regex="written$", lines=1)
 
 
+class TestViewportsContextTaskGeneration(IntegrationTest):
+
+    viminput = """
+    === Work tasks | @work ===
+    """
+
+    vimoutput = """
+    === Work tasks | @work ===
+    * [ ] tag work task  #{uuid}
+    """
+
+    tasks = [
+        dict(description="tag work task", tags=['work']),
+    ]
+
+    def execute(self):
+        with open(self.taskrc_path, 'a') as f:
+            f.write('context.work=+work\n')
+
+        self.command("w", regex="written$", lines=1)
+
+
+class TestViewportsContextComplexFilterTaskGeneration(IntegrationTest):
+
+    viminput = """
+    === Work tasks | @work or project:Home ===
+    """
+
+    vimoutput = """
+    === Work tasks | @work or project:Home ===
+    * [ ] home project task  #{uuid}
+    * [ ] tag work task  #{uuid}
+    """
+
+    tasks = [
+        dict(description="tag work task", tags=['work']),
+        dict(description="home project task", project='Home'),
+    ]
+
+    def execute(self):
+        with open(self.taskrc_path, 'a') as f:
+            f.write('context.work=+work\n')
+
+        self.command("w", regex="written$", lines=1)
+
+
+class TestViewportsTwoContextTaskGeneration(IntegrationTest):
+
+    viminput = """
+    === Work tasks | @work or @home ===
+    """
+
+    vimoutput = """
+    === Work tasks | @work or @home ===
+    * [ ] home project task  #{uuid}
+    * [ ] tag work task  #{uuid}
+    """
+
+    tasks = [
+        dict(description="tag work task", tags=['work']),
+        dict(description="home project task", project='Home'),
+    ]
+
+    def execute(self):
+        with open(self.taskrc_path, 'a') as f:
+            f.write('context.work=+work\n')
+            f.write('context.home=project:Home\n')
+
+        self.command("w", regex="written$", lines=1)
+
+
 class TestViewportDefaultsAssigment(IntegrationTest):
 
     viminput = """
