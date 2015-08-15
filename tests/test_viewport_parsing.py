@@ -3,10 +3,6 @@ from datetime import datetime
 from base import MockVim, MockCache
 import sys
 
-mockvim = MockVim()
-sys.modules['vim'] = mockvim
-
-from taskwiki.viewport import ViewPort
 from taskwiki.constants import DEFAULT_SORT_ORDER, DEFAULT_VIEWPORT_VIRTUAL_TAGS
 
 
@@ -14,11 +10,22 @@ class TestParsingVimwikiTask(object):
     def setup(self):
         self.mockvim = MockVim()
         self.cache = MockCache()
+
+        # Setup fake entries for custom TaskWarrior instance and Sort order
+        self.cache.warriors.update({'T': 'extra'})
+        self.mockvim.vars.update({'taskwiki_sort_orders': dict(T='extra')})
+
         sys.modules['vim'] = self.mockvim
+        from taskwiki.viewport import ViewPort
+        self.ViewPort = ViewPort
+
+    def teardown(self):
+        self.mockvim.reset()
+        self.cache.reset()
 
     def test_simple(self):
         self.mockvim.current.buffer[0] = "== Test | project:Home =="
-        port = ViewPort.from_line(0, self.cache)
+        port = self.ViewPort.from_line(0, self.cache)
 
         assert port.taskfilter == list(DEFAULT_VIEWPORT_VIRTUAL_TAGS) + ["project:Home"]
         assert port.name == "Test"
@@ -27,7 +34,7 @@ class TestParsingVimwikiTask(object):
 
     def test_defaults(self):
         self.mockvim.current.buffer[0] = "== Test | project:Home | +home =="
-        port = ViewPort.from_line(0, self.cache)
+        port = self.ViewPort.from_line(0, self.cache)
 
         assert port.taskfilter == list(DEFAULT_VIEWPORT_VIRTUAL_TAGS) + ["project:Home"]
         assert port.name == "Test"
@@ -37,7 +44,7 @@ class TestParsingVimwikiTask(object):
 
     def test_different_tw(self):
         self.mockvim.current.buffer[0] = "== Test | project:Home #T =="
-        port = ViewPort.from_line(0, self.cache)
+        port = self.ViewPort.from_line(0, self.cache)
 
         assert port.taskfilter == list(DEFAULT_VIEWPORT_VIRTUAL_TAGS) + ["project:Home"]
         assert port.name == "Test"
@@ -46,7 +53,7 @@ class TestParsingVimwikiTask(object):
 
     def test_different_sort(self):
         self.mockvim.current.buffer[0] = "== Test | project:Home $T =="
-        port = ViewPort.from_line(0, self.cache)
+        port = self.ViewPort.from_line(0, self.cache)
 
         assert port.taskfilter == list(DEFAULT_VIEWPORT_VIRTUAL_TAGS) + ["project:Home"]
         assert port.name == "Test"
@@ -55,7 +62,7 @@ class TestParsingVimwikiTask(object):
 
     def test_different_sort_with_complex_filter(self):
         self.mockvim.current.buffer[0] = "== Test | project:Home or project:Work $T =="
-        port = ViewPort.from_line(0, self.cache)
+        port = self.ViewPort.from_line(0, self.cache)
 
         assert port.taskfilter == list(DEFAULT_VIEWPORT_VIRTUAL_TAGS) + ["project:Home", "or", "project:Work"]
         assert port.name == "Test"
@@ -64,7 +71,7 @@ class TestParsingVimwikiTask(object):
 
     def test_different_sort_tw(self):
         self.mockvim.current.buffer[0] = "== Test | project:Home #T $T =="
-        port = ViewPort.from_line(0, self.cache)
+        port = self.ViewPort.from_line(0, self.cache)
 
         assert port.taskfilter == list(DEFAULT_VIEWPORT_VIRTUAL_TAGS) + ["project:Home"]
         assert port.name == "Test"
@@ -73,7 +80,7 @@ class TestParsingVimwikiTask(object):
 
     def test_defaults_different_tw(self):
         self.mockvim.current.buffer[0] = "== Test | project:Home | +home #T =="
-        port = ViewPort.from_line(0, self.cache)
+        port = self.ViewPort.from_line(0, self.cache)
 
         assert port.taskfilter == list(DEFAULT_VIEWPORT_VIRTUAL_TAGS) + ["project:Home"]
         assert port.name == "Test"
@@ -83,7 +90,7 @@ class TestParsingVimwikiTask(object):
 
     def test_defaults_different_tw_sort(self):
         self.mockvim.current.buffer[0] = "== Test | project:Home | +home #T $T =="
-        port = ViewPort.from_line(0, self.cache)
+        port = self.ViewPort.from_line(0, self.cache)
 
         assert port.taskfilter == list(DEFAULT_VIEWPORT_VIRTUAL_TAGS) + ["project:Home"]
         assert port.name == "Test"

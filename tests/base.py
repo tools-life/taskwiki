@@ -256,21 +256,31 @@ class MultipleSourceTest(IntegrationTest):
         else:
             return line
 
-
 # Mock vim to test vim-nonrelated functions
 class MockVim(object):
-
-    def eval(*args, **kwargs):
-        return 42
 
     class current(object):
         buffer = ['']
 
-    vars = dict(taskwiki_sort_orders=dict(T='extra'))
+    vars = dict()
     warriors = dict()
+
+    def eval(*args, **kwargs):
+        return 42
+
+    def reset(self):
+        self.current.buffer = ['']
+        self.vars.clear()
+        self.warriors.clear()
+
 
 # Mock Cache object
 class MockCache(object):
-    warriors = {'default': 'default', 'T': 'extra'}
+    warriors = {'default': 'default'}
     buffer_has_authority = True
+
+    def reset(self):
+        self.warriors.clear()
+        self.warriors.update({'default': 'default'})
+        self.buffer_has_authority = True
 
