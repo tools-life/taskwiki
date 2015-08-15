@@ -284,10 +284,9 @@ class Meta(object):
         if vim.vars.get('taskwiki_source_tw_colors'):
 
             tw = cache.get_relevant_tw()
-            config = tw.get_config()
 
             for syntax in tw_color_counterparts.keys():
-                tw_def = config.get(tw_color_counterparts[syntax])
+                tw_def = tw.config.get(tw_color_counterparts[syntax])
 
                 if tw_def:
                     vim_def = util.convert_colorstring_for_vim(tw_def)
