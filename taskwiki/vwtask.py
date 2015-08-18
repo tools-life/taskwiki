@@ -199,8 +199,8 @@ class VimwikiTask(object):
                 new_description = first_part.strip()
                 modstring = second_part.strip()
 
-                # Convert the modstring and apply it, ignore meta part
-                modifications = util.tw_modstring_to_kwargs(modstring)[0]
+                # Convert the modstring
+                modifications = util.tw_modstring_to_kwargs(modstring)
                 for key in modifications.keys():
                     self[key] = modifications[key]
 
