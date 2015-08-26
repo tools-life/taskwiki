@@ -33,60 +33,121 @@ CONTENTS						   *taskwiki-contents*
 =============================================================================
 1. INTRODUCTION							   *taskwiki*
 
-TaskWiki is a vim plugin that enhances vimwiki (another vim plugin) by adding
-    Taskwarrior tasks, reports and commands, to Vimwiki's todo functionality.
+Taskwiki enhances simple vimwiki task lists by storing the task metadata in
+Taskwarrior. Taskwarrior uses plaintext data files as a backend, and taskwiki
+uses Taskwarrior as a backend. This allows taskwiki to leverage its powerful
+features, such as filtering, recurrent tasks, user defined attributes or hooks.
 
-Key Features:
-- ViewPorts: a vimwiki header with a task query (filter) embedded, generates
-    a corresponding list of tasks. These tasks can be modified and changes
-    will be synced back to task data.  A ViewPort header looks like this:
+----------------------------------------------------------------------------
+Individual tasks
 
-    == Project Foo Tasks | +PENDING project:foo | +bar pri:H ==
-	 title ^^^            filter ^^^             ^^^ user defaults
+~   * [ ] Install Taskwiki
 
-    title can be any text, and the filter elements are concealed in normal mode.
+Such tasks get synced to TaskWarrior when the file is saved. Additional
+metadata, as project, tags, priority, can be stored with this task.
 
-    Defaults for new tasks added under a ViewPort are derived from the filter
-    	(where possible) and from user-defaults (if any)
-	Only simpler elements will work as defaults defaults to new tasks:
-	    - attribute:value (project:foo)
-	    - +tag
-	Complex filter elements, or dates, like these, will _not_ be used:
-	    - nothing with attribute modifiers (project.not:foo)
-	    - due: sched: wait: until: values (?)
-	    - nothing in parentheses (project:foo or project:bar)
-	    - no negative tags (-foo)
-	    - no virtual tags (+PENDING +TODAY +OVERDUE etc.)
-	User-defaults will be added to, and can override, filter-defaults.
-    To see ViewPort details, like defaults used, <CR> with cursor on VP header
+Some of that metadata gets visually represented in vim, and is updated
+if the representation changes in vim.
 
-- Individual Todos: tasks can be used anywhere in a vimwiki, looking like:
+~   * [ ] Install Taskwiki !!! (2015-08-23 19:00)
 
-~ * [ ] Install TaskWiki plugin
-   and when adding a new task, any other metadata can be added after "--" like
-~ * [ ] test taskwiki todos and viewports -- proj:tw.wiki +foo due:tomorrow
+----------------------------------------------------------------------------
+Task lists
 
-    Task are synced with the task data on file open and on saving. After sync,
-    all tasks end with a concealed uuid (eg.  #541c5b57) don't edit this!
+Tasks can be grouped - simply written in one block. This has the advantage
+of any child tasks being marked as dependencies of the parent tasks.
 
-    NOTE: vimwiki todos can still be used along side of taskwiki tasks, as long
-    as the leading character is "-" or "#." or "+" but not "*".
-        - [ ] This is a vimwiki todo (ignored by taskwiki)
+~   * [ ] Get married
+~       * [ ] Find a girlfriend
+~       * [ ] Buy a ring
+~       * [ ] Propose
 
-- Task Info: hitting <CR> with the cursor over a task shows all task info.
+----------------------------------------------------------------------------
+Viewports
 
-- Reports: burndown, calendar, history, projects, summary, stats and tags
-    reports can all be invoked, opening in a split window.
+Viewport is a header with a task query (filter) embedded, generating
+the corresponding task list. These tasks can be modified and changes
+will be synced back to task data.  A simple viewport can look as follows:
 
-- Grid view: the :TaskWikiGrid command will open a new buffer with a grid
-    view of task details, of the nearest ViewPort (using vim-taskwarrior)
+~   == Home tasks | project:Home ==
 
-- Back-links: The command :TaskWikiLink will add an annotation to the selected
-    task(s) with the ~/path/to/file.wiki
+Filter query is concealed.
 
-- Tests: TaskWiki is well tested in development to ensure data integrity.
-    **DISCLAIMER** This is free software, it comes with absolutely NO
-    warranty and no promise of fitness for any purpose! (back up your data!)
+Upon saving, this will generate the list of matching tasks, in a tree-like
+fashion (respecting dependencies).
+
+~   == Home tasks | project:Home ==
+~   * [ ] Feed the dog (2015-08-08)
+~   * [ ] Tidy up the house !!
+~     * [ ] Wash the dishes
+~     * [ ] Declare war on the cobwebs
+
+Tasks added (written) to the task list under the viewport inherit the defaults
+from its filter.
+
+~  == Home tasks | project:Home ==
+~  * [ ] Feed the dog
+~  * [ ] Tidy up the house !!
+~    * [ ] Wash the dishes
+~    * [ ] Declare war on the cobwebs
+~  * [ ] Call the landlord about rent payment (2015-08-23)
+~         ^ the task above will have project:Home set automatically
+
+For some more complex filters, defaults cannot be automatically derived.
+In such case, you can specify the defaults explicitly:
+
+~   == Urgent tasks | +OVERDUE or +urgent | +urgent ==
+~                                            ^ defaults definition
+
+Viewports can be inspected by hitting [CR] with cursor above them.
+
+----------------------------------------------------------------------------
+Report splits
+
+Taskwiki can provide additional information reports on a task list (selected,
+or part of a viewport) and on individial tasks as well. These reports are shown
+in dynamic temporary splits.
+
+~   * [ ] Tidy up the house !! (2015-08-23 00:00)
+
+For example, hitting [CR] on the above task runs :TaskWikiInfo and displays:
+
+    Name          Value
+    ------------- ---------------------------------------------------------
+    ID            6
+    Description   Tidy up the house
+                    2015-08-22 21:29:35 Tip: Use roomba for vacuum-cleaning
+    Status        Pending
+    Project       Home
+    Entered       2015-08-22 21:27:26 (2 minutes)
+    Due           2015-08-23 00:00:00
+    Last modified 2015-08-22 21:30:21 (1 second)
+    Virtual tags  ANNOTATED MONTH PENDING READY UNBLOCKED YEAR
+    UUID          448c2fa9-6a06-454e-a2bc-b0c8ae91994f
+    Urgency       9.895
+    Priority      H
+
+    Date                Modification
+    ------------------- ------------------------------------------------------------
+    2015-08-14 21:29:35 Annotation of 'Tip: Use roomba for vacuum-cleaning' added.
+    2015-08-14 21:30:11 Due set to '2015-08-23 00:00:00'.
+
+Running the :TaskWikiSummary can produce side-split like this:
+
+    Project            Remaining Avg age  Complete 0%                        100%
+    ------------------ --------- -------- -------- ------------------------------
+    Work                      18  4 weeks      74% ======================
+      Designs
+        Feature X              3  4 weeks      89% ==========================
+        Feature Y              7  2 weeks      47% =========
+      Tickets                  5  3 weeks      79% ======================
+      Blog                     1 4 months      50% ===============
+
+
+There are many more reports (burndown, calendar, history, projects, stats,
+summary, tags,..), but for the sake of brevity, they will not be described here.
+They work in a similiar fashion.
+
 
 =============================================================================
 2. REQUIREMENTS					          *taskwiki-requires*
