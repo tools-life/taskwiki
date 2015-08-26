@@ -116,30 +116,30 @@ n	<CR> 	is mapped to show task info, VP details or follow vimwiki link
 
     Normal mode key mappings (those with "v" also work in visual mode)
     <Leader>t +
-vn	a 	:TaskWikiAnnotate
- n	bd 	:TaskWikiBurndownDaily
- n	bw 	:TaskWikiBurndownWeekly
- n	bm 	:TaskWikiBurndownMonthly
-vn	cp 	:TaskWikiChooseProject
-vn	ct 	:TaskWikiChooseTag
- n	C 	:TaskWikiCalendar
-vn	d 	:TaskWikiDone
-vn	D 	:TaskWikiDelete
-vn	e 	:TaskWikiEdit
-vn	g 	:TaskWikiGrid
- n	Gm 	:TaskWikiGhistoryMonthly
- n	Ga 	:TaskWikiGhistoryAnnual
- n	hm 	:TaskWikiHistoryMonthly
- n	ha 	:TaskWikiHistoryAnnual
-vn	i 	:TaskWikiInfo
-vn	l 	:TaskWikiLink
-vn	m 	:TaskWikiMod
- n	p 	:TaskWikiProjects
- n	s 	:TaskWikiProjectsSummary
- n	S 	:TaskWikiStats
- n	t 	:TaskWikiTags
-vn	+ 	:TaskWikiStart
-vn	- 	:TaskWikiStop
+vn	a 	|:TaskWikiAnnotate|
+ n	bd 	|:TaskWikiBurndownDaily|
+ n	bw 	|:TaskWikiBurndownWeekly|
+ n	bm 	|:TaskWikiBurndownMonthly|
+vn	cp 	|:TaskWikiChooseProject|
+vn	ct 	|:TaskWikiChooseTag|
+ n	C 	|:TaskWikiCalendar|
+vn	d 	|:TaskWikiDone|
+vn	D 	|:TaskWikiDelete|
+vn	e 	|:TaskWikiEdit|
+vn	g 	|:TaskWikiGrid|
+ n	Gm 	|:TaskWikiGhistoryMonthly|
+ n	Ga 	|:TaskWikiGhistoryAnnual|
+ n	hm 	|:TaskWikiHistoryMonthly|
+ n	ha 	|:TaskWikiHistoryAnnual|
+vn	i 	|:TaskWikiInfo|
+vn	l 	|:TaskWikiLink|
+vn	m 	|:TaskWikiMod|
+ n	p 	|:TaskWikiProjects|
+ n	s 	|:TaskWikiProjectsSummary|
+ n	S 	|:TaskWikiStats|
+ n	t 	|:TaskWikiTags|
+vn	+ 	|:TaskWikiStart|
+vn	- 	|:TaskWikiStop|
 
 =============================================================================
 5. COMMANDS						  *taskwiki-commands*
@@ -147,92 +147,96 @@ vn	- 	:TaskWikiStop
 -----------------------------------------------------------------------------
 Split reports commands (that open taskwarrior reports in a window split)
 
-*:TaskWikiBurndown(Daily, Monthly, Weekly) [args]
+*:TaskWikiBurndownDaily* [args]
+*:TaskWikiBurndownWeekly* [args]
+*:TaskWikiBurndownMonthly* [args]
     Opens a split window with the burndown report (close with <CR> or "q")
 
-*:TaskWikiCalendar [args]
+*:TaskWikiCalendar* [args]
     Opens a split window with the calendar report (close with <CR> or "q")
 
-*:TaskWikiGhistory(Annual, Monthly) [args]
+*:TaskWikiGhistoryMonthly* [args]
+*:TaskWikiGhistoryAnnual* [args]
     Opens a split window with the ghistory report (close with <CR> or "q")
 
-*:TaskWikiHistory(Annual, Monthly) [args]
+*:TaskWikiHistoryMonthly* [args]
+*:TaskWikiHistoryAnnual* [args]
     Opens a split window with the history report (close with <CR> or "q")
 
-*:TaskWikiProjects [args]
+*:TaskWikiProjects* [args]
     Opens a vsplit window with the projects report (close with <CR> or "q")
 
-*:TaskWikiProjectsSummary [args]
+*:TaskWikiProjectsSummary* [args]
     Opens a vsplit window with the summary report (close with <CR> or "q")
 
-*:TaskWikiStats [args]
+*:TaskWikiStats* [args]
     Opens a vsplit window with the stats report (close with <CR> or "q")
 
-*:TaskWikiTags [args]
+*:TaskWikiTags* [args]
     Opens a vsplit window with the tags report (close with <CR> or "q")
 
 -----------------------------------------------------------------------------
 Commands that operate on tasks in the buffer
 
-*:TaskWikiAnnotate
+*:TaskWikiAnnotate*
     Opens a prompt to add annotation to selected task(s)
 
-*:TaskWikiDone
+*:TaskWikiDone*
     Marks the completed task as done (status:completed)
 
-*:TaskWikiDelete
+*:TaskWikiDelete*
     Deletes the selected task(s)
 
-*:TaskWikiEdit
+*:TaskWikiEdit*
     Opens the task in vim, with all fields exposed for editing
 
-*:TaskWikiGrid
+*:TaskWikiGrid*
     Opens a new buffer with the selected ViewPort displayed as a grid
     (requires vim-taskwarrior plugin)
 
-*:TaskWikiInfo
+*:TaskWikiInfo*
     (or <CR>) Opens a window with the info report of task under the cursor
     ("q" or <CR> again, closes the window)
 
-*:TaskWikiLink
+*:TaskWikiLink*
     Adds an annotation to selected task(s) with ~/path/to/file.wiki
 
-*:TaskWikiStart
+*:TaskWikiStart*
     "Starts" the selected task(s)
 
-*:TaskWikiStop
+*:TaskWikiStop*
     "Stops" the selected task(s)
 
-*:TaskWikiMod [mods]
+*:TaskWikiMod* [mods]
     Opens a prompt for task modification, for selected task(s)
 
 ----------------------------------------------------------------------------
 Interactive commands
 
-*:TaskWikiChooseProject
+*:TaskWikiChooseProject*
     Interactively choose project
 
-*:TaskWikiChooseTag
+*:TaskWikiChooseTag*
     Interactively choose tag
 
 ----------------------------------------------------------------------------
 Meta commands
 
-*:TaskWikiInspect
+*:TaskWikiInspect*
     (or <CR>) Opens window with details of ViewPort under the cursor
     ("q" or <CR> again, closes the window)
 
 =============================================================================
 6. SETTINGS						  *taskwiki-settings*
 
-taskwiki_taskrc_location
+*taskwiki_taskrc_location*
     The location of the taskrc file used by taskwiki. Defaults to ~/.taskrc.
 
-taskwiki_data_location
+*taskwiki_data_location*
     The location of the data directory for taskwarrior data used by taskwiki.
     Defaults to ~/.task.
 
-taskwiki_extra_warriors
+*taskwiki_extra_warriors*
     A dictionary containing alternative taskwarrior instance definitions.
 
     A key for any alternative taskwarrior definition must be a single,
@@ -247,13 +251,13 @@ taskwiki_extra_warriors
 
 ~   === Home habits | project:Home #H ===
 
-taskwiki_sort_order
+*taskwiki_sort_order*
     The default sort order used to sort the tasks within viewports. Defaults
     to 'due+,pri-,project+'. Expects a comma-separated list of attributes,
     optionally followed by + or - to denote the increasing or decreasing
     order, respectively.
 
-taskwiki_sort_orders
+*taskwiki_sort_orders*
     The sort order can also be customized per viewport. This configuration
     variable stores a dictionary with the alternative sort order definitions,
     each indexed by a uppercase letter.
@@ -266,20 +270,20 @@ taskwiki_sort_orders
 
 ~   === Work tasks by decreased due, grouped by project | project:Work $T ===
 
-taskwiki_split_max_width
+*taskwiki_split_max_width*
     Use to limit the width of any vertical split created by taskwiki.
 
-taskwiki_split_max_height
+*taskwiki_split_max_height*
     Use to limit the height of any vertical split created by taskwiki.
 
-taskwiki_source_tw_colors
+*taskwiki_source_tw_colors*
     If set, taskwiki will try to use the same colors for task highlighting
     as those defined in taskwarrior.
 
-taskwiki_disable
+*taskwiki_disable*
     Setting any value for this variable will disable taskwiki.
 
-taskwiki_measure_coverage
+*taskwiki_measure_coverage*
     Development only. Uses python-coverage to track how much of the code
     is covered by tests.
 
