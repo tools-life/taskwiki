@@ -258,9 +258,24 @@ modification (project, tag) in a split window.
 ----------------------------------------------------------------------------
 Meta commands
 
-*:TaskWikiInspect*
-    (or <CR>) Opens window with details of ViewPort under the cursor
-    ("q" or <CR> again, closes the window)
+This group of commands is directly related to taskwiki or taskwiki specific
+constructs.
+
+*:TaskWikiBufferLoad*
+    Updates the tasks from the Taskwarrior database. This command is run
+    automatically when the taskwiki file is opened.
+
+*:TaskWikiBufferSave*
+    Saves the changes to the Taskwarrior database. This parses and saves all
+    the buffer-only changes (such as changing the description, or due date).
+    This command is run automatically when the taskwiki file is saved.
+
+    NOTE: Using commands such as |:TaskWikiDone| or |:TaskWikiMod| will save
+    the modifications both in the buffer and the Taskwarrior database.
+
+*:TaskWikiInspect* (or <CR> over a viewport)
+    Opens a split window with details of viewport under the cursor. To
+    close the split, use "q" or <CR>.
 
 =============================================================================
 6. SETTINGS						  *taskwiki-settings*
