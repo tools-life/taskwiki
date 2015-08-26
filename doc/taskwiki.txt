@@ -145,7 +145,22 @@ vn	- 	|:TaskWikiStop|
 5. COMMANDS						  *taskwiki-commands*
 
 -----------------------------------------------------------------------------
-Split reports commands (that open taskwarrior reports in a window split)
+Split reports commands.
+
+This family of commands displays TaskWarrior reports in a read-only
+vertical/horizontal split. Size of these splits can be limited,
+see |taskwiki_max_split_height| and |taskwiki_max_split_width| options.
+
+To allow color output in the split windows, make sure you have AnsiEsc vim
+plugin installed, see |taskwiki-optional|.
+
+These commands will by default use filter from the nearest viewport. If you
+want to display report window using global, non-filtered data, explicitly
+pass the 'global' argument, i.e:
+
+    :TaskWikiStats global
+
+List of split report commands:
 
 *:TaskWikiBurndownDaily* [args]
 *:TaskWikiBurndownWeekly* [args]
