@@ -21,13 +21,14 @@ CONTENTS						   *taskwiki-contents*
     1. Introduction 						    |taskwiki|
     2. Requirements                                        |taskwiki-requires|
     3. Installing					    |taskwiki-install|
-    4. Mapping						    |taskwiki-mapping|
-    5. Commands						   |taskwiki-commands|
-    6. Settings						   |taskwiki-settings|
-    7. Troubleshooting					    |taskwiki-trouble|
-    8. Contributing					 |taskwiki-contribute|
-    9. Credits						    |taskwiki-credits|
-    10. License						    |taskwiki-license|
+    4. Optional enhancements                               |taskwiki-optional|
+    5. Mapping						    |taskwiki-mapping|
+    6. Commands						   |taskwiki-commands|
+    7. Settings						   |taskwiki-settings|
+    8. Troubleshooting					    |taskwiki-trouble|
+    9. Contributing					 |taskwiki-contribute|
+    10. Credits						    |taskwiki-credits|
+    11. License						    |taskwiki-license|
 
 =============================================================================
 1. INTRODUCTION							   *taskwiki*
@@ -122,7 +123,30 @@ However, make sure your box satisfies the requirements stated above.
 To access documentation, run :helptags and then :help taskwiki.
 
 =============================================================================
-4. MAPPING						   *taskwiki-mapping*
+4. OPTIONAL ENHANCEMENTS                                  *taskwiki-optional*
+
+The following optional plugins enhance and integrate with TaskWiki.
+At very least,I'd recommend the AnsiEsc plugin - Taskwarrior
+charts are much more fun when they're colorful!
+
+* [vim-plugin-AnsiEsc](https://github.com/powerman/vim-plugin-AnsiEsc)
+adds color support in charts.
+
+    git clone https://github.com/powerman/vim-plugin-AnsiEsc ~/.vim/bundle/
+
+* [tagbar](https://github.com/majutsushi/tagbar)
+provides taskwiki file navigation.
+
+    git clone https://github.com/majutsushi/tagbar ~/.vim/bundle/
+
+* [vim-taskwarrior](https://github.com/farseer90718/vim-taskwarrior)
+enables grid view.
+
+    git clone https://github.com/farseer90718/vim-taskwarrior ~/.vim/bundle/
+
+
+=============================================================================
+5. MAPPING						   *taskwiki-mapping*
 
 n	<CR> 	is mapped to show task info, VP details or follow vimwiki link
 		After editing a task in insert mode, <CR> starts a new task
@@ -155,7 +179,7 @@ vn	+ 	|:TaskWikiStart|
 vn	- 	|:TaskWikiStop|
 
 =============================================================================
-5. COMMANDS						  *taskwiki-commands*
+6. COMMANDS						  *taskwiki-commands*
 
 -----------------------------------------------------------------------------
 Split reports commands.
@@ -291,7 +315,7 @@ constructs.
     close the split, use "q" or <CR>.
 
 =============================================================================
-6. SETTINGS						  *taskwiki-settings*
+7. SETTINGS						  *taskwiki-settings*
 
 *taskwiki_taskrc_location*
     The location of the taskrc file used by taskwiki. Defaults to ~/.taskrc.
@@ -353,7 +377,7 @@ constructs.
 
 
 =============================================================================
-7. TROUBLESHOOTING					   *taskwiki-trouble*
+8. TROUBLESHOOTING					   *taskwiki-trouble*
 Are requirements met?
 	-Vim
 	-TaskWiki (this plugin)
@@ -362,19 +386,19 @@ Are requirements met?
 	-vim-taskwarrior
 
 =============================================================================
-8. CONTRIBUTIONS					*taskwiki-contribute*
+9. CONTRIBUTIONS					*taskwiki-contribute*
 
 Clone, fork, contribute and learn more at https://github.com/tbabej/taskwiki
 Good ideas, well formed bug reports and thoughtful pull-requests welcome.
 
 =============================================================================
-9. CREDITS						   *taskwiki-credits*
+10. CREDITS						   *taskwiki-credits*
 
 Authored by Tomas Babej
 inspired by vimwiki-tasks
 
 =============================================================================
-10. LICENSE						   *taskwiki-license*
+11. LICENSE						   *taskwiki-license*
 
 Copyright 2014-2015 Tomas Babej
 http://github.com/tbabej/taskwiki
