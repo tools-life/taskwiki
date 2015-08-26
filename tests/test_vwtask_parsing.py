@@ -91,3 +91,12 @@ class TestParsingVimwikiTask(object):
         assert vwtask['due'] == local_zone.localize(datetime(2015,8,8))
         assert vwtask['uuid'] == None
 
+    def test_added_modstring(self):
+        self.mockvim.current.buffer[0] = "* [ ] Home task -- project:Home"
+        vwtask = self.VimwikiTask.from_line(self.cache, 0)
+
+        assert vwtask['description'] == u"Home task"
+        assert vwtask['project'] == u"Home"
+        assert vwtask['priority'] == None
+        assert vwtask['due'] == None
+        assert vwtask['uuid'] == None
