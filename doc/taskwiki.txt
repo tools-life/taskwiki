@@ -449,14 +449,21 @@ Are requirements met?
 =============================================================================
 9. CONTRIBUTIONS					*taskwiki-contribute*
 
-Clone, fork, contribute and learn more at https://github.com/tbabej/taskwiki
-Good ideas, well formed bug reports and thoughtful pull-requests welcome.
+Code and issue tracker is hosted at: https://github.com/tbabej/taskwiki
+
+Feel free to submit pull requests and/or file issues for bugs and suggestions.
 
 =============================================================================
 10. CREDITS						   *taskwiki-credits*
 
-Authored by Tomas Babej
-inspired by vimwiki-tasks
+Created by: Tomas Babej.
+
+Design suggestions contributed by: David J Patrick.
+
+Inspired by: [vimwiki-tasks plugin](https://github.com/teranex/vimwiki-tasks).
+
+Taskwiki wouldn't be possible without all the work and support from the
+Taskwarrior community. Come hang out at #taskwarrior on Freenode.
 
 =============================================================================
 11. LICENSE						   *taskwiki-license*
