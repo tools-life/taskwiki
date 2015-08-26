@@ -265,6 +265,103 @@ To add arbitrary metadata to the tasks, see |taskwiki-commands|, especially
 ----------------------------------------------------------------------------
 5.2. Viewports                                  *taskwiki-features-viewport*
 
+---------------
+5.2.1 Filtering
+
+Viewport is a enhanced header, which generates a list of tasks under itself.
+
+As noted in |taskwiki| introduction, each viewport has an embedded filter
+query. When the taskwiki file is loaded or saved, viewport will re-generate
+the list of tasks matching the embedded filter.
+
+~   == Home tasks | project:Home ==
+~   * [ ] Feed the dog (2015-08-08)
+~   * [ ] Tidy up the house !!
+~     * [ ] Wash the dishes
+~     * [ ] Declare war on the cobwebs
+
+Filter strings can be arbitrary taskwarrior filter strings, usage of
+attribute modifiers or virtual tags is allowed:
+
+~   == Overdue tasks | +OVERDUE ==
+~   == Today tasks | +TODAY ==
+~   == Today tasks | due:today ==
+~   == Tomorrow-morning tasks | due.after:tomorrow due.before:tomorrow+12h ==
+
+--------------
+5.2.2 Defaults
+
+Any task added to the viewport will be assigned default values, which are
+derived from the filter definition. This only makes sense, since otherwise
+a task added below the viewport would be removed (it would not match the
+filter).
+
+~   == Home tasks | project:Home ==
+~   * [ ] This task I just wrote here will have project home
+
+However, for more complex filters, defaults cannot be directly derived, for
+example, when attribute modifiers are being used:
+
+~   == Any documentation tasks | project.has:docs ==
+~   * [ ] Should I have project taskwiki.docs or tasklib.docs?
+
+In such case, no default attrbites are derived. Nevertheless, user can
+specify the defaults directly:
+
+~   == Any documentation tasks | project.has:docs | project:taskwiki.docs ==
+
+-------------
+5.2.3 Sorting
+
+Tasks within the viewport are sorted in the form of the dependency tree -
+all the tasks that are blocking a particular task are displayed below that
+task, indented.
+
+The ordering of the tasks within the same level (and parent) is determined
+by the default sort order, see |taskwiki_sort_order|. Sort order can be
+customized per-viewport, in which case you need to set a alternative
+sort order in the |taskwiki_sort_orders| option, along with its identifier.
+
+    Example:
+    let g:taskwiki_sort_orders={"T": "project+,due-"}
+
+Using this sort order is as simple, use $[IDENTIFIER] at the end of viewport
+definition:
+
+~   == Differently ordered home tasks | project:Home $T ==
+
+--------------------
+5.2.4 Default filter
+
+By default, every viewport filter is extended with -DELETED and -PARENT
+virtual tags.
+
+This is quite sensible, however, there might be a case where you wish to
+override this behaviour. To do so, use following virtual tag syntax, which
+forces the virtual tag, no matter its presence in the defaults.
+
+    ?!TAG - any presence in the defaults will not be considered
+    +!TAG - +TAG will be forced, even if -TAG is present in the defaults
+    -!TAG - -TAG will be forced, even if +TAG is present in the defaults
+
+Examples:
+
+~   == Home tasks, even deleted | project:Home ?!DELETED ==
+~   == Home tasks, only deleted | project:Home +!DELETED ==
+~   == Home tasks, excluding deleted | project:Home -!DELETED ==
+
+-----------------------
+5.2.5 Meta virtual tags
+
+Currently, there is one meta virtual tag, -VISIBLE. This tag can be used
+to filter out tasks that are displayed elsewhere in the same taskwiki file.
+
+Example:
+
+~    == Work tasks not belonging to any subproject | project:Work -VISIBLE ==
+~    == Work coding tasks | project:Work.Coding ==
+~    == Work review tasks | project:Work.Review ==
+
 
 =============================================================================
 6. MAPPING						   *taskwiki-mapping*
