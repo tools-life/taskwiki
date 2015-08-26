@@ -61,9 +61,9 @@ Key Features:
 
 - Individual Todos: tasks can be used anywhere in a vimwiki, looking like:
 
- * [ ] Install TaskWiki plugin
+~ * [ ] Install TaskWiki plugin
    and when adding a new task, any other metadata can be added after "--" like
- * [ ] test taskwiki todos and viewports -- proj:tw.wiki +foo due:tomorrow
+~ * [ ] test taskwiki todos and viewports -- proj:tw.wiki +foo due:tomorrow
 
     Task are synced with the task data on file open and on saving. After sync,
     all tasks end with a concealed uuid (eg.  #541c5b57) don't edit this!
