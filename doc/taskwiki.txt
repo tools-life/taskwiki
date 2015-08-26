@@ -171,30 +171,30 @@ List of split report commands:
 *:TaskWikiBurndownDaily* [args]
 *:TaskWikiBurndownWeekly* [args]
 *:TaskWikiBurndownMonthly* [args]
-    Opens a split window with the burndown report (close with <CR> or "q")
+    Opens a horizontal split window with the burndown report.
 
 *:TaskWikiCalendar* [args]
-    Opens a split window with the calendar report (close with <CR> or "q")
+    Opens a horizontal split window with the calendar report.
 
 *:TaskWikiGhistoryMonthly* [args]
 *:TaskWikiGhistoryAnnual* [args]
-    Opens a split window with the ghistory report (close with <CR> or "q")
+    Opens a horizontal split window with the ghistory report.
 
 *:TaskWikiHistoryMonthly* [args]
 *:TaskWikiHistoryAnnual* [args]
-    Opens a split window with the history report (close with <CR> or "q")
+    Opens a horizontal split window with the history report.
 
 *:TaskWikiProjects* [args]
-    Opens a vsplit window with the projects report (close with <CR> or "q")
+    Opens a vertical split window with the projects report.
 
 *:TaskWikiProjectsSummary* [args]
-    Opens a vsplit window with the summary report (close with <CR> or "q")
+    Opens a vertical split window with the summary report.
 
 *:TaskWikiStats* [args]
-    Opens a vsplit window with the stats report (close with <CR> or "q")
+    Opens a vertical split window with the stats report.
 
 *:TaskWikiTags* [args]
-    Opens a vsplit window with the tags report (close with <CR> or "q")
+    Opens a vertical split window with the tags report.
 
 -----------------------------------------------------------------------------
 Commands that operate on tasks in the buffer
