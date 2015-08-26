@@ -260,3 +260,4 @@ inspired by vimwiki-tasks
 
 MIT?
 
+ vim:tw=78:ts=8:ft=help
