@@ -239,13 +239,21 @@ selected tasks.
     Opens a prompt for task modification, for selected task(s).
 
 ----------------------------------------------------------------------------
-Interactive commands
+Interactive commands.
+
+Following commands work similiarly as the previous group, they can operate
+on selected tasks. The modification is done via choosing the particular
+modification (project, tag) in a split window.
 
 *:TaskWikiChooseProject*
-    Interactively choose project
+    Interactively choose project for selected task(s) by hitting <CR> over the
+    desired value in the split window. Use "q" to close the split, without
+    performing any modifications.
 
 *:TaskWikiChooseTag*
-    Interactively choose tag
+    Interactively choose tag for selected task(s) by hitting <CR> over the
+    desired value in the split window. Use "q" to close the split, without
+    performing any modifications.
 
 ----------------------------------------------------------------------------
 Meta commands
