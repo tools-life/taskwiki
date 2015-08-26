@@ -197,39 +197,46 @@ List of split report commands:
     Opens a vertical split window with the tags report.
 
 -----------------------------------------------------------------------------
-Commands that operate on tasks in the buffer
+Commands operating on selected tasks.
+
+This group of commands operates on a selected tasks. Selected tasks can be
+either the task which is currently under cursor, or any group of visually
+selected tasks.
 
 *:TaskWikiAnnotate*
-    Opens a prompt to add annotation to selected task(s)
+    Opens a prompt to add annotation to selected task(s).
 
 *:TaskWikiDone*
-    Marks the completed task as done (status:completed)
+    Marks the selected task(s) as completed.
 
 *:TaskWikiDelete*
-    Deletes the selected task(s)
+    Deletes the selected task(s). Removes them from the file.
 
 *:TaskWikiEdit*
-    Opens the task in vim, with all fields exposed for editing
+    Opens the task in a separate vim instance using 'task edit'.
 
 *:TaskWikiGrid*
-    Opens a new buffer with the selected ViewPort displayed as a grid
-    (requires vim-taskwarrior plugin)
+    Opens a new buffer with the selected ViewPort displayed as a grid.
+    Requires vim-taskwarrior plugin, see |taskwiki-optional|.
 
-*:TaskWikiInfo*
-    (or <CR>) Opens a window with the info report of task under the cursor
-    ("q" or <CR> again, closes the window)
+*:TaskWikiInfo* (or <CR> over a task)
+    Opens a split window with the info report of task under the cursor. To
+    close the split, use "q" or <CR>.
+
+    NOTE: This split can have very big height for tasks with many past
+    modifications. See |taskwiki_split_max_height|.
 
 *:TaskWikiLink*
-    Adds an annotation to selected task(s) with ~/path/to/file.wiki
+    Adds an annotation to selected task(s) with ~/path/to/file.wiki.
 
 *:TaskWikiStart*
-    "Starts" the selected task(s)
+    "Starts" the selected task(s).
 
 *:TaskWikiStop*
-    "Stops" the selected task(s)
+    "Stops" the selected task(s).
 
 *:TaskWikiMod* [mods]
-    Opens a prompt for task modification, for selected task(s)
+    Opens a prompt for task modification, for selected task(s).
 
 ----------------------------------------------------------------------------
 Interactive commands
