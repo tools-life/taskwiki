@@ -1,4 +1,4 @@
-*taskwiki.txt*          Taskwarrior tasks in Vimwiki                  v0.8.4 ~
+*taskwiki.txt*          Taskwarrior tasks in Vimwiki                  v0.4   ~
                    _____         _   __        ___ _    _                    ~
         a         |_   _|_ _ ___| | _\ \      / (_) | _(_)         a         ~
    command-line     | |/ _` / __| |/ /\ \ /\ / /| | |/ / |   personal wiki   ~
@@ -22,13 +22,16 @@ CONTENTS						   *taskwiki-contents*
     2. Requirements                                        |taskwiki-requires|
     3. Installing					    |taskwiki-install|
     4. Optional enhancements                               |taskwiki-optional|
-    5. Mapping						    |taskwiki-mapping|
-    6. Commands						   |taskwiki-commands|
-    7. Settings						   |taskwiki-settings|
-    8. Troubleshooting					    |taskwiki-trouble|
-    9. Contributing					 |taskwiki-contribute|
-    10. Credits						    |taskwiki-credits|
-    11. License						    |taskwiki-license|
+    5. More details about features                         |taskwiki-features|
+        5.1. Tasks                                    |taskwiki-features-task|
+        5.2. Viewports                            |taskwiki-features-viewport|
+    6. Mapping						    |taskwiki-mapping|
+    7. Commands						   |taskwiki-commands|
+    8. Settings						   |taskwiki-settings|
+    9. Troubleshooting					    |taskwiki-trouble|
+    10. Contributing					 |taskwiki-contribute|
+    11. Credits						    |taskwiki-credits|
+    12. License						    |taskwiki-license|
 
 =============================================================================
 1. INTRODUCTION							   *taskwiki*
@@ -205,9 +208,66 @@ enables grid view.
 
     git clone https://github.com/farseer90718/vim-taskwarrior ~/.vim/bundle/
 
+=============================================================================
+5. FEATURES IN DETAIL                                     *taskwiki-features*
+
+----------------------------------------------------------------------------
+5.1. Tasks                                          *taskwiki-features-task*
+
+Any task in the taskwiki file will be saved to Taskwarrior. Task is identified
+by an concealed UUID.
+
+~   * [ ] Install Taskwiki  #2a4f52
+~                           ^ this part is concealed
+
+Currently, following task metadata is represented in the buffer:
+
+* Status. Tasks are highlighted differently depending on their status.
+
+~   * [ ] Install Taskwiki   |   pending task
+~   * [X] Install Taskwiki   |   completed task
+~   * [D] Install Taskwiki   |   deleted task
+~   * [S] Install Taskwiki   |   started task
+
+* Description. All the text that is not part of the other metadata.
+* Due date. Either a date, or date with time inside parentheses.
+
+~   * [X] Install Taskwiki (2015-08-08)        | task with due date
+~   * [X] Install Taskwiki (2015-08-08 14:00)  | task with due date and time
+
+* Priority. This is denoted by 1,2, or 3 exclamation marks for L, M and H
+  priority levels, respectively.
+
+~   * [X] Install Taskwiki !!   | task with medium priority
+
+* Dependency. If any task is indented right below other, the indented
+  task will be marked as dependency for the non-idented one.
+
+~   * [ ] Make sandwich  | will be marked as dependant on tasks below
+~     * [ ] Buy bread
+~     * [ ] Find butter
+
+The actual indentation (number of spaces) does not matter. Task will be
+marked as dependency only for its direct parent.
+
+Any changes to the buffer representation of the task will be saved to the
+Taskwarrior data files. You can hence conveniently change description, or
+add due dates, directly from your taskwiki files.
+
+Tasks can be assigned any other metadata that Taskwarrior supports, such
+as tags, or custom user-defined attrbites. To simplify parsing, however,
+not all of them are represented in the buffer. However, they can be used
+for filtering, etc.
+
+To add arbitrary metadata to the tasks, see |taskwiki-commands|, especially
+|:TaskWikiMod|, |:TaskWikiAnnotate| and friends.
+
+----------------------------------------------------------------------------
+5.2. Viewports                                  *taskwiki-features-viewport*
+
 
 =============================================================================
-5. MAPPING						   *taskwiki-mapping*
+6. MAPPING						   *taskwiki-mapping*
 
 n	<CR> 	is mapped to show task info, VP details or follow vimwiki link
 		After editing a task in insert mode, <CR> starts a new task
@@ -240,7 +300,7 @@ vn	+ 	|:TaskWikiStart|
 vn	- 	|:TaskWikiStop|
 
 =============================================================================
-6. COMMANDS						  *taskwiki-commands*
+7. COMMANDS						  *taskwiki-commands*
 
 -----------------------------------------------------------------------------
 Split reports commands.
@@ -376,7 +436,7 @@ constructs.
     close the split, use "q" or <CR>.
 
 =============================================================================
-7. SETTINGS						  *taskwiki-settings*
+8. SETTINGS						  *taskwiki-settings*
 
 *taskwiki_taskrc_location*
     The location of the taskrc file used by taskwiki. Defaults to ~/.taskrc.
@@ -438,21 +498,21 @@ constructs.
 
 
 =============================================================================
-8. TROUBLESHOOTING					   *taskwiki-trouble*
+9. TROUBLESHOOTING					   *taskwiki-trouble*
 
 Make sure both your taskwiki and tasklib versions are updated. If this does
 not resolve your issue, feel free to submit a bug report, or seek support
 on #taskwarrior IRC channgel on Freenode.
 
 =============================================================================
-9. CONTRIBUTIONS					*taskwiki-contribute*
+10. CONTRIBUTIONS					*taskwiki-contribute*
 
 Code and issue tracker is hosted at: https://github.com/tbabej/taskwiki
 
 Feel free to submit pull requests and/or file issues for bugs and suggestions.
 
 =============================================================================
-10. CREDITS						   *taskwiki-credits*
+11. CREDITS						   *taskwiki-credits*
 
 Created by: Tomas Babej.
 
@@ -464,7 +524,7 @@ Taskwiki wouldn't be possible without all the work and support from the
 Taskwarrior community. Come hang out at #taskwarrior on Freenode.
 
 =============================================================================
-11. LICENSE						   *taskwiki-license*
+12. LICENSE						   *taskwiki-license*
 
 Copyright 2014-2015 Tomas Babej
 http://github.com/tbabej/taskwiki
