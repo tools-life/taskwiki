@@ -439,12 +439,10 @@ constructs.
 
 =============================================================================
 8. TROUBLESHOOTING					   *taskwiki-trouble*
-Are requirements met?
-	-Vim
-	-TaskWiki (this plugin)
-	-Taskwarrior
-	-Tasklib
-	-vim-taskwarrior
+
+Make sure both your taskwiki and tasklib versions are updated. If this does
+not resolve your issue, feel free to submit a bug report, or seek support
+on #taskwarrior IRC channgel on Freenode.
 
 =============================================================================
 9. CONTRIBUTIONS					*taskwiki-contribute*
