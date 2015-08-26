@@ -112,9 +112,14 @@ sufficient, and raise error if not.
 =============================================================================
 3. INSTALLING						   *taskwiki-install*
 
-- plugins the vim way: http://vimdoc.sourceforge.net/htmldoc/usr_05.html#05.4
-- plugins the easy way: https://github.com/tpope/vim-pathogen
-    Other "vim plugin managers" will probably work, but have not been tested
+Using pathogen (or similiar vim plugin manager), the taskwiki install is
+as simple as:
+
+    git clone https://github.com/tbabej/taskwiki ~/.vim/bundle/taskwiki
+
+However, make sure your box satisfies the requirements stated above.
+
+To access documentation, run :helptags and then :help taskwiki.
 
 =============================================================================
 4. MAPPING						   *taskwiki-mapping*
