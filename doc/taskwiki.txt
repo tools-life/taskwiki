@@ -19,7 +19,7 @@ QUICK-REFERENCE   --   use "<leader>t" and one of:   --    *taskwiki-quickref*
 CONTENTS						   *taskwiki-contents*
 
     1. Introduction 						    |taskwiki|
-    2. Prerequisites					     |taskwiki-prereq|
+    2. Requirements                                        |taskwiki-requires|
     3. Installing					    |taskwiki-install|
     4. Mapping						    |taskwiki-mapping|
     5. Commands						   |taskwiki-commands|
@@ -88,18 +88,26 @@ Key Features:
     warranty and no promise of fitness for any purpose! (back up your data!)
 
 =============================================================================
-2. PREREQUISITES					    *taskwiki-prereq*
+2. REQUIREMENTS					          *taskwiki-requires*
 
-This plugin requires:
-- vim 7.4 or greater, with python bindings (use :version in vim, to check)
-- vimwiki dev branch (https://github.com/vimwiki/vimwiki)
-- taskwarrior 2.4.0+ (http://taskwarrior.org/download/)
-- tasklib develop branch (https://github.com/tbabej/tasklib/tree/develop)
+* Vim 7.4 or newer, compiled with +python
+* [Vimwiki](https://github.com/vimwiki/vimwiki/tree/dev) (the dev branch)
 
-and can be enhanced with:
-- vim-plugin-AnsiEsc (https://github.com/powerman/vim-plugin-AnsiEsc) for color
-- tagbar (https://github.com/majutsushi/tagbar) for taskwiki file navigation
-- vim-taskwarrior (https://github.com/farseer90718/vim-taskwarrior) for grid
+    git clone https://github.com/vimwiki/vimwiki ~/.vim/bundle/ --branch dev
+
+* [Taskwarrior](http://taskwarrior.org) (version 2.4.0 or newer)
+- install either from [sources](http://taskwarrior.org/download/)
+or using your [package manager](http://taskwarrior.org/download/#dist)
+
+    sudo dnf install task
+
+* [tasklib](https://github.com/tbabej/tasklib/tree/develop) (the develop branch)
+- Python library for Taskwarrior.
+
+    sudo pip install --upgrade git+git://github.com/tbabej/tasklib@develop
+
+Taskwiki will automatically check whether the Vim and tasklib versions are
+sufficient, and raise error if not.
 
 =============================================================================
 3. INSTALLING						   *taskwiki-install*
