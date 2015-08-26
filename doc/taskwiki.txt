@@ -151,14 +151,20 @@ This family of commands displays TaskWarrior reports in a read-only
 vertical/horizontal split. Size of these splits can be limited,
 see |taskwiki_max_split_height| and |taskwiki_max_split_width| options.
 
-To allow color output in the split windows, make sure you have AnsiEsc vim
-plugin installed, see |taskwiki-optional|.
-
 These commands will by default use filter from the nearest viewport. If you
 want to display report window using global, non-filtered data, explicitly
 pass the 'global' argument, i.e:
 
     :TaskWikiStats global
+
+To specify an explicit filter, you can use the filter as the argument, i.e:
+
+    :TaskWikiStats project:Home
+
+To close the split windows, just hit <CR> or "q".
+
+NOTE: To allow color output in the split windows, make sure you have AnsiEsc
+vim plugin installed, see |taskwiki-optional|.
 
 List of split report commands:
 
