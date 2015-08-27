@@ -113,6 +113,21 @@ class TestViewportsTwoContextTaskGeneration(IntegrationTest):
         self.command("w", regex="written$", lines=1)
 
 
+class TestViewportsContextInvalid(IntegrationTest):
+
+    viminput = """
+    === Work tasks | @doesnotexist ===
+    """
+
+    vimoutput = """
+    === Work tasks | @doesnotexist ===
+    """
+
+    def execute(self):
+        self.command("w", regex="Context definition for 'doesnotexist' "
+                                "could not be found.", lines=3)
+
+
 class TestViewportDefaultsAssigment(IntegrationTest):
 
     viminput = """
