@@ -659,11 +659,12 @@ constructs.
     Use to limit the height of any vertical split created by taskwiki.
 
 *taskwiki_source_tw_colors*
-    If set, taskwiki will try to use the same colors for task highlighting
-    as those defined in taskwarrior.
+    If set to a non-empty value (such as "yes"), taskwiki will try to
+    use the same colors for task highlighting as those defined in
+    taskwarrior.
 
 *taskwiki_disable*
-    Setting any value for this variable will disable taskwiki.
+    Setting any non-empty value for this variable will disable taskwiki.
 
 *taskwiki_measure_coverage*
     Development only. Uses python-coverage to track how much of the code
