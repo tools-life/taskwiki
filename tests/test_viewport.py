@@ -397,3 +397,29 @@ class TestViewportsSpecificSortingCombined(TestViewportsSpecificSorting):
     * [ ] home task 2 (2015-08-02 00:00)  #{uuid}
     * [ ] work task 2 (2015-08-02 00:00)  #{uuid}
     """
+
+class TestViewportsVisibleMetaTag(IntegrationTest):
+
+    viminput = """
+    === Home tasks | project:Home -VISIBLE ===
+
+    === Chores | project:Home.Chores ===
+    """
+
+    vimoutput = """
+    === Home tasks | project:Home -VISIBLE ===
+    * [ ] home task  #{uuid}
+
+    === Chores | project:Home.Chores ===
+    * [ ] chore task  #{uuid}
+    """
+
+    tasks = [
+        dict(description="home task", project='Home.Random'),
+        dict(description="chore task", project='Home.Chores'),
+    ]
+
+    def execute(self):
+        # Currently, two saves are necessary for VISIBLE to take effect
+        self.command("w", regex="written$", lines=1)
+        self.command("w", regex="written$", lines=1)
