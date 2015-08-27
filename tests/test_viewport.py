@@ -398,6 +398,23 @@ class TestViewportsSpecificSortingCombined(TestViewportsSpecificSorting):
     * [ ] work task 2 (2015-08-02 00:00)  #{uuid}
     """
 
+
+class TestViewportsSortedInvalidOrder(IntegrationTest):
+
+    viminput = """
+    === Work tasks | +work $X ===
+    """
+
+    vimoutput = """
+    === Work tasks | +work $X ===
+    """
+
+    def execute(self):
+        # Check that proper error message is raised
+        self.command("w", regex="Sort indicator 'X' for viewport "
+            "'Work tasks' is not defined, using default.", lines=2)
+
+
 class TestViewportsVisibleMetaTag(IntegrationTest):
 
     viminput = """
