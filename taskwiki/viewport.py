@@ -109,7 +109,7 @@ class ViewPort(object):
             elif token.startswith('!-'):
                 tokens_to_remove.add(token)
                 tokens_to_remove.add('+' + token[2:])
-                tokens_to_add.append('-' + token[2:])
+                tokens_to_add.add('-' + token[2:])
             elif token.startswith('!?'):
                 tokens_to_remove.add(token)
                 tokens_to_remove.add('+' + token[2:])
