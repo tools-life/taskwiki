@@ -117,11 +117,11 @@ class ViewPort(object):
                 tokens_to_remove.add('+' + token[2:])
                 tokens_to_remove.add('-' + token[2:])
 
-        taskfilter_args = list(tokens_to_add) + taskfilter_args
-
         for token in tokens_to_remove:
             if token in taskfilter_args:
                 taskfilter_args.remove(token)
+
+        taskfilter_args = list(tokens_to_add) + taskfilter_args
 
         # Deal with the situation when both +TAG and -TAG appear in the
         # taskfilter_args. If one of them is from the defaults, the explicit
