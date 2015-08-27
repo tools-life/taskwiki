@@ -357,15 +357,15 @@ This is quite sensible, however, there might be a case where you wish to
 override this behaviour. To do so, use following virtual tag syntax, which
 forces the virtual tag, no matter its presence in the defaults.
 
-    ?!TAG - any presence in the defaults will not be considered
-    +!TAG - +TAG will be forced, even if -TAG is present in the defaults
-    -!TAG - -TAG will be forced, even if +TAG is present in the defaults
+    !?TAG - any presence in the defaults will not be considered
+    !+TAG - +TAG will be forced, even if -TAG is present in the defaults
+    !-TAG - -TAG will be forced, even if +TAG is present in the defaults
 
 Examples:
 
-~   == Home tasks, even deleted | project:Home ?!DELETED ==
-~   == Home tasks, only deleted | project:Home +!DELETED ==
-~   == Home tasks, excluding deleted | project:Home -!DELETED ==
+~   == Home tasks, even deleted | project:Home !?DELETED ==
+~   == Home tasks, only deleted | project:Home !+DELETED ==
+~   == Home tasks, excluding deleted | project:Home !-DELETED ==
 
 -----------------------
 5.2.5 Meta virtual tags
