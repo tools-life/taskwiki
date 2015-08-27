@@ -221,6 +221,9 @@ by an concealed UUID.
 ~   * [ ] Install Taskwiki  #2a4f52
 ~                           ^ this part is concealed
 
+----------------------
+5.1.1 Represented data
+
 Currently, following task metadata is represented in the buffer:
 
 * Status. Tasks are highlighted differently depending on their status.
@@ -255,6 +258,9 @@ Any changes to the buffer representation of the task will be saved to the
 Taskwarrior data files. You can hence conveniently change description, or
 add due dates, directly from your taskwiki files.
 
+------------------------------
+5.1.2 Assigning other metadata
+
 Tasks can be assigned any other metadata that Taskwarrior supports, such
 as tags, or custom user-defined attrbites. To simplify parsing, however,
 not all of them are represented in the buffer. However, they can be used
@@ -262,6 +268,16 @@ for filtering, etc.
 
 To add arbitrary metadata to the tasks, see |taskwiki-commands|, especially
 |:TaskWikiMod|, |:TaskWikiAnnotate| and friends.
+
+To assign metadata when creating a task, you can use put it into the
+description, separating it from the real description using the '--' divider.
+
+~   * [ ] This has project home -- project:Home
+
+Upon saving, the metadata string will disappear, saving the metadata into
+Taskwarrior:
+
+~   * [ ] This has project home  #431f42
 
 ----------------------------------------------------------------------------
 5.2. Viewports                                  *taskwiki-features-viewport*
