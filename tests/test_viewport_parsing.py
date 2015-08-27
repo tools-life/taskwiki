@@ -97,3 +97,33 @@ class TestParsingVimwikiTask(object):
         assert port.defaults == {'tags':['home']}
         assert port.sort == 'extra'
         assert port.tw == 'extra'
+
+    def test_override_default_virtual_tags_neutral(self):
+        self.mockvim.current.buffer[0] = "== Test | project:Home !?DELETED =="
+        port = self.ViewPort.from_line(0, self.cache)
+
+        assert port.taskfilter == ["-PARENT", "project:Home"]
+        assert port.name == "Test"
+        assert port.defaults == {'project':'Home'}
+        assert port.sort == DEFAULT_SORT_ORDER
+        assert port.tw == 'default'
+
+    def test_override_default_virtual_tags_positive(self):
+        self.mockvim.current.buffer[0] = "== Test | project:Home !+DELETED =="
+        port = self.ViewPort.from_line(0, self.cache)
+
+        assert port.taskfilter == ["+DELETED", "-PARENT", "project:Home"]
+        assert port.name == "Test"
+        assert port.defaults == {'project':'Home'}
+        assert port.sort == DEFAULT_SORT_ORDER
+        assert port.tw == 'default'
+
+    def test_override_default_virtual_tags_negative(self):
+        self.mockvim.current.buffer[0] = "== Test | project:Home !-DELETED =="
+        port = self.ViewPort.from_line(0, self.cache)
+
+        assert port.taskfilter == ["-DELETED", "-PARENT","project:Home"]
+        assert port.name == "Test"
+        assert port.defaults == {'project':'Home'}
+        assert port.sort == DEFAULT_SORT_ORDER
+        assert port.tw == 'default'
