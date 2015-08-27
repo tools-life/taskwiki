@@ -379,6 +379,13 @@ Example:
 ~    == Work coding tasks | project:Work.Coding ==
 ~    == Work review tasks | project:Work.Review ==
 
+----------------
+5.2.6 Inspection
+
+You can inspect a give viewport (see what filter and defaults are being
+used, as well as other pieces of information) by using the |:TaskWikiInspect|
+command (or hitting <CR>) over a viewport definition.
+
 ----------------------------------------------------------------------------
 5.3. Extra data sources                         *taskwiki-features-warriors*
 
