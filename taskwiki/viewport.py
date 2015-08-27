@@ -101,21 +101,26 @@ class ViewPort(object):
         tokens_to_remove = set()
         tokens_to_add = set()
 
-        for token in filter(lambda x: x.isupper(), taskfilter_args):
+        is_forced_virtual_tag = lambda x: x.isupper() and (
+            x.startswith('!+') or
+            x.startswith('!-') or
+            x.startswith('!?')
+        )
+
+        for token in filter(is_forced_virtual_tag, taskfilter_args):
+            # In any case, remove the forced tag and the forcing
+            # flag from the taskfilter
+            tokens_to_remove.add(token)
+            tokens_to_remove.add('+' + token[2:])
+            tokens_to_remove.add('-' + token[2:])
+
+            # Add forced tag versions
             if token.startswith('!+'):
-                tokens_to_remove.add(token)
-                tokens_to_remove.add('+' + token[2:])
-                tokens_to_remove.add('-' + token[2:])
                 tokens_to_add.add('+' + token[2:])
             elif token.startswith('!-'):
-                tokens_to_remove.add(token)
-                tokens_to_remove.add('+' + token[2:])
-                tokens_to_remove.add('-' + token[2:])
                 tokens_to_add.add('-' + token[2:])
             elif token.startswith('!?'):
-                tokens_to_remove.add(token)
-                tokens_to_remove.add('+' + token[2:])
-                tokens_to_remove.add('-' + token[2:])
+                pass
 
         for token in tokens_to_remove:
             if token in taskfilter_args:
