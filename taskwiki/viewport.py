@@ -104,11 +104,13 @@ class ViewPort(object):
         for token in filter(lambda x: x.isupper(), taskfilter_args):
             if token.startswith('!+'):
                 tokens_to_remove.add(token)
+                tokens_to_remove.add('+' + token[2:])
                 tokens_to_remove.add('-' + token[2:])
                 tokens_to_add.add('+' + token[2:])
             elif token.startswith('!-'):
                 tokens_to_remove.add(token)
                 tokens_to_remove.add('+' + token[2:])
+                tokens_to_remove.add('-' + token[2:])
                 tokens_to_add.add('-' + token[2:])
             elif token.startswith('!?'):
                 tokens_to_remove.add(token)
