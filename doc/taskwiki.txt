@@ -364,7 +364,7 @@ Example:
 ~    == Work review tasks | project:Work.Review ==
 
 ----------------------------------------------------------------------------
-5.2. Extra data sources                         *taskwiki-features-warriors*
+5.3. Extra data sources                         *taskwiki-features-warriors*
 
 Taskwiki can work with multiple instances of the taskwarrior databases at
 the same time. This is handy if you keep different taskwarrior databases
