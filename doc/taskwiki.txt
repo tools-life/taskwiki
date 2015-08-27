@@ -386,6 +386,27 @@ You can inspect a give viewport (see what filter and defaults are being
 used, as well as other pieces of information) by using the |:TaskWikiInspect|
 command (or hitting <CR>) over a viewport definition.
 
+-------------------------------------------
+5.2.7 Usage of existing context definitions
+
+If you use the context feature in Taskwarrior, you can easily reference
+definition of any context using the @[context_name] syntax in the viewport's
+filter.
+
+For example, if you define the following context in the Taskwarrior,
+
+    $ task context define worktoday project:Work due:today
+
+you can leverage this definition in the filter:
+
+~   == Work tasks today | @worktoday ==
+
+Which is equivalent to (context gets expanded):
+
+~   == Work tasks today | project:Work due:today ==
+
+You can also verify the expansion by inspecting the viewport.
+
 ----------------------------------------------------------------------------
 5.3. Extra data sources                         *taskwiki-features-warriors*
 
