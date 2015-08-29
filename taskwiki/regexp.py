@@ -44,7 +44,8 @@ DATE_FORMAT = "(%Y-%m-%d)"
 GENERIC_VIEWPORT = re.compile(
     '^'                    # Starts at the begging of the line
     '[=]+'                 # Heading begging
-    '(?P<name>[^=\|]*)'    # Name of the viewport, all before the | sign
+    '(?P<name>[^=\|\[\{]*)'  # Name of the viewport, all before the | sign
+                             # Cannot include '[', '=', '|, and '{'
     '\|'                   # Colon
     '(?P<filter>[^=\|]*?)'       # Filter
     '('                    # Optional defaults
