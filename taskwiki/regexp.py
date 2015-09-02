@@ -34,8 +34,8 @@ GENERIC_TASK = re.compile(''.join([
         '(', SOURCE_INDICATOR, ')?',
         '(', UUID, ')?',
     ')?',  # UUID is not there for new tasks
-    FINAL_SEGMENT_SEPARATOR_UNNAMED,
-    #'$'    # Enforce match on the whole line
+    SPACE_UNNAMED,
+    '$'    # Enforce match on the whole line
 ]))
 
 DATETIME_FORMAT = "(%Y-%m-%d %H:%M)"
