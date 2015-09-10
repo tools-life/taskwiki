@@ -70,7 +70,7 @@ command! -range TaskWikiChooseTag :<line1>,<line2>py ChooseSplitTags("global").e
 " Meta commands
 command! TaskWikiInspect :py Meta().inspect_viewport()
 
-" Disable <CR> as VimwikIFollowLink
+" Disable <CR> as VimwikiFollowLink
 if !hasmapto('<Plug>VimwikiFollowLink')
   nmap <Plug>NoVimwikiFollowLink <Plug>VimwikiFollowLink
 endif
