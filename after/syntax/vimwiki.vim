@@ -28,3 +28,17 @@ syntax match TaskWikiTaskPriority containedin=TaskWikiTask contained /\( !\| !!\
 " Set concealed parts as really concealed in normal mode, and with cursor over
 setlocal conceallevel=3
 setlocal concealcursor=nc
+
+" Configure custom FoldText function
+" Altered version of the VimwikiFoldText
+
+function! TaskwikiFoldText()
+  let line = getline(v:foldstart)
+  let main_text = substitute(line, '^\s*', repeat(' ',indent(v:foldstart)), '')
+  let short_text = substitute(main_text, '|[^=]* =', '=', '')
+  let fold_len = v:foldend - v:foldstart + 1
+  let len_text = ' ['.fold_len.'] '
+  return short_text.len_text.repeat(' ', 500)
+endfunction
+
+setlocal foldtext=TaskwikiFoldText()
