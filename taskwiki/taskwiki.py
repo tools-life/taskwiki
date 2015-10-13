@@ -307,6 +307,7 @@ class Split(object):
     maxheight = False
     vertical = False
     cursorline = True
+    size = None
     tw_extra_args = []
 
     def __init__(self, args):
@@ -345,6 +346,7 @@ class Split(object):
 
         util.show_in_split(
             output,
+            size=self.size,
             name=self.split_name,
             vertical=self.vertical,
             activate_cursorline=self.cursorline,
