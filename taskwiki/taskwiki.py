@@ -330,15 +330,18 @@ class Split(object):
             port = viewport.ViewPort.find_closest(cache)
             return port.taskfilter if port is not None else []
 
+    @property
+    def full_args(self):
+        return self.args + [self.command] + self.tw_extra_args
+
     def execute(self):
-        args = self.args + [self.command] + self.tw_extra_args
         if self.colorful:
-            output = util.tw_execute_colorful(self.tw, args,
+            output = util.tw_execute_colorful(self.tw, self.full_args,
                                               allow_failure=False,
                                               maxwidth=self.maxwidth,
                                               maxheight=self.maxheight)
         else:
-            output = util.tw_execute_safely(self.tw, args)
+            output = util.tw_execute_safely(self.tw, self.full_args)
 
         util.show_in_split(
             output,
