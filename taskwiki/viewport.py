@@ -295,14 +295,14 @@ class ViewPort(object):
             # There might be more if the viewport contained multiple
             # representations of the same task
             if task.saved:
-                matching_vimwikitasks= [
+                matching_vimwikitasks = [
                     t for t in self.tasks
                     if t.uuid == vwtask.ShortUUID(task['uuid'], task.backend)
                 ]
             else:
                 # For the tasks that are not saved yet, only one
                 # representation can exist, so use object-comparison
-                matching_vimwikitasks= [
+                matching_vimwikitasks = [
                     t for t in self.tasks
                     if t.task == task
                 ]
@@ -317,7 +317,7 @@ class ViewPort(object):
         existing_tasks = len(self.tasks)
 
         sorted_to_add = list(to_add)
-        sorted_to_add.sort(key=lambda x:x['entry'])
+        sorted_to_add.sort(key=lambda x: x['entry'])
 
         for task in sorted_to_add:
             added_tasks += 1
