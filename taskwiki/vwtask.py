@@ -270,13 +270,15 @@ class VimwikiTask(object):
         return self.task.modified or self.add_dependencies
 
     def save_to_tw(self):
+        # This method persumes all the dependencies have been created at the
+        # point it was called, hence move set the dependencies for the underlying
+        # task
+        self.task['depends'] |= set(s.task for s in self.add_dependencies
+                                    if not s.task.completed)
+
         # Push the values to the Task only if the Vimwiki representation
         # somehow differs
-        # TODO: Check more than description
         if self.tainted or not self.uuid:
-            # TODO: this does not solve the issue of changed or removed deps (moved task)
-            self.task['depends'] |= set(s.task for s in self.add_dependencies
-                                        if not s.task.completed)
             self.task.save()
 
             # If task was first time saved now, add it to the cache and remove
