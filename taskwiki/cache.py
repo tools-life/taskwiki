@@ -174,6 +174,18 @@ class TaskCache(object):
         # Restore the old authority flag value
         self.buffer_has_authority = old_authority
 
+    def load_viewports(self):
+        for i in range(len(vim.current.buffer)):
+            port = viewport.ViewPort.from_line(i, self)
+
+            if port is None:
+                continue
+
+            port.load_tasks()
+
+            # Save the viewport in the cache
+            self.viewport_cache[i] = port
+
     def update_vwtasks_in_buffer(self):
         for task in self.vimwikitask_cache.values():
             task.update_in_buffer()
@@ -222,19 +234,8 @@ class TaskCache(object):
             vwtask.update_from_task()
 
     def evaluate_viewports(self):
-        i = 0
-        while i < len(vim.current.buffer):
-            port = viewport.ViewPort.from_line(i, self)
-            i += 1
-
-            if port is None:
-                continue
-
-            port.load_tasks()
+        for port in self.viewport_cache.values():
             port.sync_with_taskwarrior()
-
-            # Save the viewport in the cache
-            self.viewport_cache[i] = port
 
     def get_viewport_by_task(self, task):
         """
