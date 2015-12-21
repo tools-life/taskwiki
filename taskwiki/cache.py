@@ -65,6 +65,7 @@ class TaskCache(object):
     def __init__(self):
         self.task_cache = dict()
         self.vimwikitask_cache = dict()
+        self.viewport_cache = dict()
         self.warriors = WarriorStore()
         self.buffer_has_authority = True
 
@@ -159,6 +160,7 @@ class TaskCache(object):
     def reset(self):
         self.task_cache = dict()
         self.vimwikitask_cache = dict()
+        self.viewport_cache = dict()
 
     def load_vwtasks(self, buffer_has_authority=True):
         # Set the authority flag, which determines which data (Buffer or TW)
@@ -230,6 +232,21 @@ class TaskCache(object):
 
             port.load_tasks()
             port.sync_with_taskwarrior()
+
+            # Save the viewport in the cache
+            self.viewport_cache[i] = port
+
+    def get_viewport_by_task(self, task):
+        """
+        Looks for a viewport containing the given task by iterating over the cached
+        items.
+
+        Returns the viewport, or None if not found.
+        """
+
+        for port in self.viewport_cache.values():
+            if task in port.viewport_tasks:
+                return port
 
     def rebuild_vimwikitask_cache(self):
         new_cache = dict()
