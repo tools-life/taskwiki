@@ -107,6 +107,16 @@ def get_input(prompt="Enter: ", allow_empty=False):
 
     return value
 
+def get_current_window():
+    """
+    Returns a current window number. Provides a workaround for Neovim.
+    """
+
+    try:
+        return vim.current.window.number - 1
+    except AttributeError:
+        return vim.eval('winnr()')
+
 def convert_colorstring_for_vim(string):
     BASIC_COLORS = [
         "blue", "yellow", "green", "red",
@@ -235,7 +245,7 @@ def show_in_split(lines, size=None, position="belowright", vertical=False,
 
     if activate_cursorline and not vim.current.window.options['cursorline']:
         vim.current.window.options['cursorline'] = True
-        cursorline_activated_in_window = vim.current.window.number - 1
+        cursorline_activated_in_window = get_current_window()
 
     # Call 'vsplit' for vertical, otherwise 'split'
     vertical_prefix = 'v' if vertical else ''
@@ -318,7 +328,7 @@ def tw_execute_safely(tw, *args, **kwargs):
 @contextlib.contextmanager
 def current_line_highlighted():
     original_value = vim.current.window.options['cursorline']
-    original_window_number = vim.current.window.number - 1
+    original_window_number = get_current_window()
     vim.current.window.options['cursorline'] = True
 
     vim.command('redraw')
