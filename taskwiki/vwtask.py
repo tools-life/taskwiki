@@ -265,10 +265,6 @@ class VimwikiTask(object):
     def priority_to_tw_format(self):
         return convert_priority_to_tw_format(self['priority'])
 
-    @property
-    def tainted(self):
-        return self.task.modified or self.add_dependencies
-
     def save_to_tw(self):
         # This method persumes all the dependencies have been created at the
         # point it was called, hence move set the dependencies for the underlying
@@ -278,7 +274,7 @@ class VimwikiTask(object):
 
         # Push the values to the Task only if the Vimwiki representation
         # somehow differs
-        if self.tainted or not self.uuid:
+        if self.task.modified or not self.uuid:
             self.task.save()
 
             # If task was first time saved now, add it to the cache and remove
