@@ -58,8 +58,8 @@ class WarriorStore(object):
 
 class NoNoneStore(object):
 
-    def __init__(self, get_method):
-        self.get_method = get_method
+    def __init__(self, cache):
+        self.cache = cache
         self.store = dict()
 
     def __getitem__(self, key):
