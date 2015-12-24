@@ -94,14 +94,18 @@ class TaskCache(object):
     multiple redundant taskwarrior calls.
     """
 
-        # Anything else is wrong
-        else:
-            raise ValueError("Wrong key type: %s (%s)" % (key, type(key)))
+    def __init__(self):
+        self.task = NoNoneStore(lambda x: x.tw.tasks.get(x))
+        self.vwtask = NoNoneStore(vwtask.VimwikiTask.from_line)
+        self.viewport = NoNoneStore(viewport.ViewPort.from_line)
+        self.line = NoNoneStore(lambda (cls, line): cls.parse_line(line))
+        self.warriors = WarriorStore()
+        self.buffer_has_authority = True
 
     @property
     def vimwikitask_dependency_order(self):
         iterated_cache = {
-            k:v for k,v in self.vimwikitask_cache.iteritems()
+            k:v for k,v in self.vwtask.iteritems()
             if v is not None
         }
 
@@ -114,9 +118,10 @@ class TaskCache(object):
                     yield task
 
     def reset(self):
-        self.task_cache = dict()
-        self.vimwikitask_cache = dict()
-        self.viewport_cache = dict()
+        self.task.store = dict()
+        self.vwtask.store = dict()
+        self.viewport.store = dict()
+        self.line.store = dict()
 
     def load_vwtasks(self, buffer_has_authority=True):
         # Set the authority flag, which determines which data (Buffer or TW)
@@ -125,7 +130,7 @@ class TaskCache(object):
         self.buffer_has_authority = buffer_has_authority
 
         for i in range(len(vim.current.buffer)):
-            self[i]  # Loads the line into the cache
+            self.vwtask[i]  # Loads the line into the cache
 
         # Restore the old authority flag value
         self.buffer_has_authority = old_authority
@@ -140,7 +145,7 @@ class TaskCache(object):
             port.load_tasks()
 
             # Save the viewport in the cache
-            self.viewport_cache[i] = port
+            self.viewport[i] = port
 
     def update_vwtasks_in_buffer(self):
         for task in self.vimwikitask_cache.values():
@@ -183,7 +188,7 @@ class TaskCache(object):
             # Update each task in the cache
             for task in tasks:
                 key = vwtask.ShortUUID(task['uuid'], tw)
-                self.task_cache[key] = task
+                self.task[key] = task
 
     def update_vwtasks_from_tasks(self):
         for vwtask in self.vimwikitask_cache.values():
@@ -201,7 +206,7 @@ class TaskCache(object):
         Returns the viewport, or None if not found.
         """
 
-        for port in self.viewport_cache.values():
+        for port in self.viewport.values():
             if task in port.viewport_tasks:
                 return port
 
@@ -211,7 +216,7 @@ class TaskCache(object):
         for vimwikitask in self.vimwikitask_cache.values():
             new_cache[vimwikitask['line_number']] = vimwikitask
 
-        self.vimwikitask_cache = new_cache
+        self.vwtask.store = new_cache
 
     def insert_line(self, line, position):
         # Insert the line
@@ -250,14 +255,14 @@ class TaskCache(object):
         vim.current.buffer[position2] = vim.current.buffer[position1]
         vim.current.buffer[position1] = temp
 
-        temp = self[position2]
-        self[position2] = self.vimwikitask_cache.get(position1)
-        self[position1] = temp
+        temp = self.vwtask[position2]
+        self.vwtask[position2] = self.vwtask.get(position1)
+        self.vwtask[position1] = temp
 
         # Update the line numbers cached in the vimwikitasks
         for position in (position1, position2):
-            if self[position] is not None:
-                self[position]['line_number'] = position
+            if self.vwtask[position] is not None:
+                self.vwtask[position]['line_number'] = position
 
         # Rebuild of the cache is not necessary, only those two lines are affected
 
