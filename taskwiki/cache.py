@@ -176,7 +176,7 @@ class TaskCache(object):
             self.viewport[i] = port
 
     def update_vwtasks_in_buffer(self):
-        for task in self.vimwikitask_cache.values():
+        for task in self.vwtask.values():
             task.update_in_buffer()
 
     def save_tasks(self):
@@ -219,11 +219,11 @@ class TaskCache(object):
                 self.task[key] = task
 
     def update_vwtasks_from_tasks(self):
-        for vwtask in self.vimwikitask_cache.values():
+        for vwtask in self.vwtask.values():
             vwtask.update_from_task()
 
     def evaluate_viewports(self):
-        for port in self.viewport_cache.values():
+        for port in self.viewport.values():
             port.sync_with_taskwarrior()
 
     def get_viewport_by_task(self, task):
@@ -241,7 +241,7 @@ class TaskCache(object):
     def rebuild_vimwikitask_cache(self):
         new_cache = dict()
 
-        for vimwikitask in self.vimwikitask_cache.values():
+        for vimwikitask in self.vwtask.values():
             new_cache[vimwikitask['line_number']] = vimwikitask
 
         self.vwtask.store = new_cache
@@ -251,7 +251,7 @@ class TaskCache(object):
         vim.current.buffer.append(line, position)
 
         # Update the position of all the things shifted by the insertion
-        for vimwikitask in self.vimwikitask_cache.values():
+        for vimwikitask in self.vwtask.values():
             if vimwikitask['line_number'] >= position:
                 vimwikitask['line_number'] += 1
 
@@ -263,10 +263,10 @@ class TaskCache(object):
         del vim.current.buffer[position]
 
         # Remove the vimwikitask from cache
-        del self.vimwikitask_cache[position]
+        del self.vwtask.store[position]
 
         # Update the position of all the things shifted by the removal
-        for vimwikitask in self.vimwikitask_cache.values():
+        for vimwikitask in self.vwtask.values():
             if vimwikitask['line_number'] > position:
                 vimwikitask['line_number'] -= 1
 
@@ -284,7 +284,7 @@ class TaskCache(object):
         vim.current.buffer[position1] = temp
 
         temp = self.vwtask[position2]
-        self.vwtask[position2] = self.vwtask.get(position1)
+        self.vwtask[position2] = self.vwtask[position1]
         self.vwtask[position1] = temp
 
         # Update the line numbers cached in the vimwikitasks

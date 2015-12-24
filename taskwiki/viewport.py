@@ -243,7 +243,7 @@ class ViewPort(object):
         # -VISIBLE virtual tag used
         elif self.meta.get('visible') is False:
             # Determine which tasks are outside the viewport
-            all_vwtasks = set(self.cache.vimwikitask_cache.values())
+            all_vwtasks = set(self.cache.vwtask.values())
             vwtasks_outside_viewport = all_vwtasks - set(self.tasks)
             tasks_outside_viewport = set(
                 t.task for t in vwtasks_outside_viewport
@@ -274,7 +274,7 @@ class ViewPort(object):
             match = re.search(regexp.GENERIC_TASK, line)
 
             if match:
-                self.tasks.add(self.cache.task[i])
+                self.tasks.add(self.cache.vwtask[i])
             else:
                 # If we didn't found a valid task, terminate the viewport
                 break
