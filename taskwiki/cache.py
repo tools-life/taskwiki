@@ -66,10 +66,10 @@ class NoNoneStore(object):
         item = self.store.get(key)
 
         if item is None:
-            item = get_method(self, key)
+            item = self.get_method(key)
 
         # If we successfully obtained an item, save it to the cache
-        if vimwikitask is not None:
+        if item is not None:
             self.store[key] = item
 
         return item  # May return None if the line has no task
