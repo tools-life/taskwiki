@@ -84,8 +84,36 @@ class NoNoneStore(object):
         # Otherwise store the given value
         self.store[key] = value
 
-    def __getattr__(self, key):
-        return getattr(self.store, key)
+    def values(self):
+        return self.store.values()
+
+    def iteritems(self):
+        return self.store.iteritems()
+
+
+class TaskStore(NoNoneStore):
+
+    def get_method(self, key):
+        return key.tw.tasks.get(uuid=key.value)
+
+
+class VwtaskStore(NoNoneStore):
+
+    def get_method(self, line):
+        return vwtask.VimwikiTask.from_line(self.cache, line)
+
+
+class ViewportStore(NoNoneStore):
+
+    def get_method(self, line):
+        return viewport.ViewPort.from_line(line, self)
+
+
+class LineStore(NoNoneStore):
+
+    def get_method(self, key):
+        cls, line = key
+        return cls.parse_line(line)
 
 
 class TaskCache(object):
@@ -95,10 +123,10 @@ class TaskCache(object):
     """
 
     def __init__(self):
-        self.task = NoNoneStore(lambda x: x.tw.tasks.get(x))
-        self.vwtask = NoNoneStore(vwtask.VimwikiTask.from_line)
-        self.viewport = NoNoneStore(viewport.ViewPort.from_line)
-        self.line = NoNoneStore(lambda (cls, line): cls.parse_line(line))
+        self.task = TaskStore(self)
+        self.vwtask = VwtaskStore(self)
+        self.viewport = ViewportStore(self)
+        self.line = LineStore(self)
         self.warriors = WarriorStore()
         self.buffer_has_authority = True
 
