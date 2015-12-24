@@ -69,7 +69,7 @@ class SelectedTasks(object):
         cache.reset()
 
         # Load the current tasks
-        range_tasks = [cache[i] for i in util.selected_line_numbers()]
+        range_tasks = [cache.vwtask[i] for i in util.selected_line_numbers()]
         self.tasks = [t for t in range_tasks if t is not None]
 
         if not self.tasks:
@@ -199,7 +199,7 @@ class Mappings(object):
         # otherwise do the default VimwikiFollowLink
         position = util.get_current_line_number()
 
-        if cache[position] is not None:
+        if cache.vwtask[position] is not None:
             SelectedTasks().info()
         else:
             port = viewport.ViewPort.from_line(position, cache)

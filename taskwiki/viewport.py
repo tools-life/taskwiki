@@ -274,7 +274,7 @@ class ViewPort(object):
             match = re.search(regexp.GENERIC_TASK, line)
 
             if match:
-                self.tasks.add(self.cache[i])
+                self.tasks.add(self.cache.task[i])
             else:
                 # If we didn't found a valid task, terminate the viewport
                 break
@@ -324,7 +324,7 @@ class ViewPort(object):
             added_at = self.line_number + existing_tasks + added_tasks
 
             # Add the task object to cache
-            self.cache[vwtask.ShortUUID(task['uuid'], self.tw)] = task
+            self.cache.task[vwtask.ShortUUID(task['uuid'], self.tw)] = task
 
             # Create the VimwikiTask
             vimwikitask = vwtask.VimwikiTask.from_task(self.cache, task)
@@ -335,6 +335,6 @@ class ViewPort(object):
             self.cache.insert_line(str(vimwikitask), added_at)
 
             # Save it to cache
-            self.cache[added_at] = vimwikitask
+            self.cache.vwtask[added_at] = vimwikitask
 
         sort.TaskSorter(self.cache, self.tasks, self.sort).execute()

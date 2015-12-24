@@ -226,7 +226,7 @@ class VimwikiTask(object):
         # Else try to load it or create a new one
         if self.uuid:
             try:
-                return self.cache[self.uuid]
+                return self.cache.task[self.uuid]
             except Task.DoesNotExist:
                 # Task with stale uuid, recreate
                 self.__unsaved_task = Task(self.tw)
@@ -285,7 +285,7 @@ class VimwikiTask(object):
             # the temporary reference
             if self.__unsaved_task is not None:
                 self.uuid = ShortUUID(self.__unsaved_task['uuid'], self.tw)
-                self.cache[self.uuid] = self.__unsaved_task
+                self.cache.task[self.uuid] = self.__unsaved_task
                 self.__unsaved_task = None
 
             # Mark task as done.
@@ -346,7 +346,7 @@ class VimwikiTask(object):
     def find_parent_task(self):
         for i in reversed(range(0, self['line_number'])):
             # The from_line constructor returns None if line doesn't match a task
-            task = self.cache[i]
+            task = self.cache.vwtask[i]
             if task and len(task['indent']) < len(self['indent']):
                 return task
 
