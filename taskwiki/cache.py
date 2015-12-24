@@ -56,46 +56,23 @@ class WarriorStore(object):
         return self.warriors.iteritems()
 
 
-class TaskCache(object):
-    """
-    A cache that holds all the tasks in the given file and prevents
-    multiple redundant taskwarrior calls.
-    """
+class NoNoneStore(object):
 
-    def __init__(self):
-        self.task_cache = dict()
-        self.vimwikitask_cache = dict()
-        self.viewport_cache = dict()
-        self.warriors = WarriorStore()
-        self.buffer_has_authority = True
+    def __init__(self, get_method):
+        self.get_method = get_method
+        self.store = dict()
 
     def __getitem__(self, key):
-        # Integer keys (line numbers) refer to the VimwikiTask objects
-        if type(key) is int:
-            vimwikitask = self.vimwikitask_cache.get(key)
+        item = self.store.get(key)
 
-            if vimwikitask is None:
-                vimwikitask = vwtask.VimwikiTask.from_line(self, key)
+        if item is None:
+            item = get_method(self, key)
 
-            # If we successfully parsed a task, save it to the cache
-            if vimwikitask is not None:
-                self.vimwikitask_cache[key] = vimwikitask
+        # If we successfully obtained an item, save it to the cache
+        if vimwikitask is not None:
+            self.store[key] = item
 
-            return vimwikitask  # May return None if the line has no task
-
-        # ShortUUID objects refer to Task cache
-        elif type(key) == vwtask.ShortUUID:
-            task = self.task_cache.get(key)
-
-            if task is None:
-                task = key.tw.tasks.get(uuid=key.value)
-                self.task_cache[key] = task
-
-            return task
-
-        # Anything else is wrong
-        else:
-            raise ValueError("Wrong key type: %s (%s)" % (key, type(key)))
+        return item  # May return None if the line has no task
 
     def __setitem__(self, key, value):
         # Never store None in the cache, treat it as deletion
@@ -104,39 +81,18 @@ class TaskCache(object):
                 del self[key]
             return
 
-        # String keys refer to the Task objects
-        if type(key) is vwtask.ShortUUID:
-            self.task_cache[key] = value
+        # Otherwise store the given value
+        self.store[key] = value
 
-        # Integer keys (line numbers) refer to the VimwikiTask objects
-        elif type(key) is int:
-            self.vimwikitask_cache[key] = value
+    def __getattr__(self, key):
+        return getattr(self.store, key)
 
-        # Anything else is wrong
-        else:
-            raise ValueError("Wrong key type: %s (%s)" % (key, type(key)))
 
-    def __delitem__(self, key):
-        # String keys refer to the Task objects
-        if type(key) is vwtask.ShortUUID:
-            del self.task_cache[key]
-
-        # Integer keys (line numbers) refer to the VimwikiTask objects
-        elif type(key) is int:
-            del self.vimwikitask_cache[key]
-
-        # Anything else is wrong
-        else:
-            raise ValueError("Wrong key type: %s (%s)" % (key, type(key)))
-
-    def __contains__(self, key):
-        # String keys refer to the Task objects
-        if type(key) is vwtask.ShortUUID:
-            return key in self.task_cache
-
-        # Integer keys (line numbers) refer to the VimwikiTask objects
-        elif type(key) is int:
-            return key in self.vimwikitask_cache
+class TaskCache(object):
+    """
+    A cache that holds all the tasks in the given file and prevents
+    multiple redundant taskwarrior calls.
+    """
 
         # Anything else is wrong
         else:
