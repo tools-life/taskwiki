@@ -63,10 +63,11 @@ class WholeBuffer(object):
 
 class SelectedTasks(object):
     def __init__(self):
-        self.tw = cache.get_relevant_tw()
-
         # Reset cache, otherwise old line content may be used
         cache.reset()
+
+        # Find relevant TaskWarrior instance
+        self.tw = cache.get_relevant_tw()
 
         # Load the current tasks
         range_tasks = [cache.vwtask[i] for i in util.selected_line_numbers()]
