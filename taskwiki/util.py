@@ -10,7 +10,7 @@ import random
 import sys
 import vim  # pylint: disable=F0401
 
-from .errors import TaskWikiException
+from errors import TaskWikiException
 
 # Detect if command AnsiEsc is available
 ANSI_ESC_AVAILABLE = vim.eval('exists(":AnsiEsc")') == '2'
