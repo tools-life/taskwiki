@@ -31,7 +31,7 @@ class WarriorStore(object):
     def __getitem__(self, key):
         try:
             return self.warriors[key]
-        except KeyError as e:
+        except KeyError:
             raise errors.TaskWikiException(
                 "Taskwarrior with key '{0}' not available."
                 .format(key))
