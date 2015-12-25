@@ -170,8 +170,12 @@ class ViewPort(object):
         return taskfilter_args, meta
 
     @classmethod
+    def parse_line(cls, number):
+        return re.search(regexp.GENERIC_VIEWPORT, vim.current.buffer[number])
+
+    @classmethod
     def from_line(cls, number, cache):
-        match = re.search(regexp.GENERIC_VIEWPORT, vim.current.buffer[number])
+        match = cache.line[(cls, number)]
 
         if not match:
             return None

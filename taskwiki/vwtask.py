@@ -110,6 +110,10 @@ class VimwikiTask(object):
         return cls.from_line(cache, line_number)
 
     @classmethod
+    def parse_line(cls, number):
+        return re.search(regexp.GENERIC_TASK, vim.current.buffer[number])
+
+    @classmethod
     def from_line(cls, cache, number):
         """
         Creates a Vimwiki object from given line in the buffer.
@@ -118,7 +122,7 @@ class VimwikiTask(object):
         # Protected access is ok here
         # pylint: disable=W0212
 
-        match = re.search(regexp.GENERIC_TASK, vim.current.buffer[number])
+        match = cache.line[(cls, number)]
 
         if not match:
             return None
