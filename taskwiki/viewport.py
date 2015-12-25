@@ -83,7 +83,7 @@ class ViewPort(object):
                 context_args = util.tw_modstring_to_args(context_definition)
                 detected_contexts.append((token, context_args))
             else:
-                raise util.TaskWikiException("Context definition for '{0}' "
+                raise errors.TaskWikiException("Context definition for '{0}' "
                         "could not be found.".format(token[1:]))
 
         for context_token, context_args in detected_contexts:

@@ -41,7 +41,7 @@ class WarriorStore(object):
         try:
             return self.warriors[key]
         except KeyError as e:
-            raise util.TaskWikiException(
+            raise errors.TaskWikiException(
                 "Taskwarrior with key '{0}' not available."
                 .format(key))
 

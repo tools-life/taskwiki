@@ -13,7 +13,7 @@ sys.path.insert(0, os.path.join(BASE_DIR, 'taskwiki'))
 
 # Handle exceptions without traceback, if they're TaskWikiException
 def output_exception(exception_type, value, tb):
-    if exception_type is util.TaskWikiException:
+    if exception_type is errors.TaskWikiException:
         print(unicode(value), file=sys.stderr)
     else:
         sys.__excepthook__(exception_type, value, tb)
@@ -510,7 +510,7 @@ class ChooseSplitTags(CallbackSplitMixin, SplitTags):
         if match:
             return match.group('name')
         else:
-            raise util.TaskWikiException("No tag selected.")
+            raise errors.TaskWikiException("No tag selected.")
 
     def callback(self):
         tag = self.get_selected_tag()
