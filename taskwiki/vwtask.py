@@ -348,11 +348,15 @@ class VimwikiTask(object):
         ])
 
     def find_parent_task(self):
+        # If this task is not indented, we have nothing to do here
+        if not self['indent']:
+            return None
+
         for i in reversed(range(0, self['line_number'])):
             # The from_line constructor returns None if line doesn't match a task
-            task = self.cache.vwtask[i]
-            if task and len(task['indent']) < len(self['indent']):
-                return task
+            line = self.cache.line[(VimwikiTask, i)]
+            if line and len(line.group('space')) < len(self['indent']):
+                return self.cache.vwtask[i]
 
     def apply_defaults(self):
         for i in reversed(range(0, self['line_number'])):
