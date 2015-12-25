@@ -106,7 +106,7 @@ class VwtaskStore(NoNoneStore):
 class ViewportStore(NoNoneStore):
 
     def get_method(self, line):
-        return viewport.ViewPort.from_line(line, self)
+        return viewport.ViewPort.from_line(line, self.cache)
 
 
 class LineStore(NoNoneStore):
