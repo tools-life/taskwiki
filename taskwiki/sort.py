@@ -57,8 +57,6 @@ class TaskSorter(object):
                 vwtasks_sorted[offset].vwtask['line_number']
             )
 
-        self.cache.rebuild_vimwikitask_cache()
-
 
 class CustomNodeComparator(object):
     """

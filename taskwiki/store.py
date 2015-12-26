@@ -98,12 +98,26 @@ class TaskStore(NoNoneStore):
 
 class VwtaskStore(LineNumberedKeyedStoreMixin, NoNoneStore):
 
+    def shift(self, position, offset):
+        for line, vwtask in self.store.items():
+            if line >= position:
+                vwtask['line_number'] += offset
+
+        super(VwtaskStore, self).shift(position, offset)
+
     def get_method(self, line):
         import vwtask
         return vwtask.VimwikiTask.from_line(self.cache, line)
 
 
 class ViewportStore(LineNumberedKeyedStoreMixin, NoNoneStore):
+
+    def shift(self, position, offset):
+        for line, viewport in self.store.items():
+            if line >= position:
+                viewport.line_number += offset
+
+        super(ViewportStore, self).shift(position, offset)
 
     def get_method(self, line):
         import viewport

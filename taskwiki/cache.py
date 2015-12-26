@@ -134,28 +134,16 @@ class TaskCache(object):
             if task in port.viewport_tasks:
                 return port
 
-    def rebuild_vimwikitask_cache(self):
-        new_cache = dict()
-
-        for vimwikitask in self.vwtask.values():
-            new_cache[vimwikitask['line_number']] = vimwikitask
-
-        self.vwtask.store = new_cache
-
     def insert_line(self, line, position):
         # Insert the line
         vim.current.buffer.append(line, position)
 
         # Update the position of all the things shifted by the insertion
-        for vimwikitask in self.vwtask.values():
-            if vimwikitask['line_number'] >= position:
-                vimwikitask['line_number'] += 1
+        self.vwtask.shift(position, 1)
+        self.viewport.shift(position, 1)
 
         # Shift lines in the line cache
         self.line.shift(position, 1)
-
-        # Rebuild cache keys
-        self.rebuild_vimwikitask_cache()
 
     def remove_line(self, position):
         # Remove the line
@@ -163,20 +151,17 @@ class TaskCache(object):
 
         # Remove the vimwikitask from cache
         del self.vwtask.store[position]
+        del self.viewport.store[position]
 
         # Delete the line from the line cache
         del self.line.store[position]
 
         # Update the position of all the things shifted by the removal
-        for vimwikitask in self.vwtask.values():
-            if vimwikitask['line_number'] > position:
-                vimwikitask['line_number'] -= 1
+        self.vwtask.shift(position, -1)
+        self.viewport.shift(position, -1)
 
         # Shift lines in the line cache
         self.line.shift(position, -1)
-
-        # Rebuild cache keys
-        self.rebuild_vimwikitask_cache()
 
     def swap_lines(self, position1, position2):
         buffer_size = len(vim.current.buffer)
