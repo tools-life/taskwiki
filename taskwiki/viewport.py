@@ -5,6 +5,7 @@ import vim  # pylint: disable=F0401
 
 import vwtask
 import regexp
+import errors
 import util
 import sort
 import constants
