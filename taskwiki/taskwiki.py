@@ -370,6 +370,9 @@ class CallbackSplitMixin(object):
         # Close the split if the user leaves it
         vim.command('au BufLeave <buffer> :bwipe')
 
+        # SREMatch objecets cannot be pickled
+        cache.line.clear()
+
         # We can't save the current instance in vim variable
         # so save the pickled version
         vim.current.buffer.vars['taskwiki_callback'] = pickle.dumps(self)

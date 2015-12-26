@@ -81,6 +81,9 @@ class NoNoneStore(object):
     def iteritems(self):
         return self.store.iteritems()
 
+    def clear(self):
+        return self.store.clear()
+
 
 class TaskStore(NoNoneStore):
 
