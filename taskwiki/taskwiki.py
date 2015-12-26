@@ -5,8 +5,6 @@ import pickle
 import sys
 import vim  # pylint: disable=F0401
 
-from tasklib import TaskWarrior
-
 # Insert the taskwiki on the python path
 BASE_DIR = vim.eval("s:plugin_path")
 sys.path.insert(0, os.path.join(BASE_DIR, 'taskwiki'))
