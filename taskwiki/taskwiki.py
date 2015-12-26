@@ -11,6 +11,7 @@ sys.path.insert(0, os.path.join(BASE_DIR, 'taskwiki'))
 
 # Handle exceptions without traceback, if they're TaskWikiException
 def output_exception(exception_type, value, tb):
+    import errors
     if exception_type is errors.TaskWikiException:
         print(unicode(value), file=sys.stderr)
     else:
