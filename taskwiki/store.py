@@ -1,8 +1,6 @@
 from tasklib import TaskWarrior
 
 import errors
-import vwtask
-import viewport
 
 
 class WarriorStore(object):
@@ -94,12 +92,14 @@ class TaskStore(NoNoneStore):
 class VwtaskStore(NoNoneStore):
 
     def get_method(self, line):
+        import vwtask
         return vwtask.VimwikiTask.from_line(self.cache, line)
 
 
 class ViewportStore(NoNoneStore):
 
     def get_method(self, line):
+        import viewport
         return viewport.ViewPort.from_line(line, self.cache)
 
 
