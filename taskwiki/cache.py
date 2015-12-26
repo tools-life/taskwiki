@@ -150,11 +150,11 @@ class TaskCache(object):
         del vim.current.buffer[position]
 
         # Remove the vimwikitask from cache
-        del self.vwtask.store[position]
-        del self.viewport.store[position]
+        del self.vwtask[position]
+        del self.viewport[position]
 
         # Delete the line from the line cache
-        del self.line.store[position]
+        del self.line[position]
 
         # Update the position of all the things shifted by the removal
         self.vwtask.shift(position, -1)

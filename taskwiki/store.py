@@ -73,6 +73,10 @@ class NoNoneStore(object):
         # Otherwise store the given value
         self.store[key] = value
 
+    def __delitem__(self, key):
+        if key in self.store:
+            del self.store[key]
+
     def values(self):
         return self.store.values()
 
