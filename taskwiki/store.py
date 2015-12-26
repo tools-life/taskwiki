@@ -90,6 +90,11 @@ class LineNumberedKeyedStoreMixin(object):
             for i in self.store.keys()
         }
 
+    def swap(self, position1, position2):
+        temp = self[position1]
+        self[position1] = self[position2]
+        self[position2] = temp
+
 class TaskStore(NoNoneStore):
 
     def get_method(self, key):
@@ -105,6 +110,13 @@ class VwtaskStore(LineNumberedKeyedStoreMixin, NoNoneStore):
 
         super(VwtaskStore, self).shift(position, offset)
 
+    def swap(self, position1, position2):
+        super(VwtaskStore, self).swap(position1, position2)
+
+        for index in (position1, position2):
+            if self[index] is not None:
+                self[index]['line_number'] = index
+
     def get_method(self, line):
         import vwtask
         return vwtask.VimwikiTask.from_line(self.cache, line)
@@ -118,6 +130,13 @@ class ViewportStore(LineNumberedKeyedStoreMixin, NoNoneStore):
                 viewport.line_number += offset
 
         super(ViewportStore, self).shift(position, offset)
+
+    def swap(self, position1, position2):
+        super(ViewportStore, self).swap(position1, position2)
+
+        for index in (position1, position2):
+            if self[index] is not None:
+                self[index].line_number = index
 
     def get_method(self, line):
         import viewport

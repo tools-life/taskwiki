@@ -171,21 +171,9 @@ class TaskCache(object):
         # Swap lines in the line cache
         self.line.swap(position1, position2)
 
-        # Swap both the lines and vimwikitasks indexes
-        temp = vim.current.buffer[position2]
-        vim.current.buffer[position2] = vim.current.buffer[position1]
-        vim.current.buffer[position1] = temp
-
-        temp = self.vwtask[position2]
-        self.vwtask[position2] = self.vwtask[position1]
-        self.vwtask[position1] = temp
-
-        # Update the line numbers cached in the vimwikitasks
-        for position in (position1, position2):
-            if self.vwtask[position] is not None:
-                self.vwtask[position]['line_number'] = position
-
-        # Rebuild of the cache is not necessary, only those two lines are affected
+        # Swap both the viewport and vimwikitasks indexes
+        self.vwtask.swap(position1, position2)
+        self.viewport.swap(position1, position2)
 
     def get_relevant_tw(self):
         # Find closest task
