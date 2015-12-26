@@ -151,6 +151,9 @@ class TaskCache(object):
             if vimwikitask['line_number'] >= position:
                 vimwikitask['line_number'] += 1
 
+        # Shift lines in the line cache
+        self.line.shift(position, 1)
+
         # Rebuild cache keys
         self.rebuild_vimwikitask_cache()
 
@@ -161,10 +164,16 @@ class TaskCache(object):
         # Remove the vimwikitask from cache
         del self.vwtask.store[position]
 
+        # Delete the line from the line cache
+        del self.line.store[position]
+
         # Update the position of all the things shifted by the removal
         for vimwikitask in self.vwtask.values():
             if vimwikitask['line_number'] > position:
                 vimwikitask['line_number'] -= 1
+
+        # Shift lines in the line cache
+        self.line.shift(position, -1)
 
         # Rebuild cache keys
         self.rebuild_vimwikitask_cache()
@@ -173,6 +182,9 @@ class TaskCache(object):
         buffer_size = len(vim.current.buffer)
         if position1 >= buffer_size or position2 >= buffer_size:
             raise ValueError("Tring to swap %d with %d" % (position1, position2))
+
+        # Swap lines in the line cache
+        self.line.swap(position1, position2)
 
         # Swap both the lines and vimwikitasks indexes
         temp = vim.current.buffer[position2]

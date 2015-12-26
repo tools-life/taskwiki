@@ -82,6 +82,13 @@ class NoNoneStore(object):
     def clear(self):
         return self.store.clear()
 
+class LineNumberedKeyedStoreMixin(object):
+
+    def shift(self, position, offset):
+        self.store = {
+            (i + offset if i >= position else i): self.store[i]
+            for i in self.store.keys()
+        }
 
 class TaskStore(NoNoneStore):
 
@@ -89,14 +96,14 @@ class TaskStore(NoNoneStore):
         return key.tw.tasks.get(uuid=key.value)
 
 
-class VwtaskStore(NoNoneStore):
+class VwtaskStore(LineNumberedKeyedStoreMixin, NoNoneStore):
 
     def get_method(self, line):
         import vwtask
         return vwtask.VimwikiTask.from_line(self.cache, line)
 
 
-class ViewportStore(NoNoneStore):
+class ViewportStore(LineNumberedKeyedStoreMixin, NoNoneStore):
 
     def get_method(self, line):
         import viewport
@@ -109,4 +116,34 @@ class LineStore(NoNoneStore):
         cls, line = key
         return cls.parse_line(line)
 
+    def shift(self, position, offset):
+        new_store = {
+            (cls, i + offset if i >= position else i): self.store[(cls, i)]
+            for cls, i in self.store.keys()
+        }
+
+        self.store = new_store
+
+    def swap(self, position1, position2):
+        temp_store1 = {
+            (cls, i): self.store[(cls, i)]
+            for cls, i in self.store.keys()
+            if i == position1
+        }
+
+        temp_store2 = {
+            (cls, i): self.store[(cls, i)]
+            for cls, i in self.store.keys()
+            if i == position2
+        }
+
+        for cls, i in self.store.keys():
+            if i == position1 or i == position2:
+                del self.store[(cls, i)]
+
+        for cls, i in temp_store1.keys():
+            self.store[(cls, position2)] = temp_store1[(cls, i)]
+
+        for cls, i in temp_store2.keys():
+            self.store[(cls, position1)] = temp_store2[(cls, i)]
 
