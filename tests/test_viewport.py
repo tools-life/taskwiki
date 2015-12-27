@@ -227,6 +227,44 @@ class TestViewportInspection(IntegrationTest):
         assert self.command(":py print vim.current.buffer", regex="<buffer taskwiki.")
 
 
+class TestViewportInspectionWithVisibleTag(IntegrationTest):
+
+    viminput = """
+    === Work tasks | +work -VISIBLE ===
+    * [ ] tag work task  #{uuid}
+
+    === Home tasks | +home ===
+    * [ ] tag work task  #{uuid}
+    """
+
+    vimoutput = """
+    ViewPort inspection:
+    --------------------
+    Name: Work tasks
+    Filter used: -DELETED -PARENT +work
+    Defaults used: tags:['work']
+    Ordering used: due+,pri-,project+
+    Matching taskwarrior tasks: 0
+    Displayed tasks: 0
+    Tasks to be added:
+    Tasks to be deleted:
+    """
+
+    tasks = [
+        dict(description="tag work task", tags=['work', 'home']),
+    ]
+
+    def execute(self):
+        self.command("w", regex="written$", lines=1)
+        sleep(0.5)
+        self.client.feedkeys('1gg')
+        sleep(0.5)
+        self.client.feedkeys(r'\<CR>')
+        sleep(0.5)
+
+        assert self.command(":py print vim.current.buffer", regex="<buffer taskwiki.")
+
+
 class TestViewportsUnicodeTaskGeneration(IntegrationTest):
 
     viminput = """
