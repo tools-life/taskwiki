@@ -147,7 +147,7 @@ class TestViewportDefaultsAssigment(IntegrationTest):
         task = self.tw.tasks.pending()[0]
         assert task['description'] == 'tag work task'
         assert task['status'] == 'pending'
-        assert task['tags'] == ['work']
+        assert task['tags'] == set(['work'])
 
 
 class TestViewportDefaultsExplicit(IntegrationTest):
@@ -169,7 +169,7 @@ class TestViewportDefaultsExplicit(IntegrationTest):
         assert task['description'] == 'home task'
         assert task['status'] == 'pending'
         assert task['project'] == 'Chores'
-        assert task['tags'] == []
+        assert task['tags'] == set()
 
 
 class TestViewportDefaultsExplicitEmpty(IntegrationTest):
@@ -191,7 +191,7 @@ class TestViewportDefaultsExplicitEmpty(IntegrationTest):
         assert task['description'] == 'home task'
         assert task['status'] == 'pending'
         assert task['project'] == None
-        assert task['tags'] == []
+        assert task['tags'] == set()
 
 
 class TestViewportInspection(IntegrationTest):

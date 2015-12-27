@@ -692,8 +692,8 @@ class TestModInteractiveAction(IntegrationTest):
         for task in self.tasks:
             task.refresh()
 
-        assert self.tasks[0]['tags'] == ["work"]
-        assert self.tasks[1]['tags'] == []
+        assert self.tasks[0]['tags'] == set(["work"])
+        assert self.tasks[1]['tags'] == set()
 
 
 class TestModVisibleAction(IntegrationTest):

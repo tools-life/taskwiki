@@ -142,8 +142,8 @@ class TestChooseTag(IntegrationTest):
         for task in self.tasks:
             task.refresh()
 
-        assert self.tasks[0]['tags'] == ["home"]
-        assert self.tasks[1]['tags'] == ["home"]
+        assert self.tasks[0]['tags'] == set(["home"])
+        assert self.tasks[1]['tags'] == set(["home"])
 
 
 class TestChooseTagCancelled(IntegrationTest):
@@ -178,6 +178,6 @@ class TestChooseTagCancelled(IntegrationTest):
         for task in self.tasks:
             task.refresh()
 
-        assert self.tasks[0]['tags'] == ["home"]
+        assert self.tasks[0]['tags'] == set(["home"])
         assert self.tasks[1]['project'] == None
 
