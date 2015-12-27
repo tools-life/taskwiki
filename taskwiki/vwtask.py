@@ -154,6 +154,8 @@ class VimwikiTask(object):
             due = match.group('due')
             if due:
                 # With strptime, we get a native datetime object
+                parsed_due = None
+
                 try:
                     parsed_due = datetime.strptime(due, regexp.DATETIME_FORMAT)
                 except ValueError:
@@ -166,7 +168,8 @@ class VimwikiTask(object):
 
                 # We need to interpret it as timezone aware object in user's
                 # timezone, This properly handles DST and timezone offset.
-                self.task['due'] = parsed_due
+                if parsed_due:
+                    self.task['due'] = parsed_due
 
             # After all line-data parsing, save the data in the buffer
             self._buffer_data = {key:self[key] for key in self.buffer_keys}
