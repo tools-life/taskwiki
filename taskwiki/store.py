@@ -162,6 +162,8 @@ class LineStore(NoNoneStore):
         self.store = new_store
 
     def swap(self, position1, position2):
+        import vim
+
         temp_store1 = {
             (cls, i): self.store[(cls, i)]
             for cls, i in self.store.keys()
@@ -183,4 +185,9 @@ class LineStore(NoNoneStore):
 
         for cls, i in temp_store2.keys():
             self.store[(cls, position1)] = temp_store2[(cls, i)]
+
+        # Also change the actual line content
+        temp = vim.current.buffer[position1]
+        vim.current.buffer[position1] = vim.current.buffer[position2]
+        vim.current.buffer[position2] = temp
 
