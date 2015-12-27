@@ -118,9 +118,6 @@ class SelectedTasks(object):
         if port:
             vim.command("TW rc:{0} rc.context: {1}"
                         .format(port.tw.taskrc_location, port.raw_filter))
-
-            print("TW rc:{0} rc.context: {1}"
-                  .format(port.tw.taskrc_location, port.raw_filter))
         else:
             print("No viewport detected.", file=sys.stderr)
 
