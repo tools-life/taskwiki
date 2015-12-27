@@ -95,8 +95,8 @@ class LineNumberedKeyedStoreMixin(object):
         }
 
     def swap(self, position1, position2):
-        temp = self[position1]
-        self[position1] = self[position2]
+        temp = self.store.get(position1)
+        self[position1] = self.store.get(position2)
         self[position2] = temp
 
 class TaskStore(NoNoneStore):
@@ -118,7 +118,7 @@ class VwtaskStore(LineNumberedKeyedStoreMixin, NoNoneStore):
         super(VwtaskStore, self).swap(position1, position2)
 
         for index in (position1, position2):
-            if self[index] is not None:
+            if self.store.get(index) is not None:
                 self[index]['line_number'] = index
 
     def get_method(self, line):
@@ -139,7 +139,7 @@ class ViewportStore(LineNumberedKeyedStoreMixin, NoNoneStore):
         super(ViewportStore, self).swap(position1, position2)
 
         for index in (position1, position2):
-            if self[index] is not None:
+            if self.store.get(index) is not None:
                 self[index].line_number = index
 
     def get_method(self, line):
