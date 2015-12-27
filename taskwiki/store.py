@@ -149,6 +149,11 @@ class ViewportStore(LineNumberedKeyedStoreMixin, NoNoneStore):
 
 class LineStore(NoNoneStore):
 
+    def __delitem__(self, number):
+        for cls, i in self.store.keys():
+            if i == number:
+                del self.store[(cls, i)]
+
     def get_method(self, key):
         cls, line = key
         return cls.parse_line(line)
