@@ -105,11 +105,6 @@ class VimwikiTask(object):
                 return vwtask
 
     @classmethod
-    def from_current_line(cls, cache):
-        line_number = util.get_current_line_number()
-        return cls.from_line(cache, line_number)
-
-    @classmethod
     def parse_line(cls, number):
         return re.search(regexp.GENERIC_TASK, vim.current.buffer[number])
 
