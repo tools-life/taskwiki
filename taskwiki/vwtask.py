@@ -237,7 +237,7 @@ class VimwikiTask(object):
                     'echom "UUID \'{0}\' not found, Task on line {1} will be '
                     're-created in TaskWarrior."'.format(
                         self.uuid,
-                        self['line_number']
+                        self['line_number'] + 1
                     ))
                 self.uuid = None
         else:
