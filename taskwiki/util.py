@@ -112,7 +112,7 @@ def get_current_window():
     try:
         return vim.current.window.number - 1
     except AttributeError:
-        return vim.eval('winnr()')
+        return int(vim.eval('winnr()')) - 1
 
 def convert_colorstring_for_vim(string):
     BASIC_COLORS = [
