@@ -66,8 +66,7 @@ class NoNoneStore(object):
     def __setitem__(self, key, value):
         # Never store None in the cache, treat it as deletion
         if value is None:
-            if key in self:
-                del self[key]
+            del self[key]
             return
 
         # Otherwise store the given value
@@ -76,6 +75,9 @@ class NoNoneStore(object):
     def __delitem__(self, key):
         if key in self.store:
             del self.store[key]
+
+    def __contains__(self, key):
+        return key in self.store
 
     def values(self):
         return self.store.values()
