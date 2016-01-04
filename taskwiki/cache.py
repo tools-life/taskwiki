@@ -136,7 +136,13 @@ class TaskCache(object):
 
     def insert_line(self, line, position):
         # Insert the line
-        vim.current.buffer.append(line, position)
+        if position == len(vim.current.buffer):
+            # Workaround: Necessary since neovim cannot append
+            # after the last line of the buffer when mentioning
+            # the position explicitly
+            vim.current.buffer.append(line)
+        else:
+            vim.current.buffer.append(line, position)
 
         # Update the position of all the things shifted by the insertion
         self.vwtask.shift(position, 1)
