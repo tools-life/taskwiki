@@ -279,6 +279,13 @@ class MockCache(object):
     warriors = {'default': 'default'}
     buffer_has_authority = True
 
+    def __init__(self):
+        from taskwiki import store
+        self.line = store.LineStore(self)
+        self.vwtask = dict()
+        self.task = dict()
+        self.viewport = dict()
+
     def reset(self):
         self.warriors.clear()
         self.warriors.update({'default': 'default'})

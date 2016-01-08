@@ -246,6 +246,30 @@ class TestTagsSimple(IntegrationTest):
         assert re.search(work, output, re.MULTILINE)
 
 
+class TestTagsSimpleFiltered(IntegrationTest):
+
+    tasks = [
+        dict(description="home task"),
+        dict(description="home chore task 1", tags=['chore']),
+        dict(description="home chore task 2", tags=['chore']),
+        dict(description="work task 1", tags=['work']),
+        dict(description="work task 2", tags=['work']),
+    ]
+
+    def execute(self):
+        self.command("TaskWikiTags +chore")
+        assert self.command(":py print vim.current.buffer", silent=False).startswith("<buffer tags")
+        output = '\n'.join(self.read_buffer())
+
+        header = r'\s*'.join(['Tag', 'Count'])
+        chores = r'\s*'.join(['chore', '2'])
+        work = r'\s*'.join(['work', '2'])
+
+        assert re.search(header, output, re.MULTILINE)
+        assert re.search(chores, output, re.MULTILINE)
+        assert not re.search(work, output, re.MULTILINE)
+
+
 class TestSplitReplacement(IntegrationTest):
 
     def execute(self):

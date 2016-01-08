@@ -10,13 +10,10 @@ import random
 import sys
 import vim  # pylint: disable=F0401
 
+from errors import TaskWikiException
+
 # Detect if command AnsiEsc is available
 ANSI_ESC_AVAILABLE = vim.eval('exists(":AnsiEsc")') == '2'
-
-
-class TaskWikiException(Exception):
-    """Used to interrupt a TaskWiki command/event and notify the user."""
-    pass
 
 
 def tw_modstring_to_args(line):

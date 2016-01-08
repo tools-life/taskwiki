@@ -1,59 +1,10 @@
 import vim  # pylint: disable=F0401
 import re
 
-import util
 import vwtask
 import viewport
 import regexp
-
-from tasklib import TaskWarrior
-
-
-class WarriorStore(object):
-    """
-    Stores all instances of TaskWarrior objects.
-    """
-
-    def __init__(self):
-        # Determine defaults
-        default_rc = vim.vars.get('taskwiki_taskrc_location') or '~/.taskrc'
-        default_data = vim.vars.get('taskwiki_data_location') or '~/.task'
-
-        default_kwargs = dict(
-            data_location=default_data,
-            taskrc_location=default_rc,
-        )
-
-        # Setup the store of TaskWarrior objects
-        self.warriors = {'default': TaskWarrior(**default_kwargs)}
-        extra_warrior_defs = vim.vars.get('taskwiki_extra_warriors', {})
-
-        for key in extra_warrior_defs.keys():
-            current_kwargs = default_kwargs.copy()
-            current_kwargs.update(extra_warrior_defs[key])
-            self.warriors[key] = TaskWarrior(**current_kwargs)
-
-        # Make sure context is not respected in any TaskWarrior
-        for tw in self.warriors.values():
-            tw.overrides.update({'context':''})
-
-    def __getitem__(self, key):
-        try:
-            return self.warriors[key]
-        except KeyError as e:
-            raise util.TaskWikiException(
-                "Taskwarrior with key '{0}' not available."
-                .format(key))
-
-
-    def __setitem__(self, key, value):
-        self.warriors[key] = value
-
-    def values(self):
-        return self.warriors.values()
-
-    def iteritems(self):
-        return self.warriors.iteritems()
+import store
 
 
 class TaskCache(object):
@@ -63,89 +14,22 @@ class TaskCache(object):
     """
 
     def __init__(self):
-        self.task_cache = dict()
-        self.vimwikitask_cache = dict()
-        self.viewport_cache = dict()
-        self.warriors = WarriorStore()
+        # Determine defaults
+        default_rc = vim.vars.get('taskwiki_taskrc_location') or '~/.taskrc'
+        default_data = vim.vars.get('taskwiki_data_location') or '~/.task'
+        extra_warrior_defs = vim.vars.get('taskwiki_extra_warriors', {})
+
+        self.task = store.TaskStore(self)
+        self.vwtask = store.VwtaskStore(self)
+        self.viewport = store.ViewportStore(self)
+        self.line = store.LineStore(self)
+        self.warriors = store.WarriorStore(default_rc, default_data, extra_warrior_defs)
         self.buffer_has_authority = True
-
-    def __getitem__(self, key):
-        # Integer keys (line numbers) refer to the VimwikiTask objects
-        if type(key) is int:
-            vimwikitask = self.vimwikitask_cache.get(key)
-
-            if vimwikitask is None:
-                vimwikitask = vwtask.VimwikiTask.from_line(self, key)
-
-            # If we successfully parsed a task, save it to the cache
-            if vimwikitask is not None:
-                self.vimwikitask_cache[key] = vimwikitask
-
-            return vimwikitask  # May return None if the line has no task
-
-        # ShortUUID objects refer to Task cache
-        elif type(key) == vwtask.ShortUUID:
-            task = self.task_cache.get(key)
-
-            if task is None:
-                task = key.tw.tasks.get(uuid=key.value)
-                self.task_cache[key] = task
-
-            return task
-
-        # Anything else is wrong
-        else:
-            raise ValueError("Wrong key type: %s (%s)" % (key, type(key)))
-
-    def __setitem__(self, key, value):
-        # Never store None in the cache, treat it as deletion
-        if value is None:
-            if key in self:
-                del self[key]
-            return
-
-        # String keys refer to the Task objects
-        if type(key) is vwtask.ShortUUID:
-            self.task_cache[key] = value
-
-        # Integer keys (line numbers) refer to the VimwikiTask objects
-        elif type(key) is int:
-            self.vimwikitask_cache[key] = value
-
-        # Anything else is wrong
-        else:
-            raise ValueError("Wrong key type: %s (%s)" % (key, type(key)))
-
-    def __delitem__(self, key):
-        # String keys refer to the Task objects
-        if type(key) is vwtask.ShortUUID:
-            del self.task_cache[key]
-
-        # Integer keys (line numbers) refer to the VimwikiTask objects
-        elif type(key) is int:
-            del self.vimwikitask_cache[key]
-
-        # Anything else is wrong
-        else:
-            raise ValueError("Wrong key type: %s (%s)" % (key, type(key)))
-
-    def __contains__(self, key):
-        # String keys refer to the Task objects
-        if type(key) is vwtask.ShortUUID:
-            return key in self.task_cache
-
-        # Integer keys (line numbers) refer to the VimwikiTask objects
-        elif type(key) is int:
-            return key in self.vimwikitask_cache
-
-        # Anything else is wrong
-        else:
-            raise ValueError("Wrong key type: %s (%s)" % (key, type(key)))
 
     @property
     def vimwikitask_dependency_order(self):
         iterated_cache = {
-            k:v for k,v in self.vimwikitask_cache.iteritems()
+            k:v for k,v in self.vwtask.iteritems()
             if v is not None
         }
 
@@ -158,9 +42,10 @@ class TaskCache(object):
                     yield task
 
     def reset(self):
-        self.task_cache = dict()
-        self.vimwikitask_cache = dict()
-        self.viewport_cache = dict()
+        self.task.store = dict()
+        self.vwtask.store = dict()
+        self.viewport.store = dict()
+        self.line.store = dict()
 
     def load_vwtasks(self, buffer_has_authority=True):
         # Set the authority flag, which determines which data (Buffer or TW)
@@ -169,7 +54,7 @@ class TaskCache(object):
         self.buffer_has_authority = buffer_has_authority
 
         for i in range(len(vim.current.buffer)):
-            self[i]  # Loads the line into the cache
+            self.vwtask[i]  # Loads the line into the cache
 
         # Restore the old authority flag value
         self.buffer_has_authority = old_authority
@@ -184,10 +69,10 @@ class TaskCache(object):
             port.load_tasks()
 
             # Save the viewport in the cache
-            self.viewport_cache[i] = port
+            self.viewport[i] = port
 
     def update_vwtasks_in_buffer(self):
-        for task in self.vimwikitask_cache.values():
+        for task in self.vwtask.values():
             task.update_in_buffer()
 
     def save_tasks(self):
@@ -227,14 +112,14 @@ class TaskCache(object):
             # Update each task in the cache
             for task in tasks:
                 key = vwtask.ShortUUID(task['uuid'], tw)
-                self.task_cache[key] = task
+                self.task[key] = task
 
     def update_vwtasks_from_tasks(self):
-        for vwtask in self.vimwikitask_cache.values():
+        for vwtask in self.vwtask.values():
             vwtask.update_from_task()
 
     def evaluate_viewports(self):
-        for port in self.viewport_cache.values():
+        for port in self.viewport.values():
             port.sync_with_taskwarrior()
 
     def get_viewport_by_task(self, task):
@@ -245,65 +130,50 @@ class TaskCache(object):
         Returns the viewport, or None if not found.
         """
 
-        for port in self.viewport_cache.values():
+        for port in self.viewport.values():
             if task in port.viewport_tasks:
                 return port
-
-    def rebuild_vimwikitask_cache(self):
-        new_cache = dict()
-
-        for vimwikitask in self.vimwikitask_cache.values():
-            new_cache[vimwikitask['line_number']] = vimwikitask
-
-        self.vimwikitask_cache = new_cache
 
     def insert_line(self, line, position):
         # Insert the line
         vim.current.buffer.append(line, position)
 
         # Update the position of all the things shifted by the insertion
-        for vimwikitask in self.vimwikitask_cache.values():
-            if vimwikitask['line_number'] >= position:
-                vimwikitask['line_number'] += 1
+        self.vwtask.shift(position, 1)
+        self.viewport.shift(position, 1)
 
-        # Rebuild cache keys
-        self.rebuild_vimwikitask_cache()
+        # Shift lines in the line cache
+        self.line.shift(position, 1)
 
     def remove_line(self, position):
         # Remove the line
         del vim.current.buffer[position]
 
         # Remove the vimwikitask from cache
-        del self.vimwikitask_cache[position]
+        del self.vwtask[position]
+        del self.viewport[position]
+
+        # Delete the line from the line cache
+        del self.line[position]
 
         # Update the position of all the things shifted by the removal
-        for vimwikitask in self.vimwikitask_cache.values():
-            if vimwikitask['line_number'] > position:
-                vimwikitask['line_number'] -= 1
+        self.vwtask.shift(position, -1)
+        self.viewport.shift(position, -1)
 
-        # Rebuild cache keys
-        self.rebuild_vimwikitask_cache()
+        # Shift lines in the line cache
+        self.line.shift(position, -1)
 
     def swap_lines(self, position1, position2):
         buffer_size = len(vim.current.buffer)
         if position1 >= buffer_size or position2 >= buffer_size:
             raise ValueError("Tring to swap %d with %d" % (position1, position2))
 
-        # Swap both the lines and vimwikitasks indexes
-        temp = vim.current.buffer[position2]
-        vim.current.buffer[position2] = vim.current.buffer[position1]
-        vim.current.buffer[position1] = temp
+        # Swap lines in the line cache
+        self.line.swap(position1, position2)
 
-        temp = self[position2]
-        self[position2] = self.vimwikitask_cache.get(position1)
-        self[position1] = temp
-
-        # Update the line numbers cached in the vimwikitasks
-        for position in (position1, position2):
-            if self[position] is not None:
-                self[position]['line_number'] = position
-
-        # Rebuild of the cache is not necessary, only those two lines are affected
+        # Swap both the viewport and vimwikitasks indexes
+        self.vwtask.swap(position1, position2)
+        self.viewport.swap(position1, position2)
 
     def get_relevant_tw(self):
         # Find closest task

@@ -5,6 +5,7 @@ import vim  # pylint: disable=F0401
 
 import vwtask
 import regexp
+import errors
 import util
 import sort
 import constants
@@ -83,7 +84,7 @@ class ViewPort(object):
                 context_args = util.tw_modstring_to_args(context_definition)
                 detected_contexts.append((token, context_args))
             else:
-                raise util.TaskWikiException("Context definition for '{0}' "
+                raise errors.TaskWikiException("Context definition for '{0}' "
                         "could not be found.".format(token[1:]))
 
         for context_token, context_args in detected_contexts:
@@ -170,8 +171,12 @@ class ViewPort(object):
         return taskfilter_args, meta
 
     @classmethod
+    def parse_line(cls, number):
+        return re.search(regexp.GENERIC_VIEWPORT, vim.current.buffer[number])
+
+    @classmethod
     def from_line(cls, number, cache):
-        match = re.search(regexp.GENERIC_VIEWPORT, vim.current.buffer[number])
+        match = cache.line[(cls, number)]
 
         if not match:
             return None
@@ -243,7 +248,7 @@ class ViewPort(object):
         # -VISIBLE virtual tag used
         elif self.meta.get('visible') is False:
             # Determine which tasks are outside the viewport
-            all_vwtasks = set(self.cache.vimwikitask_cache.values())
+            all_vwtasks = set(self.cache.vwtask.values())
             vwtasks_outside_viewport = all_vwtasks - set(self.tasks)
             tasks_outside_viewport = set(
                 t.task for t in vwtasks_outside_viewport
@@ -274,7 +279,7 @@ class ViewPort(object):
             match = re.search(regexp.GENERIC_TASK, line)
 
             if match:
-                self.tasks.add(self.cache[i])
+                self.tasks.add(self.cache.vwtask[i])
             else:
                 # If we didn't found a valid task, terminate the viewport
                 break
@@ -324,7 +329,7 @@ class ViewPort(object):
             added_at = self.line_number + existing_tasks + added_tasks
 
             # Add the task object to cache
-            self.cache[vwtask.ShortUUID(task['uuid'], self.tw)] = task
+            self.cache.task[vwtask.ShortUUID(task['uuid'], self.tw)] = task
 
             # Create the VimwikiTask
             vimwikitask = vwtask.VimwikiTask.from_task(self.cache, task)
@@ -335,6 +340,6 @@ class ViewPort(object):
             self.cache.insert_line(str(vimwikitask), added_at)
 
             # Save it to cache
-            self.cache[added_at] = vimwikitask
+            self.cache.vwtask[added_at] = vimwikitask
 
         sort.TaskSorter(self.cache, self.tasks, self.sort).execute()

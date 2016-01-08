@@ -26,6 +26,27 @@ class TestSimpleTaskCreation(IntegrationTest):
         assert task['status'] == 'pending'
 
 
+class TestInvalidUUIDTask(IntegrationTest):
+
+    viminput = """
+    * [ ] This is a test task  #abc123ef
+    """
+
+    vimoutput = """
+    * [ ] This is a test task  #{uuid}
+    """
+
+    def execute(self):
+        self.command("w", regex="on line 1 will be re-created")
+
+        # Check that only one tasks with this description exists
+        assert len(self.tw.tasks.pending()) == 1
+
+        task = self.tw.tasks.pending()[0]
+        assert task['description'] == 'This is a test task'
+        assert task['status'] == 'pending'
+
+
 class TestSimpleTaskModification(IntegrationTest):
 
     viminput = """
@@ -109,6 +130,28 @@ class TestSimpleTaskWithDueDatetimeCreation(IntegrationTest):
         assert task['description'] == 'This is a test task'
         assert task['status'] == 'pending'
         assert task['due'] == local_zone.localize(due)
+
+
+class TestSimpleTaskWithFlawedDueDatetimeCreation(IntegrationTest):
+
+    viminput = """
+    * [ ] This is a test task (2015-94-53 12:00)
+    """
+
+    vimoutput = """
+    * [ ] This is a test task  #{uuid}
+    """
+
+    def execute(self):
+        self.command("w", regex="Invalid timestamp", lines=2)
+
+        # Check that only one tasks with this description exists
+        assert len(self.tw.tasks.pending()) == 1
+
+        task = self.tw.tasks.pending()[0]
+        assert task['description'] == 'This is a test task'
+        assert task['status'] == 'pending'
+        assert task['due'] == None
 
 
 class TestSimpleTaskWithDueDateCreation(IntegrationTest):

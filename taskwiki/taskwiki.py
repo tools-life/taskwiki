@@ -5,15 +5,14 @@ import pickle
 import sys
 import vim  # pylint: disable=F0401
 
-from tasklib import TaskWarrior
-
 # Insert the taskwiki on the python path
 BASE_DIR = vim.eval("s:plugin_path")
 sys.path.insert(0, os.path.join(BASE_DIR, 'taskwiki'))
 
+import errors
 # Handle exceptions without traceback, if they're TaskWikiException
 def output_exception(exception_type, value, tb):
-    if exception_type is util.TaskWikiException:
+    if exception_type is errors.TaskWikiException:
         print(unicode(value), file=sys.stderr)
     else:
         sys.__excepthook__(exception_type, value, tb)
@@ -63,13 +62,14 @@ class WholeBuffer(object):
 
 class SelectedTasks(object):
     def __init__(self):
-        self.tw = cache.get_relevant_tw()
-
         # Reset cache, otherwise old line content may be used
         cache.reset()
 
+        # Find relevant TaskWarrior instance
+        self.tw = cache.get_relevant_tw()
+
         # Load the current tasks
-        range_tasks = [cache[i] for i in util.selected_line_numbers()]
+        range_tasks = [cache.vwtask[i] for i in util.selected_line_numbers()]
         self.tasks = [t for t in range_tasks if t is not None]
 
         if not self.tasks:
@@ -118,9 +118,6 @@ class SelectedTasks(object):
         if port:
             vim.command("TW rc:{0} rc.context: {1}"
                         .format(port.tw.taskrc_location, port.raw_filter))
-
-            print("TW rc:{0} rc.context: {1}"
-                  .format(port.tw.taskrc_location, port.raw_filter))
         else:
             print("No viewport detected.", file=sys.stderr)
 
@@ -199,7 +196,7 @@ class Mappings(object):
         # otherwise do the default VimwikiFollowLink
         position = util.get_current_line_number()
 
-        if cache[position] is not None:
+        if cache.vwtask[position] is not None:
             SelectedTasks().info()
         else:
             port = viewport.ViewPort.from_line(position, cache)
@@ -369,6 +366,9 @@ class CallbackSplitMixin(object):
         # Close the split if the user leaves it
         vim.command('au BufLeave <buffer> :bwipe')
 
+        # SREMatch objecets cannot be pickled
+        cache.line.clear()
+
         # We can't save the current instance in vim variable
         # so save the pickled version
         vim.current.buffer.vars['taskwiki_callback'] = pickle.dumps(self)
@@ -509,7 +509,7 @@ class ChooseSplitTags(CallbackSplitMixin, SplitTags):
         if match:
             return match.group('name')
         else:
-            raise util.TaskWikiException("No tag selected.")
+            raise errors.TaskWikiException("No tag selected.")
 
     def callback(self):
         tag = self.get_selected_tag()

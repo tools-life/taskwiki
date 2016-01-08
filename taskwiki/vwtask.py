@@ -105,9 +105,8 @@ class VimwikiTask(object):
                 return vwtask
 
     @classmethod
-    def from_current_line(cls, cache):
-        line_number = util.get_current_line_number()
-        return cls.from_line(cache, line_number)
+    def parse_line(cls, number):
+        return re.search(regexp.GENERIC_TASK, vim.current.buffer[number])
 
     @classmethod
     def from_line(cls, cache, number):
@@ -118,7 +117,7 @@ class VimwikiTask(object):
         # Protected access is ok here
         # pylint: disable=W0212
 
-        match = re.search(regexp.GENERIC_TASK, vim.current.buffer[number])
+        match = cache.line[(cls, number)]
 
         if not match:
             return None
@@ -155,6 +154,8 @@ class VimwikiTask(object):
             due = match.group('due')
             if due:
                 # With strptime, we get a native datetime object
+                parsed_due = None
+
                 try:
                     parsed_due = datetime.strptime(due, regexp.DATETIME_FORMAT)
                 except ValueError:
@@ -167,7 +168,8 @@ class VimwikiTask(object):
 
                 # We need to interpret it as timezone aware object in user's
                 # timezone, This properly handles DST and timezone offset.
-                self.task['due'] = parsed_due
+                if parsed_due:
+                    self.task['due'] = parsed_due
 
             # After all line-data parsing, save the data in the buffer
             self._buffer_data = {key:self[key] for key in self.buffer_keys}
@@ -226,7 +228,7 @@ class VimwikiTask(object):
         # Else try to load it or create a new one
         if self.uuid:
             try:
-                return self.cache[self.uuid]
+                return self.cache.task[self.uuid]
             except Task.DoesNotExist:
                 # Task with stale uuid, recreate
                 self.__unsaved_task = Task(self.tw)
@@ -235,7 +237,7 @@ class VimwikiTask(object):
                     'echom "UUID \'{0}\' not found, Task on line {1} will be '
                     're-created in TaskWarrior."'.format(
                         self.uuid,
-                        self['line_number']
+                        self['line_number'] + 1
                     ))
                 self.uuid = None
         else:
@@ -285,7 +287,7 @@ class VimwikiTask(object):
             # the temporary reference
             if self.__unsaved_task is not None:
                 self.uuid = ShortUUID(self.__unsaved_task['uuid'], self.tw)
-                self.cache[self.uuid] = self.__unsaved_task
+                self.cache.task[self.uuid] = self.__unsaved_task
                 self.__unsaved_task = None
 
             # Mark task as done.
@@ -344,11 +346,15 @@ class VimwikiTask(object):
         ])
 
     def find_parent_task(self):
+        # If this task is not indented, we have nothing to do here
+        if not self['indent']:
+            return None
+
         for i in reversed(range(0, self['line_number'])):
             # The from_line constructor returns None if line doesn't match a task
-            task = self.cache[i]
-            if task and len(task['indent']) < len(self['indent']):
-                return task
+            line = self.cache.line[(VimwikiTask, i)]
+            if line and len(line.group('space')) < len(self['indent']):
+                return self.cache.vwtask[i]
 
     def apply_defaults(self):
         for i in reversed(range(0, self['line_number'])):

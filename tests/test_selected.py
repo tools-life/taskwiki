@@ -259,6 +259,35 @@ class TestInfoAction(IntegrationTest):
         assert re.search(data2, output, re.MULTILINE)
 
 
+class TestInfoActionTriggeredByEnter(IntegrationTest):
+
+    viminput = """
+    * [ ] test task 1  #{uuid}
+    * [ ] test task 2  #{uuid}
+    """
+
+    tasks = [
+        dict(description="test task 1"),
+        dict(description="test task 2"),
+    ]
+
+    def execute(self):
+        self.client.type('1gg')
+        self.client.feedkeys("\\<CR>")
+        sleep(0.5)
+
+        assert self.command(":py print vim.current.buffer", silent=False).startswith("<buffer info")
+        output = '\n'.join(self.read_buffer())
+
+        header = r'\s*'.join(['Name', 'Value'])
+        data = r'\s*'.join(['Description', 'test task 1'])
+        data2 = r'\s*'.join(['Status', 'Pending'])
+
+        assert re.search(header, output, re.MULTILINE)
+        assert re.search(data, output, re.MULTILINE)
+        assert re.search(data2, output, re.MULTILINE)
+
+
 class TestInfoActionMoved(IntegrationTest):
 
     viminput = """
@@ -692,8 +721,8 @@ class TestModInteractiveAction(IntegrationTest):
         for task in self.tasks:
             task.refresh()
 
-        assert self.tasks[0]['tags'] == ["work"]
-        assert self.tasks[1]['tags'] == []
+        assert self.tasks[0]['tags'] == set(["work"])
+        assert self.tasks[1]['tags'] == set()
 
 
 class TestModVisibleAction(IntegrationTest):
@@ -832,6 +861,35 @@ class TestDoneAction(IntegrationTest):
 
         assert self.tasks[1]['end'] == None
 
+class TestDoneNoSelected(IntegrationTest):
+
+    viminput = """
+    * [ ] test task 1  #{uuid}
+
+    * [ ] test task 2  #{uuid}
+    """
+
+    vimoutput = """
+    * [ ] test task 1  #{uuid}
+
+    * [ ] test task 2  #{uuid}
+    """
+
+    tasks = [
+        dict(description="test task 1"),
+        dict(description="test task 2"),
+    ]
+
+    def execute(self):
+        self.client.type('2gg')
+        self.command(
+            "TaskWikiDone",
+            regex="No tasks selected.",
+            lines=1)
+
+        assert self.tasks[0]['status'] == "pending"
+        assert self.tasks[1]['status'] == "pending"
+
 
 class TestDoneActionMoved(IntegrationTest):
 
@@ -911,3 +969,30 @@ class TestDoneActionRange(IntegrationTest):
 
         assert (now - self.tasks[1]['end']).total_seconds() < 5
         assert (self.tasks[1]['end'] - now).total_seconds() < 5
+
+
+class TestSortManually(IntegrationTest):
+
+    viminput = """
+    * [ ] test task 1  #{uuid}
+    * [ ] test task 2  #{uuid}
+    """
+
+    vimoutput = """
+    * [ ] test task 2  #{uuid}
+    * [ ] test task 1  #{uuid}
+    """
+
+    tasks = [
+        dict(description="test task 1"),
+        dict(description="test task 2"),
+    ]
+
+    def execute(self):
+        self.client.normal('1gg')
+        sleep(0.5)
+        self.client.normal('VG')
+        sleep(0.5)
+        self.client.feedkeys(":TaskWikiSort description-")
+        self.client.type("<Enter>")
+        sleep(0.5)

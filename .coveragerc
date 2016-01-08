@@ -1,2 +1,2 @@
 [report]
-omit = */python2.7/*,*/test*,*/__init__.py
+omit = */python2.7/*,*/test*,*/__init__.py,*/taskwiki/coverage.py
