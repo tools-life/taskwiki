@@ -30,9 +30,11 @@ augroup taskwiki
     autocmd!
     " Update to TW upon saving
     execute "autocmd BufWrite *.".expand('%:e')." TaskWikiBufferSave"
-    " Save and load the view to preserve folding
-    execute "autocmd BufWinLeave *.".expand('%:e')." mkview"
-    execute "autocmd BufWinEnter *.".expand('%:e')." silent loadview"
+    " Save and load the view to preserve folding, if desired
+    if !exists('g:taskwiki_dont_preserve_folds')
+      execute "autocmd BufWinLeave *.".expand('%:e')." mkview"
+      execute "autocmd BufWinEnter *.".expand('%:e')." silent loadview"
+    endif
 augroup END
 
 " Global update commands

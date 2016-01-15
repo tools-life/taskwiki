@@ -663,6 +663,10 @@ constructs.
     use the same colors for task highlighting as those defined in
     taskwarrior.
 
+*taskwiki_dont_preserve_folds*
+    If set to a non-empty value (such as "yes"), taskwiki will not
+    preserve folding when entering or leaving a vimwiki buffer.
+
 *taskwiki_disable*
     Setting any non-empty value for this variable will disable taskwiki.
 
