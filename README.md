@@ -92,7 +92,7 @@ Tasks can be grouped - simply written in one block. This has the advantage
 of any child tasks being marked as dependencies of the parent tasks.
 
     * [ ] Get married
-        * [ ] Find a girlfriend
+        * [X] Find a girlfriend
         * [ ] Buy a ring
         * [ ] Propose
 
