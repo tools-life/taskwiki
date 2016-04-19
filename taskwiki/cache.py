@@ -9,15 +9,14 @@ import store
 
 class BufferProxy(object):
 
-    def __init__(self, buffer_object):
-        self.object = buffer_object
+    def __init__(self):
         self.data = []
 
     def obtain(self):
-        self.data = self.object[:]
+        self.data = vim.current.buffer[:]
 
     def push(self):
-        self.object[:] = self.data
+        vim.current.buffer[:] = self.data
 
     def __getitem__(self, index):
         return self.data[index]
@@ -54,7 +53,7 @@ class TaskCache(object):
         default_data = vim.vars.get('taskwiki_data_location') or '~/.task'
         extra_warrior_defs = vim.vars.get('taskwiki_extra_warriors', {})
 
-        self.buffer = BufferProxy(vim.current.buffer)
+        self.buffer = BufferProxy()
         self.task = store.TaskStore(self)
         self.vwtask = store.VwtaskStore(self)
         self.viewport = store.ViewportStore(self)
