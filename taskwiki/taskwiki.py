@@ -44,6 +44,7 @@ class WholeBuffer(object):
         cache.update_vwtasks_from_tasks()
         cache.update_vwtasks_in_buffer()
         cache.evaluate_viewports()
+        cache.buffer.push()
 
     @staticmethod
     def update_to_tw():
@@ -58,6 +59,7 @@ class WholeBuffer(object):
         cache.save_tasks()
         cache.update_vwtasks_in_buffer()
         cache.evaluate_viewports()
+        cache.buffer.push()
 
 
 class SelectedTasks(object):
@@ -96,6 +98,8 @@ class SelectedTasks(object):
             vimwikitask.update_in_buffer()
             print("Task \"{0}\" completed.".format(vimwikitask['description']))
 
+        cache.buffer.push()
+
     def info(self):
         for vimwikitask in self.tasks:
             out = util.tw_execute_safely(self.tw, [vimwikitask.uuid, 'info'])
@@ -133,6 +137,8 @@ class SelectedTasks(object):
             cache.remove_line(vimwikitask['line_number'])
             print("Task \"{0}\" deleted.".format(vimwikitask['description']))
 
+        cache.buffer.push()
+
     def modify(self, modstring):
         # If no modstring was passed as argument, ask the user interactively
         if not modstring:
@@ -159,6 +165,8 @@ class SelectedTasks(object):
         if output:
             print(output[-1])
 
+        cache.buffer.push()
+
     def start(self):
         # Multiple VimwikiTasks might refer to the same task, so make sure
         # we do not start one task twice
@@ -171,6 +179,7 @@ class SelectedTasks(object):
             vimwikitask.update_in_buffer()
             print("Task \"{0}\" started.".format(vimwikitask['description']))
 
+        cache.buffer.push()
 
     def stop(self):
         # Multiple VimwikiTasks might refer to the same task, so make sure
@@ -186,6 +195,7 @@ class SelectedTasks(object):
 
     def sort(self, sortstring):
         sort.TaskSorter(cache, self.tasks, sortstring).execute()
+        cache.buffer.push()
 
 
 class Mappings(object):

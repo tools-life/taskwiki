@@ -158,7 +158,7 @@ class LineStore(NoNoneStore):
 
     def get_method(self, key):
         cls, line = key
-        return cls.parse_line(line)
+        return cls.parse_line(self.cache, line)
 
     def shift(self, position, offset):
         new_store = {
@@ -169,8 +169,6 @@ class LineStore(NoNoneStore):
         self.store = new_store
 
     def swap(self, position1, position2):
-        import vim
-
         temp_store1 = {
             (cls, i): self.store[(cls, i)]
             for cls, i in self.store.keys()
@@ -194,7 +192,7 @@ class LineStore(NoNoneStore):
             self.store[(cls, position1)] = temp_store2[(cls, i)]
 
         # Also change the actual line content
-        temp = vim.current.buffer[position1]
-        vim.current.buffer[position1] = vim.current.buffer[position2]
-        vim.current.buffer[position2] = temp
+        temp = self.cache.buffer[position1]
+        self.cache.buffer[position1] = self.cache.buffer[position2]
+        self.cache.buffer[position2] = temp
 

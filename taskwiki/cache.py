@@ -7,6 +7,41 @@ import regexp
 import store
 
 
+class BufferProxy(object):
+
+    def __init__(self, buffer_object):
+        self.object = buffer_object
+        self.data = []
+
+    def obtain(self):
+        self.data = self.object[:]
+
+    def push(self):
+        self.object[:] = self.data
+
+    def __getitem__(self, index):
+        return self.data[index]
+
+    def __setitem__(self, index, lines):
+        self.data[index] = lines
+
+    def __delitem__(self, index):
+        del self.data[index]
+
+    def __iter__(self):
+        for line in self.data:
+            yield line
+
+    def __len__(self):
+        return len(self.data)
+
+    def append(self, data, position=None):
+        if position is None:
+            self.data.append(data)
+        else:
+            self.data.insert(data, 0)
+
+
 class TaskCache(object):
     """
     A cache that holds all the tasks in the given file and prevents
@@ -19,6 +54,7 @@ class TaskCache(object):
         default_data = vim.vars.get('taskwiki_data_location') or '~/.task'
         extra_warrior_defs = vim.vars.get('taskwiki_extra_warriors', {})
 
+        self.buffer = BufferProxy(vim.current.buffer)
         self.task = store.TaskStore(self)
         self.vwtask = store.VwtaskStore(self)
         self.viewport = store.ViewportStore(self)
@@ -42,6 +78,7 @@ class TaskCache(object):
                     yield task
 
     def reset(self):
+        self.buffer.obtain()
         self.task.store = dict()
         self.vwtask.store = dict()
         self.viewport.store = dict()
@@ -53,14 +90,14 @@ class TaskCache(object):
         old_authority = self.buffer_has_authority
         self.buffer_has_authority = buffer_has_authority
 
-        for i in range(len(vim.current.buffer)):
+        for i in range(len(self.buffer)):
             self.vwtask[i]  # Loads the line into the cache
 
         # Restore the old authority flag value
         self.buffer_has_authority = old_authority
 
     def load_viewports(self):
-        for i in range(len(vim.current.buffer)):
+        for i in range(len(self.buffer)):
             port = viewport.ViewPort.from_line(i, self)
 
             if port is None:
@@ -83,7 +120,7 @@ class TaskCache(object):
         raw_task_info = []
 
         # Load the tasks in batch, all in given TaskWarrior instance
-        for line in vim.current.buffer:
+        for line in self.buffer:
             match = re.search(regexp.GENERIC_TASK, line)
             if not match:
                 continue
@@ -136,13 +173,13 @@ class TaskCache(object):
 
     def insert_line(self, line, position):
         # Insert the line
-        if position == len(vim.current.buffer):
+        if position == len(self.buffer):
             # Workaround: Necessary since neovim cannot append
             # after the last line of the buffer when mentioning
             # the position explicitly
-            vim.current.buffer.append(line)
+            self.buffer.append(line)
         else:
-            vim.current.buffer.append(line, position)
+            self.buffer.append(line, position)
 
         # Update the position of all the things shifted by the insertion
         self.vwtask.shift(position, 1)
@@ -153,7 +190,7 @@ class TaskCache(object):
 
     def remove_line(self, position):
         # Remove the line
-        del vim.current.buffer[position]
+        del self.buffer[position]
 
         # Remove the vimwikitask from cache
         del self.vwtask[position]
@@ -170,7 +207,7 @@ class TaskCache(object):
         self.line.shift(position, -1)
 
     def swap_lines(self, position1, position2):
-        buffer_size = len(vim.current.buffer)
+        buffer_size = len(self.buffer)
         if position1 >= buffer_size or position2 >= buffer_size:
             raise ValueError("Tring to swap %d with %d" % (position1, position2))
 

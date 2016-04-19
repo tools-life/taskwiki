@@ -171,8 +171,8 @@ class ViewPort(object):
         return taskfilter_args, meta
 
     @classmethod
-    def parse_line(cls, number):
-        return re.search(regexp.GENERIC_VIEWPORT, vim.current.buffer[number])
+    def parse_line(cls, cache, number):
+        return re.search(regexp.GENERIC_VIEWPORT, cache.buffer[number])
 
     @classmethod
     def from_line(cls, number, cache):
@@ -212,7 +212,7 @@ class ViewPort(object):
         # Search lines in order: first all above, than all below
         line_numbers = itertools.chain(
             reversed(range(0, current_line + 1)),
-            range(current_line + 1, len(vim.current.buffer))
+            range(current_line + 1, len(cache.buffer))
             )
 
         for i in line_numbers:
@@ -274,8 +274,8 @@ class ViewPort(object):
 
     def load_tasks(self):
         # Load all tasks below the viewport
-        for i in range(self.line_number + 1, len(vim.current.buffer)):
-            line = vim.current.buffer[i]
+        for i in range(self.line_number + 1, len(self.cache.buffer)):
+            line = self.cache.buffer[i]
             match = re.search(regexp.GENERIC_TASK, line)
 
             if match:

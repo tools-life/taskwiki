@@ -96,7 +96,7 @@ class VimwikiTask(object):
         # Search lines in order: first all above, than all below
         line_numbers = itertools.chain(
             reversed(range(0, current_line + 1)),
-            range(current_line + 1, len(vim.current.buffer))
+            range(current_line + 1, len(cache.buffer))
             )
 
         for i in line_numbers:
@@ -105,8 +105,8 @@ class VimwikiTask(object):
                 return vwtask
 
     @classmethod
-    def parse_line(cls, number):
-        return re.search(regexp.GENERIC_TASK, vim.current.buffer[number])
+    def parse_line(cls, cache, number):
+        return re.search(regexp.GENERIC_TASK, cache.buffer[number])
 
     @classmethod
     def from_line(cls, cache, number):
@@ -330,7 +330,7 @@ class VimwikiTask(object):
         buffer_data = {key:self[key] for key in self.buffer_keys}
         if self._buffer_data != buffer_data:
             # If so, update the line in vim and saved buffer data
-            vim.current.buffer[self['line_number']] = str(self)
+            self.cache.buffer[self['line_number']] = str(self)
             self._buffer_data = buffer_data
 
     def __str__(self):
