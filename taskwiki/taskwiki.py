@@ -204,6 +204,9 @@ class Mappings(object):
 
     @staticmethod
     def task_info_or_vimwiki_follow_link():
+        # Reset the cache to use up-to-date buffer content
+        cache.reset()
+
         # If the line under cursor contains task, toggle info
         # otherwise do the default VimwikiFollowLink
         position = util.get_current_line_number()
