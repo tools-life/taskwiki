@@ -193,6 +193,8 @@ class SelectedTasks(object):
             vimwikitask.update_in_buffer()
             print("Task \"{0}\" stopped.".format(vimwikitask['description']))
 
+        cache.buffer.push()
+
     def sort(self, sortstring):
         sort.TaskSorter(cache, self.tasks, sortstring).execute()
         cache.buffer.push()
