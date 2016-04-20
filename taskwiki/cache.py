@@ -20,7 +20,10 @@ class BufferProxy(object):
         vim.buffers[self.buffer_number][:] = self.data
 
     def __getitem__(self, index):
-        return self.data[index]
+        try:
+            return self.data[index]
+        except IndexError:
+            return ''
 
     def __setitem__(self, index, lines):
         self.data[index] = lines
@@ -39,7 +42,7 @@ class BufferProxy(object):
         if position is None:
             self.data.append(data)
         else:
-            self.data.insert(data, 0)
+            self.data.insert(position, data)
 
 
 class TaskCache(object):

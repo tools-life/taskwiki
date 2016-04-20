@@ -307,7 +307,7 @@ class MockBuffer(object):
         if position is None:
             self.data.append(data)
         else:
-            self.data.insert(data, 0)
+            self.data.insert(position, data)
 
 
 # Mock Cache object
