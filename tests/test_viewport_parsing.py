@@ -24,7 +24,7 @@ class TestParsingVimwikiTask(object):
         self.cache.reset()
 
     def test_simple(self):
-        self.mockvim.current.buffer[0] = "== Test | project:Home =="
+        self.cache.buffer[0] = "== Test | project:Home =="
         port = self.ViewPort.from_line(0, self.cache)
 
         assert port.taskfilter == list(DEFAULT_VIEWPORT_VIRTUAL_TAGS) + ["project:Home"]
@@ -33,7 +33,7 @@ class TestParsingVimwikiTask(object):
         assert port.tw == 'default'
 
     def test_defaults(self):
-        self.mockvim.current.buffer[0] = "== Test | project:Home | +home =="
+        self.cache.buffer[0] = "== Test | project:Home | +home =="
         port = self.ViewPort.from_line(0, self.cache)
 
         assert port.taskfilter == list(DEFAULT_VIEWPORT_VIRTUAL_TAGS) + ["project:Home"]
@@ -43,7 +43,7 @@ class TestParsingVimwikiTask(object):
         assert port.tw == 'default'
 
     def test_different_tw(self):
-        self.mockvim.current.buffer[0] = "== Test | project:Home #T =="
+        self.cache.buffer[0] = "== Test | project:Home #T =="
         port = self.ViewPort.from_line(0, self.cache)
 
         assert port.taskfilter == list(DEFAULT_VIEWPORT_VIRTUAL_TAGS) + ["project:Home"]
@@ -52,7 +52,7 @@ class TestParsingVimwikiTask(object):
         assert port.tw == 'extra'
 
     def test_different_sort(self):
-        self.mockvim.current.buffer[0] = "== Test | project:Home $T =="
+        self.cache.buffer[0] = "== Test | project:Home $T =="
         port = self.ViewPort.from_line(0, self.cache)
 
         assert port.taskfilter == list(DEFAULT_VIEWPORT_VIRTUAL_TAGS) + ["project:Home"]
@@ -61,7 +61,7 @@ class TestParsingVimwikiTask(object):
         assert port.tw == 'default'
 
     def test_different_sort_with_complex_filter(self):
-        self.mockvim.current.buffer[0] = "== Test | project:Home or project:Work $T =="
+        self.cache.buffer[0] = "== Test | project:Home or project:Work $T =="
         port = self.ViewPort.from_line(0, self.cache)
 
         assert port.taskfilter == list(DEFAULT_VIEWPORT_VIRTUAL_TAGS) + ["project:Home", "or", "project:Work"]
@@ -70,7 +70,7 @@ class TestParsingVimwikiTask(object):
         assert port.tw == 'default'
 
     def test_different_sort_tw(self):
-        self.mockvim.current.buffer[0] = "== Test | project:Home #T $T =="
+        self.cache.buffer[0] = "== Test | project:Home #T $T =="
         port = self.ViewPort.from_line(0, self.cache)
 
         assert port.taskfilter == list(DEFAULT_VIEWPORT_VIRTUAL_TAGS) + ["project:Home"]
@@ -79,7 +79,7 @@ class TestParsingVimwikiTask(object):
         assert port.tw == 'extra'
 
     def test_defaults_different_tw(self):
-        self.mockvim.current.buffer[0] = "== Test | project:Home | +home #T =="
+        self.cache.buffer[0] = "== Test | project:Home | +home #T =="
         port = self.ViewPort.from_line(0, self.cache)
 
         assert port.taskfilter == list(DEFAULT_VIEWPORT_VIRTUAL_TAGS) + ["project:Home"]
@@ -89,7 +89,7 @@ class TestParsingVimwikiTask(object):
         assert port.tw == 'extra'
 
     def test_defaults_different_tw_sort(self):
-        self.mockvim.current.buffer[0] = "== Test | project:Home | +home #T $T =="
+        self.cache.buffer[0] = "== Test | project:Home | +home #T $T =="
         port = self.ViewPort.from_line(0, self.cache)
 
         assert port.taskfilter == list(DEFAULT_VIEWPORT_VIRTUAL_TAGS) + ["project:Home"]
@@ -99,7 +99,7 @@ class TestParsingVimwikiTask(object):
         assert port.tw == 'extra'
 
     def test_override_default_virtual_tags_neutral(self):
-        self.mockvim.current.buffer[0] = "== Test | project:Home !?DELETED =="
+        self.cache.buffer[0] = "== Test | project:Home !?DELETED =="
         port = self.ViewPort.from_line(0, self.cache)
 
         assert port.taskfilter == ["-PARENT", "project:Home"]
@@ -109,7 +109,7 @@ class TestParsingVimwikiTask(object):
         assert port.tw == 'default'
 
     def test_override_default_virtual_tags_positive(self):
-        self.mockvim.current.buffer[0] = "== Test | project:Home !+DELETED =="
+        self.cache.buffer[0] = "== Test | project:Home !+DELETED =="
         port = self.ViewPort.from_line(0, self.cache)
 
         assert port.taskfilter == ["+DELETED", "-PARENT", "project:Home"]
@@ -119,7 +119,7 @@ class TestParsingVimwikiTask(object):
         assert port.tw == 'default'
 
     def test_override_default_virtual_tags_negative(self):
-        self.mockvim.current.buffer[0] = "== Test | project:Home !-DELETED =="
+        self.cache.buffer[0] = "== Test | project:Home !-DELETED =="
         port = self.ViewPort.from_line(0, self.cache)
 
         assert port.taskfilter == ["-DELETED", "-PARENT","project:Home"]
@@ -129,7 +129,7 @@ class TestParsingVimwikiTask(object):
         assert port.tw == 'default'
 
     def test_override_default_virtual_tags_positive_without_forcing(self):
-        self.mockvim.current.buffer[0] = "== Test | project:Home +DELETED =="
+        self.cache.buffer[0] = "== Test | project:Home +DELETED =="
         port = self.ViewPort.from_line(0, self.cache)
 
         assert port.taskfilter == ["-PARENT", "project:Home", "+DELETED"]

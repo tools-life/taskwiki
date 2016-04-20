@@ -273,6 +273,42 @@ class MockVim(object):
         self.vars.clear()
         self.warriors.clear()
 
+class MockBuffer(object):
+
+    def __init__(self):
+        self.data = ['']
+
+    def obtain(self):
+        pass
+
+    def push(self):
+        pass
+
+    def __getitem__(self, index):
+        try:
+            return self.data[index]
+        except IndexError:
+            return ''
+
+    def __setitem__(self, index, lines):
+        self.data[index] = lines
+
+    def __delitem__(self, index):
+        del self.data[index]
+
+    def __iter__(self):
+        for line in self.data:
+            yield line
+
+    def __len__(self):
+        return len(self.data)
+
+    def append(self, data, position=None):
+        if position is None:
+            self.data.append(data)
+        else:
+            self.data.insert(data, 0)
+
 
 # Mock Cache object
 class MockCache(object):
@@ -281,6 +317,7 @@ class MockCache(object):
 
     def __init__(self):
         from taskwiki import store
+        self.buffer = MockBuffer()
         self.line = store.LineStore(self)
         self.vwtask = dict()
         self.task = dict()
