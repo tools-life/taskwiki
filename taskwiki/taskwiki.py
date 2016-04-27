@@ -10,15 +10,6 @@ BASE_DIR = vim.eval("s:plugin_path")
 sys.path.insert(0, os.path.join(BASE_DIR, 'taskwiki'))
 
 import errors
-# Handle exceptions without traceback, if they're TaskWikiException
-def output_exception(exception_type, value, tb):
-    if exception_type is errors.TaskWikiException:
-        print(unicode(value), file=sys.stderr)
-    else:
-        sys.__excepthook__(exception_type, value, tb)
-
-sys.excepthook = output_exception
-
 import cache
 import sort
 import util
