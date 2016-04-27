@@ -6,12 +6,13 @@ import viewport
 import regexp
 import store
 
+NEOVIM = (vim.eval('has("nvim")') == "1")
 
 class BufferProxy(object):
 
     def __init__(self, number):
         self.data = []
-        self.buffer_number = number
+        self.buffer_number = number - 1 if NEOVIM else number
 
     def obtain(self):
         self.data = vim.buffers[self.buffer_number][:]
