@@ -114,6 +114,17 @@ def get_current_window():
     except AttributeError:
         return int(vim.eval('winnr()')) - 1
 
+def get_buffer(number):
+    """
+    Returns a buffer with specfied number. Provides a workaround for Neovim.
+
+    Note that vim.buffers may not contain all buffers with sequential numbers.
+    """
+
+    buffers = [buffer for buffer in vim.buffers if buffer.number == number]
+    assert len(buffers) == 1
+    return buffers[0]
+
 def convert_colorstring_for_vim(string):
     BASIC_COLORS = [
         "blue", "yellow", "green", "red",
