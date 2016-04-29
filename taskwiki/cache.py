@@ -5,20 +5,19 @@ import vwtask
 import viewport
 import regexp
 import store
-
-NEOVIM = (vim.eval('has("nvim")') == "1")
+import util
 
 class BufferProxy(object):
 
     def __init__(self, number):
         self.data = []
-        self.buffer_number = number - 1 if NEOVIM else number
+        self.buffer_number = number
 
     def obtain(self):
-        self.data = vim.buffers[self.buffer_number][:]
+        self.data = util.get_buffer(self.buffer_number)[:]
 
     def push(self):
-        vim.buffers[self.buffer_number][:] = self.data
+        util.get_buffer(self.buffer_number)[:] = self.data
 
     def __getitem__(self, index):
         try:
