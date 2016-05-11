@@ -4,6 +4,7 @@ import re
 from taskwiki import viewport
 from taskwiki import regexp
 from taskwiki import store
+from taskwiki import short
 from taskwiki import util
 
 NEOVIM = (vim.eval('has("nvim")') == "1")
@@ -152,7 +153,7 @@ class TaskCache(object):
 
             # Update each task in the cache
             for task in tasks:
-                key = vwtask.ShortUUID(task['uuid'], tw)
+                key = short.ShortUUID(task['uuid'], tw)
                 self.task[key] = task
 
     def update_vwtasks_from_tasks(self):

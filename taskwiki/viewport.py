@@ -8,6 +8,7 @@ from taskwiki import regexp
 from taskwiki import errors
 from taskwiki import util
 from taskwiki import sort
+from taskwiki import short
 from taskwiki import constants
 
 
@@ -302,7 +303,7 @@ class ViewPort(object):
             if task.saved:
                 matching_vimwikitasks = [
                     t for t in self.tasks
-                    if t.uuid == vwtask.ShortUUID(task['uuid'], task.backend)
+                    if t.uuid == short.ShortUUID(task['uuid'], task.backend)
                 ]
             else:
                 # For the tasks that are not saved yet, only one
@@ -329,7 +330,7 @@ class ViewPort(object):
             added_at = self.line_number + existing_tasks + added_tasks
 
             # Add the task object to cache
-            self.cache.task[vwtask.ShortUUID(task['uuid'], self.tw)] = task
+            self.cache.task[short.ShortUUID(task['uuid'], self.tw)] = task
 
             # Create the VimwikiTask
             vimwikitask = vwtask.VimwikiTask.from_task(self.cache, task)
