@@ -1,10 +1,10 @@
 import vim  # pylint: disable=F0401
 import re
 
-from taskwiki import vwtask
 from taskwiki import viewport
 from taskwiki import regexp
 from taskwiki import store
+from taskwiki import util
 
 NEOVIM = (vim.eval('has("nvim")') == "1")
 
@@ -224,5 +224,6 @@ class TaskCache(object):
 
     def get_relevant_tw(self):
         # Find closest task
+        from taskwiki import vwtask
         task = vwtask.VimwikiTask.find_closest(self)
         return task.tw if task else self.warriors['default']

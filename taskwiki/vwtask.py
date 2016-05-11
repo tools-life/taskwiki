@@ -6,7 +6,6 @@ from datetime import datetime
 from tasklib import Task
 
 from taskwiki import regexp
-from taskwiki import viewport
 from taskwiki import util
 
 
@@ -358,6 +357,8 @@ class VimwikiTask(object):
                 return self.cache.vwtask[i]
 
     def apply_defaults(self):
+        from taskwiki import viewport
+
         for i in reversed(range(0, self['line_number'])):
             port = viewport.ViewPort.from_line(i, self.cache)
             if port:
