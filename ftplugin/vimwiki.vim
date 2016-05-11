@@ -24,7 +24,7 @@ if exists("g:taskwiki_measure_coverage")
 endif
 
 " Execute the main body of taskwiki source
-execute 'pyfile ' . s:plugin_path . '/taskwiki/taskwiki.py'
+execute 'pyfile ' . s:plugin_path . '/taskwiki/main.py'
 
 augroup taskwiki
     autocmd!

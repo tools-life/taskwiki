@@ -1,5 +1,6 @@
-import constants
 import vim
+
+from taskwiki import constants
 
 class TaskSorter(object):
     def __init__(self, cache, tasks, sortstring=None):

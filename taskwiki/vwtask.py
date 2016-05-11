@@ -4,9 +4,10 @@ import vim  # pylint: disable=F0401
 from datetime import datetime
 
 from tasklib import Task
-import regexp
-import viewport
-import util
+
+from taskwiki import regexp
+from taskwiki import viewport
+from taskwiki import util
 
 
 def convert_priority_from_tw_format(priority):

@@ -3,12 +3,12 @@ import re
 import sys
 import vim  # pylint: disable=F0401
 
-import vwtask
-import regexp
-import errors
-import util
-import sort
-import constants
+from taskwiki import vwtask
+from taskwiki import regexp
+from taskwiki import errors
+from taskwiki import util
+from taskwiki import sort
+from taskwiki import constants
 
 
 class ViewPort(object):

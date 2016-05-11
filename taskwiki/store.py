@@ -1,6 +1,6 @@
 from tasklib import TaskWarrior
 
-import errors
+from taskwiki import errors
 
 
 class WarriorStore(object):

@@ -7,13 +7,13 @@ import vim  # pylint: disable=F0401
 
 # Insert the taskwiki on the python path
 BASE_DIR = vim.eval("s:plugin_path")
-sys.path.insert(0, os.path.join(BASE_DIR, 'taskwiki'))
+sys.path.insert(0, BASE_DIR)
 
-import errors
-import cache
-import sort
-import util
-import viewport
+from taskwiki import errors
+from taskwiki import cache
+from taskwiki import sort
+from taskwiki import util
+from taskwiki import viewport
 
 # Initialize the cache
 cache = cache.TaskCache()

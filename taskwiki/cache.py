@@ -1,11 +1,12 @@
 import vim  # pylint: disable=F0401
 import re
 
-import vwtask
-import viewport
-import regexp
-import store
-import util
+from taskwiki import vwtask
+from taskwiki import viewport
+from taskwiki import regexp
+from taskwiki import store
+
+NEOVIM = (vim.eval('has("nvim")') == "1")
 
 class BufferProxy(object):
 
