@@ -33,7 +33,7 @@ augroup taskwiki
     " Save and load the view to preserve folding, if desired
     if !exists('g:taskwiki_dont_preserve_folds')
       execute "autocmd BufWinLeave *.".expand('%:e')." mkview"
-      execute "autocmd BufWinEnter *.".expand('%:e')." silent loadview"
+      execute "autocmd BufWinEnter *.".expand('%:e')." silent! loadview"
       execute "autocmd BufWinEnter *.".expand('%:e')." doautocmd SessionLoadPost *.".expand('%:e')
     endif
 augroup END
