@@ -281,6 +281,16 @@ class VimwikiTask(object):
         elif mark == 'D':
             mark = ' '
 
+        if self.task.recurring:
+            mark = 'R'
+        elif mark == 'R':
+            mark = ' '
+
+        if self.task.waiting:
+            mark = 'W'
+        elif mark == 'W':
+            mark = ' '
+
         return mark
 
     def update_from_task(self):
