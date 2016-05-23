@@ -6,7 +6,21 @@ endif
 " Detect if conceal feature is available
 let s:conceal = exists("+conceallevel") ? ' conceal': ''
 
-syntax match TaskWikiTask contains=VimwikiListTodo /\s*\* \[.\]\s.*$/
+syntax match TaskWikiTask /\s*\* \[.\]\s.*$/
+       \ contains=VimwikiListTodo,
+                \ VimwikiTag,
+                \ VimwikiEmoticons,
+                \ VimwikiTodo,
+                \ VimwikiBoldT,
+                \ VimwikiItalicT,
+                \ VimwikiBoldItalicT,
+                \ VimwikiItalicBoldT,
+                \ VimwikiDelTextT,
+                \ VimwikiSuperScriptT,
+                \ VimwikiSubScriptT,
+                \ VimwikiCodeT,
+                \ VimwikiEqInT,
+                \ @Spell
 
 " Conceal the UUID
 execute 'syn match TaskWikiTaskUuid containedin=TaskWikiTask /\v#([A-Z]:)?[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/'.s:conceal
