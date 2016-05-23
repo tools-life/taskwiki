@@ -77,7 +77,7 @@ class TestSimpleTaskModification(IntegrationTest):
         assert task['status'] == 'pending'
 
 
-class TestSimpleTaskCompletion(IntegrationTest):
+class TestBufferTaskCompletion(IntegrationTest):
 
     viminput = """
     * [ ] This is a test task  #{uuid}
@@ -106,6 +106,169 @@ class TestSimpleTaskCompletion(IntegrationTest):
         task = self.tw.tasks.completed()[0]
         assert task['description'] == 'This is a test task'
         assert task['status'] == 'completed'
+        assert task['end'] is not None
+
+
+class TestBufferTaskUncompletion(IntegrationTest):
+
+    viminput = """
+    * [X] This is a test task  #{uuid}
+    """
+
+    vimoutput = """
+    * [ ] This is a test task  #{uuid}
+    """
+
+    tasks = [
+        dict(description="This is a test task", status="completed")
+    ]
+
+    def execute(self):
+        # Change the current line's due date
+        current_data = self.read_buffer()
+        current_data[0] = current_data[0].replace('[X]', '[ ]')
+        self.write_buffer(current_data)
+
+        self.command("w", regex="written$", lines=1)
+
+        # Check that the task was completed
+        assert len(self.tw.tasks.pending()) == 1
+        assert len(self.tw.tasks.completed()) == 0
+
+        task = self.tw.tasks.pending()[0]
+        assert task['description'] == 'This is a test task'
+        assert task['status'] == 'pending'
+        assert task['end'] is None
+
+
+class TestBufferTaskDeletion(IntegrationTest):
+
+    viminput = """
+    * [ ] This is a test task  #{uuid}
+    """
+
+    vimoutput = """
+    * [D] This is a test task  #{uuid}
+    """
+
+    tasks = [
+        dict(description="This is a test task")
+    ]
+
+    def execute(self):
+        # Change the current line's due date
+        current_data = self.read_buffer()
+        current_data[0] = current_data[0].replace('[ ]', '[D]')
+        self.write_buffer(current_data)
+
+        self.command("w", regex="written$", lines=1)
+
+        # Check that the task was completed
+        assert len(self.tw.tasks.pending()) == 0
+        assert len(self.tw.tasks.deleted()) == 1
+
+        task = self.tw.tasks.deleted()[0]
+        assert task['description'] == 'This is a test task'
+        assert task['status'] == 'deleted'
+        assert task['end'] is not None
+
+
+class TestBufferTaskUndeletion(IntegrationTest):
+
+    viminput = """
+    * [D] This is a test task  #{uuid}
+    """
+
+    vimoutput = """
+    * [ ] This is a test task  #{uuid}
+    """
+
+    tasks = [
+        dict(description="This is a test task", status="deleted", end="now")
+    ]
+
+    def execute(self):
+        # Change the current line's due date
+        current_data = self.read_buffer()
+        current_data[0] = current_data[0].replace('[D]', '[ ]')
+        self.write_buffer(current_data)
+
+        self.command("w", regex="written$", lines=1)
+
+        # Check that the task was completed
+        assert len(self.tw.tasks.pending()) == 1
+        assert len(self.tw.tasks.deleted()) == 0
+
+        task = self.tw.tasks.pending()[0]
+        assert task['description'] == 'This is a test task'
+        assert task['status'] == 'pending'
+        assert task['end'] is None
+
+
+class TestBufferTaskActivation(IntegrationTest):
+
+    viminput = """
+    * [ ] This is a test task  #{uuid}
+    """
+
+    vimoutput = """
+    * [S] This is a test task  #{uuid}
+    """
+
+    tasks = [
+        dict(description="This is a test task")
+    ]
+
+    def execute(self):
+        # Change the current line's due date
+        current_data = self.read_buffer()
+        current_data[0] = current_data[0].replace('[ ]', '[S]')
+        self.write_buffer(current_data)
+
+        self.command("w", regex="written$", lines=1)
+
+        # Check that the task was completed
+        assert len(self.tw.tasks.pending()) == 1
+        assert len(self.tw.tasks.filter(start__any=None)) == 1
+
+        task = self.tw.tasks.get(start__any=None)
+        assert task['description'] == 'This is a test task'
+        assert task['status'] == 'pending'
+        assert task['start'] is not None
+        assert task['end'] is None
+
+
+class TestBufferTaskDeactivation(IntegrationTest):
+
+    viminput = """
+    * [S] This is a test task  #{uuid}
+    """
+
+    vimoutput = """
+    * [ ] This is a test task  #{uuid}
+    """
+
+    tasks = [
+        dict(description="This is a test task", status="pending", start="now")
+    ]
+
+    def execute(self):
+        # Change the current line's due date
+        current_data = self.read_buffer()
+        current_data[0] = current_data[0].replace('[S]', '[ ]')
+        self.write_buffer(current_data)
+
+        self.command("w", regex="written$", lines=1)
+
+        # Check that the task was completed
+        assert len(self.tw.tasks.pending()) == 1
+        assert len(self.tw.tasks.completed()) == 0
+
+        task = self.tw.tasks.pending()[0]
+        assert task['description'] == 'This is a test task'
+        assert task['status'] == 'pending'
+        assert task['start'] is None
+        assert task['end'] is None
 
 
 class TestSimpleTaskWithDueDatetimeCreation(IntegrationTest):
