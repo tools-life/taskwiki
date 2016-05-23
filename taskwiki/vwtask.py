@@ -99,23 +99,24 @@ class VimwikiTask(object):
                 len(match.group('priority') or [])) # This is either 0,1,2 or 3
 
             # Also make sure changes in the progress field are reflected
-            if self['completed_mark'] is 'X' and not self.task.completed:
+            if self['completed_mark'] is 'X':
                 self.task['status'] = 'completed'
                 self.task['start'] = None
-                self.task['end'] = datetime.now()
-            elif self['completed_mark'] is 'S' and not self.task.active:
+                self.task['end'] = self.task['end'] or datetime.now()
+            elif self['completed_mark'] is 'S':
                 self.task['status'] = 'pending'
-                self.task['start'] = datetime.now()
+                self.task['start'] = self.task['start'] or datetime.now()
                 self.task['end'] = None
-            elif self['completed_mark'] == 'D' and not self.task.deleted:
+            elif self['completed_mark'] == 'D':
                 self.task['status'] = 'deleted'
                 self.task['start'] = None
-                self.task['end'] = datetime.now()
-            elif self['completed_mark'] == ' ' and (not self.task.pending
-                    or self.task.active):
+                self.task['end'] = self.task['end'] or datetime.now()
+            elif self['completed_mark'] == ' ':
                 self.task['status'] = "pending"
                 self.task['start'] = None
                 self.task['end'] = None
+                self.task['wait'] = None
+                self.task['recur'] = None
 
             # To get local time aware timestamp, we need to convert to
             # from local datetime to UTC time, since that is what
