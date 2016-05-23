@@ -99,11 +99,23 @@ class VimwikiTask(object):
                 len(match.group('priority') or [])) # This is either 0,1,2 or 3
 
             # Also make sure changes in the progress field are reflected
-            if self['completed_mark'] is 'X':
+            if self['completed_mark'] is 'X' and not self.task.completed:
                 self.task['status'] = 'completed'
-            elif self['completed_mark'] is 'S':
+                self.task['start'] = None
+                self.task['end'] = datetime.now()
+            elif self['completed_mark'] is 'S' and not self.task.active:
                 self.task['status'] = 'pending'
-                self.task['start'] = self.task['start'] or 'now'
+                self.task['start'] = datetime.now()
+                self.task['end'] = None
+            elif self['completed_mark'] == 'D' and not self.task.deleted:
+                self.task['status'] = 'deleted'
+                self.task['start'] = None
+                self.task['end'] = datetime.now()
+            elif self['completed_mark'] == ' ' and (not self.task.pending
+                    or self.task.active):
+                self.task['status'] = "pending"
+                self.task['start'] = None
+                self.task['end'] = None
 
             # To get local time aware timestamp, we need to convert to
             # from local datetime to UTC time, since that is what
@@ -246,11 +258,6 @@ class VimwikiTask(object):
                 self.uuid = ShortUUID(self.__unsaved_task['uuid'], self.tw)
                 self.cache.task[self.uuid] = self.__unsaved_task
                 self.__unsaved_task = None
-
-            # Mark task as done.
-            is_not_completed = self.task.pending or self.task.waiting
-            if self['completed_mark'] == 'X' and is_not_completed:
-                self.task.done()
 
             # If we saved the task, we need to update. Hooks may have chaned data.
             self.update_from_task()
