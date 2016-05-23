@@ -37,6 +37,8 @@ endfor
 syntax match TaskWikiTaskActive containedin=TaskWikiTask contained /\s*\*\s\[S\]\s[^#]*/
 syntax match TaskWikiTaskCompleted containedin=TaskWikiTask contained /\s*\*\s\[X\]\s[^#]*/
 syntax match TaskWikiTaskDeleted containedin=TaskWikiTask contained /\s*\*\s*\[D\]\s[^#]*/
+syntax match TaskWikiTaskRecurring containedin=TaskWikiTask contained /\s*\*\s\[R\]\s[^#]*/
+syntax match TaskWikiTaskWaiting containedin=TaskWikiTask contained /\s*\*\s\[W\]\s[^#]*/
 syntax match TaskWikiTaskPriority containedin=TaskWikiTask contained /\( !\| !!\| !!!\)\( \)\@=/
 
 " Set concealed parts as really concealed in normal mode, and with cursor over

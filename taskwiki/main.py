@@ -276,11 +276,15 @@ class Meta(object):
             'TaskWikiTaskActive': 'color.active',
             'TaskWikiTaskCompleted': 'color.completed',
             'TaskWikiTaskDeleted': 'color.deleted',
+            'TaskWikiTaskRecurring': 'color.recurring',
+            'TaskWikiTaskWaiting': 'color.completed',
         }
 
         taskwiki_native_colors = {
             'TaskWikiTaskActive': 'Type',
             'TaskWikiTaskCompleted': 'Comment',
+            'TaskWikiTaskRecurring': 'Comment',
+            'TaskWikiTaskWaiting': 'Comment',
             'TaskWikiTaskDeleted': 'Error',
             'TaskWikiTaskPriority': 'Error',
         }
