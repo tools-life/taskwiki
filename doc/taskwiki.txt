@@ -680,7 +680,7 @@ constructs.
 
 Make sure both your taskwiki and tasklib versions are updated. If this does
 not resolve your issue, feel free to submit a bug report, or seek support
-on #taskwarrior IRC channgel on Freenode.
+on #taskwarrior IRC channel on Freenode.
 
 =============================================================================
 10. CONTRIBUTIONS					*taskwiki-contribute*
