@@ -205,7 +205,7 @@ class TestViewportInspection(IntegrationTest):
     ViewPort inspection:
     --------------------
     Name: Work tasks
-    Filter used: -DELETED -PARENT +work
+    Filter used: -DELETED -PARENT ( +work )
     Defaults used: tags:['work']
     Ordering used: due+,pri-,project+
     Matching taskwarrior tasks: 1
@@ -241,7 +241,7 @@ class TestViewportInspectionWithVisibleTag(IntegrationTest):
     ViewPort inspection:
     --------------------
     Name: Work tasks
-    Filter used: -DELETED -PARENT +work
+    Filter used: -DELETED -PARENT ( +work )
     Defaults used: tags:['work']
     Ordering used: due+,pri-,project+
     Matching taskwarrior tasks: 0
