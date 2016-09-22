@@ -27,7 +27,7 @@ class TestParsingVimwikiTask(object):
         self.cache.buffer[0] = "== Test | project:Home =="
         port = self.ViewPort.from_line(0, self.cache)
 
-        assert port.taskfilter == list(DEFAULT_VIEWPORT_VIRTUAL_TAGS) + ["project:Home"]
+        assert port.taskfilter == list(DEFAULT_VIEWPORT_VIRTUAL_TAGS) + ["(", "project:Home", ")"]
         assert port.name == "Test"
         assert port.sort == DEFAULT_SORT_ORDER
         assert port.tw == 'default'
@@ -36,7 +36,7 @@ class TestParsingVimwikiTask(object):
         self.cache.buffer[0] = "== Test | project:Home | +home =="
         port = self.ViewPort.from_line(0, self.cache)
 
-        assert port.taskfilter == list(DEFAULT_VIEWPORT_VIRTUAL_TAGS) + ["project:Home"]
+        assert port.taskfilter == list(DEFAULT_VIEWPORT_VIRTUAL_TAGS) + ["(", "project:Home", ")"]
         assert port.name == "Test"
         assert port.defaults == {'tags':['home']}
         assert port.sort == DEFAULT_SORT_ORDER
@@ -46,7 +46,7 @@ class TestParsingVimwikiTask(object):
         self.cache.buffer[0] = "== Test | project:Home #T =="
         port = self.ViewPort.from_line(0, self.cache)
 
-        assert port.taskfilter == list(DEFAULT_VIEWPORT_VIRTUAL_TAGS) + ["project:Home"]
+        assert port.taskfilter == list(DEFAULT_VIEWPORT_VIRTUAL_TAGS) + ["(", "project:Home", ")"]
         assert port.name == "Test"
         assert port.sort == DEFAULT_SORT_ORDER
         assert port.tw == 'extra'
@@ -55,7 +55,7 @@ class TestParsingVimwikiTask(object):
         self.cache.buffer[0] = "== Test | project:Home $T =="
         port = self.ViewPort.from_line(0, self.cache)
 
-        assert port.taskfilter == list(DEFAULT_VIEWPORT_VIRTUAL_TAGS) + ["project:Home"]
+        assert port.taskfilter == list(DEFAULT_VIEWPORT_VIRTUAL_TAGS) + ["(", "project:Home", ")"]
         assert port.name == "Test"
         assert port.sort == 'extra'
         assert port.tw == 'default'
@@ -64,7 +64,7 @@ class TestParsingVimwikiTask(object):
         self.cache.buffer[0] = "== Test | project:Home or project:Work $T =="
         port = self.ViewPort.from_line(0, self.cache)
 
-        assert port.taskfilter == list(DEFAULT_VIEWPORT_VIRTUAL_TAGS) + ["project:Home", "or", "project:Work"]
+        assert port.taskfilter == list(DEFAULT_VIEWPORT_VIRTUAL_TAGS) + ["(", "project:Home", "or", "project:Work", ")"]
         assert port.name == "Test"
         assert port.sort == 'extra'
         assert port.tw == 'default'
@@ -73,7 +73,7 @@ class TestParsingVimwikiTask(object):
         self.cache.buffer[0] = "== Test | project:Home #T $T =="
         port = self.ViewPort.from_line(0, self.cache)
 
-        assert port.taskfilter == list(DEFAULT_VIEWPORT_VIRTUAL_TAGS) + ["project:Home"]
+        assert port.taskfilter == list(DEFAULT_VIEWPORT_VIRTUAL_TAGS) + ["(", "project:Home", ")"]
         assert port.name == "Test"
         assert port.sort == 'extra'
         assert port.tw == 'extra'
@@ -82,7 +82,7 @@ class TestParsingVimwikiTask(object):
         self.cache.buffer[0] = "== Test | project:Home | +home #T =="
         port = self.ViewPort.from_line(0, self.cache)
 
-        assert port.taskfilter == list(DEFAULT_VIEWPORT_VIRTUAL_TAGS) + ["project:Home"]
+        assert port.taskfilter == list(DEFAULT_VIEWPORT_VIRTUAL_TAGS) + ["(", "project:Home", ")"]
         assert port.name == "Test"
         assert port.defaults == {'tags':['home']}
         assert port.sort == DEFAULT_SORT_ORDER
@@ -92,7 +92,7 @@ class TestParsingVimwikiTask(object):
         self.cache.buffer[0] = "== Test | project:Home | +home #T $T =="
         port = self.ViewPort.from_line(0, self.cache)
 
-        assert port.taskfilter == list(DEFAULT_VIEWPORT_VIRTUAL_TAGS) + ["project:Home"]
+        assert port.taskfilter == list(DEFAULT_VIEWPORT_VIRTUAL_TAGS) + ["(", "project:Home", ")"]
         assert port.name == "Test"
         assert port.defaults == {'tags':['home']}
         assert port.sort == 'extra'
@@ -102,7 +102,7 @@ class TestParsingVimwikiTask(object):
         self.cache.buffer[0] = "== Test | project:Home !?DELETED =="
         port = self.ViewPort.from_line(0, self.cache)
 
-        assert port.taskfilter == ["-PARENT", "project:Home"]
+        assert port.taskfilter == ["-PARENT", "(", "project:Home", ")"]
         assert port.name == "Test"
         assert port.defaults == {'project':'Home'}
         assert port.sort == DEFAULT_SORT_ORDER
@@ -112,7 +112,7 @@ class TestParsingVimwikiTask(object):
         self.cache.buffer[0] = "== Test | project:Home !+DELETED =="
         port = self.ViewPort.from_line(0, self.cache)
 
-        assert port.taskfilter == ["+DELETED", "-PARENT", "project:Home"]
+        assert port.taskfilter == ["+DELETED", "-PARENT", "(", "project:Home", ")"]
         assert port.name == "Test"
         assert port.defaults == {'project':'Home'}
         assert port.sort == DEFAULT_SORT_ORDER
@@ -122,7 +122,7 @@ class TestParsingVimwikiTask(object):
         self.cache.buffer[0] = "== Test | project:Home !-DELETED =="
         port = self.ViewPort.from_line(0, self.cache)
 
-        assert port.taskfilter == ["-DELETED", "-PARENT","project:Home"]
+        assert port.taskfilter == ["-DELETED", "-PARENT", "(", "project:Home", ")"]
         assert port.name == "Test"
         assert port.defaults == {'project':'Home'}
         assert port.sort == DEFAULT_SORT_ORDER
@@ -132,7 +132,7 @@ class TestParsingVimwikiTask(object):
         self.cache.buffer[0] = "== Test | project:Home +DELETED =="
         port = self.ViewPort.from_line(0, self.cache)
 
-        assert port.taskfilter == ["-PARENT", "project:Home", "+DELETED"]
+        assert port.taskfilter == ["-PARENT", "(", "project:Home", "+DELETED", ")"]
         assert port.name == "Test"
         assert port.defaults == {'project':'Home'}
         assert port.sort == DEFAULT_SORT_ORDER

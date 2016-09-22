@@ -73,7 +73,9 @@ class ViewPort(object):
 
         # Get the initial version of the taskfilter args
         taskfilter_args = list(constants.DEFAULT_VIEWPORT_VIRTUAL_TAGS)
+        taskfilter_args += "("
         taskfilter_args += util.tw_modstring_to_args(filterstring)
+        taskfilter_args += ")"
 
         # Process syntactic sugar: Context expansion
         detected_contexts = []
