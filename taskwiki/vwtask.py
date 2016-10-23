@@ -241,12 +241,15 @@ class VimwikiTask(object):
         # This method persumes all the dependencies have been created at the
         # point it was called, hence move set the dependencies for the underlying
         # task. Remove dependencies for all other tasks within the viewport.
+
+        # This happens so that the dependencies are rebuilt from the tree after
+        # each save, since tasks may have been moved within the tree and dependencies
+        # added / removed in this implicit manner.
         port = self.cache.get_viewport_by_task(self.task)
         if port is not None:
             self.task['depends'] -= set(port.viewport_tasks)
 
-        self.task['depends'] |= set(s.task for s in self.add_dependencies
-                                    if not s.task.completed)
+        self.task['depends'] |= set(s.task for s in self.add_dependencies)
 
         # Push the values to the Task only if the Vimwiki representation
         # somehow differs
