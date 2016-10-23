@@ -478,3 +478,30 @@ class TestViewportsVisibleMetaTag(IntegrationTest):
         # Currently, two saves are necessary for VISIBLE to take effect
         self.command("w", regex="written$", lines=1)
         self.command("w", regex="written$", lines=1)
+
+
+class TestViewportsPreserveHierarchyUponCompletion(IntegrationTest):
+
+    viminput = """
+    === Work tasks | +work ===
+    * [ ] main task
+        * [ ] sub task a
+        * [ ] sub task b
+    """
+
+    vimoutput = """
+    === Work tasks | +work ===
+    * [ ] main task  #{uuid}
+        * [X] sub task a  #{uuid}
+        * [ ] sub task b  #{uuid}
+    """
+
+    def execute(self):
+        self.command("w", regex="written$", lines=1)
+        sleep(0.5)
+        self.client.feedkeys('3gg')
+        sleep(0.5)
+        self.client.feedkeys(r'\\td')
+        sleep(0.5)
+        self.command("w", regex="written$", lines=1)
+        sleep(0.5)
