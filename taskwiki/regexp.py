@@ -60,6 +60,14 @@ GENERIC_VIEWPORT = re.compile(
     '[=]+'                 # Header ending
     )
 
+GENERIC_HEADER = re.compile(
+    '^'        # Starts at the beginning of the line
+    '[=]+'     # With a positive number of =
+    '[^=]+'    # Character other than =
+    '[=]+'     # Positive number of =, closing the header
+    '\s*'      # Allow trailing whitespace
+)
+
 ANSI_ESCAPE_SEQ = re.compile(
     '\x1b'     # literal ESC
     '\['       # literal [
