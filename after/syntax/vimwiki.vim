@@ -42,8 +42,9 @@ syntax match TaskWikiTaskWaiting containedin=TaskWikiTask contained /\s*\*\s\[W\
 syntax match TaskWikiTaskPriority containedin=TaskWikiTask contained /\( !\| !!\| !!!\)\( \)\@=/
 
 " Set concealed parts as really concealed in normal mode, and with cursor over
+" (unless disabled by user)
+setlocal conceallevel=3
 if !exists('g:taskwiki_disable_concealcursor')
-  setlocal conceallevel=3
   setlocal concealcursor=nc
 endif
 
