@@ -100,7 +100,12 @@ class SelectedTasks(object):
 
     def edit(self):
         for vimwikitask in self.tasks:
-            vim.command('! task {0} edit'.format(vimwikitask.uuid))
+            alternate_data_location = self.tw.overrides.get('data.location')
+            location_override = ('rc.data.location=' + alternate_data_location
+                                 if alternate_data_location else '')
+
+            vim.command('! task {0} {1} edit'
+                        .format(location_override, vimwikitask.uuid))
 
     def link(self):
         path = util.get_absolute_filepath()
