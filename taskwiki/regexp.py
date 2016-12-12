@@ -42,22 +42,22 @@ DATETIME_FORMAT = "(%Y-%m-%d %H:%M)"
 DATE_FORMAT = "(%Y-%m-%d)"
 
 GENERIC_VIEWPORT = re.compile(
-    '^'                    # Starts at the begging of the line
-    '[=]+'                 # Heading begging
-    '(?P<name>[^=\|\[\{]*)'  # Name of the viewport, all before the | sign
-                             # Cannot include '[', '=', '|, and '{'
-    '\|'                   # Colon
+    '^'                          # Starts at the begging of the line
+    '[=]+'                       # Heading begging
+    '(?P<name>[^=\|\[\{]*)'      # Name of the viewport, all before the | sign
+                                 # Cannot include '[', '=', '|, and '{'
+    '\|'                         # Colon
     '(?P<filter>[^=\|]+?)'       # Filter
-    '('                    # Optional defaults
-      '\|'                   # Colon
-      '(?P<defaults>[^=\|]+?)'     # Default attrs
+    '('                          # Optional defaults
+      '\|'                       # Colon
+      '(?P<defaults>[^=\|]+?)'   # Default attrs
     ')?'
-    '\s*'                  # Any whitespace
-    '(#(?P<source>[A-Z]))?' # Optional source indicator
-    '\s*'                  # Any whitespace
-    '(\$(?P<sort>[A-Z]))?'  # Optional sort indicator
-    '\s*'                  # Any whitespace
-    '[=]+'                 # Header ending
+    '\s*'                        # Any whitespace
+    '(#(?P<source>[A-Z]))?'      # Optional source indicator
+    '\s*'                        # Any whitespace
+    '(\$(?P<sort>[A-Z]))?'       # Optional sort indicator
+    '\s*'                        # Any whitespace
+    '[=]+'                       # Header ending
     )
 
 GENERIC_HEADER = re.compile(
