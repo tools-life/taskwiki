@@ -194,6 +194,39 @@ class TestViewportDefaultsExplicitEmpty(IntegrationTest):
         assert task['tags'] == set()
 
 
+class TestViewportDefaultsTerminatedByHeader(IntegrationTest):
+
+    viminput = """
+    === Work tasks | +work ===
+    * [ ] tag work task
+
+    === Unrelated work tasks ===
+    * [ ] not tagged work task
+    """
+
+    vimoutput = """
+    === Work tasks | +work ===
+    * [ ] tag work task  #{uuid}
+
+    === Unrelated work tasks ===
+    * [ ] not tagged work task  #{uuid}
+    """
+
+    def execute(self):
+        self.command("w", regex="written$", lines=1)
+        assert len(self.tw.tasks.pending()) == 2
+
+        task = self.tw.tasks.filter('+work')[0]
+        assert task['description'] == 'tag work task'
+        assert task['status'] == 'pending'
+        assert task['tags'] == set(['work'])
+
+        task = self.tw.tasks.filter('-work')[0]
+        assert task['description'] == 'not tagged work task'
+        assert task['status'] == 'pending'
+        assert task['tags'] == set()
+
+
 class TestViewportInspection(IntegrationTest):
 
     viminput = """
