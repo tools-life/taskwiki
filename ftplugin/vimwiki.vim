@@ -36,6 +36,7 @@ augroup taskwiki
       execute "autocmd BufWinEnter *.".expand('%:e')." silent! loadview"
       execute "autocmd BufWinEnter *.".expand('%:e')." silent! doautocmd SessionLoadPost *.".expand('%:e')
     endif
+    execute "autocmd BufEnter *.".expand('%:e')." :py cache.reset()"
 augroup END
 
 " Global update commands
