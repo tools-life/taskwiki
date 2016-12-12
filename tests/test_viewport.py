@@ -240,7 +240,7 @@ class TestViewportInspection(IntegrationTest):
     Name: Work tasks
     Filter used: -DELETED -PARENT ( +work )
     Defaults used: tags:['work']
-    Ordering used: due+,pri-,project+
+    Ordering used: status+,end+,due+,pri-,project+
     Matching taskwarrior tasks: 1
     Displayed tasks: 1
     Tasks to be added:
@@ -276,7 +276,7 @@ class TestViewportInspectionWithVisibleTag(IntegrationTest):
     Name: Work tasks
     Filter used: -DELETED -PARENT ( +work )
     Defaults used: tags:['work']
-    Ordering used: due+,pri-,project+
+    Ordering used: status+,end+,due+,pri-,project+
     Matching taskwarrior tasks: 0
     Displayed tasks: 0
     Tasks to be added:
