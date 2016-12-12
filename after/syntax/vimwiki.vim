@@ -42,8 +42,10 @@ syntax match TaskWikiTaskWaiting containedin=TaskWikiTask contained /\s*\*\s\[W\
 syntax match TaskWikiTaskPriority containedin=TaskWikiTask contained /\( !\| !!\| !!!\)\( \)\@=/
 
 " Set concealed parts as really concealed in normal mode, and with cursor over
-setlocal conceallevel=3
-setlocal concealcursor=nc
+if !exists('g:taskwiki_disable_concealcursor')
+  setlocal conceallevel=3
+  setlocal concealcursor=nc
+endif
 
 " Configure custom FoldText function
 " Altered version of the VimwikiFoldText
