@@ -22,14 +22,14 @@ Standing on the shoulders of vimwiki and Taskwarrior_
 
         git clone https://github.com/vimwiki/vimwiki ~/.vim/bundle/ --branch dev
 
-* [Taskwarrior](http://taskwarrior.org) (version 2.4.0 or newer)
-- install either from [sources](http://taskwarrior.org/download/)
+* [Taskwarrior](http://taskwarrior.org) (version 2.4.0 or newer),
+install either from [sources](http://taskwarrior.org/download/)
 or using your [package manager](http://taskwarrior.org/download/#dist)
 
         sudo dnf install task
 
-* [tasklib](https://github.com/tbabej/tasklib/tree/develop) (the develop branch)
-- Python library for Taskwarrior.
+* [tasklib](https://github.com/tbabej/tasklib/tree/develop) (the develop branch),
+Python library for Taskwarrior.
 
         sudo pip install --upgrade git+git://github.com/tbabej/tasklib@develop
 
