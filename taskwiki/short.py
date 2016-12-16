@@ -1,8 +1,10 @@
+import six
+
 class ShortUUID(object):
     def __init__(self, value, tw):
         # Extract the UUID from the given object. Support both
         # strings and ShortUUID instances.
-        if type(value) in (str, unicode):
+        if isinstance(value, six.string_types):
             # Use str reprentation of the value, first 8 chars
             self.value = str(value)[:8]
         elif type(value) is ShortUUID:

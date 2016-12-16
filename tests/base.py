@@ -2,6 +2,7 @@
 
 import os
 import re
+import six
 import subprocess
 import tempfile
 import vimrunner
@@ -29,8 +30,8 @@ class IntegrationTest(object):
 
     def read_buffer(self, start=0, end=1000):
         return self.client.read_buffer(
-            unicode(start+1),
-            unicode(end+1)
+            six.text_type(start+1),
+            six.text_type(end+1)
             ).splitlines()
 
 

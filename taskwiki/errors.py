@@ -3,6 +3,7 @@ Contains TaskWiki-specific exceptions.
 """
 
 from __future__ import print_function
+import six
 import sys
 
 
@@ -18,7 +19,7 @@ class TaskWikiException(VimPrettyException):
 # Handle error without traceback, if they're descendants of VimPrettyException
 def output_exception(exception_type, value, traceback):
     if any(['VimPretty' in t.__name__ for t in exception_type.mro()]):
-        print(unicode(value), file=sys.stderr)
+        print(six.text_type(value), file=sys.stderr)
     else:
         sys.__excepthook__(exception_type, value, traceback)
 

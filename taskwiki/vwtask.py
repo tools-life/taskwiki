@@ -1,4 +1,5 @@
 import re
+import six
 import itertools
 import vim  # pylint: disable=F0401
 from datetime import datetime

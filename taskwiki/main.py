@@ -2,6 +2,7 @@ from __future__ import print_function
 import re
 import os
 import pickle
+import six
 import sys
 import vim  # pylint: disable=F0401
 
@@ -255,8 +256,8 @@ class Meta(object):
                 port.sort,
                 len(port.matching_tasks),
                 len(port.tasks),
-                ', '.join(map(unicode, to_add)),
-                ', '.join(map(unicode, to_del)),
+                ', '.join(map(six.text_type, to_add)),
+                ', '.join(map(six.text_type, to_del)),
             )
 
             # Show in the split
