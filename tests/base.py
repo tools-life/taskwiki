@@ -159,6 +159,10 @@ class IntegrationTest(object):
         tw_class = self.py(
             'print(cache.warriors["default"].__class__.__name__)', direct=True)
 
+        print(self.py('print(dir(errors))', direct=True))
+        print(self.py('print(dir(cache))', direct=True))
+        print(self.py('import taskwiki; print(dir(taskwiki))', direct=True))
+
         if not soft:
             assert tw_class == 'TaskWarrior', "not {}".format(tw_class)
             assert cache_class == 'TaskCache', "not {}".format(cache_class)
