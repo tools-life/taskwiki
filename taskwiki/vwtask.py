@@ -95,7 +95,11 @@ class VimwikiTask(object):
         # explicitly stated that buffer has authority or if the task
         # being loaded is not saved in TW
         if cache.buffer_has_authority or not self.task.saved:
-            self.task['description'] = match.group('text').decode('utf-8')
+            if six.PY2:
+                self.task['description'] = match.group('text').decode('utf-8')
+            else:
+                self.task['description'] = match.group('text')
+
             self.task['priority'] = convert_priority_to_tw_format(
                 len(match.group('priority') or [])) # This is either 0,1,2 or 3
 
@@ -318,7 +322,8 @@ class VimwikiTask(object):
             '* [',
             self['completed_mark'],
             '] ',
-            self['description'].encode('utf-8') if self['description'] else 'TEXT MISSING?',
+            (self['description'].encode('utf-8') if six.PY2 else self['description'])
+                if self['description'] else 'TEXT MISSING?',
             ' ' + '!' * self.priority_from_tw_format if self['priority'] else '',
             ' ' + self['due'].strftime(regexp.DATETIME_FORMAT) if self['due'] else '',
             '  #' + self.uuid.vim_representation(self.cache) if self.uuid else '',
