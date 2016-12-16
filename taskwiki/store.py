@@ -152,7 +152,7 @@ class ViewportStore(LineNumberedKeyedStoreMixin, NoNoneStore):
 class LineStore(NoNoneStore):
 
     def __delitem__(self, number):
-        for cls, i in self.store.keys():
+        for cls, i in list(self.store.keys()):
             if i == number:
                 del self.store[(cls, i)]
 
@@ -181,7 +181,7 @@ class LineStore(NoNoneStore):
             if i == position2
         }
 
-        for cls, i in self.store.keys():
+        for cls, i in list(self.store.keys()):
             if i == position1 or i == position2:
                 del self.store[(cls, i)]
 
