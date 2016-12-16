@@ -160,8 +160,8 @@ class IntegrationTest(object):
             'print(cache.warriors["default"].__class__.__name__)', direct=True)
 
         if not soft:
-            assert tw_class == 'TaskWarrior'
-            assert cache_class == 'TaskCache'
+            assert tw_class == 'TaskWarrior', "not {}".format(tw_class)
+            assert cache_class == 'TaskCache', "not {}".format(cache_class)
         elif tw_class != 'TaskWarrior' or cache_class != 'TaskCache':
             return False
 
