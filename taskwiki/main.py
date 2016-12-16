@@ -1,4 +1,5 @@
 from __future__ import print_function
+import base64
 import re
 import os
 import pickle
@@ -387,14 +388,22 @@ class CallbackSplitMixin(object):
 
         # We can't save the current instance in vim variable
         # so save the pickled version
-        vim.current.buffer.vars['taskwiki_callback'] = pickle.dumps(self)
+        if six.PY2:
+            vim.current.buffer.vars['taskwiki_callback'] = pickle.dumps(self)
+        else:
+            vim.current.buffer.vars['taskwiki_callback'] = base64.encodebytes(
+                    bytes(pickle.dumps(self))
+            ).decode()
 
         # Remap <CR> to calling the callback and wiping the buffer
         vim.command(
             "nnoremap <silent> <buffer> <enter> :"
             + vim.vars['taskwiki_py'].decode() +
-            "callback = pickle.loads("
-                "vim.current.buffer.vars['taskwiki_callback']); "
+            "callback = pickle.loads(" +
+            ( "base64.decodebytes("
+                "vim.current.buffer.vars['taskwiki_callback'])); "
+            if six.PY3 else
+            "vim.current.buffer.vars['taskwiki_callback']); " ) +
             "callback.callback(); "
             "vim.command('bwipe') <CR>"
         )
