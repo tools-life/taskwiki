@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from datetime import datetime
-from base import MockVim, MockCache
+from tests.base import MockVim, MockCache
 import sys
 
 from tasklib import local_zone

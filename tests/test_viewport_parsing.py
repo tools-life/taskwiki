@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from datetime import datetime
-from base import MockVim, MockCache
+from tests.base import MockVim, MockCache
 import sys
 
 from taskwiki.constants import DEFAULT_SORT_ORDER, DEFAULT_VIEWPORT_VIRTUAL_TAGS
