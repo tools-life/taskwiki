@@ -73,6 +73,11 @@ class IntegrationTest(object):
     def setup(self):
         self.generate_data()
         self.start_client()  # Start client with 3 chances
+
+        # Force vim into python3 mode if testing under python3
+        if six.PY3:
+            self.client.command('exec has("python3")')
+
         self.configure_global_varialbes()
         self.add_plugin('taskwiki')
         self.add_plugin('vimwiki')
@@ -166,7 +171,7 @@ class IntegrationTest(object):
     # Helper function that fills in {uuid} placeholders with correct UUIDs
     def fill_uuid(self, line):
         # Tasks in testing can have only alphanumerical descriptions
-        match = re.match(ur'\s*\* \[.\] (?P<desc>[äa-zA-Z0-9 ]*)(?<!\s)', line,
+        match = re.match(u'\\s*\\* \\[.\\] (?P<desc>[äa-zA-Z0-9 ]*)(?<!\\s)', line,
                 flags=re.UNICODE)
 
         if not match:
