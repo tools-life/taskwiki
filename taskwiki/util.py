@@ -372,3 +372,23 @@ def enforce_dependencies(cache):
     if taskwarrior_required_version > taskwarrior_installed_version:
         raise TaskWikiException("Taskwarrior version at least %s is required."
                                 % TASKWARRIOR_VERSION)
+
+def decode_bytes(var):
+    """
+    Data structures obtained from vim under python3 will return bytestrings.
+    Make sure we can handle that.
+    """
+
+    if isinstance(var, bytes):
+        return var.decode()
+
+    if isinstance(var, list):
+        return list([decode_bytes(element) for element in var])
+
+    if isinstance(var, dict) or 'vim.dictionary' in str(type(var)):
+        return  {
+            decode_bytes(key): decode_bytes(value)
+            for key, value in var.items()
+        }
+
+    return var

@@ -59,6 +59,12 @@ class TaskCache(object):
         default_data = vim.vars.get('taskwiki_data_location') or '~/.task'
         extra_warrior_defs = vim.vars.get('taskwiki_extra_warriors', {})
 
+        # Handle bytes (vim returnes bytes for Python3)
+        if six.PY3:
+            default_rc = util.decode_bytes(default_rc)
+            default_data = util.decode_bytes(default_data)
+            extra_warrior_defs = util.decode_bytes(extra_warrior_defs)
+
         self.buffer = BufferProxy(vim.current.buffer.number)
         self.task = store.TaskStore(self)
         self.vwtask = store.VwtaskStore(self)
