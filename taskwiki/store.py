@@ -124,7 +124,7 @@ class VwtaskStore(LineNumberedKeyedStoreMixin, NoNoneStore):
                 self[index]['line_number'] = index
 
     def get_method(self, line):
-        import vwtask
+        from taskwiki import vwtask
         return vwtask.VimwikiTask.from_line(self.cache, line)
 
 

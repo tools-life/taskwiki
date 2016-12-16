@@ -5,12 +5,12 @@ from distutils.version import LooseVersion
 import contextlib
 import pkg_resources
 import os
-import regexp
 import random
 import sys
 import vim  # pylint: disable=F0401
 
 from taskwiki.errors import TaskWikiException
+from taskwiki import regexp
 
 # Detect if command AnsiEsc is available
 ANSI_ESC_AVAILABLE = vim.eval('exists(":AnsiEsc")') == '2'
