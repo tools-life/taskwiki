@@ -78,8 +78,8 @@ execute "command! -range -nargs=* TaskWikiMod :<line1>,<line2>"      . s:py . "S
 execute "command! -range -nargs=* TaskWikiAnnotate :<line1>,<line2>" . s:py . "SelectedTasks().annotate(<q-args>)"
 
 " Interactive commands
-execute "command! -range TaskWikiChooseProject :<line1>,<line2>"     . s:py . "ChooseSplitProjects("global").execute()"
-execute "command! -range TaskWikiChooseTag :<line1>,<line2>"         . s:py . "ChooseSplitTags("global").execute()"
+execute "command! -range TaskWikiChooseProject :<line1>,<line2>"     . s:py . "ChooseSplitProjects('global').execute()"
+execute "command! -range TaskWikiChooseTag :<line1>,<line2>"         . s:py . "ChooseSplitTags('global').execute()"
 
 " Meta commands
 execute "command! TaskWikiInspect :" . s:py . "Meta().inspect_viewport()"
