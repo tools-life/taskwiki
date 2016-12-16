@@ -52,8 +52,8 @@ before_script:
   - cd ~/.vim/bundle/taskwiki
 script:
   - py.test -vv --cov .
-  - mv ~/taskwiki-coverage/.coverage.* .
-  - coverage combine
-  - coverage report
+  - "mv ~/taskwiki-coverage/.coverage.* . || :"
+  - "coverage combine || :"
+  - "coverage report || :"
 after_success:
   - coveralls
