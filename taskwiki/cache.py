@@ -1,5 +1,6 @@
 import vim  # pylint: disable=F0401
 import re
+import six
 
 from taskwiki import viewport
 from taskwiki import regexp
