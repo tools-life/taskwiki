@@ -231,7 +231,7 @@ class ViewPort(object):
     def raw_defaults(self):
         return ', '.join(
             '{0}:{1}'.format(key, value)
-            for key, value in self.defaults.iteritems()
+            for key, value in self.defaults.items()
             )
 
     @property

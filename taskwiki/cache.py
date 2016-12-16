@@ -70,7 +70,7 @@ class TaskCache(object):
     @property
     def vimwikitask_dependency_order(self):
         iterated_cache = {
-            k:v for k,v in self.vwtask.iteritems()
+            k:v for k,v in self.vwtask.items()
             if v is not None
         }
 

@@ -36,7 +36,7 @@ class ShortUUID(object):
         """
 
         # Determine the key of the TW instance
-        [key] = [key for key, value in cache.warriors.iteritems()
+        [key] = [key for key, value in cache.warriors.items()
                  if value == self.tw]
         prefix = '{0}:'.format(key) if key is not 'default' else ''
 

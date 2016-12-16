@@ -41,8 +41,8 @@ class WarriorStore(object):
     def values(self):
         return self.warriors.values()
 
-    def iteritems(self):
-        return self.warriors.iteritems()
+    def items(self):
+        return self.warriors.items()
 
 
 class NoNoneStore(object):
@@ -82,8 +82,8 @@ class NoNoneStore(object):
     def values(self):
         return self.store.values()
 
-    def iteritems(self):
-        return self.store.iteritems()
+    def items(self):
+        return self.store.items()
 
     def clear(self):
         return self.store.clear()
