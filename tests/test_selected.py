@@ -247,7 +247,7 @@ class TestInfoAction(IntegrationTest):
     def execute(self):
         self.command("TaskWikiInfo")
 
-        assert self.command(":py print vim.current.buffer", silent=False).startswith("<buffer info")
+        assert self.py("print(vim.current.buffer)", silent=False).startswith("<buffer info")
         output = '\n'.join(self.read_buffer())
 
         header = r'\s*'.join(['Name', 'Value'])
@@ -276,7 +276,7 @@ class TestInfoActionTriggeredByEnter(IntegrationTest):
         self.client.feedkeys("\\<CR>")
         sleep(0.5)
 
-        assert self.command(":py print vim.current.buffer", silent=False).startswith("<buffer info")
+        assert self.py("print(vim.current.buffer)", silent=False).startswith("<buffer info")
         output = '\n'.join(self.read_buffer())
 
         header = r'\s*'.join(['Name', 'Value'])
@@ -304,7 +304,7 @@ class TestInfoActionMoved(IntegrationTest):
         self.client.type('2gg')  # Go to the second line
         self.command("TaskWikiInfo")
 
-        assert self.command(":py print vim.current.buffer", silent=False).startswith("<buffer info")
+        assert self.py("print(vim.current.buffer)", silent=False).startswith("<buffer info")
         output = '\n'.join(self.read_buffer())
 
         header = r'\s*'.join(['Name', 'Value'])
@@ -335,7 +335,7 @@ class TestInfoActionRange(IntegrationTest):
 
         sleep(1)
 
-        assert self.command(":py print vim.current.buffer", silent=False).startswith("<buffer info")
+        assert self.py("print(vim.current.buffer)", silent=False).startswith("<buffer info")
         output = '\n'.join(self.read_buffer())
 
         header = r'\s*'.join(['Name', 'Value'])

@@ -257,7 +257,7 @@ class TestViewportInspection(IntegrationTest):
         self.client.feedkeys(r'\<CR>')
         sleep(0.5)
 
-        assert self.command(":py print vim.current.buffer", regex="<buffer taskwiki.")
+        assert self.py("print(vim.current.buffer)", regex="<buffer taskwiki.")
 
 
 class TestViewportInspectionWithVisibleTag(IntegrationTest):
@@ -295,7 +295,7 @@ class TestViewportInspectionWithVisibleTag(IntegrationTest):
         self.client.feedkeys(r'\<CR>')
         sleep(0.5)
 
-        assert self.command(":py print vim.current.buffer", regex="<buffer taskwiki.")
+        assert self.py("print(vim.current.buffer)", regex="<buffer taskwiki.")
 
 
 class TestViewportsUnicodeTaskGeneration(IntegrationTest):

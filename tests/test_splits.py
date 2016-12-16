@@ -22,7 +22,7 @@ class TestBurndownDailySimple(IntegrationTest):
 
     def execute(self):
         self.command("TaskWikiBurndownDaily")
-        assert self.command(":py print vim.current.buffer", silent=False).startswith("<buffer burndown.daily")
+        assert self.py("print(vim.current.buffer)", silent=False).startswith("<buffer burndown.daily")
         assert "Daily Burndown" in self.read_buffer()[0]
 
 
@@ -30,7 +30,7 @@ class TestBurndownMonthlySimple(IntegrationTest):
 
     def execute(self):
         self.command("TaskWikiBurndownMonthly")
-        assert self.command(":py print vim.current.buffer", silent=False).startswith("<buffer burndown.monthly")
+        assert self.py("print(vim.current.buffer)", silent=False).startswith("<buffer burndown.monthly")
         assert "Monthly Burndown" in self.read_buffer()[0]
 
 
@@ -38,7 +38,7 @@ class TestBurndownWeeklySimple(IntegrationTest):
 
     def execute(self):
         self.command("TaskWikiBurndownWeekly")
-        assert self.command(":py print vim.current.buffer", silent=False).startswith("<buffer burndown.weekly")
+        assert self.py("print(vim.current.buffer)", silent=False).startswith("<buffer burndown.weekly")
         assert "Weekly Burndown" in self.read_buffer()[0]
 
 
@@ -46,7 +46,7 @@ class TestCalendarSimple(IntegrationTest):
 
     def execute(self):
         self.command("TaskWikiCalendar")
-        assert self.command(":py print vim.current.buffer", silent=False).startswith("<buffer calendar")
+        assert self.py("print(vim.current.buffer)", silent=False).startswith("<buffer calendar")
 
         # Assert each day is displayed at least once.
         output = self.read_buffer()
@@ -65,7 +65,7 @@ class TestGhistoryAnnualSimple(IntegrationTest):
 
     def execute(self):
         self.command("TaskWikiGhistoryAnnual")
-        assert self.command(":py print vim.current.buffer", silent=False).startswith("<buffer ghistory.annual")
+        assert self.py("print(vim.current.buffer)", silent=False).startswith("<buffer ghistory.annual")
         output = self.read_buffer()
 
         header_words = ("Year", "Number", "Added", "Completed", "Deleted")
@@ -90,7 +90,7 @@ class TestGhistoryMonthlySimple(IntegrationTest):
 
     def execute(self):
         self.command("TaskWikiGhistoryMonthly")
-        assert self.command(":py print vim.current.buffer", silent=False).startswith("<buffer ghistory.monthly")
+        assert self.py("print(vim.current.buffer)", silent=False).startswith("<buffer ghistory.monthly")
         output = self.read_buffer()
 
         header_words = ("Year", "Month", "Number", "Added", "Completed", "Deleted")
@@ -117,7 +117,7 @@ class TestHistoryAnnualSimple(IntegrationTest):
 
     def execute(self):
         self.command("TaskWikiHistoryAnnual")
-        assert self.command(":py print vim.current.buffer", silent=False).startswith("<buffer history.annual")
+        assert self.py("print(vim.current.buffer)", silent=False).startswith("<buffer history.annual")
         output = '\n'.join(self.read_buffer())
 
         header = r'\s*'.join(['Year', 'Added', 'Completed', 'Deleted', 'Net'])
@@ -138,7 +138,7 @@ class TestHistoryMonthlySimple(IntegrationTest):
 
     def execute(self):
         self.command("TaskWikiHistoryMonthly")
-        assert self.command(":py print vim.current.buffer", silent=False).startswith("<buffer history.monthly")
+        assert self.py("print(vim.current.buffer)", silent=False).startswith("<buffer history.monthly")
         output = '\n'.join(self.read_buffer())
 
         header = r'\s*'.join(['Year', 'Month', 'Added', 'Completed', 'Deleted', 'Net'])
@@ -160,7 +160,7 @@ class TestProjectsSimple(IntegrationTest):
 
     def execute(self):
         self.command("TaskWikiProjects")
-        assert self.command(":py print vim.current.buffer", silent=False).startswith("<buffer projects")
+        assert self.py("print(vim.current.buffer)", silent=False).startswith("<buffer projects")
         output = '\n'.join(self.read_buffer())
 
         header = r'\s*'.join(['Project', 'Tasks'])
@@ -186,7 +186,7 @@ class TestSummarySimple(IntegrationTest):
 
     def execute(self):
         self.command("TaskWikiProjectsSummary")
-        assert self.command(":py print vim.current.buffer", silent=False).startswith("<buffer summary")
+        assert self.py("print(vim.current.buffer)", silent=False).startswith("<buffer summary")
         output = '\n'.join(self.read_buffer())
 
         header = r'\s*'.join(['Project', 'Remaining', 'Avg age', 'Complete'])
@@ -212,7 +212,7 @@ class TestStatsSimple(IntegrationTest):
 
     def execute(self):
         self.command("TaskWikiStats")
-        assert self.command(":py print vim.current.buffer", silent=False).startswith("<buffer stats")
+        assert self.py("print(vim.current.buffer)", silent=False).startswith("<buffer stats")
         output = '\n'.join(self.read_buffer())
 
         header = r'\s*'.join(['Category', 'Data'])
@@ -234,7 +234,7 @@ class TestTagsSimple(IntegrationTest):
 
     def execute(self):
         self.command("TaskWikiTags")
-        assert self.command(":py print vim.current.buffer", silent=False).startswith("<buffer tags")
+        assert self.py("print(vim.current.buffer)", silent=False).startswith("<buffer tags")
         output = '\n'.join(self.read_buffer())
 
         header = r'\s*'.join(['Tag', 'Count'])
@@ -258,7 +258,7 @@ class TestTagsSimpleFiltered(IntegrationTest):
 
     def execute(self):
         self.command("TaskWikiTags +chore")
-        assert self.command(":py print vim.current.buffer", silent=False).startswith("<buffer tags")
+        assert self.py("print(vim.current.buffer)", silent=False).startswith("<buffer tags")
         output = '\n'.join(self.read_buffer())
 
         header = r'\s*'.join(['Tag', 'Count'])
@@ -274,12 +274,12 @@ class TestSplitReplacement(IntegrationTest):
 
     def execute(self):
         self.command("TaskWikiBurndownDaily")
-        assert self.command(":py print vim.current.buffer", silent=False).startswith("<buffer burndown.daily")
+        assert self.py("print(vim.current.buffer)", silent=False).startswith("<buffer burndown.daily")
         assert "Daily Burndown" in self.read_buffer()[0]
 
         self.command("TaskWikiBurndownDaily")
-        assert self.command(":py print vim.current.buffer", silent=False).startswith("<buffer burndown.daily")
+        assert self.py("print(vim.current.buffer)", silent=False).startswith("<buffer burndown.daily")
         assert "Daily Burndown" in self.read_buffer()[0]
 
         # Assert that there are only two buffers in the window
-        self.command(":py print len(vim.buffers)", regex='2$', lines=1)
+        self.py("print(len(vim.buffers))", regex='2$', lines=1)

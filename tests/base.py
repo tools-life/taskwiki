@@ -89,6 +89,16 @@ class IntegrationTest(object):
         sleep(0.5)  # Killing takes some time
         self.tasks = self.__class__.tasks  # Reset the task list
 
+    def py(self, command, silent=True, regex=None, lines=None, direct=False):
+        py_command = 'py ' if six.PY2 else 'py3 '
+
+        # Direct command communicate directly with the client
+        if direct:
+            return self.client.command(py_command + command)
+        else:
+            return self.command(py_command + command,
+                            silent=silent, regex=regex, lines=lines)
+
     def command(self, command, silent=True, regex=None, lines=None):
         result = self.client.command(command)
 
@@ -140,9 +150,9 @@ class IntegrationTest(object):
             return False
 
         # Assert that TW and cache objects exist
-        cache_class = self.client.command('py print(cache.__class__.__name__)')
-        tw_class = self.client.command(
-            'py print(cache.warriors["default"].__class__.__name__)')
+        cache_class = self.py('print(cache.__class__.__name__)', direct=True)
+        tw_class = self.py(
+            'print(cache.warriors["default"].__class__.__name__)', direct=True)
 
         if not soft:
             assert tw_class == 'TaskWarrior'
