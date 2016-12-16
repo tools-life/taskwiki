@@ -391,7 +391,8 @@ class CallbackSplitMixin(object):
 
         # Remap <CR> to calling the callback and wiping the buffer
         vim.command(
-            "nnoremap <silent> <buffer> <enter> :py "
+            "nnoremap <silent> <buffer> <enter> :"
+            + vim.vars['s:py'] +
             "callback = pickle.loads("
                 "vim.current.buffer.vars['taskwiki_callback']); "
             "callback.callback(); "

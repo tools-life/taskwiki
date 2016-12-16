@@ -294,7 +294,8 @@ def show_in_split(lines, size=None, position="belowright", vertical=False,
     # Remove cursorline in original window if it was this split which set it
     if cursorline_activated_in_window is not None:
         vim.command("au BufLeave,BufDelete,BufWipeout <buffer> "
-                    ":py vim.windows[{0}].options['cursorline']=False"
+                    + vim.vars['py'] +
+                    " vim.windows[{0}].options['cursorline']=False"
                     .format(cursorline_activated_in_window))
 
     if ANSI_ESC_AVAILABLE:
