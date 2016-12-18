@@ -57,7 +57,7 @@ class TaskCache(object):
     def __init__(self):
         # Determine defaults
         default_rc = vim.vars.get('taskwiki_taskrc_location') or '~/.taskrc'
-        default_data = vim.vars.get('taskwiki_data_location') or '~/.task'
+        default_data = vim.vars.get('taskwiki_data_location') or None
         extra_warrior_defs = vim.vars.get('taskwiki_extra_warriors', {})
 
         # Handle bytes (vim returnes bytes for Python3)
