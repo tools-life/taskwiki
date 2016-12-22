@@ -16,12 +16,15 @@ class TaskWikiException(VimPrettyException):
     pass
 
 
-# Handle error without traceback, if they're descendants of VimPrettyException
-def output_exception(exception_type, value, traceback):
-    if any(['VimPretty' in t.__name__ for t in exception_type.mro()]):
-        print(six.text_type(value), file=sys.stderr)
-    else:
-        sys.__excepthook__(exception_type, value, traceback)
+def pretty_exception_handler(original_function):
+    """
+    Wraps a given function object to catch and process all the
+    VimPrettyExceptions encountered.
+    """
+    def wrapped_function(*args, **kwargs):
+        try:
+            original_function(*args, **kwargs)
+        except VimPrettyException as e:
+            print(six.text_type(e), file=sys.stderr)
 
-# Wrap the original except hook
-sys.excepthook = output_exception
+    return wrapped_function

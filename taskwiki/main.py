@@ -25,6 +25,7 @@ util.enforce_dependencies(cache)
 
 class WholeBuffer(object):
     @staticmethod
+    @errors.pretty_exception_handler
     def update_from_tw():
         """
         Updates all the incomplete tasks in the vimwiki file if the info from TW is different.
@@ -40,6 +41,7 @@ class WholeBuffer(object):
         cache.buffer.push()
 
     @staticmethod
+    @errors.pretty_exception_handler
     def update_to_tw():
         """
         Updates all tasks that differ from their TaskWarrior representation.
@@ -56,6 +58,7 @@ class WholeBuffer(object):
 
 
 class SelectedTasks(object):
+    @errors.pretty_exception_handler
     def __init__(self):
         # Reset cache, otherwise old line content may be used
         cache.reset()
@@ -70,6 +73,7 @@ class SelectedTasks(object):
         if not self.tasks:
             print("No tasks selected.")
 
+    @errors.pretty_exception_handler
     def annotate(self, annotation):
         if not annotation:
             with util.current_line_highlighted():
@@ -79,6 +83,7 @@ class SelectedTasks(object):
             vimwikitask.task.add_annotation(annotation)
             print("Task \"{0}\" annotated.".format(vimwikitask['description']))
 
+    @errors.pretty_exception_handler
     def done(self):
         # Multiple VimwikiTasks might refer to the same task, so make sure
         # we do not complete one task twice
@@ -93,6 +98,7 @@ class SelectedTasks(object):
 
         cache.buffer.push()
 
+    @errors.pretty_exception_handler
     def info(self):
         for vimwikitask in self.tasks:
             out = util.tw_execute_safely(self.tw, [vimwikitask.uuid, 'info'])
@@ -100,6 +106,7 @@ class SelectedTasks(object):
                 util.show_in_split(out, name='info', activate_cursorline=True)
             break  # Show only one task
 
+    @errors.pretty_exception_handler
     def edit(self):
         for vimwikitask in self.tasks:
             alternate_data_location = self.tw.overrides.get('data.location')
@@ -109,12 +116,14 @@ class SelectedTasks(object):
             vim.command('! task {0} {1} edit'
                         .format(location_override, vimwikitask.uuid))
 
+    @errors.pretty_exception_handler
     def link(self):
         path = util.get_absolute_filepath()
         for vimwikitask in self.tasks:
             vimwikitask.task.add_annotation("wiki: {0}".format(path))
             print("Task \"{0}\" linked.".format(vimwikitask['description']))
 
+    @errors.pretty_exception_handler
     def grid(self):
         port = viewport.ViewPort.find_closest(cache)
         if port:
@@ -123,6 +132,7 @@ class SelectedTasks(object):
         else:
             print("No viewport detected.", file=sys.stderr)
 
+    @errors.pretty_exception_handler
     def delete(self):
         # Delete the tasks in TaskWarrior
         # Multiple VimwikiTasks might refer to the same task, so make sure
@@ -137,6 +147,7 @@ class SelectedTasks(object):
 
         cache.buffer.push()
 
+    @errors.pretty_exception_handler
     def modify(self, modstring):
         # If no modstring was passed as argument, ask the user interactively
         if not modstring:
@@ -165,6 +176,7 @@ class SelectedTasks(object):
 
         cache.buffer.push()
 
+    @errors.pretty_exception_handler
     def start(self):
         # Multiple VimwikiTasks might refer to the same task, so make sure
         # we do not start one task twice
@@ -179,6 +191,7 @@ class SelectedTasks(object):
 
         cache.buffer.push()
 
+    @errors.pretty_exception_handler
     def stop(self):
         # Multiple VimwikiTasks might refer to the same task, so make sure
         # we do not stop one task twice
@@ -193,6 +206,7 @@ class SelectedTasks(object):
 
         cache.buffer.push()
 
+    @errors.pretty_exception_handler
     def sort(self, sortstring):
         sort.TaskSorter(cache, self.tasks, sortstring).execute()
         cache.buffer.push()
@@ -201,6 +215,7 @@ class SelectedTasks(object):
 class Mappings(object):
 
     @staticmethod
+    @errors.pretty_exception_handler
     def task_info_or_vimwiki_follow_link():
         # Reset the cache to use up-to-date buffer content
         cache.reset()
@@ -221,6 +236,7 @@ class Mappings(object):
 
 class Meta(object):
 
+    @errors.pretty_exception_handler
     def inspect_viewport(self):
         position = util.get_current_line_number()
         port = viewport.ViewPort.from_line(position, cache)
@@ -265,6 +281,7 @@ class Meta(object):
             lines = template_formatted.splitlines()
             util.show_in_split(lines, activate_cursorline=True)
 
+    @errors.pretty_exception_handler
     def integrate_tagbar(self):
         tagbar_available = vim.eval('exists(":Tagbar")') == '2'
         if tagbar_available:
@@ -278,6 +295,7 @@ class Meta(object):
                 'ctagsargs': 'default'
                 }
 
+    @errors.pretty_exception_handler
     def set_proper_colors(self):
         tw_color_counterparts = {
             'TaskWikiTaskActive': 'color.active',
@@ -326,6 +344,7 @@ class Split(object):
     size = None
     tw_extra_args = []
 
+    @errors.pretty_exception_handler
     def __init__(self, args):
         self.args = self._process_args(args)
         self.split_name = self.split_name or self.command
@@ -351,6 +370,7 @@ class Split(object):
     def full_args(self):
         return self.args + [self.command] + self.tw_extra_args
 
+    @errors.pretty_exception_handler
     def execute(self):
         if self.colorful:
             output = util.tw_execute_colorful(self.tw, self.full_args,
@@ -373,10 +393,12 @@ class CallbackSplitMixin(object):
 
     split_cursorline = False
 
+    @errors.pretty_exception_handler
     def __init__(self, args):
         super(CallbackSplitMixin, self).__init__(args)
         self.selected = SelectedTasks()
 
+    @errors.pretty_exception_handler
     def execute(self):
         super(CallbackSplitMixin, self).execute()
 
@@ -424,7 +446,7 @@ class SplitProjects(Split):
 class ChooseSplitProjects(CallbackSplitMixin, SplitProjects):
     split_cursorline = True
 
-    def get_selected_project(self):
+    def _get_selected_project(self):
         project_re = re.compile(r'^(?P<indent>\s*)(?P<name>[^\s]+)\s+[0-9]+$')
 
         project_parts = []
@@ -446,8 +468,9 @@ class ChooseSplitProjects(CallbackSplitMixin, SplitProjects):
         project_parts.reverse()
         return '.'.join(project_parts)
 
+    @errors.pretty_exception_handler
     def callback(self):
-        project = self.get_selected_project()
+        project = self._get_selected_project()
         self.selected.modify("project:{0}".format(project))
 
 
@@ -482,6 +505,7 @@ class SplitCalendar(Split):
 
     # Task calendar does not take filter and in general uses
     # command-suffix syntax
+    @errors.pretty_exception_handler
     def __init__(self, args):
         self.args = []
         self.tw_extra_args = util.tw_modstring_to_args(args)
@@ -528,7 +552,7 @@ class SplitTags(Split):
 class ChooseSplitTags(CallbackSplitMixin, SplitTags):
     split_cursorline = True
 
-    def get_selected_tag(self):
+    def _get_selected_tag(self):
         tag_re = re.compile(r'^(?P<name>[^\s]+)\s+[0-9]+$')
         match = tag_re.match(vim.current.line)
 
@@ -537,8 +561,9 @@ class ChooseSplitTags(CallbackSplitMixin, SplitTags):
         else:
             raise errors.TaskWikiException("No tag selected.")
 
+    @errors.pretty_exception_handler
     def callback(self):
-        tag = self.get_selected_tag()
+        tag = self._get_selected_tag()
         self.selected.modify("+{0}".format(tag))
 
 
