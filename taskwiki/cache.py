@@ -8,7 +8,6 @@ from taskwiki import store
 from taskwiki import short
 from taskwiki import util
 
-NEOVIM = (vim.eval('has("nvim")') == "1")
 
 class BufferProxy(object):
 
