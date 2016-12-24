@@ -12,13 +12,13 @@ BASE_DIR = vim.eval("s:plugin_path")
 sys.path.insert(0, BASE_DIR)
 
 from taskwiki import errors
-from taskwiki import cache
+from taskwiki import cache as cache_module
 from taskwiki import sort
 from taskwiki import util
 from taskwiki import viewport
 
 # Initialize the cache
-cache = cache.TaskCache()
+cache = cache_module.TaskCache()
 
 # Check the necessary dependencies first
 util.enforce_dependencies(cache)
