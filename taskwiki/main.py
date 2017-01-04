@@ -81,7 +81,7 @@ class SelectedTasks(object):
 
         for vimwikitask in self.tasks:
             vimwikitask.task.add_annotation(annotation)
-            print("Task \"{0}\" annotated.".format(vimwikitask['description']))
+            print(u"Task \"{0}\" annotated.".format(vimwikitask['description']))
 
     @errors.pretty_exception_handler
     def done(self):
@@ -94,7 +94,7 @@ class SelectedTasks(object):
         for vimwikitask in self.tasks:
             vimwikitask.update_from_task()
             vimwikitask.update_in_buffer()
-            print("Task \"{0}\" completed.".format(vimwikitask['description']))
+            print(u"Task \"{0}\" completed.".format(vimwikitask['description']))
 
         cache.buffer.push()
 
@@ -120,8 +120,8 @@ class SelectedTasks(object):
     def link(self):
         path = util.get_absolute_filepath()
         for vimwikitask in self.tasks:
-            vimwikitask.task.add_annotation("wiki: {0}".format(path))
-            print("Task \"{0}\" linked.".format(vimwikitask['description']))
+            vimwikitask.task.add_annotation(u"wiki: {0}".format(path))
+            print(u"Task \"{0}\" linked.".format(vimwikitask['description']))
 
     @errors.pretty_exception_handler
     def grid(self):
@@ -143,7 +143,7 @@ class SelectedTasks(object):
         # Remove the lines in the buffer
         for vimwikitask in self.tasks:
             cache.remove_line(vimwikitask['line_number'])
-            print("Task \"{0}\" deleted.".format(vimwikitask['description']))
+            print(u"Task \"{0}\" deleted.".format(vimwikitask['description']))
 
         cache.buffer.push()
 
@@ -187,7 +187,7 @@ class SelectedTasks(object):
         for vimwikitask in self.tasks:
             vimwikitask.update_from_task()
             vimwikitask.update_in_buffer()
-            print("Task \"{0}\" started.".format(vimwikitask['description']))
+            print(u"Task \"{0}\" started.".format(vimwikitask['description']))
 
         cache.buffer.push()
 
@@ -202,7 +202,7 @@ class SelectedTasks(object):
         for vimwikitask in self.tasks:
             vimwikitask.update_from_task()
             vimwikitask.update_in_buffer()
-            print("Task \"{0}\" stopped.".format(vimwikitask['description']))
+            print(u"Task \"{0}\" stopped.".format(vimwikitask['description']))
 
         cache.buffer.push()
 
@@ -247,7 +247,7 @@ class Meta(object):
             cache.load_tasks()
 
         template = (
-            "ViewPort inspection:\n"
+            u"ViewPort inspection:\n"
             "--------------------\n"
             "Name: {0}\n"
             "Filter used: {1}\n"
