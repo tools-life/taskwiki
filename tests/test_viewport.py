@@ -23,6 +23,25 @@ class TestViewportsTaskGeneration(IntegrationTest):
         self.command("w", regex="written$", lines=1)
 
 
+class TestViewportsTaskGenerationEmptyFilter(IntegrationTest):
+
+    viminput = """
+    === Work tasks | ===
+    """
+
+    vimoutput = """
+    === Work tasks | ===
+    * [ ] some task  #{uuid}
+    """
+
+    tasks = [
+        dict(description="some task"),
+    ]
+
+    def execute(self):
+        self.command("w", regex="written$", lines=1)
+
+
 class TestViewportsTaskRemoval(IntegrationTest):
 
     viminput = """
