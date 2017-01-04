@@ -190,9 +190,8 @@ class TestChooseTagNoSelected(IntegrationTest):
     """
 
     vimoutput = """
-    Tag  Count
-    ---- -----
-    home     1
+    * [ ] test task 1  #{uuid}
+    * [ ] test task 2  #{uuid}
     """
 
     tasks = [
