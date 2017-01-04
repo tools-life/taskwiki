@@ -170,6 +170,26 @@ class ViewPort(object):
         taskfilter_args = [x for x in taskfilter_args
                            if x not in self.meta_tokens]
 
+        # If, after all processing, any empty parens appear in the
+        # seqeunce of taskfilter_args, remove them
+        def deempty_parenthesize(tokens):
+            empty_paren_index = None
+
+            # Detect any empty parenthesis pair
+            for index, token in enumerate(tokens):
+                if token == '(' and tokens[index+1] == ')':
+                    empty_paren_index = index
+
+            # Delete empty pair, if found
+            if empty_paren_index is not None:
+                del tokens[empty_paren_index]
+                del tokens[empty_paren_index]
+
+                # Attempt to delete next one, if it exists
+                deempty_parenthesize(tokens)
+
+        deempty_parenthesize(taskfilter_args)
+
         # All syntactic processing done, return the resulting filter args
         return taskfilter_args, meta
 
