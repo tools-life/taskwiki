@@ -142,7 +142,7 @@ class ViewPort(object):
         def get_complement_tag(tag):
             return ('+' if tag.startswith('-') else '-') + tag[1:]
 
-        virtual_tags = filter(detect_virtual_tag, taskfilter_args)
+        virtual_tags = list(filter(detect_virtual_tag, taskfilter_args))
         tokens_to_remove = set()
         # For each virtual tag, check if its complement is in the
         # taskfilter_args too. If so, remove the tag that came from defaults.
@@ -167,8 +167,8 @@ class ViewPort(object):
             if token == '-VISIBLE':
                 meta['visible'] = False
 
-        taskfilter_args = filter(lambda x: x not in self.meta_tokens,
-                                 taskfilter_args)
+        taskfilter_args = [x for x in taskfilter_args
+                           if x not in self.meta_tokens]
 
         # All syntactic processing done, return the resulting filter args
         return taskfilter_args, meta
