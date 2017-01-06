@@ -530,3 +530,29 @@ class TestSimpleUnicodeTaskCreation(IntegrationTest):
         task = self.tw.tasks.pending()[0]
         assert task['description'] == u'This is a test täsk'
         assert task['status'] == 'pending'
+
+
+class TestLineNumberPreservation(IntegrationTest):
+
+    viminput = """
+    My tasks for today:
+    * [ ] Wake up
+    * [ ] Sieze the day
+    * [ ] Go to sleep in time
+    """
+
+    vimoutput = """
+    My tasks for today:
+    * [ ] Wake up  #{uuid}
+    * [ ] Go to sleep in time  #{uuid}
+    """
+
+    def execute(self):
+        self.command("w", regex="written$", lines=1)
+
+        # Delete Sieze the day task
+        self.client.normal('3gg')
+        self.command('TaskWikiDelete', regex="deleted", lines=1)
+
+        # Check cursor position
+        assert self.client.eval("line('.')") == '3'
