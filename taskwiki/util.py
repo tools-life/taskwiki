@@ -348,6 +348,17 @@ def current_line_highlighted():
         original_window = vim.windows[original_window_number]
         original_window.options['cursorline'] = original_value
 
+@contextlib.contextmanager
+def current_line_preserved():
+    """
+    Make sure the current line is preserved during the operation by marking it
+    first and later restoring it with the :number command, i.e. :42.
+    """
+
+    current_line = get_current_line_number() + 1
+    yield
+    vim.command('{0}'.format(current_line))
+
 def enforce_dependencies(cache):
     # Vim version is already checked in vimscript file
     # This is done so that we avoid problems with +python

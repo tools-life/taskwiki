@@ -19,7 +19,8 @@ class BufferProxy(object):
         self.data = util.get_buffer(self.buffer_number)[:]
 
     def push(self):
-        util.get_buffer(self.buffer_number)[:] = self.data
+        with util.current_line_preserved():
+            util.get_buffer(self.buffer_number)[:] = self.data
 
     def __getitem__(self, index):
         try:
