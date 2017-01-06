@@ -117,7 +117,8 @@ class IntegrationTest(object):
 
             # Multiline-evaluate the regex
             if regex:
-                assert re.search(regex, result, re.MULTILINE)
+                details = u"Regex not found in: {0}".format(result)
+                assert re.search(regex, result, re.MULTILINE), details
 
             if lines:
                 assert lines == len(result.splitlines())
