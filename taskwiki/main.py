@@ -560,18 +560,20 @@ class ChooseSplitTags(CallbackSplitMixin, SplitTags):
     split_cursorline = True
 
     def _get_selected_tag(self):
-        tag_re = re.compile(r'^(?P<name>[^\s]+)\s+[0-9]+$')
+        tag_re = re.compile(r'^(?P<name>[^\s]+)\s+[0-9]+$', re.UNICODE)
         match = tag_re.match(vim.current.line)
 
         if match:
-            return match.group('name')
+            tag = match.group('name')
+            tag = tag.decode('utf-8') if six.PY2 else tag
+            return tag
         else:
             raise errors.TaskWikiException("No tag selected.")
 
     @errors.pretty_exception_handler
     def callback(self):
         tag = self._get_selected_tag()
-        self.selected.modify("+{0}".format(tag))
+        self.selected.modify(u"+{0}".format(tag))
 
 
 if __name__ == '__main__':
