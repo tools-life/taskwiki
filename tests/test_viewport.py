@@ -338,7 +338,7 @@ class TestViewportsUnicodeTaskGeneration(IntegrationTest):
 
 class TestUnicodeViewportsUnicodeTaskGeneration(IntegrationTest):
 
-    viminput = """
+    viminput = u"""
     === Réunion 2017 | project:Réunion2017 ===
     """
 
@@ -353,11 +353,12 @@ class TestUnicodeViewportsUnicodeTaskGeneration(IntegrationTest):
 
     def execute(self):
         self.command("w", regex="written$", lines=1)
+        assert len(self.tw.tasks.pending()) == 1
 
 
 class TestUnicodeViewportsUnicodeDefaultsAssignment(IntegrationTest):
 
-    viminput = """
+    viminput = u"""
     === Réunion 2017 | project:Réunion2017 ===
     * [ ] Réunion task 1
     """
