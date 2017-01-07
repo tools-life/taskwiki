@@ -205,10 +205,15 @@ class ViewPort(object):
         if not match:
             return None
 
-        filterstring = six.u(match.group('filter'))
+        filterstring = match.group('filter')
         defaults = match.group('defaults')
-        defaults = six.u(defaults) if defaults is not None else defaults
-        name = six.u(match.group('name').strip())
+        name = match.group('name').strip()
+
+        if six.PY2:
+            filterstring = filterstring.decode('utf-8')
+            defaults = defaults.decode('utf-8') if defaults is not None else defaults
+            name = name.decode('utf-8')
+
         tw = cache.warriors[match.group('source') or 'default']
 
         sort_id = match.group('sort')
@@ -247,12 +252,12 @@ class ViewPort(object):
 
     @property
     def raw_filter(self):
-        return ' '.join(self.taskfilter)
+        return u' '.join(self.taskfilter)
 
     @property
     def raw_defaults(self):
-        return ', '.join(
-            '{0}:{1}'.format(key, value)
+        return u', '.join(
+            u'{0}:{1}'.format(key, value)
             for key, value in self.defaults.items()
             )
 

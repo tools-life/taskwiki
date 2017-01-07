@@ -247,7 +247,7 @@ class Meta(object):
             cache.load_tasks()
 
         template = (
-            u"ViewPort inspection:\n"
+            "ViewPort inspection:\n"
             "--------------------\n"
             "Name: {0}\n"
             "Filter used: {1}\n"
@@ -267,9 +267,9 @@ class Meta(object):
 
             # Fill in the interesting info in the template
             template_formatted = template.format(
-                port.name,
-                port.raw_filter,
-                port.raw_defaults,
+                port.name if six.PY3 else port.name.encode('utf-8'),
+                port.raw_filter if six.PY3 else port.raw_filter.encode('utf-8'),
+                port.raw_defaults if six.PY3 else port.raw_defaults.encode('utf-8'),
                 port.sort,
                 len(port.matching_tasks),
                 len(port.tasks),
