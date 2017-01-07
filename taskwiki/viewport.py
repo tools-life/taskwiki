@@ -1,5 +1,6 @@
 import itertools
 import re
+import six
 import sys
 import vim  # pylint: disable=F0401
 
@@ -204,9 +205,10 @@ class ViewPort(object):
         if not match:
             return None
 
-        filterstring = match.group('filter')
+        filterstring = six.u(match.group('filter'))
         defaults = match.group('defaults')
-        name = match.group('name').strip()
+        defaults = six.u(defaults) if defaults is not None else defaults
+        name = six.u(match.group('name').strip())
         tw = cache.warriors[match.group('source') or 'default']
 
         sort_id = match.group('sort')
