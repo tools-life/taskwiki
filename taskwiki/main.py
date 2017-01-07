@@ -450,7 +450,8 @@ class ChooseSplitProjects(CallbackSplitMixin, SplitProjects):
     split_cursorline = True
 
     def _get_selected_project(self):
-        project_re = re.compile(r'^(?P<indent>\s*)(?P<name>[^\s]+)\s+[0-9]+$')
+        project_re = re.compile(r'^(?P<indent>\s*)(?P<name>[^\s]+)\s+[0-9]+$',
+                                re.UNICODE)
 
         project_parts = []
         current_indent = None
@@ -469,12 +470,15 @@ class ChooseSplitProjects(CallbackSplitMixin, SplitProjects):
             project_parts = []
 
         project_parts.reverse()
-        return '.'.join(project_parts)
+        if six.PY2:
+            return u'.'.join([p.decode('utf-8') for p in project_parts])
+        else:
+            return u'.'.join(project_parts)
 
     @errors.pretty_exception_handler
     def callback(self):
         project = self._get_selected_project()
-        self.selected.modify("project:{0}".format(project))
+        self.selected.modify(u"project:{0}".format(project))
 
 
 class SplitSummary(Split):
