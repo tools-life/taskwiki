@@ -336,6 +336,49 @@ class TestViewportsUnicodeTaskGeneration(IntegrationTest):
         self.command("w", regex="written$", lines=1)
 
 
+class TestUnicodeViewportsUnicodeTaskGeneration(IntegrationTest):
+
+    viminput = """
+    === Réunion 2017 | project:Réunion2017 ===
+    """
+
+    vimoutput = u"""
+    === Réunion 2017 | project:Réunion2017 ===
+    * [ ] Réunion task 1  #{uuid}
+    """
+
+    tasks = [
+        dict(description=u"Réunion task 1", project=u'Réunion2017'),
+    ]
+
+    def execute(self):
+        self.command("w", regex="written$", lines=1)
+        import time
+        time.sleep(40)
+
+
+class TestUnicodeViewportsUnicodeDefaultsAssignment(IntegrationTest):
+
+    viminput = """
+    === Réunion 2017 | project:Réunion2017 ===
+    * [ ] Réunion task 1
+    """
+
+    vimoutput = u"""
+    === Réunion 2017 | project:Réunion2017 ===
+    * [ ] Réunion task 1  #{uuid}
+    """
+
+    def execute(self):
+        self.command("w", regex="written$", lines=1)
+        assert len(self.tw.tasks.pending()) == 1
+
+        task = self.tw.tasks.pending()[0]
+        assert task['description'] == u'Réunion task 1'
+        assert task['status'] == 'pending'
+        assert task['project'] == u'Réunion2017'
+
+
 class TestViewportsSortedGeneration(IntegrationTest):
 
     viminput = """
