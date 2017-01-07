@@ -353,8 +353,6 @@ class TestUnicodeViewportsUnicodeTaskGeneration(IntegrationTest):
 
     def execute(self):
         self.command("w", regex="written$", lines=1)
-        import time
-        time.sleep(40)
 
 
 class TestUnicodeViewportsUnicodeDefaultsAssignment(IntegrationTest):
