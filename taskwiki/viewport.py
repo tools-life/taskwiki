@@ -222,8 +222,8 @@ class ViewPort(object):
 
             # If we failed to fetch the sortstring, warn the user
             if sortstring is None and sort_id is not None:
-                print("Sort indicator '{0}' for viewport '{1}' is not defined,"
-                      " using default.".format(sort_id, name), sys.stderr)
+                print(u"Sort indicator '{0}' for viewport '{1}' is not defined,"
+                       " using default.".format(sort_id, name), sys.stderr)
 
         self = cls(number, cache, tw, name, filterstring,
                    defaults, sortstring)
