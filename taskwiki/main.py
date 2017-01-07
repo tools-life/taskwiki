@@ -410,22 +410,25 @@ class CallbackSplitMixin(object):
 
         # We can't save the current instance in vim variable
         # so save the pickled version
-        if six.PY2:
-            vim.current.buffer.vars['taskwiki_callback'] = pickle.dumps(self)
-        else:
-            vim.current.buffer.vars['taskwiki_callback'] = base64.encodebytes(
-                    bytes(pickle.dumps(self))
-            ).decode()
+        dump = pickle.dumps((
+            {k:v for k,v in self.__dict__.items() if k != 'selected'},
+            self.selected.__dict__)
+        )
+
+        vim.current.buffer.vars['taskwiki_callback'] = base64.encodestring(
+            bytes(dump)
+        )
 
         # Remap <CR> to calling the callback and wiping the buffer
         vim.command(
             "nnoremap <silent> <buffer> <enter> :"
-            + vim.vars['taskwiki_py'].decode() +
-            "callback = pickle.loads(" +
-            ( "base64.decodebytes("
-                "vim.current.buffer.vars['taskwiki_callback'])); "
-            if six.PY3 else
-            "vim.current.buffer.vars['taskwiki_callback']); " ) +
+            + util.decode_bytes(vim.vars['taskwiki_py']) +
+            "callback = {0}('');".format(self.__class__.__name__) +
+            "orig_dict, selected_dict = pickle.loads("
+            "base64.decodestring("
+              "six.b(util.decode_bytes(vim.current.buffer.vars['taskwiki_callback'])))); "
+            "callback.__dict__.update(orig_dict);"
+            "callback.selected.__dict__ = selected_dict;"
             "callback.callback(); "
             "vim.command('bwipe') <CR>"
         )
