@@ -14,7 +14,7 @@ from taskwiki import regexp
 
 # Detect if command AnsiEsc is available
 ANSI_ESC_AVAILABLE = vim.eval('exists(":AnsiEsc")') == '2'
-
+NEOVIM = (vim.eval('has("nvim")') == "1")
 
 def tw_modstring_to_args(line):
     output = []
@@ -387,8 +387,12 @@ def enforce_dependencies(cache):
 def decode_bytes(var):
     """
     Data structures obtained from vim under python3 will return bytestrings.
+    Neovim under python3 will return str.
     Make sure we can handle that.
     """
+
+    if NEOVIM:
+        return var
 
     if isinstance(var, bytes):
         return var.decode()
