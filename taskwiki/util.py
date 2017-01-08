@@ -237,16 +237,16 @@ def show_in_split(lines, size=None, position="belowright", vertical=False,
             size = max([len(strip_ansi_escape_sequence(l)) for l in lines]) + 1
 
             # If absolute maximum width was set, do not exceed it
-            if vim.vars.get('taskwiki_split_max_width'):
-                size = min(size, vim.vars.get('taskwiki_split_max_width'))
+            if get_var('taskwiki_split_max_width'):
+                size = min(size, get_var('taskwiki_split_max_width'))
 
         else:
             # Number of lines
             size = len(lines)
 
             # If absolute maximum height was set, do not exceed it
-            if vim.vars.get('taskwiki_split_max_height'):
-                size = min(size, vim.vars.get('taskwiki_split_max_height'))
+            if get_var('taskwiki_split_max_height'):
+                size = min(size, get_var('taskwiki_split_max_height'))
 
     # Set cursorline in the window
     cursorline_activated_in_window = None
@@ -294,7 +294,7 @@ def show_in_split(lines, size=None, position="belowright", vertical=False,
     # Remove cursorline in original window if it was this split which set it
     if cursorline_activated_in_window is not None:
         vim.command("au BufLeave,BufDelete,BufWipeout <buffer> "
-                    + decode_bytes(vim.vars['taskwiki_py']) +
+                    + get_var('taskwiki_py') +
                     " vim.windows[{0}].options['cursorline']=False"
                     .format(cursorline_activated_in_window))
 
@@ -407,3 +407,16 @@ def decode_bytes(var):
         }
 
     return var
+
+def get_var(name, default=None):
+    """
+    Provide a layer for getting a variable value out of vim, consistent over
+    vim+py22/vim+py3/neovim combinations.
+    """
+
+    value = vim.vars.get(name)
+
+    if value is None:
+        return default
+    else:
+        return decode_bytes(value)

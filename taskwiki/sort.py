@@ -1,6 +1,5 @@
-import vim
-
 from taskwiki import constants
+from taskwiki import util
 
 class TaskSorter(object):
     def __init__(self, cache, tasks, sortstring=None):
@@ -8,7 +7,7 @@ class TaskSorter(object):
         self.tasks = tasks
         self.sortstring = (
             sortstring or
-            vim.vars.get('taskwiki_sort_default') or
+            util.get_var('taskwiki_sort_default') or
             constants.DEFAULT_SORT_ORDER
         ) + ',line_number+'
 

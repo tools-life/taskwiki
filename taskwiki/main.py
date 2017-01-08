@@ -315,7 +315,7 @@ class Meta(object):
         }
 
         # If tw support is enabled, try to find definition in TW first
-        if vim.vars.get('taskwiki_source_tw_colors'):
+        if util.get_var('taskwiki_source_tw_colors'):
 
             tw = cache.get_relevant_tw()
 
@@ -422,11 +422,11 @@ class CallbackSplitMixin(object):
         # Remap <CR> to calling the callback and wiping the buffer
         vim.command(
             "nnoremap <silent> <buffer> <enter> :"
-            + util.decode_bytes(vim.vars['taskwiki_py']) +
+            + util.get_var('taskwiki_py') +
             "callback = {0}('');".format(self.__class__.__name__) +
             "orig_dict, selected_dict = pickle.loads("
             "base64.decodestring("
-              "six.b(util.decode_bytes(vim.current.buffer.vars['taskwiki_callback'])))); "
+              "six.b(util.get_var('taskwiki_callback')))); "
             "callback.__dict__.update(orig_dict);"
             "callback.selected.__dict__ = selected_dict;"
             "callback.callback(); "

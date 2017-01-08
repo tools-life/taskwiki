@@ -52,7 +52,7 @@ class ViewPort(object):
         self.tasks = set()
         self.sort = (
             sort or
-            vim.vars.get('taskwiki_sort_order') or
+            util.get_var('taskwiki_sort_order') or
             constants.DEFAULT_SORT_ORDER
         )
 
@@ -217,7 +217,7 @@ class ViewPort(object):
         tw = cache.warriors[match.group('source') or 'default']
 
         sort_id = match.group('sort')
-        sorts_configured = vim.vars.get('taskwiki_sort_orders', {})
+        sorts_configured = util.get_var('taskwiki_sort_orders', {})
 
         sortstring = None
 
