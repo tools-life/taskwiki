@@ -66,7 +66,6 @@ class IntegrationTest(object):
                 raise
 
     def configure_global_varialbes(self):
-        self.command('let g:taskwiki_measure_coverage="yes"')
         self.command('let g:taskwiki_data_location="{0}"'.format(self.dir))
         self.command('let g:taskwiki_taskrc_location="{0}"'.format(self.taskrc_path))
 

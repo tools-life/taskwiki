@@ -674,10 +674,6 @@ constructs.
 *taskwiki_disable*
     Setting any non-empty value for this variable will disable taskwiki.
 
-*taskwiki_measure_coverage*
-    Development only. Uses python-coverage to track how much of the code
-    is covered by tests.
-
 
 =============================================================================
 9. TROUBLESHOOTING					   *taskwiki-trouble*
