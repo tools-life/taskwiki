@@ -256,10 +256,12 @@ class ViewPort(object):
 
     @property
     def raw_defaults(self):
-        return u', '.join(
+        value = u', '.join(
             u'{0}:{1}'.format(key, value)
             for key, value in self.defaults.items()
             )
+        # Strip u'' literal symbols from the output
+        return value.replace("u'", "'") if six.PY2 else value
 
     @property
     def viewport_tasks(self):
