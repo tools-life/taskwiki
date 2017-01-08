@@ -426,7 +426,8 @@ class CallbackSplitMixin(object):
             "callback = {0}('');".format(self.__class__.__name__) +
             "orig_dict, selected_dict = pickle.loads("
             "base64.decodestring("
-              "six.b(util.get_var('taskwiki_callback')))); "
+              "six.b(util.get_var('taskwiki_callback', "
+                                  "vars_obj=vim.current.buffer.vars)))); "
             "callback.__dict__.update(orig_dict);"
             "callback.selected.__dict__ = selected_dict;"
             "callback.callback(); "

@@ -408,13 +408,18 @@ def decode_bytes(var):
 
     return var
 
-def get_var(name, default=None):
+def get_var(name, default=None, vars_obj=None):
     """
     Provide a layer for getting a variable value out of vim, consistent over
     vim+py22/vim+py3/neovim combinations.
+
+    Params:
+        default - default value, returned when variable is not found
+        vars - used vars object, defaults to vim.vars
     """
 
-    value = vim.vars.get(name)
+    vars_obj = vars_obj or vim.vars
+    value = vars_obj.get(name)
 
     if value is None:
         return default
