@@ -1,3 +1,5 @@
+dist: trusty
+sudo: required
 language: python
 env:
   - TASK_VERSION=v2.4.0
@@ -10,17 +12,23 @@ env:
   - TASK_VERSION=2.6.0
 python:
   - "2.7"
+  - "3.5"
 before_install:
   # Setup virtual framebuffer
   - export DISPLAY=:99.0
   - sh -e /etc/init.d/xvfb start
 install:
+  # Install python3
+  - sudo apt-get update -qq
+  - sudo apt-get install python3 python3-pip -y
   # Install testing tools
   - pip install pytest pytest-cov coveralls vimrunner
   - pip install git+git://github.com/robgolding63/tasklib@develop
   # Install to both virtualenv and outside it, vim needs it too
   - sudo pip install git+git://github.com/robgolding63/tasklib@develop
   - sudo pip install pytest pytest-cov coveralls vimrunner
+  - sudo pip3 install git+git://github.com/robgolding63/tasklib@develop
+  - sudo pip3 install pytest pytest-cov coveralls vimrunner
   # Setup TaskWarrior
   - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
   - sudo add-apt-repository ppa:pi-rho/dev -y
@@ -52,7 +60,7 @@ install:
   - cp -r $TRAVIS_BUILD_DIR ~/.vim/bundle/taskwiki
   - mkdir ~/taskwiki-coverage
 before_script:
-  - cd ~/.vim/bundle/taskwiki
+  - cd $TRAVIS_BUILD_DIR
 script:
   - py.test -vv --cov .
   - "mv ~/taskwiki-coverage/.coverage.* . || :"
