@@ -1,10 +1,5 @@
 import sys
-
-# Mock vim to test vim-nonrelated functions
-class MockVim(object):
-
-    def eval(*args, **kwargs):
-        return 42
+from tests.base import MockVim
 
 sys.modules['vim'] = MockVim()
 
