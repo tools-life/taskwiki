@@ -74,7 +74,6 @@ def tw_modstring_to_kwargs(line):
 
 def tw_args_to_kwargs(args):
     output = dict()
-    meta = dict()  # Store meta attributes
 
     for arg in args:
         # If the argument contains :, then it's a key/value pair
