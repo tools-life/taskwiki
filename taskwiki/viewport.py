@@ -2,7 +2,6 @@ import itertools
 import re
 import six
 import sys
-import vim  # pylint: disable=F0401
 
 from taskwiki import vwtask
 from taskwiki import regexp
