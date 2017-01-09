@@ -17,7 +17,7 @@ Standing on the shoulders of vimwiki and Taskwarrior_
 
 #### Make sure you satisfy the requirements
 
-* Vim 7.4 or newer, compiled with +python or +python3
+* Vim 7.4 or newer, with +python or +python3 (NeoVim is also supported)
 * [Vimwiki](https://github.com/vimwiki/vimwiki/tree/dev) (the dev branch)
 
         git clone https://github.com/vimwiki/vimwiki ~/.vim/bundle/ --branch dev
