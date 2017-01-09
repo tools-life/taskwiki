@@ -20,6 +20,11 @@ syntax match TaskWikiTask /\s*\* \[.\]\s.*$/
                 \ VimwikiSubScriptT,
                 \ VimwikiCodeT,
                 \ VimwikiEqInT,
+                \ VimwikiLink,
+                \ VimwikiNoExistsLink,
+                \ VimwikiNoExistsLinkT,
+                \ VimwikiWikiLink,
+                \ VimwikiWikiLinkT,
                 \ @Spell
 
 " Conceal the UUID
