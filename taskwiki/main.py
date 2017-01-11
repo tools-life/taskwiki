@@ -249,16 +249,30 @@ class Mappings(object):
 
         # If the line under cursor contains task, toggle info
         # otherwise do the default VimwikiFollowLink
-        position = util.get_current_line_number()
+        row = util.get_current_line_number()
+        column = util.get_current_column_number()
+        line = cache.buffer[row]
 
-        if cache.vwtask[position] is not None:
+        # Detect if the cursor stands on a vimwiki link,
+        # if so, trigger it
+        inside_vimwiki_link = all([
+            '[[' in line,
+            ']]' in line,
+            column >= line.find('[['),
+            column <= line.find(']]') + 1
+        ])
+
+        if inside_vimwiki_link:
+            vim.command('VimwikiFollowLink')
+            return
+
+        # No link detected, so it's our stuff now
+        if cache.vwtask[row] is not None:
             SelectedTasks().info()
         else:
-            port = viewport.ViewPort.from_line(position, cache)
+            port = viewport.ViewPort.from_line(row, cache)
             if port is not None:
                 Meta().inspect_viewport()
-            else:
-                vim.command('VimwikiFollowLink')
 
 
 class Meta(object):
