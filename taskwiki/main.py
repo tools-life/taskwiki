@@ -77,6 +77,10 @@ class SelectedTasks(object):
         if not self.tasks:
             print("No tasks selected.")
 
+    @classmethod
+    def save_action(cls, method, *args):
+        cls.last_action = {'method': method, 'args': args}
+
     @errors.pretty_exception_handler
     def annotate(self, annotation):
         if not annotation:
@@ -87,7 +91,7 @@ class SelectedTasks(object):
             vimwikitask.task.add_annotation(annotation)
             print(u"Task \"{0}\" annotated.".format(vimwikitask['description']))
 
-        self.__class__.last_action = {'method': 'annotate', 'args': (annotation,)}
+        self.save_action('annotate', annotation)
 
     @errors.pretty_exception_handler
     def done(self):
@@ -103,7 +107,7 @@ class SelectedTasks(object):
             print(u"Task \"{0}\" completed.".format(vimwikitask['description']))
 
         cache.buffer.push()
-        self.__class__.last_action = {'method': 'done'}
+        self.save_action('done')
 
     @errors.pretty_exception_handler
     def info(self):
@@ -122,7 +126,7 @@ class SelectedTasks(object):
 
             vim.command('! task {0} {1} edit'
                         .format(location_override, vimwikitask.uuid))
-        self.__class__.last_action = {'method': 'edit'}
+        self.save_action('edit')
 
     @errors.pretty_exception_handler
     def link(self):
@@ -130,7 +134,7 @@ class SelectedTasks(object):
         for vimwikitask in self.tasks:
             vimwikitask.task.add_annotation(u"wiki: {0}".format(path))
             print(u"Task \"{0}\" linked.".format(vimwikitask['description']))
-        self.__class__.last_action = {'method': 'link'}
+        self.save_action('link')
 
     @errors.pretty_exception_handler
     def grid(self):
@@ -155,7 +159,7 @@ class SelectedTasks(object):
             print(u"Task \"{0}\" deleted.".format(vimwikitask['description']))
 
         cache.buffer.push()
-        self.__class__.last_action = {'method': 'delete'}
+        self.save_action('delete')
 
     @errors.pretty_exception_handler
     def modify(self, modstring):
@@ -185,7 +189,7 @@ class SelectedTasks(object):
             print(output[-1])
 
         cache.buffer.push()
-        self.__class__.last_action = {'method': 'modify', 'args': (modstring,)}
+        self.save_action('modify', modstring)
 
     def redo(self):
         """
@@ -211,7 +215,7 @@ class SelectedTasks(object):
             print(u"Task \"{0}\" started.".format(vimwikitask['description']))
 
         cache.buffer.push()
-        self.__class__.last_action = {'method': 'start'}
+        self.save_action('start')
 
     @errors.pretty_exception_handler
     def stop(self):
@@ -227,7 +231,7 @@ class SelectedTasks(object):
             print(u"Task \"{0}\" stopped.".format(vimwikitask['description']))
 
         cache.buffer.push()
-        self.__class__.last_action = {'method': 'stop'}
+        self.save_action('stop')
 
     @errors.pretty_exception_handler
     def sort(self, sortstring):
