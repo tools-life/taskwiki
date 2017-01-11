@@ -182,6 +182,10 @@ def get_current_line_number():
     row, column = vim.current.window.cursor
     return row - 1
 
+def get_current_column_number():
+    row, column = vim.current.window.cursor
+    return column
+
 def get_valid_tabpage_buffers(tabpage):
     return [win.buffer for win in tabpage.windows if win.buffer.valid]
 
