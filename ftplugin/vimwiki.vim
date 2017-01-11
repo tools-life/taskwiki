@@ -70,6 +70,7 @@ execute "command! -range TaskWikiDelete :<line1>,<line2>" . g:taskwiki_py . "Sel
 execute "command! -range TaskWikiStart :<line1>,<line2>"  . g:taskwiki_py . "SelectedTasks().start()"
 execute "command! -range TaskWikiStop :<line1>,<line2>"   . g:taskwiki_py . "SelectedTasks().stop()"
 execute "command! -range TaskWikiDone :<line1>,<line2>"   . g:taskwiki_py . "SelectedTasks().done()"
+execute "command! -range TaskWikiRedo :<line1>,<line2>"   . g:taskwiki_py . "SelectedTasks().redo()"
 
 execute "command! -range -nargs=* TaskWikiSort :<line1>,<line2>"     . g:taskwiki_py . "SelectedTasks().sort(<q-args>)"
 execute "command! -range -nargs=* TaskWikiMod :<line1>,<line2>"      . g:taskwiki_py . "SelectedTasks().modify(<q-args>)"
@@ -112,6 +113,7 @@ nmap <silent><buffer> <Leader>tp :TaskWikiProjects<CR>
 nmap <silent><buffer> <Leader>ts :TaskWikiProjectsSummary<CR>
 nmap <silent><buffer> <Leader>tS :TaskWikiStats<CR>
 nmap <silent><buffer> <Leader>tt :TaskWikiTags<CR>
+nmap <silent><buffer> <Leader>t. :TaskWikiRedo<CR>
 nmap <silent><buffer> <Leader>t+ :TaskWikiStart<CR>
 nmap <silent><buffer> <Leader>t- :TaskWikiStop<CR>
 
@@ -126,5 +128,6 @@ vmap <silent><buffer> <Leader>tg :TaskWikiGrid<CR>
 vmap <silent><buffer> <Leader>ti :TaskWikiInfo<CR>
 vmap <silent><buffer> <Leader>tl :TaskWikiLink<CR>
 vmap <silent><buffer> <Leader>tm :TaskWikiMod<CR>
+vmap <silent><buffer> <Leader>t. :TaskWikiRedo<CR>
 vmap <silent><buffer> <Leader>t+ :TaskWikiStart<CR>
 vmap <silent><buffer> <Leader>t- :TaskWikiStop<CR>
