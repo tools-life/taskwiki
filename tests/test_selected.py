@@ -141,6 +141,36 @@ class TestAnnotateActionRange(IntegrationTest):
         assert annotation[0]['description'] == "This is annotation."
 
 
+class TestAnnotateActionRedo(IntegrationTest):
+
+    viminput = """
+    * [ ] test task 1  #{uuid}
+    * [ ] test task 2  #{uuid}
+    """
+
+    tasks = [
+        dict(description="test task 1"),
+        dict(description="test task 2"),
+    ]
+
+    def execute(self):
+        # Annotate the first task
+        self.command(
+            "TaskWikiAnnotate This is annotation.",
+            regex="Task \"test task 1\" annotated.$",
+            lines=1)
+
+        self.tasks[0].refresh()
+        annotation = self.tasks[0]['annotations']
+        assert annotation != []
+        assert annotation[0]['description'] == "This is annotation."
+
+        # Now also annotate the second task
+        self.client.type('j')
+        self.command("TaskWikiRedo", regex="Task \"test task 2\" annotated.$",
+                     lines=1)
+
+
 class TestDeleteAction(IntegrationTest):
 
     viminput = """
