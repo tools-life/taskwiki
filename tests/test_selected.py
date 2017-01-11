@@ -262,6 +262,43 @@ class TestDeleteActionRange(IntegrationTest):
         assert self.tasks[0]['status'] == "deleted"
 
 
+class TestDeleteActionRedo(IntegrationTest):
+
+    viminput = """
+    * [ ] test task 1  #{uuid}
+    * [ ] test task 2  #{uuid}
+    """
+
+    vimoutput = """
+    """
+
+    tasks = [
+        dict(description="test task 1"),
+        dict(description="test task 2"),
+    ]
+
+    def execute(self):
+        # Delete the first task
+        self.command(
+            "TaskWikiDelete",
+            regex="Task \"test task 1\" deleted.$",
+            lines=1
+        )
+
+        # Now also delete the second task
+        self.command(
+            "TaskWikiRedo",
+            regex="Task \"test task 2\" deleted.$",
+            lines=1
+        )
+
+        for task in self.tasks:
+            task.refresh()
+
+        assert self.tasks[0]['status'] == "deleted"
+        assert self.tasks[1]['status'] == "deleted"
+
+
 class TestInfoAction(IntegrationTest):
 
     viminput = """
@@ -463,6 +500,49 @@ class TestLinkActionRange(IntegrationTest):
         assert annotation[0]['description'] == backlink
 
 
+class TestLinkActionRedo(IntegrationTest):
+
+    viminput = """
+    * [ ] test task 1  #{uuid}
+    * [ ] test task 2  #{uuid}
+    """
+
+    tasks = [
+        dict(description="test task 1"),
+        dict(description="test task 2"),
+    ]
+
+    def execute(self):
+        # Link the first task
+        self.command(
+            "TaskWikiLink",
+            regex="Task \"test task 1\" linked.$",
+            lines=1
+        )
+
+        # Now also link the second task
+        self.client.type('j')
+        self.command(
+            "TaskWikiRedo",
+            regex="Task \"test task 2\" linked.$",
+            lines=1
+        )
+
+        backlink = "wiki: {0}".format(self.filepath)
+
+        # Assert the backlink on the first task
+        self.tasks[0].refresh()
+        annotation = self.tasks[0]['annotations']
+        assert annotation != []
+        assert annotation[0]['description'] == backlink
+
+        # Assert the backlink on the second task
+        self.tasks[1].refresh()
+        annotation = self.tasks[1]['annotations']
+        assert annotation != []
+        assert annotation[0]['description'] == backlink
+
+
 class TestStartAction(IntegrationTest):
 
     viminput = """
@@ -564,6 +644,54 @@ class TestStartActionRange(IntegrationTest):
         self.client.feedkeys(":TaskWikiStart")
         self.client.type('<Enter>')
         sleep(1)
+
+        for task in self.tasks:
+            task.refresh()
+
+        now = local_zone.localize(datetime.now())
+
+        assert self.tasks[0]['status'] == "pending"
+        assert self.tasks[1]['status'] == "pending"
+
+        assert (now - self.tasks[0]['start']).total_seconds() < 5
+        assert (self.tasks[0]['start'] - now).total_seconds() < 5
+
+        assert (now - self.tasks[1]['start']).total_seconds() < 5
+        assert (self.tasks[1]['start'] - now).total_seconds() < 5
+
+
+class TestStartActionRedo(IntegrationTest):
+
+    viminput = """
+    * [ ] test task 1  #{uuid}
+    * [ ] test task 2  #{uuid}
+    """
+
+    vimoutput = """
+    * [S] test task 1  #{uuid}
+    * [S] test task 2  #{uuid}
+    """
+
+    tasks = [
+        dict(description="test task 1"),
+        dict(description="test task 2"),
+    ]
+
+    def execute(self):
+        # Start the first task
+        self.command(
+            "TaskWikiStart",
+            regex="Task \"test task 1\" started.$",
+            lines=1
+        )
+
+        # Now also start the second task
+        self.client.type('j')
+        self.command(
+            "TaskWikiRedo",
+            regex="Task \"test task 2\" started.$",
+            lines=1
+        )
 
         for task in self.tasks:
             task.refresh()
@@ -692,6 +820,50 @@ class TestStopActionRange(IntegrationTest):
         assert self.tasks[1]['start'] == None
 
 
+class TestStopActionRedo(IntegrationTest):
+
+    viminput = """
+    * [S] test task 1  #{uuid}
+    * [S] test task 2  #{uuid}
+    """
+
+    vimoutput = """
+    * [ ] test task 1  #{uuid}
+    * [ ] test task 2  #{uuid}
+    """
+
+    tasks = [
+        dict(description="test task 1", start="now"),
+        dict(description="test task 2", start="now"),
+    ]
+
+    def execute(self):
+        self.command(
+            "TaskWikiStop",
+            regex="Task \"test task 1\" stopped.$",
+            lines=1
+        )
+
+        # Now also stop the second task
+        self.client.type('j')
+        self.command(
+            "TaskWikiRedo",
+            regex="Task \"test task 2\" stopped.$",
+            lines=1
+        )
+
+        for task in self.tasks:
+            task.refresh()
+
+        now = local_zone.localize(datetime.now())
+
+        assert self.tasks[0]['status'] == "pending"
+        assert self.tasks[1]['status'] == "pending"
+
+        assert self.tasks[0]['start'] == None
+        assert self.tasks[1]['start'] == None
+
+
 class TestModAction(IntegrationTest):
 
     viminput = """
@@ -720,6 +892,45 @@ class TestModAction(IntegrationTest):
 
         assert self.tasks[0]['project'] == "Home"
         assert self.tasks[1]['project'] == None
+
+
+class TestModActionRedo(IntegrationTest):
+
+    viminput = """
+    * [ ] test task 1  #{uuid}
+    * [ ] test task 2  #{uuid}
+    """
+
+    vimoutput = """
+    * [ ] test task 1  #{uuid}
+    * [ ] test task 2  #{uuid}
+    """
+
+    tasks = [
+        dict(description="test task 1"),
+        dict(description="test task 2"),
+    ]
+
+    def execute(self):
+        self.command(
+            "TaskWikiMod project:Home",
+            regex="Modified 1 task.$",
+            lines=1
+        )
+
+        # Now also modify the second task
+        self.client.type('j')
+        self.command(
+            "TaskWikiRedo",
+            regex="Modified 1 task.$",
+            lines=1
+        )
+
+        for task in self.tasks:
+            task.refresh()
+
+        assert self.tasks[0]['project'] == "Home"
+        assert self.tasks[1]['project'] == "Home"
 
 
 class TestModInteractiveAction(IntegrationTest):
@@ -753,6 +964,47 @@ class TestModInteractiveAction(IntegrationTest):
 
         assert self.tasks[0]['tags'] == set(["work"])
         assert self.tasks[1]['tags'] == set()
+
+
+class TestModInteractiveActionRedo(IntegrationTest):
+
+    viminput = """
+    * [ ] test task 1  #{uuid}
+    * [ ] test task 2  #{uuid}
+    """
+
+    vimoutput = """
+    * [ ] test task 1  #{uuid}
+    * [ ] test task 2  #{uuid}
+    """
+
+    tasks = [
+        dict(description="test task 1"),
+        dict(description="test task 2"),
+    ]
+
+    def execute(self):
+        self.client.feedkeys(":TaskWikiMod")
+        sleep(1)
+        self.client.type('<Enter>')
+        sleep(1)
+        self.client.feedkeys("+work")
+        self.client.type('<Enter>')
+        sleep(1)
+
+        # Now also modify the second task
+        self.client.type('j')
+        self.command(
+            "TaskWikiRedo",
+            regex="Modified 1 task.$",
+            lines=1
+        )
+
+        for task in self.tasks:
+            task.refresh()
+
+        assert self.tasks[0]['tags'] == set(["work"])
+        assert self.tasks[1]['tags'] == set(["work"])
 
 
 class TestModVisibleAction(IntegrationTest):
@@ -985,6 +1237,53 @@ class TestDoneActionRange(IntegrationTest):
         self.client.feedkeys(":TaskWikiDone")
         self.client.type('<Enter>')
         sleep(1)
+
+        for task in self.tasks:
+            task.refresh()
+
+        now = local_zone.localize(datetime.now())
+
+        assert self.tasks[0]['status'] == "completed"
+        assert self.tasks[1]['status'] == "completed"
+
+        assert (now - self.tasks[0]['end']).total_seconds() < 5
+        assert (self.tasks[0]['end'] - now).total_seconds() < 5
+
+        assert (now - self.tasks[1]['end']).total_seconds() < 5
+        assert (self.tasks[1]['end'] - now).total_seconds() < 5
+
+
+class TestDoneActionRedo(IntegrationTest):
+
+    viminput = """
+    * [ ] test task 1  #{uuid}
+    * [ ] test task 2  #{uuid}
+    """
+
+    vimoutput = """
+    * [X] test task 1  #{uuid}
+    * [X] test task 2  #{uuid}
+    """
+
+    tasks = [
+        dict(description="test task 1"),
+        dict(description="test task 2"),
+    ]
+
+    def execute(self):
+        self.command(
+            "TaskWikiDone",
+            regex="Task \"test task 1\" completed.$",
+            lines=1
+        )
+
+        # Now also finish the second task
+        self.client.type('j')
+        self.command(
+            "TaskWikiRedo",
+            regex="Task \"test task 2\" completed.$",
+            lines=1
+        )
 
         for task in self.tasks:
             task.refresh()
