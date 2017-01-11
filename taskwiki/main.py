@@ -58,6 +58,10 @@ class WholeBuffer(object):
 
 
 class SelectedTasks(object):
+
+    # Keeps track of the last action performed on any selected tasks
+    last_action = {}
+
     @errors.pretty_exception_handler
     def __init__(self):
         # Reset cache, otherwise old line content may be used
@@ -83,6 +87,8 @@ class SelectedTasks(object):
             vimwikitask.task.add_annotation(annotation)
             print(u"Task \"{0}\" annotated.".format(vimwikitask['description']))
 
+        self.__class__.last_action = {'method': 'annotate', 'args': (annotation,)}
+
     @errors.pretty_exception_handler
     def done(self):
         # Multiple VimwikiTasks might refer to the same task, so make sure
@@ -97,6 +103,7 @@ class SelectedTasks(object):
             print(u"Task \"{0}\" completed.".format(vimwikitask['description']))
 
         cache.buffer.push()
+        self.__class__.last_action = {'method': 'done'}
 
     @errors.pretty_exception_handler
     def info(self):
@@ -115,6 +122,7 @@ class SelectedTasks(object):
 
             vim.command('! task {0} {1} edit'
                         .format(location_override, vimwikitask.uuid))
+        self.__class__.last_action = {'method': 'edit'}
 
     @errors.pretty_exception_handler
     def link(self):
@@ -122,6 +130,7 @@ class SelectedTasks(object):
         for vimwikitask in self.tasks:
             vimwikitask.task.add_annotation(u"wiki: {0}".format(path))
             print(u"Task \"{0}\" linked.".format(vimwikitask['description']))
+        self.__class__.last_action = {'method': 'link'}
 
     @errors.pretty_exception_handler
     def grid(self):
@@ -146,6 +155,7 @@ class SelectedTasks(object):
             print(u"Task \"{0}\" deleted.".format(vimwikitask['description']))
 
         cache.buffer.push()
+        self.__class__.last_action = {'method': 'delete'}
 
     @errors.pretty_exception_handler
     def modify(self, modstring):
@@ -175,6 +185,17 @@ class SelectedTasks(object):
             print(output[-1])
 
         cache.buffer.push()
+        self.__class__.last_action = {'method': 'modify', 'args': (modstring,)}
+
+    def redo(self):
+        """
+        Performs the last modification applied to any selected tasks once again.
+        """
+
+        if self.__class__.last_action:
+            method = getattr(self, self.__class__.last_action['method'])
+            method(*self.__class__.last_action.get('args', tuple()))
+
 
     @errors.pretty_exception_handler
     def start(self):
@@ -190,6 +211,7 @@ class SelectedTasks(object):
             print(u"Task \"{0}\" started.".format(vimwikitask['description']))
 
         cache.buffer.push()
+        self.__class__.last_action = {'method': 'start'}
 
     @errors.pretty_exception_handler
     def stop(self):
@@ -205,6 +227,7 @@ class SelectedTasks(object):
             print(u"Task \"{0}\" stopped.".format(vimwikitask['description']))
 
         cache.buffer.push()
+        self.__class__.last_action = {'method': 'stop'}
 
     @errors.pretty_exception_handler
     def sort(self, sortstring):
