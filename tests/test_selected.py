@@ -355,6 +355,31 @@ class TestInfoActionTriggeredByEnter(IntegrationTest):
         assert re.search(data2, output, re.MULTILINE)
 
 
+class TestInfoActionNotTriggeredByEnterOnLink(IntegrationTest):
+
+    viminput = """
+    * [ ] [[link task]] 1  #{uuid}
+    * [ ] test task 2  #{uuid}
+    """
+
+    tasks = [
+        dict(description="[[link task]] 1"),
+        dict(description="test task 2"),
+    ]
+
+    def execute(self):
+        self.client.type('1gg')
+        self.client.type('10l')
+        self.client.feedkeys("\\<CR>")
+        sleep(0.5)
+
+        # Make sure we have been sent to a new buffer
+        output = '\n'.join(self.read_buffer())
+
+        assert not self.py("print(vim.current.buffer)", silent=False).startswith("<buffer info")
+        assert not output
+
+
 class TestInfoActionMoved(IntegrationTest):
 
     viminput = """

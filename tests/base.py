@@ -68,6 +68,7 @@ class IntegrationTest(object):
     def configure_global_varialbes(self):
         self.command('let g:taskwiki_data_location="{0}"'.format(self.dir))
         self.command('let g:taskwiki_taskrc_location="{0}"'.format(self.taskrc_path))
+        self.command("let g:vimwiki_list = [{'syntax': 'mediawiki', 'ext': '.txt','path': '%s'}]" % self.dir)
 
     def setup(self):
         self.generate_data()
@@ -171,7 +172,7 @@ class IntegrationTest(object):
     # Helper function that fills in {uuid} placeholders with correct UUIDs
     def fill_uuid(self, line):
         # Tasks in testing can have only alphanumerical descriptions
-        match = re.match(u'\\s*\\* \\[.\\] (?P<desc>[äéôa-zA-Z0-9 ]*)(?<!\\s)', line,
+        match = re.match(u'\\s*\\* \\[.\\] (?P<desc>[äéôa-zA-Z0-9 \[\]]*)(?<!\\s)', line,
                 flags=re.UNICODE)
 
         if not match:
