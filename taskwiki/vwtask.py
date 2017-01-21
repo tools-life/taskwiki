@@ -335,10 +335,14 @@ class VimwikiTask(object):
             return None
 
         for i in reversed(range(0, self['line_number'])):
-            # The from_line constructor returns None if line doesn't match a task
-            line = self.cache.line[(VimwikiTask, i)]
-            if line and len(line.group('space')) < len(self['indent']):
-                return self.cache.vwtask[i]
+            # Stop looking if there is less indentation
+            if not self.cache.buffer[i].startswith(self['indent']):
+                # The from_line constructor returns None if line doesn't match a task
+                line = self.cache.line[(VimwikiTask, i)]
+                if line:
+                    return self.cache.vwtask[i]
+                else:
+                    return None
 
     def apply_defaults(self):
         from taskwiki import viewport
