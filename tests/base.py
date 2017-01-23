@@ -61,7 +61,7 @@ class IntegrationTest(object):
         except RuntimeError:
             if retry > 0:
                 sleep(2)
-                self.start_client(client, retry=retry-1)
+                self.start_client(retry=retry-1)
             else:
                 raise
 
