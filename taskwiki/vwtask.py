@@ -121,7 +121,6 @@ class VimwikiTask(object):
                 self.task['start'] = None
                 self.task['end'] = None
                 self.task['wait'] = None
-                self.task['recur'] = None
 
             # To get local time aware timestamp, we need to convert to
             # from local datetime to UTC time, since that is what
@@ -268,7 +267,7 @@ class VimwikiTask(object):
                 self.cache.task[self.uuid] = self.__unsaved_task
                 self.__unsaved_task = None
 
-            # If we saved the task, we need to update. Hooks may have chaned data.
+            # If we saved the task, we need to update. Hooks may have changed data.
             self.update_from_task()
 
     def get_completed_mark(self):
