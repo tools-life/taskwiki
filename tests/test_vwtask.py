@@ -456,6 +456,29 @@ class TestChildTaskCreation(IntegrationTest):
         assert parent['depends'] == set([child])
 
 
+class TestChildTaskCreationLimit(IntegrationTest):
+
+    viminput = """
+    * [ ] This is not a parent task
+    * This is the parent entry
+      * [ ] This is not a child task
+    """
+
+    vimoutput = """
+    * [ ] This is not a parent task  #{uuid}
+    * This is the parent entry
+      * [ ] This is not a child task  #{uuid}
+    """
+
+    def execute(self):
+        self.command("w", regex="written$", lines=1)
+
+        parent = self.tw.tasks.filter(description="This is not a parent task")[0]
+        child = self.tw.tasks.filter(description="This is not a child task")[0]
+
+        assert parent['depends'] == set()
+
+
 class TestChildTaskModification(IntegrationTest):
 
     viminput = """
