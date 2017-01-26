@@ -148,11 +148,12 @@ class IntegrationTest(object):
             elif not any([scriptfile in line for line in scriptnames]):
                 return False
 
-        # Assert only note about Bram being maintainer is in messages
+        # Assert only note about Bram or Mike being maintainer is in messages
         bramline = u'Messages maintainer: Bram Moolenaar <Bram@vim.org>'
+        mikeline = u'Messages maintainer: Mike Williams <mrw@eandem.co.uk>'
         if not soft:
-            assert self.client.command('messages') == bramline
-        elif not self.client.command('messages') == bramline:
+            assert self.client.command('messages') in (bramline, mikeline)
+        elif self.client.command('messages') not in (bramline, mikeline):
             return False
 
         # Assert that TW and cache objects exist
