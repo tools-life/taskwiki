@@ -232,3 +232,22 @@ Taskwarrior community. Come hang out at #taskwarrior on Freenode.
 Code and issue tracker is hosted at: https://github.com/tbabej/taskwiki
 
 Feel free to submit pull requests and/or file issues for bugs and suggestions.
+
+#### Tests
+
+To run the included tests you will require
+
+* [test.py](http://pytest.org)
+* [gvim](http://vim.org)
+* [vimrunner-python](https://github.com/andri-ch/vimrunner-python) (with the included default_vimrc)
+
+Note also, that the tests depend on language specific messages. So you might
+need to install and enable either the `en_US` or `en_GB` locale. For example:
+
+    LANG=en_US python -m pytest
+
+Please save any changes in your own gvim instances before starting the tests,
+because they will be terminated after each finished test!
+
+Finally you might want to have a look at [the travis configuration](.travis.yml)
+and consider using a virtual machine or [Xvfb](https://www.x.org/releases/X11R7.6/doc/man/man1/Xvfb.1.xhtml).
