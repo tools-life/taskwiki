@@ -1350,3 +1350,34 @@ class TestSortManually(IntegrationTest):
         self.client.feedkeys(":TaskWikiSort description-")
         self.client.type("<Enter>")
         sleep(0.5)
+
+class TestSelectAfterBufferSwitch(IntegrationTest):
+
+    viminput = """
+    * [ ] test task  #{uuid}
+    """
+
+    vimoutput = """
+    * [ ] test task  #{uuid}
+    """
+
+    tasks = [
+        dict(description="test task"),
+    ]
+
+    def execute(self):
+        self.command('w', silent=False)
+        sleep(0.5)
+        self.command('split testwiki2.txt', silent=False)
+        sleep(0.5)
+        self.command('set filetype=vimwiki', silent=False)
+        sleep(0.5)
+        self.command('q!')
+        sleep(0.5)
+        self.client.normal('1gg')
+        sleep(0.5)
+        self.command("TaskWikiMod project:Home", regex="Modified 1 task.")
+        sleep(0.5)
+
+        self.tasks[0].refresh()
+        assert self.tasks[0]['project'] == "Home"
