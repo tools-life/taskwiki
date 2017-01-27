@@ -324,7 +324,7 @@ class TestSimpleTaskWithDueDateCreation(IntegrationTest):
     """
 
     vimoutput = """
-    * [ ] This is a test task (2015-03-03 00:00)  #{uuid}
+    * [ ] This is a test task (2015-03-03)  #{uuid}
     """
 
     def execute(self):

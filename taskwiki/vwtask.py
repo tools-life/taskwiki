@@ -316,6 +316,11 @@ class VimwikiTask(object):
             self._buffer_data = buffer_data
 
     def __str__(self):
+        due_str = ' ' + (
+                self['due'].strftime(regexp.DATETIME_FORMAT) if self['due'].time() else
+                self['due'].strftime(regexp.DATE_FORMAT)
+                ) if self['due'] else ''
+
         return ''.join([
             self['indent'],
             '* [',
@@ -324,7 +329,7 @@ class VimwikiTask(object):
             (self['description'].encode('utf-8') if six.PY2 else self['description'])
                 if self['description'] else 'TEXT MISSING?',
             ' ' + '!' * self.priority_from_tw_format if self['priority'] else '',
-            ' ' + self['due'].strftime(regexp.DATETIME_FORMAT) if self['due'] else '',
+            due_str,
             '  #' + self.uuid.vim_representation(self.cache) if self.uuid else '',
         ])
 
