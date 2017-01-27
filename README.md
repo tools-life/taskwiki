@@ -140,7 +140,7 @@ Taskwiki can provide additional information reports on a task list (selected,
 or part of a viewport) and on individial tasks as well. These reports are shown
 in dynamic temporary splits.
 
-    * [ ] Tidy up the house !! (2015-08-23 00:00)
+    * [ ] Tidy up the house !! (2015-08-23)
 
 For example, hitting [CR] on the above task runs :TaskWikiInfo and displays:
 
@@ -186,7 +186,7 @@ They work in a similiar fashion.
 Taskwiki provides commands for the all the traditional operation on tasks, such as
 starting, stopping, completing, deletion, annotation, generic modification, etc.
 
-    * [ ] Tidy up the house !! (2015-08-23 00:00)
+    * [ ] Tidy up the house !! (2015-08-23)
 
 Say we want to postpone this task to tomorrow. This can be achieved by hitting
 [Leader]tm (:TaskWikiMod) a prompt will show up, where we enter our desired
@@ -196,7 +196,7 @@ modification:
 
 Task is instantly updated:
 
-    * [ ] Tidy up the house !! (2015-08-24 00:00)
+    * [ ] Tidy up the house !! (2015-08-24)
 
 Task modification commands can be performed on a task currently below the
 cursor, or on a visually selected group of tasks.

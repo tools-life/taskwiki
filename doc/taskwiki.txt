@@ -112,7 +112,7 @@ Taskwiki can provide additional information reports on a task list (selected,
 or part of a viewport) and on individial tasks as well. These reports are shown
 in dynamic temporary splits.
 
-~   * [ ] Tidy up the house !! (2015-08-23 00:00)
+~   * [ ] Tidy up the house !! (2015-08-23)
 
 For example, hitting [CR] on the above task runs :TaskWikiInfo and displays:
 
