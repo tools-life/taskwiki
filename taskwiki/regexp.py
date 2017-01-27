@@ -19,7 +19,7 @@ TEXT = r'(?P<text>.+?)'
 COMPLETION_MARK = r'(?P<completed>.)'
 PRIORITY = r'(?P<priority>!{1,3})'
 
-GENERIC_TASK = re.compile(u''.join([
+GENERIC_TASK = re.compile(''.join([
     '^',
     EMPTY_SPACE,
     BRACKET_OPENING,
@@ -36,7 +36,7 @@ GENERIC_TASK = re.compile(u''.join([
     ')?',  # UUID is not there for new tasks
     SPACE_UNNAMED,
     '$'    # Enforce match on the whole line
-]), re.UNICODE)
+]))
 
 DATETIME_FORMAT = "(%Y-%m-%d %H:%M)"
 DATE_FORMAT = "(%Y-%m-%d)"
