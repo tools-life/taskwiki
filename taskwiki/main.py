@@ -269,10 +269,12 @@ class Mappings(object):
         # No link detected, check for viewport or a task
         if cache.vwtask[row] is not None:
             SelectedTasks().info()
+            return
         else:
             port = viewport.ViewPort.from_line(row, cache)
             if port is not None:
                 Meta().inspect_viewport()
+            return
 
         # No link detected, not a viewport or a task, so delegate to
         # VimwikiFollowLink for link creation
