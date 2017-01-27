@@ -40,7 +40,7 @@ augroup taskwiki
       execute "autocmd BufWinEnter *.".expand('%:e')." silent! loadview"
       execute "autocmd BufWinEnter *.".expand('%:e')." silent! doautocmd SessionLoadPost *.".expand('%:e')
     endif
-    execute "autocmd BufEnter *.".expand('%:e')." :" . g:taskwiki_py . "cache.reset()"
+    execute "autocmd BufEnter *.".expand('%:e')." :" . g:taskwiki_py . "cache().reset()"
 augroup END
 
 " Global update commands

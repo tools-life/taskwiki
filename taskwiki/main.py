@@ -17,11 +17,10 @@ from taskwiki import sort
 from taskwiki import util
 from taskwiki import viewport
 
-# Initialize the cache
-cache = cache_module.TaskCache(vim.current.buffer.number)
 
-# Check the necessary dependencies first
-util.enforce_dependencies(cache)
+cache = cache_module.CacheRegistry()
+cache.load_current()
+
 
 class WholeBuffer(object):
     @staticmethod
@@ -31,14 +30,15 @@ class WholeBuffer(object):
         Updates all the incomplete tasks in the vimwiki file if the info from TW is different.
         """
 
-        cache.reset()
-        cache.load_tasks()
-        cache.load_vwtasks(buffer_has_authority=False)
-        cache.load_viewports()
-        cache.update_vwtasks_from_tasks()
-        cache.update_vwtasks_in_buffer()
-        cache.evaluate_viewports()
-        cache.buffer.push()
+        c = cache()
+        c.reset()
+        c.load_tasks()
+        c.load_vwtasks(buffer_has_authority=False)
+        c.load_viewports()
+        c.update_vwtasks_from_tasks()
+        c.update_vwtasks_in_buffer()
+        c.evaluate_viewports()
+        c.buffer.push()
 
     @staticmethod
     @errors.pretty_exception_handler
@@ -47,14 +47,15 @@ class WholeBuffer(object):
         Updates all tasks that differ from their TaskWarrior representation.
         """
 
-        cache.reset()
-        cache.load_tasks()
-        cache.load_vwtasks()
-        cache.load_viewports()
-        cache.save_tasks()
-        cache.update_vwtasks_in_buffer()
-        cache.evaluate_viewports()
-        cache.buffer.push()
+        c = cache()
+        c.reset()
+        c.load_tasks()
+        c.load_vwtasks()
+        c.load_viewports()
+        c.save_tasks()
+        c.update_vwtasks_in_buffer()
+        c.evaluate_viewports()
+        c.buffer.push()
 
 
 class SelectedTasks(object):
@@ -64,14 +65,14 @@ class SelectedTasks(object):
 
     @errors.pretty_exception_handler
     def __init__(self):
-        # Reset cache, otherwise old line content may be used
-        cache.reset()
+        # Reset cache(), otherwise old line content may be used
+        cache().reset()
 
         # Find relevant TaskWarrior instance
-        self.tw = cache.get_relevant_tw()
+        self.tw = cache().get_relevant_tw()
 
         # Load the current tasks
-        range_tasks = [cache.vwtask[i] for i in util.selected_line_numbers()]
+        range_tasks = [cache().vwtask[i] for i in util.selected_line_numbers()]
         self.tasks = [t for t in range_tasks if t is not None]
 
         if not self.tasks:
@@ -106,7 +107,7 @@ class SelectedTasks(object):
             vimwikitask.update_in_buffer()
             print(u"Task \"{0}\" completed.".format(vimwikitask['description']))
 
-        cache.buffer.push()
+        cache().buffer.push()
         self.save_action('done')
 
     @errors.pretty_exception_handler
@@ -138,7 +139,7 @@ class SelectedTasks(object):
 
     @errors.pretty_exception_handler
     def grid(self):
-        port = viewport.ViewPort.find_closest(cache)
+        port = viewport.ViewPort.find_closest(cache())
         if port:
             vim.command("TW rc:{0} rc.context: {1}"
                         .format(port.tw.taskrc_location, port.raw_filter))
@@ -155,10 +156,10 @@ class SelectedTasks(object):
 
         # Remove the lines in the buffer
         for vimwikitask in self.tasks:
-            cache.remove_line(vimwikitask['line_number'])
+            cache().remove_line(vimwikitask['line_number'])
             print(u"Task \"{0}\" deleted.".format(vimwikitask['description']))
 
-        cache.buffer.push()
+        cache().buffer.push()
         self.save_action('delete')
 
     @errors.pretty_exception_handler
@@ -180,15 +181,15 @@ class SelectedTasks(object):
         output = util.tw_execute_safely(self.tw, uuids + ['mod'] + args)
 
         # Update the touched tasks in buffer, if needed
-        cache.load_tasks()
-        cache.update_vwtasks_from_tasks()
-        cache.update_vwtasks_in_buffer()
+        cache().load_tasks()
+        cache().update_vwtasks_from_tasks()
+        cache().update_vwtasks_in_buffer()
 
         # Output the feedback from TW
         if output:
             print(output[-1])
 
-        cache.buffer.push()
+        cache().buffer.push()
         self.save_action('modify', modstring)
 
     def redo(self):
@@ -214,7 +215,7 @@ class SelectedTasks(object):
             vimwikitask.update_in_buffer()
             print(u"Task \"{0}\" started.".format(vimwikitask['description']))
 
-        cache.buffer.push()
+        cache().buffer.push()
         self.save_action('start')
 
     @errors.pretty_exception_handler
@@ -230,13 +231,13 @@ class SelectedTasks(object):
             vimwikitask.update_in_buffer()
             print(u"Task \"{0}\" stopped.".format(vimwikitask['description']))
 
-        cache.buffer.push()
+        cache().buffer.push()
         self.save_action('stop')
 
     @errors.pretty_exception_handler
     def sort(self, sortstring):
-        sort.TaskSorter(cache, self.tasks, sortstring).execute()
-        cache.buffer.push()
+        sort.TaskSorter(cache(), self.tasks, sortstring).execute()
+        cache().buffer.push()
 
 
 class Mappings(object):
@@ -244,14 +245,14 @@ class Mappings(object):
     @staticmethod
     @errors.pretty_exception_handler
     def task_info_or_vimwiki_follow_link():
-        # Reset the cache to use up-to-date buffer content
-        cache.reset()
+        # Reset the cache() to use up-to-date buffer content
+        cache().reset()
 
         # If the line under cursor contains task, toggle info
         # otherwise do the default VimwikiFollowLink
         row = util.get_current_line_number()
         column = util.get_current_column_number()
-        line = cache.buffer[row]
+        line = cache().buffer[row]
 
         # Detect if the cursor stands on a vimwiki link,
         # if so, trigger it
@@ -267,11 +268,11 @@ class Mappings(object):
             return
 
         # No link detected, check for viewport or a task
-        if cache.vwtask[row] is not None:
+        if cache().vwtask[row] is not None:
             SelectedTasks().info()
             return
         else:
-            port = viewport.ViewPort.from_line(row, cache)
+            port = viewport.ViewPort.from_line(row, cache())
             if port is not None:
                 Meta().inspect_viewport()
             return
@@ -287,12 +288,12 @@ class Meta(object):
     @errors.pretty_exception_handler
     def inspect_viewport(self):
         position = util.get_current_line_number()
-        port = viewport.ViewPort.from_line(position, cache)
+        port = viewport.ViewPort.from_line(position, cache())
 
         if port.meta.get('visible') is False:
-            cache.reset()
-            cache.load_vwtasks()
-            cache.load_tasks()
+            cache().reset()
+            cache().load_vwtasks()
+            cache().load_tasks()
 
         template = (
             "ViewPort inspection:\n"
@@ -365,7 +366,7 @@ class Meta(object):
         # If tw support is enabled, try to find definition in TW first
         if util.get_var('taskwiki_source_tw_colors'):
 
-            tw = cache.get_relevant_tw()
+            tw = cache().get_relevant_tw()
 
             for syntax in tw_color_counterparts.keys():
                 tw_def = tw.config.get(tw_color_counterparts[syntax])
@@ -396,7 +397,7 @@ class Split(object):
     def __init__(self, args):
         self.args = self._process_args(args)
         self.split_name = self.split_name or self.command
-        self.tw = cache.get_relevant_tw()
+        self.tw = cache().get_relevant_tw()
 
     def _process_args(self, args):
         tw_args = util.tw_modstring_to_args(args)
@@ -411,7 +412,7 @@ class Split(object):
         # If no argument has been passed, locate the closest viewport,
         # if any exists, and use its filter.
         else:
-            port = viewport.ViewPort.find_closest(cache)
+            port = viewport.ViewPort.find_closest(cache())
             return port.taskfilter if port is not None else []
 
     @property
@@ -454,7 +455,7 @@ class CallbackSplitMixin(object):
         vim.command('au BufLeave <buffer> :bwipe')
 
         # SREMatch objecets cannot be pickled
-        cache.line.clear()
+        cache().line.clear()
 
         # We can't save the current instance in vim variable
         # so save the pickled version
@@ -566,7 +567,7 @@ class SplitCalendar(Split):
         self.args = []
         self.tw_extra_args = util.tw_modstring_to_args(args)
         self.split_name = self.split_name or self.command
-        self.tw = cache.get_relevant_tw()
+        self.tw = cache().get_relevant_tw()
 
 
 class SplitGhistoryMonthly(Split):

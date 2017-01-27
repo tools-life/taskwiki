@@ -157,9 +157,9 @@ class IntegrationTest(object):
             return False
 
         # Assert that TW and cache objects exist
-        cache_class = self.py('print(cache.__class__.__name__)', direct=True)
+        cache_class = self.py('print(cache().__class__.__name__)', direct=True)
         tw_class = self.py(
-            'print(cache.warriors["default"].__class__.__name__)', direct=True)
+            'print(cache().warriors["default"].__class__.__name__)', direct=True)
 
         if not soft:
             assert tw_class == 'TaskWarrior', "not {}".format(tw_class)
