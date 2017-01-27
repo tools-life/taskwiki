@@ -48,6 +48,50 @@ class BufferProxy(object):
             self.data.insert(position, data)
 
 
+class CacheRegistry(object):
+    """
+    Provide a registry for TaskCache instances related to vim buffers.
+    """
+
+    def __init__(self):
+        # Store caches indexed by buffer number
+        self.caches = {}
+
+        # Remember current cache
+        self.current_buffer = None
+
+    def __call__(self, buffer_number = None):
+        """
+        Get cache for given buffer_number or the one which was accessed most recently.
+        """
+
+        if buffer_number is None:
+            buffer_number = self.current_buffer
+        else:
+            self.current_buffer = buffer_number
+
+        try:
+            # Use existing cache if it was loaded before
+            cache = self.caches[buffer_number]
+        except KeyError:
+            cache = self._load_cache(buffer_number)
+
+        return cache
+
+    def _load_cache(self, buffer_number):
+        # Initialize the cache
+        cache = TaskCache(buffer_number)
+        self.caches[buffer_number] = cache
+
+        # Check the necessary dependencies
+        util.enforce_dependencies(cache)
+
+        return cache
+
+    def load_current(self):
+        return self(vim.current.buffer.number)
+
+
 class TaskCache(object):
     """
     A cache that holds all the tasks in the given buffer and prevents
