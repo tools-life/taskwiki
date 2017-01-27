@@ -50,11 +50,11 @@ class BufferProxy(object):
 
 class TaskCache(object):
     """
-    A cache that holds all the tasks in the given file and prevents
+    A cache that holds all the tasks in the given buffer and prevents
     multiple redundant taskwarrior calls.
     """
 
-    def __init__(self):
+    def __init__(self, buffer_number):
         # Determine defaults
         default_rc = util.get_var('taskwiki_taskrc_location') or '~/.taskrc'
         default_data = util.get_var('taskwiki_data_location') or None
@@ -66,7 +66,7 @@ class TaskCache(object):
             default_data = util.decode_bytes(default_data)
             extra_warrior_defs = util.decode_bytes(extra_warrior_defs)
 
-        self.buffer = BufferProxy(vim.current.buffer.number)
+        self.buffer = BufferProxy(buffer_number)
         self.task = store.TaskStore(self)
         self.vwtask = store.VwtaskStore(self)
         self.viewport = store.ViewportStore(self)

@@ -18,7 +18,7 @@ from taskwiki import util
 from taskwiki import viewport
 
 # Initialize the cache
-cache = cache_module.TaskCache()
+cache = cache_module.TaskCache(vim.current.buffer.number)
 
 # Check the necessary dependencies first
 util.enforce_dependencies(cache)
