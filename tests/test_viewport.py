@@ -386,13 +386,13 @@ class TestViewportsSortedGeneration(IntegrationTest):
 
     vimoutput = """
     === Work tasks | +work ===
-    * [ ] main task 1 (2015-08-07 00:00)  #{uuid}
-        * [ ] sub task 1a (2015-08-01 00:00)  #{uuid}
+    * [ ] main task 1 (2015-08-07)  #{uuid}
+        * [ ] sub task 1a (2015-08-01)  #{uuid}
             * [ ] sub task 1aa  #{uuid}
         * [ ] sub task 1b  #{uuid}
-    * [ ] main task 2 (2015-08-08 00:00)  #{uuid}
-    * [ ] main task 3 (2015-08-09 00:00)  #{uuid}
-        * [ ] sub task 3a (2015-08-03 00:00)  #{uuid}
+    * [ ] main task 2 (2015-08-08)  #{uuid}
+    * [ ] main task 3 (2015-08-09)  #{uuid}
+        * [ ] sub task 3a (2015-08-03)  #{uuid}
         * [ ] sub task 3b  #{uuid}
     * [ ] main task 4  #{uuid}
     """
@@ -427,12 +427,12 @@ class TestViewportsSortedGenerationReverse(TestViewportsSortedGeneration):
 
     vimoutput = """
     === Work tasks | +work ===
-    * [ ] main task 3 (2015-08-09 00:00)  #{uuid}
-        * [ ] sub task 3a (2015-08-03 00:00)  #{uuid}
+    * [ ] main task 3 (2015-08-09)  #{uuid}
+        * [ ] sub task 3a (2015-08-03)  #{uuid}
         * [ ] sub task 3b  #{uuid}
-    * [ ] main task 2 (2015-08-08 00:00)  #{uuid}
-    * [ ] main task 1 (2015-08-07 00:00)  #{uuid}
-        * [ ] sub task 1a (2015-08-01 00:00)  #{uuid}
+    * [ ] main task 2 (2015-08-08)  #{uuid}
+    * [ ] main task 1 (2015-08-07)  #{uuid}
+        * [ ] sub task 1a (2015-08-01)  #{uuid}
             * [ ] sub task 1aa  #{uuid}
         * [ ] sub task 1b  #{uuid}
     * [ ] main task 4  #{uuid}
@@ -454,12 +454,12 @@ class TestViewportsMultilevelSortedGeneration(IntegrationTest):
 
     vimoutput = """
     === Work tasks | project:Work or project:Home ===
-    * [ ] home task 1 (2015-08-01 00:00)  #{uuid}
-    * [ ] home task 2 (2015-08-02 00:00)  #{uuid}
-    * [ ] home task 3 (2015-08-03 00:00)  #{uuid}
-    * [ ] work task 1 (2015-08-01 00:00)  #{uuid}
-    * [ ] work task 2 (2015-08-02 00:00)  #{uuid}
-    * [ ] work task 3 (2015-08-03 00:00)  #{uuid}
+    * [ ] home task 1 (2015-08-01)  #{uuid}
+    * [ ] home task 2 (2015-08-02)  #{uuid}
+    * [ ] home task 3 (2015-08-03)  #{uuid}
+    * [ ] work task 1 (2015-08-01)  #{uuid}
+    * [ ] work task 2 (2015-08-02)  #{uuid}
+    * [ ] work task 3 (2015-08-03)  #{uuid}
     """
 
     tasks = [
@@ -487,10 +487,10 @@ class TestViewportsSpecificSorting(IntegrationTest):
 
     vimoutput = """
     === Work tasks | project:Work or project:Home $T ===
-    * [ ] home task 1 (2015-08-01 00:00)  #{uuid}
-    * [ ] home task 2 (2015-08-02 00:00)  #{uuid}
-    * [ ] work task 1 (2015-08-01 00:00)  #{uuid}
-    * [ ] work task 2 (2015-08-02 00:00)  #{uuid}
+    * [ ] home task 1 (2015-08-01)  #{uuid}
+    * [ ] home task 2 (2015-08-02)  #{uuid}
+    * [ ] work task 1 (2015-08-01)  #{uuid}
+    * [ ] work task 2 (2015-08-02)  #{uuid}
     """
 
     tasks = [
@@ -518,16 +518,16 @@ class TestViewportsSpecificSortingCombined(TestViewportsSpecificSorting):
 
     vimoutput = """
     === Work tasks | project:Work or project:Home $T ===
-    * [ ] home task 1 (2015-08-01 00:00)  #{uuid}
-    * [ ] home task 2 (2015-08-02 00:00)  #{uuid}
-    * [ ] work task 1 (2015-08-01 00:00)  #{uuid}
-    * [ ] work task 2 (2015-08-02 00:00)  #{uuid}
+    * [ ] home task 1 (2015-08-01)  #{uuid}
+    * [ ] home task 2 (2015-08-02)  #{uuid}
+    * [ ] work task 1 (2015-08-01)  #{uuid}
+    * [ ] work task 2 (2015-08-02)  #{uuid}
 
     === Work tasks | project:Work or project:Home ===
-    * [ ] home task 1 (2015-08-01 00:00)  #{uuid}
-    * [ ] work task 1 (2015-08-01 00:00)  #{uuid}
-    * [ ] home task 2 (2015-08-02 00:00)  #{uuid}
-    * [ ] work task 2 (2015-08-02 00:00)  #{uuid}
+    * [ ] home task 1 (2015-08-01)  #{uuid}
+    * [ ] work task 1 (2015-08-01)  #{uuid}
+    * [ ] home task 2 (2015-08-02)  #{uuid}
+    * [ ] work task 2 (2015-08-02)  #{uuid}
     """
 
 
