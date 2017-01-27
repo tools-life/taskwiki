@@ -599,3 +599,28 @@ class TestViewportsPreserveHierarchyUponCompletion(IntegrationTest):
         sleep(0.5)
         self.command("w", regex="written$", lines=1)
         sleep(0.5)
+
+
+class TestViewportRecurrentInstanceTaskGeneration(IntegrationTest):
+
+    viminput = """
+    === Work tasks | +TODAY ===
+    """
+
+    vimoutput = """
+    === Work tasks | +TODAY ===
+    * [ ] daily task  #{uuid}
+    """
+
+    tasks = [
+        dict(description="daily task", recur="daily", due="today"),
+    ]
+
+    def execute(self):
+        self.command("w", regex="written$", lines=1)
+
+        # Assert that the task did not change after another successful
+        # subsequent saving. See pull request #125.
+        self.command("w", regex="written$", lines=1)
+        task = self.tw.tasks.pending()[0]
+        assert task['description'] == "daily task"

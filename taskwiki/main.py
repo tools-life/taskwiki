@@ -266,13 +266,18 @@ class Mappings(object):
             vim.command('VimwikiFollowLink')
             return
 
-        # No link detected, so it's our stuff now
+        # No link detected, check for viewport or a task
         if cache.vwtask[row] is not None:
             SelectedTasks().info()
         else:
             port = viewport.ViewPort.from_line(row, cache)
             if port is not None:
                 Meta().inspect_viewport()
+
+        # No link detected, not a viewport or a task, so delegate to
+        # VimwikiFollowLink for link creation
+        vim.command('VimwikiFollowLink')
+
 
 
 class Meta(object):
