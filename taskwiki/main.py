@@ -275,7 +275,7 @@ class Mappings(object):
             port = viewport.ViewPort.from_line(row, cache())
             if port is not None:
                 Meta().inspect_viewport()
-            return
+                return
 
         # No link detected, not a viewport or a task, so delegate to
         # VimwikiFollowLink for link creation
