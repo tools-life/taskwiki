@@ -4,16 +4,16 @@ if version < 704
   finish
 endif
 
-" Check presence of the python support
-if has("nvim")
+" Python version detection.
+elseif has("nvim")
+  let g:taskwiki_py='py3 '
+  let g:taskwiki_pyfile='py3file '
+elseif has("python3") && ! exists("g:taskwiki_use_python2")
   let g:taskwiki_py='py3 '
   let g:taskwiki_pyfile='py3file '
 elseif has("python")
   let g:taskwiki_py='py '
   let g:taskwiki_pyfile='pyfile '
-elseif has("python3")
-  let g:taskwiki_py='py3 '
-  let g:taskwiki_pyfile='py3file '
 else
   echoerr "Taskwiki requires Vim compiled with the Python support."
   finish

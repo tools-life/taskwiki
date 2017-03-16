@@ -674,6 +674,13 @@ constructs.
 *taskwiki_disable*
     Setting any non-empty value for this variable will disable taskwiki.
 
+*taskwiki_use_python2*
+    Setting this variable to non-empty value (such as "yes") will force
+    taskwiki to use python2.
+
+    Example:
+    let g:taskwiki_use_python2="yes"
+
 
 =============================================================================
 9. TROUBLESHOOTING					   *taskwiki-trouble*
