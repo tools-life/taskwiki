@@ -5,7 +5,7 @@ if version < 704
 endif
 
 " Python version detection.
-elseif has("nvim")
+if has("nvim")
   let g:taskwiki_py='py3 '
   let g:taskwiki_pyfile='py3file '
 elseif has("python3") && ! exists("g:taskwiki_use_python2")
