@@ -125,8 +125,13 @@ class SelectedTasks(object):
             location_override = ('rc.data.location=' + alternate_data_location
                                  if alternate_data_location else '')
 
-            vim.command('! task {0} {1} edit'
-                        .format(location_override, vimwikitask.uuid))
+            # Build command template, it is different for neovim and vim
+            command = (
+                ('terminal' if util.NEOVIM else '!') +
+                ' task {0} {1} edit'
+            )
+            vim.command(command.format(location_override, vimwikitask.uuid))
+
         self.save_action('edit')
 
     @errors.pretty_exception_handler
