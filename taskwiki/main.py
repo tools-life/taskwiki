@@ -16,6 +16,7 @@ from taskwiki import cache as cache_module
 from taskwiki import sort
 from taskwiki import util
 from taskwiki import viewport
+from taskwiki import decorators
 
 
 cache = cache_module.CacheRegistry()
@@ -25,6 +26,7 @@ cache.load_current()
 class WholeBuffer(object):
     @staticmethod
     @errors.pretty_exception_handler
+    @decorators.hold_vim_cursor
     def update_from_tw():
         """
         Updates all the incomplete tasks in the vimwiki file if the info from TW is different.
@@ -42,6 +44,7 @@ class WholeBuffer(object):
 
     @staticmethod
     @errors.pretty_exception_handler
+    @decorators.hold_vim_cursor
     def update_to_tw():
         """
         Updates all tasks that differ from their TaskWarrior representation.
