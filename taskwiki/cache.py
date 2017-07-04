@@ -117,6 +117,7 @@ class TaskCache(object):
         self.line = store.LineStore(self)
         self.warriors = store.WarriorStore(default_rc, default_data, extra_warrior_defs)
         self.buffer_has_authority = True
+        self.syntax = None
 
     @property
     def vimwikitask_dependency_order(self):
@@ -139,6 +140,15 @@ class TaskCache(object):
         self.vwtask.store = dict()
         self.viewport.store = dict()
         self.line.store = dict()
+        self.syntax = None
+
+    def load_syntax(self):
+        # Fetch syntax information from taskwiki config
+        syntax = util.get_var('taskwiki_syntax')
+        if syntax is in ["default", "markdown", "restructuredtext"]:
+            self.syntax = syntax
+        else:
+            self.syntax = "default"
 
     def load_vwtasks(self, buffer_has_authority=True):
         # Set the authority flag, which determines which data (Buffer or TW)
