@@ -34,6 +34,7 @@ class WholeBuffer(object):
 
         c = cache()
         c.reset()
+        c.load_syntax()
         c.load_tasks()
         c.load_vwtasks(buffer_has_authority=False)
         c.load_viewports()
@@ -52,6 +53,7 @@ class WholeBuffer(object):
 
         c = cache()
         c.reset()
+        c.load_syntax()
         c.load_tasks()
         c.load_vwtasks()
         c.load_viewports()
