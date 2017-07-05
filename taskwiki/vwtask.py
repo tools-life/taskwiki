@@ -369,5 +369,6 @@ class VimwikiTask(object):
             # If line matches any header that is not a viewport,
             # break the search too
             line = self.cache.buffer[i]
-            if re.match(regexp.GENERIC_HEADER, line):
+            syntax = self.cache.syntax
+            if re.match(regexp.GENERIC_HEADER[syntax], line):
                 break
