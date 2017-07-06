@@ -7,6 +7,7 @@ from taskwiki import regexp
 from taskwiki import store
 from taskwiki import short
 from taskwiki import util
+from taskwiki import errors
 
 
 class BufferProxy(object):
@@ -103,13 +104,23 @@ class TaskCache(object):
         default_rc = util.get_var('taskwiki_taskrc_location') or '~/.taskrc'
         default_data = util.get_var('taskwiki_data_location') or None
         extra_warrior_defs = util.get_var('taskwiki_extra_warriors', {})
+        syntax = util.get_var('taskwiki_syntax') or 'default'
 
         # Handle bytes (vim returnes bytes for Python3)
         if six.PY3:
             default_rc = util.decode_bytes(default_rc)
             default_data = util.decode_bytes(default_data)
             extra_warrior_defs = util.decode_bytes(extra_warrior_defs)
+            syntax = util.decode_bytes(syntax)
 
+        # Validate syntax choice and set it
+        if syntax in ["default", "markdown", "restructuredtext"]:
+            self.syntax = syntax
+        else:
+            raise errors.TaskWikiException("Syntax '{}' unknown."
+                                           .format(syntax))
+
+        # Initialize all the subcomponents
         self.buffer = BufferProxy(buffer_number)
         self.task = store.TaskStore(self)
         self.vwtask = store.VwtaskStore(self)
@@ -117,7 +128,6 @@ class TaskCache(object):
         self.line = store.LineStore(self)
         self.warriors = store.WarriorStore(default_rc, default_data, extra_warrior_defs)
         self.buffer_has_authority = True
-        self.syntax = None
 
     @property
     def vimwikitask_dependency_order(self):
@@ -141,14 +151,6 @@ class TaskCache(object):
         self.viewport.store = dict()
         self.line.store = dict()
         self.syntax = None
-
-    def load_syntax(self):
-        # Fetch syntax information from taskwiki config
-        syntax = util.get_var('taskwiki_syntax')
-        if syntax in ["default", "markdown", "restructuredtext"]:
-            self.syntax = syntax
-        else:
-            self.syntax = "default"
 
     def load_vwtasks(self, buffer_has_authority=True):
         # Set the authority flag, which determines which data (Buffer or TW)
