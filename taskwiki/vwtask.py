@@ -370,5 +370,5 @@ class VimwikiTask(object):
             # break the search too
             line = self.cache.buffer[i]
             syntax = self.cache.syntax
-            if re.match(regexp.GENERIC_HEADER[syntax], line):
+            if re.match(regexp.HEADER[syntax], line):
                 break
