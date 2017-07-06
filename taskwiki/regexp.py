@@ -109,7 +109,7 @@ VIEWPORT = {
         '\r?\n'                     # Portable newlines
         r"""([-=~:^"#*._+`'])\1+""" # Any non-alphanumeric characters
         '$'                         # End of line
-    ).
+    )
 }
 
 HEADER = {
@@ -139,7 +139,7 @@ HEADER = {
         '\r?\n'                     # Portable newlines
         r"""([-=~:^"#*._+`'])\1+""" # Any non-alphanumeric characters
         '$'                         # End of line
-    ).
+    )
 }
 
 
