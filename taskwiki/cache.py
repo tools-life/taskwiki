@@ -150,7 +150,6 @@ class TaskCache(object):
         self.vwtask.store = dict()
         self.viewport.store = dict()
         self.line.store = dict()
-        self.syntax = None
 
     def load_vwtasks(self, buffer_has_authority=True):
         # Set the authority flag, which determines which data (Buffer or TW)
