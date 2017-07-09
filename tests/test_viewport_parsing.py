@@ -1,16 +1,10 @@
 # -*- coding: utf-8 -*-
 from datetime import datetime
-from tests.base import MockVim, MockCache
+from tests.base import MockVim, MockCache, header_expand
 import sys
 
 from taskwiki.constants import DEFAULT_SORT_ORDER, DEFAULT_VIEWPORT_VIRTUAL_TAGS
 
-syntax_header = {
-    'default': "== Test | %s ==",
-    'markdown': "## Test | %s",
-    'restructuredtext': "Test | %s\n================",
-}
-syntax_choice = 'default'
 
 class TestParsingVimwikiTask(object):
     def setup(self):
@@ -21,9 +15,6 @@ class TestParsingVimwikiTask(object):
         self.cache.warriors.update({'T': 'extra'})
         self.mockvim.vars.update({'taskwiki_sort_orders': dict(T='extra')})
 
-        # Set syntax
-        self.cache.syntax = syntax_choice
-
         sys.modules['vim'] = self.mockvim
         from taskwiki.viewport import ViewPort
         self.ViewPort = ViewPort
@@ -32,18 +23,31 @@ class TestParsingVimwikiTask(object):
         self.mockvim.reset()
         self.cache.reset()
 
-    def test_simple(self):
-        self.cache.buffer[0] = syntax_header[syntax_choice] % "project:Home"
+    def process_viewport(self, viewport, test_syntax):
+        """
+        Expands the example viewport to a syntax of a markup and pass on to
+        MockVim to be processed.
+        The result of the processed viewport is collected.
+        """
+        markup, format_header = test_syntax
+        formatted_viewport = header_expand(viewport, format_header)
+        self.cache.markup_syntax = markup
+        self.cache.buffer[0] = formatted_viewport
         port = self.ViewPort.from_line(0, self.cache)
+        return port
+
+    def test_simple(self, test_syntax):
+        example_viewport = "HEADER(Test | project:Home)"
+        port = self.process_viewport(example_viewport, test_syntax)
 
         assert port.taskfilter == list(DEFAULT_VIEWPORT_VIRTUAL_TAGS) + ["(", "project:Home", ")"]
         assert port.name == "Test"
         assert port.sort == DEFAULT_SORT_ORDER
         assert port.tw == 'default'
 
-    def test_defaults(self):
-        self.cache.buffer[0] = syntax_header[syntax_choice] % "project:Home | +home"
-        port = self.ViewPort.from_line(0, self.cache)
+    def test_defaults(self, test_syntax):
+        example_viewport = "HEADER(Test | project:Home | +home)"
+        port = self.process_viewport(example_viewport, test_syntax)
 
         assert port.taskfilter == list(DEFAULT_VIEWPORT_VIRTUAL_TAGS) + ["(", "project:Home", ")"]
         assert port.name == "Test"
@@ -51,45 +55,45 @@ class TestParsingVimwikiTask(object):
         assert port.sort == DEFAULT_SORT_ORDER
         assert port.tw == 'default'
 
-    def test_different_tw(self):
-        self.cache.buffer[0] = syntax_header[syntax_choice] % "project:Home #T"
-        port = self.ViewPort.from_line(0, self.cache)
+    def test_different_tw(self, test_syntax):
+        example_viewport = "HEADER(Test | project:Home #T)"
+        port = self.process_viewport(example_viewport, test_syntax)
 
         assert port.taskfilter == list(DEFAULT_VIEWPORT_VIRTUAL_TAGS) + ["(", "project:Home", ")"]
         assert port.name == "Test"
         assert port.sort == DEFAULT_SORT_ORDER
         assert port.tw == 'extra'
 
-    def test_different_sort(self):
-        self.cache.buffer[0] = syntax_header[syntax_choice] % "project:Home $T"
-        port = self.ViewPort.from_line(0, self.cache)
+    def test_different_sort(self, test_syntax):
+        example_viewport = "HEADER(Test | project:Home $T)"
+        port = self.process_viewport(example_viewport, test_syntax)
 
         assert port.taskfilter == list(DEFAULT_VIEWPORT_VIRTUAL_TAGS) + ["(", "project:Home", ")"]
         assert port.name == "Test"
         assert port.sort == 'extra'
         assert port.tw == 'default'
 
-    def test_different_sort_with_complex_filter(self):
-        self.cache.buffer[0] = syntax_header[syntax_choice] % "project:Home or project:Work $T"
-        port = self.ViewPort.from_line(0, self.cache)
+    def test_different_sort_with_complex_filter(self, test_syntax):
+        example_viewport = "HEADER(Test | project:Home or project:Work $T)"
+        port = self.process_viewport(example_viewport, test_syntax)
 
         assert port.taskfilter == list(DEFAULT_VIEWPORT_VIRTUAL_TAGS) + ["(", "project:Home", "or", "project:Work", ")"]
         assert port.name == "Test"
         assert port.sort == 'extra'
         assert port.tw == 'default'
 
-    def test_different_sort_tw(self):
-        self.cache.buffer[0] = syntax_header[syntax_choice] % "project:Home #T $T"
-        port = self.ViewPort.from_line(0, self.cache)
+    def test_different_sort_tw(self, test_syntax):
+        example_viewport = "HEADER(Test | project:Home #T $T)"
+        port = self.process_viewport(example_viewport, test_syntax)
 
         assert port.taskfilter == list(DEFAULT_VIEWPORT_VIRTUAL_TAGS) + ["(", "project:Home", ")"]
         assert port.name == "Test"
         assert port.sort == 'extra'
         assert port.tw == 'extra'
 
-    def test_defaults_different_tw(self):
-        self.cache.buffer[0] = syntax_header[syntax_choice] % "project:Home | +home #T"
-        port = self.ViewPort.from_line(0, self.cache)
+    def test_defaults_different_tw(self, test_syntax):
+        example_viewport = "HEADER(Test | project:Home | +home #T)"
+        port = self.process_viewport(example_viewport, test_syntax)
 
         assert port.taskfilter == list(DEFAULT_VIEWPORT_VIRTUAL_TAGS) + ["(", "project:Home", ")"]
         assert port.name == "Test"
@@ -97,9 +101,9 @@ class TestParsingVimwikiTask(object):
         assert port.sort == DEFAULT_SORT_ORDER
         assert port.tw == 'extra'
 
-    def test_defaults_different_tw_sort(self):
-        self.cache.buffer[0] = syntax_header[syntax_choice] % "project:Home | +home #T $T"
-        port = self.ViewPort.from_line(0, self.cache)
+    def test_defaults_different_tw_sort(self, test_syntax):
+        example_viewport = "HEADER(Test | project:Home | +home #T $T)"
+        port = self.process_viewport(example_viewport, test_syntax)
 
         assert port.taskfilter == list(DEFAULT_VIEWPORT_VIRTUAL_TAGS) + ["(", "project:Home", ")"]
         assert port.name == "Test"
@@ -107,9 +111,9 @@ class TestParsingVimwikiTask(object):
         assert port.sort == 'extra'
         assert port.tw == 'extra'
 
-    def test_override_default_virtual_tags_neutral(self):
-        self.cache.buffer[0] = syntax_header[syntax_choice] % "project:Home !?DELETED"
-        port = self.ViewPort.from_line(0, self.cache)
+    def test_override_default_virtual_tags_neutral(self, test_syntax):
+        example_viewport = "HEADER(Test | project:Home !?DELETED)"
+        port = self.process_viewport(example_viewport, test_syntax)
 
         assert port.taskfilter == ["-PARENT", "(", "project:Home", ")"]
         assert port.name == "Test"
@@ -117,9 +121,9 @@ class TestParsingVimwikiTask(object):
         assert port.sort == DEFAULT_SORT_ORDER
         assert port.tw == 'default'
 
-    def test_override_default_virtual_tags_positive(self):
-        self.cache.buffer[0] = syntax_header[syntax_choice] % "project:Home !+DELETED"
-        port = self.ViewPort.from_line(0, self.cache)
+    def test_override_default_virtual_tags_positive(self, test_syntax):
+        example_viewport = "HEADER(Test | project:Home !+DELETED)"
+        port = self.process_viewport(example_viewport, test_syntax)
 
         assert port.taskfilter == ["+DELETED", "-PARENT", "(", "project:Home", ")"]
         assert port.name == "Test"
@@ -127,9 +131,9 @@ class TestParsingVimwikiTask(object):
         assert port.sort == DEFAULT_SORT_ORDER
         assert port.tw == 'default'
 
-    def test_override_default_virtual_tags_negative(self):
-        self.cache.buffer[0] = syntax_header[syntax_choice] % "project:Home !-DELETED"
-        port = self.ViewPort.from_line(0, self.cache)
+    def test_override_default_virtual_tags_negative(self, test_syntax):
+        example_viewport = "HEADER(Test | project:Home !-DELETED)"
+        port = self.process_viewport(example_viewport, test_syntax)
 
         assert port.taskfilter == ["-DELETED", "-PARENT", "(", "project:Home", ")"]
         assert port.name == "Test"
@@ -137,9 +141,9 @@ class TestParsingVimwikiTask(object):
         assert port.sort == DEFAULT_SORT_ORDER
         assert port.tw == 'default'
 
-    def test_override_default_virtual_tags_positive_without_forcing(self):
-        self.cache.buffer[0] = syntax_header[syntax_choice] % "project:Home +DELETED"
-        port = self.ViewPort.from_line(0, self.cache)
+    def test_override_default_virtual_tags_positive_without_forcing(self, test_syntax):
+        example_viewport = "HEADER(Test | project:Home +DELETED)"
+        port = self.process_viewport(example_viewport, test_syntax)
 
         assert port.taskfilter == ["-PARENT", "(", "project:Home", "+DELETED", ")"]
         assert port.name == "Test"
