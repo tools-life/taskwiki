@@ -35,7 +35,7 @@ Python library for Taskwarrior.
 
 #### Install taskwiki
 
-Using pathogen (or similiar vim plugin manager), the taskwiki install is
+Using pathogen (or similar vim plugin manager), the taskwiki install is
 as simple as:
 
     git clone https://github.com/tbabej/taskwiki ~/.vim/bundle/taskwiki
@@ -68,8 +68,8 @@ enables grid view.
 ### How it works
 
 Taskwiki enhances simple vimwiki task lists by storing the task metadata in
-Taskwarrior. Taskwarrior uses plaintext data files as a backend, and taskwiki
-uses Taskwarrior as a backend. This allows taskwiki to leverage its powerful
+Taskwarrior. Taskwarrior uses plaintext data files as a back end, and taskwiki
+uses Taskwarrior as a back end. This allows taskwiki to leverage its powerful
 features, such as filtering, recurrent tasks, user defined attributes or hooks.
 
 ### Features
@@ -137,7 +137,7 @@ Viewports can be inspected by hitting [CR] with cursor above them.
 #### Report splits
 
 Taskwiki can provide additional information reports on a task list (selected,
-or part of a viewport) and on individial tasks as well. These reports are shown
+or part of a viewport) and on individual tasks as well. These reports are shown
 in dynamic temporary splits.
 
     * [ ] Tidy up the house !! (2015-08-23)
@@ -178,7 +178,7 @@ Running the :TaskWikiSummary can produce side-split like this:
 
 There are many more reports (burndown, calendar, history, projects, stats,
 summary, tags,..), but for the sake of brevity, they will not be described here.
-They work in a similiar fashion.
+They work in a similar fashion.
 
 
 #### Task modification commands

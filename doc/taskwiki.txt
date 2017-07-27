@@ -38,8 +38,8 @@ CONTENTS						   *taskwiki-contents*
 1. INTRODUCTION							   *taskwiki*
 
 Taskwiki enhances simple vimwiki task lists by storing the task metadata in
-Taskwarrior. Taskwarrior uses plaintext data files as a backend, and taskwiki
-uses Taskwarrior as a backend. This allows taskwiki to leverage its powerful
+Taskwarrior. Taskwarrior uses plaintext data files as a back end, and taskwiki
+uses Taskwarrior as a back end. This allows taskwiki to leverage its powerful
 features, such as filtering, recurrent tasks, user defined attributes or hooks.
 
 ----------------------------------------------------------------------------
@@ -69,9 +69,9 @@ of any child tasks being marked as dependencies of the parent tasks.
 ----------------------------------------------------------------------------
 Viewports
 
-Viewport is a header with a task query (filter) embedded, generating
-the corresponding task list. These tasks can be modified and changes
-will be synced back to task data.  A simple viewport can look as follows:
+A viewport is a header with a task query (filter) embedded, generating the
+corresponding task list. These tasks can be modified and changes will be
+synced back to task data.  A simple viewport can look as follows:
 
 ~   == Home tasks | project:Home ==
 
@@ -109,7 +109,7 @@ Viewports can be inspected by hitting [CR] with cursor above them.
 Report splits
 
 Taskwiki can provide additional information reports on a task list (selected,
-or part of a viewport) and on individial tasks as well. These reports are shown
+or part of a viewport) and on individual tasks as well. These reports are shown
 in dynamic temporary splits.
 
 ~   * [ ] Tidy up the house !! (2015-08-23)
@@ -150,7 +150,7 @@ Running the :TaskWikiSummary can produce side-split like this:
 
 There are many more reports (burndown, calendar, history, projects, stats,
 summary, tags,..), but for the sake of brevity, they will not be described here.
-They work in a similiar fashion.
+They work in a similar fashion.
 
 
 =============================================================================
@@ -178,7 +178,7 @@ sufficient, and raise error if not.
 =============================================================================
 3. INSTALLING						   *taskwiki-install*
 
-Using pathogen (or similiar vim plugin manager), the taskwiki install is
+Using pathogen (or similar vim plugin manager), the taskwiki install is
 as simple as:
 
     git clone https://github.com/tbabej/taskwiki ~/.vim/bundle/taskwiki
@@ -245,7 +245,7 @@ Currently, following task metadata is represented in the buffer:
 ~   * [X] Install Taskwiki !!   | task with medium priority
 
 * Dependency. If any task is indented right below other, the indented
-  task will be marked as dependency for the non-idented one.
+  task will be marked as dependency for the non-indented one.
 
 ~   * [ ] Make sandwich  | will be marked as dependant on tasks below
 ~     * [ ] Buy bread
@@ -262,8 +262,8 @@ add due dates, directly from your taskwiki files.
 5.1.2 Assigning other metadata
 
 Tasks can be assigned any other metadata that Taskwarrior supports, such
-as tags, or custom user-defined attrbites. To simplify parsing, however,
-not all of them are represented in the buffer. However, they can be used
+as tags or custom user-defined attributes. To simplify parsing, however,
+not all of them are represented in the buffer. Nevertheless they can be used
 for filtering, etc.
 
 To add arbitrary metadata to the tasks, see |taskwiki-commands|, especially
@@ -287,8 +287,8 @@ Taskwarrior:
 
 Viewport is a enhanced header, which generates a list of tasks under itself.
 
-As noted in |taskwiki| introduction, each viewport has an embedded filter
-query. When the taskwiki file is loaded or saved, viewport will re-generate
+As noted in the |taskwiki| introduction, each viewport has an embedded filter
+query. When the taskwiki file is loaded or saved, the viewport will re-generate
 the list of tasks matching the embedded filter.
 
 ~   == Home tasks | project:Home ==
@@ -297,7 +297,7 @@ the list of tasks matching the embedded filter.
 ~     * [ ] Wash the dishes
 ~     * [ ] Declare war on the cobwebs
 
-Filter strings can be arbitrary taskwarrior filter strings, usage of
+Filter strings can be arbitrary taskwarrior filter strings; usage of
 attribute modifiers or virtual tags is allowed:
 
 ~   == Overdue tasks | +OVERDUE ==
@@ -316,13 +316,13 @@ filter).
 ~   == Home tasks | project:Home ==
 ~   * [ ] This task I just wrote here will have project home
 
-However, for more complex filters, defaults cannot be directly derived, for
-example, when attribute modifiers are being used:
+However, for more complex filters, defaults cannot be derived directly. For
+example when attribute modifiers are being used:
 
 ~   == Any documentation tasks | project.has:docs ==
 ~   * [ ] Should I have project taskwiki.docs or tasklib.docs?
 
-In such case, no default attrbites are derived. Nevertheless, user can
+In such a case, no default attributes are derived. Nevertheless the user can
 specify the defaults directly:
 
 ~   == Any documentation tasks | project.has:docs | project:taskwiki.docs ==
@@ -330,31 +330,31 @@ specify the defaults directly:
 -------------
 5.2.3 Sorting
 
-Tasks within the viewport are sorted in the form of the dependency tree -
-all the tasks that are blocking a particular task are displayed below that
-task, indented.
+Tasks within the viewport are sorted in the form of a dependency tree - all
+the tasks that are blocking a particular task are displayed below that task,
+indented.
 
-The ordering of the tasks within the same level (and parent) is determined
-by the default sort order, see |taskwiki_sort_order|. Sort order can be
-customized per-viewport, in which case you need to set a alternative
-sort order in the |taskwiki_sort_orders| option, along with its identifier.
+The ordering of the tasks within the same level (and parent) is determined by
+the default sort order, see |taskwiki_sort_order|. Sort order can be
+customized per-viewport, in which case you need to set an alternative sort
+order in the |taskwiki_sort_orders| option, along with its identifier.
 
     Example:
     let g:taskwiki_sort_orders={"T": "project+,due-"}
 
-Using this sort order is as simple, use $[IDENTIFIER] at the end of viewport
-definition:
+Using this sort order is as simple as using $[IDENTIFIER] at the end of
+viewport definition:
 
 ~   == Differently ordered home tasks | project:Home $T ==
 
 --------------------
 5.2.4 Default filter
 
-By default, every viewport filter is extended with -DELETED and -PARENT
+By default, every viewport filter is extended with the -DELETED and -PARENT
 virtual tags.
 
 This is quite sensible, however, there might be a case where you wish to
-override this behaviour. To do so, use following virtual tag syntax, which
+override this behaviour. To do so, use the following virtual tag syntax, which
 forces the virtual tag, no matter its presence in the defaults.
 
     !?TAG - any presence in the defaults will not be considered
@@ -370,8 +370,8 @@ Examples:
 -----------------------
 5.2.5 Meta virtual tags
 
-Currently, there is one meta virtual tag, -VISIBLE. This tag can be used
-to filter out tasks that are displayed elsewhere in the same taskwiki file.
+Currently there is one meta virtual tag: -VISIBLE. This tag can be used to
+filter out tasks that are displayed elsewhere in the same taskwiki file.
 
 Example:
 
@@ -382,8 +382,8 @@ Example:
 ----------------
 5.2.6 Inspection
 
-You can inspect a give viewport (see what filter and defaults are being
-used, as well as other pieces of information) by using the |:TaskWikiInspect|
+You can inspect a given viewport (see what filter and defaults are being used,
+as well as other pieces of information) by using the |:TaskWikiInspect|
 command (or hitting <CR>) over a viewport definition.
 
 -------------------------------------------
@@ -572,7 +572,7 @@ selected tasks.
 ----------------------------------------------------------------------------
 Interactive commands.
 
-Following commands work similiarly as the previous group, they can operate
+Following commands work similarly as the previous group, they can operate
 on selected tasks. The modification is done via choosing the particular
 modification (project, tag) in a split window.
 
