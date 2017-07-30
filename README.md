@@ -246,8 +246,5 @@ need to install and enable either the `en_US` or `en_GB` locale. For example:
 
     LANG=en_US python -m pytest
 
-Please save any changes in your own gvim instances before starting the tests,
-because they will be terminated after each finished test!
-
 Finally you might want to have a look at [the travis configuration](.travis.yml)
 and consider using a virtual machine or [Xvfb](https://www.x.org/releases/X11R7.6/doc/man/man1/Xvfb.1.xhtml).
