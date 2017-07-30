@@ -10,7 +10,8 @@ import vimrunner
 from tasklib import TaskWarrior, Task
 from time import sleep
 
-server = vimrunner.Server()
+server_name = "TaskWikiTestServer"
+server = vimrunner.Server(name=server_name)
 
 
 class IntegrationTest(object):
@@ -90,7 +91,7 @@ class IntegrationTest(object):
 
     def teardown(self):
         self.client.quit()
-        subprocess.call(['killall', 'gvim'])
+        subprocess.call(['pkill', '-f', 'gvim.*--servername ' + server_name])
         sleep(0.5)  # Killing takes some time
         self.tasks = self.__class__.tasks  # Reset the task list
 
