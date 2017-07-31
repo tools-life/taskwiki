@@ -10,6 +10,7 @@ from taskwiki import util
 from taskwiki import sort
 from taskwiki import short
 from taskwiki import constants
+from taskwiki import preset
 
 
 class ViewPort(object):
@@ -41,12 +42,14 @@ class ViewPort(object):
 
         self.name = name
         self.line_number = line_number
-        self.taskfilter, self.meta = self.process_filterstring(filterstring)
+        self.taskfilter, self.meta = self.process_filterstring(filterstring, use_presets=True)
 
         if defaultstring:
             self.defaults = util.tw_modstring_to_kwargs(defaultstring)
         else:
-            self.defaults = util.tw_args_to_kwargs(self.taskfilter)
+            pure_filter, _ = self.process_filterstring(filterstring, use_presets=False)
+            self.defaults = util.tw_args_to_kwargs(pure_filter)
+
 
         self.tasks = set()
         self.sort = (
@@ -55,7 +58,7 @@ class ViewPort(object):
             constants.DEFAULT_SORT_ORDER
         )
 
-    def process_filterstring(self, filterstring):
+    def process_filterstring(self, filterstring, use_presets=True):
         """
         This method processes taskfilter in the form or filter string,
         parses it into list of filter args, processing any syntax sugar
@@ -73,6 +76,8 @@ class ViewPort(object):
 
         # Get the initial version of the taskfilter args
         taskfilter_args = list(constants.DEFAULT_VIEWPORT_VIRTUAL_TAGS)
+        if use_presets:
+            taskfilter_args += list(preset.PresetHeader.from_line(self.line_number, self.cache).taskfilter)
         taskfilter_args += "("
         taskfilter_args += util.tw_modstring_to_args(filterstring)
         taskfilter_args += ")"
