@@ -45,7 +45,13 @@ class VimwikiTask(object):
         if key in self.vim_data.keys():
             self.vim_data[key] = value
         else:
-            self.task[key] = value
+            # Tags require special handling, since we do not want to override,
+            # but rather append
+            if key == 'tags':
+                self.task[key] = self.task[key].union(value)
+            else:
+                self.task[key] = value
+
 
     @classmethod
     def find_closest(cls, cache):
