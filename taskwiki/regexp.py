@@ -60,12 +60,27 @@ GENERIC_VIEWPORT = re.compile(
     '[=]+'                       # Header ending
     )
 
+GENERIC_PRESET = re.compile(
+    '^'                           # Starts at the beginning of the line
+    '(?P<header_start>[=]+)'      # With a positive number of =
+    '([^=\|\[\{]*)'               # Heading caption, everything up to ||
+                                  # Cannot include '[', '=', '|, and '{'
+    '\|\|'                        # Delimiter
+    '(?P<filter>[^=\|]+?)'        # Filter preset
+    '('                           # Optional defaults
+      '\|\|'                      # Delimiter
+      '(?P<defaults>[^=\|]+?)'    # Default attrs preset
+    ')?'
+    '\s*'                         # Any whitespace
+    '[=]+'                        # Header ending
+    )
+
 GENERIC_HEADER = re.compile(
-    '^'        # Starts at the beginning of the line
-    '[=]+'     # With a positive number of =
-    '[^=]+'    # Character other than =
-    '[=]+'     # Positive number of =, closing the header
-    '\s*'      # Allow trailing whitespace
+    '^'                      # Starts at the beginning of the line
+    '(?P<header_start>[=]+)' # With a positive number of =
+    '[^=]+'                  # Character other than =
+    '[=]+'                   # Positive number of =, closing the header
+    '\s*'                    # Allow trailing whitespace
 )
 
 ANSI_ESCAPE_SEQ = re.compile(

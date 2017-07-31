@@ -149,6 +149,13 @@ class ViewportStore(LineNumberedKeyedStoreMixin, NoNoneStore):
         return viewport.ViewPort.from_line(line, self.cache)
 
 
+class PresetStore(LineNumberedKeyedStoreMixin, NoNoneStore):
+
+    def get_method(self, line):
+        import preset
+        return preset.PresetHeader.from_line(line, self.cache)
+
+
 class LineStore(NoNoneStore):
 
     def __delitem__(self, number):
