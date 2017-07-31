@@ -355,9 +355,17 @@ class VimwikiTask(object):
                     return None
 
     def apply_defaults(self):
-        from taskwiki import viewport
+        from taskwiki import viewport, preset
 
         for i in reversed(range(0, self['line_number'])):
+            header = preset.PresetHeader.from_line(i, self.cache)
+
+            if not header:
+                continue
+
+            # Use defaults from the preset header hierarchy
+            self.update(header.defaults)
+
             port = viewport.ViewPort.from_line(i, self.cache)
             if port:
                 # The task should have the same source as the viewport has
@@ -365,15 +373,20 @@ class VimwikiTask(object):
                 self.task.backend = port.tw
 
                 # Any defaults specified should be inherited
-                if port.defaults:
-                    for key in port.defaults.keys():
-                        self[key] = port.defaults[key]
+                self.update(port.defaults)
 
                 # If port was detected, break the search
-                break
 
-            # If line matches any header that is not a viewport,
-            # break the search too
-            line = self.cache.buffer[i]
-            if re.match(regexp.GENERIC_HEADER, line):
-                break
+            break
+
+    def update(self, defaults):
+        """
+        Apply all defaults from a dict
+
+        Similar to the dict.update method.
+        Does nothing if the argument is None.
+        """
+
+        if defaults:
+            for key in defaults.keys():
+                self[key] = defaults[key]
