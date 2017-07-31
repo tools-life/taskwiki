@@ -599,3 +599,26 @@ class TestViewportsPreserveHierarchyUponCompletion(IntegrationTest):
         sleep(0.5)
         self.command("w", regex="written$", lines=1)
         sleep(0.5)
+
+
+class TestViewportDefaultPreservesTags(IntegrationTest):
+
+    viminput = """
+    === Work tasks | +work ===
+    * [ ] hard task -- +hard
+    """
+
+    vimoutput = """
+    === Work tasks | +work ===
+    * [ ] hard task  #{uuid}
+    """
+
+    def execute(self):
+        self.command("w", regex="written$", lines=1)
+        sleep(0.5)
+
+        # Make sure both tags were preserved
+        task = self.tw.tasks.pending()[0]
+        assert task['description'] == 'hard task'
+        assert task['status'] == 'pending'
+        assert task['tags'] == set(['work', 'hard'])
