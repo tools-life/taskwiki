@@ -106,6 +106,33 @@ In such case, you can specify the defaults explicitly:
 Viewports can be inspected by hitting [CR] with cursor above them.
 
 ----------------------------------------------------------------------------
+Preset headers
+
+A preset header has a similar syntax to a viewport:
+
+~   == Home tasks || project:Home ==
+
+In contrast to viewports it does not generate a list of associated tasks.
+Instead it sets a filter for all viewports and default attributes for all new
+tasks in the corresponding section.
+
+Like with viewports for complex filters the default attributes can be given
+manually.
+
+~   == Home tasks || project:house or project:garden || project:house ==
+
+Multiple levels of preset headers are chained. So you can do this:
+
+~   == Taskwiki development || project:Taskwiki ==
+~   * Non-task notes
+~   === Bugs || +bugs ===
+~   * [ ] Bug #42
+~   === Features || +features ===
+~   * [ ] Some Feature
+
+Here both tasks are assigned the Taskwiki project, as well the respective tag.
+
+----------------------------------------------------------------------------
 Report splits
 
 Taskwiki can provide additional information reports on a task list (selected,
