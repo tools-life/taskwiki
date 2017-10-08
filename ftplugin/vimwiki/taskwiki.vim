@@ -25,7 +25,7 @@ if exists("g:taskwiki_disable")
 endif
 
 " Determine the plugin path
-let s:plugin_path = escape(expand('<sfile>:p:h:h'), '\')
+let s:plugin_path = escape(expand('<sfile>:p:h:h:h'), '\')
 
 " Execute the main body of taskwiki source
 execute g:taskwiki_pyfile . s:plugin_path . '/taskwiki/main.py'
