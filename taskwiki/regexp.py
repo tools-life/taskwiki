@@ -43,7 +43,7 @@ DATE_FORMAT = "(%Y-%m-%d)"
 
 GENERIC_VIEWPORT = re.compile(
     '^'                          # Starts at the begging of the line
-    '[=]+'                       # Heading begging
+    '(([=]+(?=(.*[=]+\s*$)))|([#]+ ))'                       # Heading begging
     '(?P<name>[^=\|\[\{]*)'      # Name of the viewport, all before the | sign
                                  # Cannot include '[', '=', '|, and '{'
     '\|'                         # Colon
@@ -57,7 +57,7 @@ GENERIC_VIEWPORT = re.compile(
     '\s*'                        # Any whitespace
     '(\$(?P<sort>[A-Z]))?'       # Optional sort indicator
     '\s*'                        # Any whitespace
-    '[=]+'                       # Header ending
+    '([=]+|)\s*$'                       # Header ending
     )
 
 GENERIC_HEADER = re.compile(
