@@ -346,7 +346,9 @@ class VimwikiTask(object):
 
         for i in reversed(range(0, self['line_number'])):
             # Stop looking if there is less indentation
-            if not self.cache.buffer[i].startswith(self['indent']):
+            indentation = len(self.cache.buffer[i]) - len(self.cache.buffer[i].lstrip())
+            indent = self['indent'].replace('\t', '    ')
+            if indentation < len(indent):
                 # The from_line constructor returns None if line doesn't match a task
                 line = self.cache.line[(VimwikiTask, i)]
                 if line:
