@@ -274,3 +274,10 @@ need to install and enable either the `en_US` or `en_GB` locale. For example:
 
 Finally you might want to have a look at [the travis configuration](.travis.yml)
 and consider using a virtual machine or [Xvfb](https://www.x.org/releases/X11R7.6/doc/man/man1/Xvfb.1.xhtml).
+
+#### Known issues
+
+Timezone has to be set [explicitly](https://github.com/tbabej/taskwiki/issues/110) using the environment variable `TZ`. For example, before launching vim:
+
+    export TZ="Europe/Prague"
+
