@@ -277,7 +277,7 @@ and consider using a virtual machine or [Xvfb](https://www.x.org/releases/X11R7.
 
 #### Known issues
 
-Timezone has to be set [explicitly](https://github.com/tbabej/taskwiki/issues/110) using the environment variable `TZ`. For example, before launching vim:
+When `tzlocal` library can't detect your local timezone, it has to be set [explicitly](https://github.com/tbabej/taskwiki/issues/110) using the environment variable `TZ`. For example, before launching vim:
 
     export TZ="Europe/Prague"
 
