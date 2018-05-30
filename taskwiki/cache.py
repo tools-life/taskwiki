@@ -21,7 +21,10 @@ class BufferProxy(object):
 
     def push(self):
         with util.current_line_preserved():
-            util.get_buffer(self.buffer_number)[:] = self.data
+            # Only set the buffer contents if the data is changed.
+            # Avoids extra undo events with empty diff.
+            if util.get_buffer(self.buffer_number)[:] != self.data:
+                util.get_buffer(self.buffer_number)[:] = self.data
 
     def __getitem__(self, index):
         try:
