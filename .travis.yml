@@ -11,7 +11,6 @@ env:
   - TASK_VERSION=v2.5.1
   - TASK_VERSION=2.6.0
 python:
-  - "2.7"
   - "3.5"
   - "3.6"
 before_install:
@@ -26,8 +25,6 @@ install:
   - pip install pytest pytest-cov coveralls vimrunner
   - pip install git+git://github.com/robgolding63/tasklib@develop
   # Install to both virtualenv and outside it, vim needs it too
-  - sudo pip install git+git://github.com/robgolding63/tasklib@develop
-  - sudo pip install pytest pytest-cov coveralls vimrunner
   - sudo pip3 install git+git://github.com/robgolding63/tasklib@develop
   - sudo pip3 install pytest pytest-cov coveralls vimrunner
   # Setup TaskWarrior
