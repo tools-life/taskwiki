@@ -146,7 +146,11 @@ class IntegrationTest(object):
         # Do a partial match for each line from scriptnames
         for scriptfile in expected_loaded_files:
             if not soft:
-                assert any([scriptfile in line for line in scriptnames])
+                if not any([scriptfile in line for line in scriptnames]):
+                    raise Exception(
+                        "Could not find scriptfile '{0}' in "
+                        "the list of loaded scripts: {1}"
+                        .format(scriptfile, scriptnames))
             elif not any([scriptfile in line for line in scriptnames]):
                 return False
 
