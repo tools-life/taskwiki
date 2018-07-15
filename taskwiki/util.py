@@ -428,3 +428,11 @@ def get_var(name, default=None, vars_obj=None):
         return default
     else:
         return decode_bytes(value)
+
+
+def is_midnight(dt):
+    """
+    Determines if given datetime object is set to midnight.
+    """
+
+    return dt.hour == 0 and dt.minute == 0 and dt.second == 0
