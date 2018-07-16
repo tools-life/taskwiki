@@ -9,7 +9,6 @@ env:
   - TASK_VERSION=v2.4.4
   - TASK_VERSION=v2.5.0
   - TASK_VERSION=v2.5.1
-  - TASK_VERSION=2.6.0
 python:
   - "3.5"
   - "3.6"
