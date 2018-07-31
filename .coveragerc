@@ -1,2 +1,6 @@
 [report]
 omit = */python2.7/*,*/test*,*/__init__.py
+[paths]
+source =
+    .
+    /root/.vim/bundle/taskwiki
