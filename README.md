@@ -266,7 +266,13 @@ Feel free to submit pull requests and/or file issues for bugs and suggestions.
 
 #### Tests
 
-To run the included tests you will require
+Taskwiki comes with preconfigured docker-based test setup. To run the tests,
+simply issue:
+
+    docker-compose build --build-arg TASK_VERSION=2.6.0 tests
+    docker-compose up
+
+To run the included tests directly you will require
 
 * [test.py](http://pytest.org)
 * [gvim](http://vim.org)
