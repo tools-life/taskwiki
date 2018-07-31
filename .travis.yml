@@ -21,6 +21,6 @@ install:
   - pushd $TRAVIS_BUILD_DIR
   - docker-compose build --build-arg TASK_VERSION=$TASK_VERSION tests
 script:
-  - docker-compose up
+  - sudo -E docker-compose up
 after_success:
   - coveralls
