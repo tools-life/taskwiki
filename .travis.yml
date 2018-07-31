@@ -1,4 +1,3 @@
-dist: trusty
 sudo: required
 language: python
 env:
@@ -17,47 +16,17 @@ before_install:
   - export DISPLAY=:99.0
   - sh -e /etc/init.d/xvfb start
 install:
-  # Install python3
-  - sudo apt-get update -qq
-  - sudo apt-get install python3 python3-pip -y
-  # Install testing tools
-  - pip install pytest pytest-cov coveralls vimrunner
-  - pip install git+git://github.com/robgolding63/tasklib@develop
-  # Install to both virtualenv and outside it, vim needs it too
-  - sudo pip3 install git+git://github.com/robgolding63/tasklib@develop
-  - sudo pip3 install pytest pytest-cov coveralls vimrunner
-  # Setup TaskWarrior
-  - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
-  - sudo add-apt-repository ppa:pi-rho/dev -y
-  - sudo apt-get update -qq
-  - sudo apt-get install -qq build-essential cmake uuid-dev g++-6
-  - sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-6 50
-  - git clone --recursive https://github.com/GothenburgBitFactory/taskwarrior.git task
-  - cd task
-  - git checkout $TASK_VERSION
-  - git clean -dfx
-  - git submodule init
-  - git submodule update
-  - cmake -DCMAKE_BUILD_TYPE=release .
-  - make -j2
-  - sudo make install
-  - task --version
-  # Setup Gvim
-  - sudo apt-get install -qq vim-gnome
-  - gvim --version
-  # Setup vimwiki
-  - mkdir -p ~/.vim/bundle
-  - pushd ~/.vim/bundle
-  - git clone https://github.com/vimwiki/vimwiki.git
-  - popd
-  - pushd ~/.vim/bundle/vimwiki/
-  - git checkout dev
-  - popd
-  # Setup taskwiki
-  - cp -r $TRAVIS_BUILD_DIR ~/.vim/bundle/taskwiki
-before_script:
-  - cd ~/.vim/bundle/taskwiki
+  # Install coverage dependencies
+  - pip install coverage coveralls
+  # Build the docker container
+  - pushd $TRAVIS_BUILD_DIR
+  - mkdir ~/taskwiki-coverage
+  - docker build --build-arg TASK_VERSION=$TASK_VERSION -t test_taskwiki .
 script:
-  - py.test -vv --cov .
+  - sudo docker run --security-opt label=type:container_runtime_t -v "$HOME/.Xauthority:/root/.Xauthority:rw" -v "$HOME/taskwiki-coverage:/root/taskwiki-coverage:rw" -v "$PWD:/root/.vim/bundle/taskwiki" --net host -e DISPLAY -it test_taskwiki
 after_success:
+  - ls ~/taskwiki-coverage
+  - mv ~/taskwiki-coverage/.coverage.* . || echo ok
+  - coverage combine
+  - coverage report
   - coveralls
