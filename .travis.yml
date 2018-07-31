@@ -25,4 +25,8 @@ install:
 script:
   - docker-compose up --exit-code-from tests
 after_success:
+  - ls /tmp/taskwiki-coverage
+  - mv /tmp/taskwiki-coverage/.coverage.* . || echo ok
+  - coverage combine
+  - coverage report
   - coveralls
