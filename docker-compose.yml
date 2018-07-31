@@ -10,3 +10,4 @@ services:
       - DISPLAY
     security_opt:
       - label=type:container_runtime_t
+    tty: true
