@@ -31,7 +31,7 @@ or using your [package manager](http://taskwarrior.org/download/#dist)
 * [tasklib](https://github.com/tbabej/tasklib/tree/develop) (the develop branch),
 Python library for Taskwarrior.
 
-        sudo pip3 install --upgrade git+git://github.com/tbabej/tasklib@develop
+        sudo pip3 install --upgrade -r requirements.txt
 
 #### Python2 support
 
