@@ -10,6 +10,8 @@ env:
   - TASK_VERSION=v2.5.1
 python:
   - "3.6"
+services:
+  - docker
 before_install:
   # Setup virtual framebuffer
   - export DISPLAY=:99.0
@@ -21,6 +23,6 @@ install:
   - pushd $TRAVIS_BUILD_DIR
   - docker-compose build --build-arg TASK_VERSION=$TASK_VERSION tests
 script:
-  - sudo -E docker-compose up
+  - docker-compose up
 after_success:
   - coveralls
