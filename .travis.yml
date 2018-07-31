@@ -21,7 +21,7 @@ install:
   # Build the docker container
   - pushd $TRAVIS_BUILD_DIR
   - mkdir ~/taskwiki-coverage
-  - docker build --build-arg TASK_VERSION=$TASK_VERSION -t test_taskwiki .
+  - docker-compose build --build-arg TASK_VERSION=$TASK_VERSION
 script:
   - make test
 after_success:
