@@ -9,7 +9,6 @@ env:
   - TASK_VERSION=v2.5.0
   - TASK_VERSION=v2.5.1
 python:
-  - "3.5"
   - "3.6"
 before_install:
   # Setup virtual framebuffer
