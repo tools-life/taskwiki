@@ -23,10 +23,6 @@ install:
   - mkdir ~/taskwiki-coverage
   - docker build --build-arg TASK_VERSION=$TASK_VERSION -t test_taskwiki .
 script:
-  - sudo docker run --security-opt label=type:container_runtime_t -v "$HOME/.Xauthority:/root/.Xauthority:rw" -v "$HOME/taskwiki-coverage:/root/taskwiki-coverage:rw" -v "$PWD:/root/.vim/bundle/taskwiki" --net host -e DISPLAY -it test_taskwiki
+  - make test
 after_success:
-  - ls ~/taskwiki-coverage
-  - mv ~/taskwiki-coverage/.coverage.* . || echo ok
-  - coverage combine
-  - coverage report
   - coveralls

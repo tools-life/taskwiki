@@ -27,10 +27,10 @@ RUN cd /root/.vim/bundle; git clone https://github.com/vimwiki/vimwiki.git
 RUN cd /root/.vim/bundle/vimwiki/; git checkout dev
 
 # Setup taskwiki
-RUN pip3 install nose pytest coveralls coverage vimrunner
+RUN pip3 install nose pytest pytest-cov coveralls coverage vimrunner
 ADD requirements.txt requirements.txt
 RUN pip3 install -r requirements.txt
 RUN mkdir /root/.vim/bundle/taskwiki
 WORKDIR /root/.vim/bundle/taskwiki
 
-CMD ["sh", "-c", "python3 -m pytest -vv tests/"]
+CMD ["sh", "-c", "python3 -m pytest -vv --cov tests/"]
