@@ -23,7 +23,7 @@ install:
   - pushd $TRAVIS_BUILD_DIR
   - docker-compose build --build-arg TASK_VERSION=$TASK_VERSION tests
 script:
-  - docker-compose up --exit-code-from tests
+  - make test
 after_success:
   - ls /tmp/taskwiki-coverage
   - mv /tmp/taskwiki-coverage/.coverage.* . || echo ok
