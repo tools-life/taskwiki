@@ -11,7 +11,7 @@ ENV LANGUAGE en_US.UTF-8
 # Setup taskwarrior
 RUN git clone --recursive https://github.com/GothenburgBitFactory/taskwarrior.git task
 WORKDIR task
-RUN git checkout $TASK_VERSION
+RUN echo $TASK_VERSION; git checkout $TASK_VERSION
 RUN git clean -dfx
 RUN git submodule init
 RUN git submodule update
