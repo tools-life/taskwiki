@@ -20,9 +20,8 @@ install:
   - pip install coverage coveralls
   # Build the docker container
   - pushd $TRAVIS_BUILD_DIR
-  - mkdir ~/taskwiki-coverage
   - docker-compose build --build-arg TASK_VERSION=$TASK_VERSION tests
 script:
-  - make test
+  - docker-compose up
 after_success:
   - coveralls
