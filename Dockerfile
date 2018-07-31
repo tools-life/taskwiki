@@ -1,4 +1,5 @@
 FROM fedora:27
+ARG TASK_VERSION
 
 RUN dnf update -y
 RUN dnf install procps-ng psmisc which vim curl git gvim gcc gcc-c++ cmake make gnutls-devel libuuid-devel mnemosyne -y
@@ -11,7 +12,7 @@ ENV LANGUAGE en_US.UTF-8
 # Setup taskwarrior
 RUN git clone --recursive https://github.com/GothenburgBitFactory/taskwarrior.git task
 WORKDIR task
-RUN echo $TASK_VERSION; git checkout $TASK_VERSION
+RUN echo ${TASK_VERSION}; git checkout ${TASK_VERSION}
 RUN git clean -dfx
 RUN git submodule init
 RUN git submodule update
