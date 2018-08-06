@@ -70,6 +70,7 @@ class IntegrationTest(object):
         self.command('let g:taskwiki_data_location="{0}"'.format(self.dir))
         self.command('let g:taskwiki_taskrc_location="{0}"'.format(self.taskrc_path))
         self.command("let g:vimwiki_list = [{'syntax': 'mediawiki', 'ext': '.txt','path': '%s'}]" % self.dir)
+        self.command('let g:taskwiki_measure_coverage="yes"')
 
     def setup(self):
         self.generate_data()
@@ -135,17 +136,22 @@ class IntegrationTest(object):
         scriptnames = self.client.command('scriptnames').splitlines()
         expected_loaded_files = [
             'vimwiki/autoload/vimwiki/base.vim',
+            'vimwiki/autoload/vimwiki/path.vim',
             'vimwiki/ftplugin/vimwiki.vim',
             'vimwiki/autoload/vimwiki/u.vim',
-            'vimwiki/syntax/omnipresent_syntax.vim',
+            'vimwiki/autoload/vimwiki/vars.vim',
             'vimwiki/syntax/vimwiki.vim',
-            'taskwiki/ftplugin/vimwiki.vim',
+            'taskwiki/ftplugin/vimwiki/taskwiki.vim'
         ]
 
         # Do a partial match for each line from scriptnames
         for scriptfile in expected_loaded_files:
             if not soft:
-                assert any([scriptfile in line for line in scriptnames])
+                if not any([scriptfile in line for line in scriptnames]):
+                    raise Exception(
+                        "Could not find scriptfile '{0}' in "
+                        "the list of loaded scripts: {1}"
+                        .format(scriptfile, scriptnames))
             elif not any([scriptfile in line for line in scriptnames]):
                 return False
 

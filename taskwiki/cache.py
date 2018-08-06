@@ -2,6 +2,7 @@ import vim  # pylint: disable=F0401
 import re
 import six
 
+from taskwiki import preset
 from taskwiki import viewport
 from taskwiki import regexp
 from taskwiki import store
@@ -20,7 +21,10 @@ class BufferProxy(object):
 
     def push(self):
         with util.current_line_preserved():
-            util.get_buffer(self.buffer_number)[:] = self.data
+            # Only set the buffer contents if the data is changed.
+            # Avoids extra undo events with empty diff.
+            if util.get_buffer(self.buffer_number)[:] != self.data:
+                util.get_buffer(self.buffer_number)[:] = self.data
 
     def __getitem__(self, index):
         try:
@@ -112,6 +116,7 @@ class TaskCache(object):
 
         self.buffer = BufferProxy(buffer_number)
         self.task = store.TaskStore(self)
+        self.presets = store.PresetStore(self)
         self.vwtask = store.VwtaskStore(self)
         self.viewport = store.ViewportStore(self)
         self.line = store.LineStore(self)
@@ -139,6 +144,23 @@ class TaskCache(object):
         self.vwtask.store = dict()
         self.viewport.store = dict()
         self.line.store = dict()
+
+    def load_presets(self):
+        stack = []
+
+        for i in range(len(self.buffer)):
+            header = preset.PresetHeader.from_line(i, self, stack[-1] if stack else None)
+
+            if header is None:
+                continue
+
+            # Save the preset header in the cache
+            self.presets[i] = header
+
+            while stack and stack[-1].level >= header.level:
+                stack.pop()
+
+            stack.append(header)
 
     def load_vwtasks(self, buffer_has_authority=True):
         # Set the authority flag, which determines which data (Buffer or TW)

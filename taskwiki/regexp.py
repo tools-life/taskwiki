@@ -42,8 +42,8 @@ DATETIME_FORMAT = "(%Y-%m-%d %H:%M)"
 DATE_FORMAT = "(%Y-%m-%d)"
 
 GENERIC_VIEWPORT = re.compile(
-    '^'                          # Starts at the begging of the line
-    '[=]+'                       # Heading begging
+    '^'                          # Starts at the beginning of the line
+    '[=]+'                       # Heading beginning
     '(?P<name>[^=\|\[\{]*)'      # Name of the viewport, all before the | sign
                                  # Cannot include '[', '=', '|, and '{'
     '\|'                         # Colon
@@ -60,12 +60,27 @@ GENERIC_VIEWPORT = re.compile(
     '[=]+'                       # Header ending
     )
 
+GENERIC_PRESET = re.compile(
+    '^'                           # Starts at the beginning of the line
+    '(?P<header_start>[=]+)'      # With a positive number of =
+    '([^=\|\[\{]*)'               # Heading caption, everything up to ||
+                                  # Cannot include '[', '=', '|, and '{'
+    '\|\|'                        # Delimiter
+    '(?P<filter>[^=\|]+?)'        # Filter preset
+    '('                           # Optional defaults
+      '\|\|'                      # Delimiter
+      '(?P<defaults>[^=\|]+?)'    # Default attrs preset
+    ')?'
+    '\s*'                         # Any whitespace
+    '[=]+'                        # Header ending
+    )
+
 GENERIC_HEADER = re.compile(
-    '^'        # Starts at the beginning of the line
-    '[=]+'     # With a positive number of =
-    '[^=]+'    # Character other than =
-    '[=]+'     # Positive number of =, closing the header
-    '\s*'      # Allow trailing whitespace
+    '^'                      # Starts at the beginning of the line
+    '(?P<header_start>[=]+)' # With a positive number of =
+    '[^=]+'                  # Character other than =
+    '[=]+'                   # Positive number of =, closing the header
+    '\s*'                    # Allow trailing whitespace
 )
 
 ANSI_ESCAPE_SEQ = re.compile(

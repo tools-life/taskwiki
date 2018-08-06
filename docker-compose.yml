@@ -1,0 +1,13 @@
+version: '3'
+services:
+  tests:
+    build: .
+    volumes:
+      - "$HOME/.Xauthority:/root/.Xauthority:rw"
+      - ".:/root/.vim/bundle/taskwiki:rw"
+    network_mode: "host"
+    environment:
+      - DISPLAY
+    security_opt:
+      - label=type:container_runtime_t
+    tty: true

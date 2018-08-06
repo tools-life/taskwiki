@@ -31,11 +31,16 @@ or using your [package manager](http://taskwarrior.org/download/#dist)
 * [tasklib](https://github.com/tbabej/tasklib/tree/develop) (the develop branch),
 Python library for Taskwarrior.
 
-        sudo pip install --upgrade git+git://github.com/tbabej/tasklib@develop
+        sudo pip3 install --upgrade -r requirements.txt
+
+#### Python2 support
+
+Taskwiki is slowly deprecating Python 2 support. Future features are no longer
+developed with Python2 compatibility in mind.
 
 #### Install taskwiki
 
-Using pathogen (or similiar vim plugin manager), the taskwiki install is
+Using pathogen (or similar vim plugin manager), the taskwiki install is
 as simple as:
 
     git clone https://github.com/tbabej/taskwiki ~/.vim/bundle/taskwiki
@@ -68,8 +73,8 @@ enables grid view.
 ### How it works
 
 Taskwiki enhances simple vimwiki task lists by storing the task metadata in
-Taskwarrior. Taskwarrior uses plaintext data files as a backend, and taskwiki
-uses Taskwarrior as a backend. This allows taskwiki to leverage its powerful
+Taskwarrior. Taskwarrior uses plaintext data files as a back end, and taskwiki
+uses Taskwarrior as a back end. This allows taskwiki to leverage its powerful
 features, such as filtering, recurrent tasks, user defined attributes or hooks.
 
 ### Features
@@ -134,10 +139,36 @@ In such case, you can specify the defaults explicitly:
 
 Viewports can be inspected by hitting [CR] with cursor above them.
 
+#### Preset headers
+
+A preset header has a similar syntax to a viewport:
+
+    == Home tasks || project:Home ==
+
+In contrast to viewports it does not generate a list of associated tasks.
+Instead it sets a filter for all viewports and default attributes for all new
+tasks in the corresponding section.
+
+Like with viewports for complex filters the default attributes can be given
+manually.
+
+    == Home tasks || project:house or project:garden || project:house ==
+
+Multiple levels of preset headers are chained. So you can do this:
+
+    == Taskwiki development || project:Taskwiki ==
+    * Non-task notes
+    === Bugs || +bugs ===
+    * [ ] Bug #42
+    === Features || +features ===
+    * [ ] Some Feature
+
+Here both tasks are assigned the Taskwiki project, as well the respective tag.
+
 #### Report splits
 
 Taskwiki can provide additional information reports on a task list (selected,
-or part of a viewport) and on individial tasks as well. These reports are shown
+or part of a viewport) and on individual tasks as well. These reports are shown
 in dynamic temporary splits.
 
     * [ ] Tidy up the house !! (2015-08-23)
@@ -178,7 +209,7 @@ Running the :TaskWikiSummary can produce side-split like this:
 
 There are many more reports (burndown, calendar, history, projects, stats,
 summary, tags,..), but for the sake of brevity, they will not be described here.
-They work in a similiar fashion.
+They work in a similar fashion.
 
 
 #### Task modification commands
@@ -235,7 +266,13 @@ Feel free to submit pull requests and/or file issues for bugs and suggestions.
 
 #### Tests
 
-To run the included tests you will require
+Taskwiki comes with preconfigured docker-based test setup. To run the tests,
+simply issue:
+
+    docker-compose build --build-arg TASK_VERSION=2.6.0 tests
+    docker-compose up
+
+To run the included tests directly you will require
 
 * [test.py](http://pytest.org)
 * [gvim](http://vim.org)
@@ -248,3 +285,10 @@ need to install and enable either the `en_US` or `en_GB` locale. For example:
 
 Finally you might want to have a look at [the travis configuration](.travis.yml)
 and consider using a virtual machine or [Xvfb](https://www.x.org/releases/X11R7.6/doc/man/man1/Xvfb.1.xhtml).
+
+#### Known issues
+
+When `tzlocal` library can't detect your local timezone, it has to be set [explicitly](https://github.com/tbabej/taskwiki/issues/110) using the environment variable `TZ`. For example, before launching vim:
+
+    export TZ="Europe/Prague"
+
