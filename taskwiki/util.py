@@ -15,6 +15,7 @@ from taskwiki import regexp
 # Detect if command AnsiEsc is available
 ANSI_ESC_AVAILABLE = vim.eval('exists(":AnsiEsc")') == '2'
 NEOVIM = (vim.eval('has("nvim")') == "1")
+HAS_TERMINAL = (NEOVIM or (int(vim.eval("v:version")) >= 800))
 
 def tw_modstring_to_args(line):
     output = []

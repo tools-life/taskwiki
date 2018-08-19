@@ -132,7 +132,7 @@ class SelectedTasks(object):
 
             # Build command template, it is different for neovim and vim
             command = (
-                ('terminal' if util.NEOVIM else '!') +
+                ('terminal' if util.HAS_TERMINAL else '!') +
                 ' task {0} {1} edit'
             )
             vim.command(command.format(location_override, vimwikitask.uuid))
