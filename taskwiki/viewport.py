@@ -195,7 +195,7 @@ class ViewPort(object):
 
     @classmethod
     def parse_line(cls, cache, number):
-        return re.search(regexp.VIEWPORT[cache.syntax], cache.buffer[number])
+        return re.search(regexp.VIEWPORT[cache.markup_syntax], cache.buffer[number])
 
     @classmethod
     def from_line(cls, number, cache):

@@ -107,21 +107,21 @@ class TaskCache(object):
         default_rc = util.get_var('taskwiki_taskrc_location') or '~/.taskrc'
         default_data = util.get_var('taskwiki_data_location') or None
         extra_warrior_defs = util.get_var('taskwiki_extra_warriors', {})
-        syntax = util.get_var('taskwiki_syntax') or 'default'
+        markup_syntax = util.get_var('taskwiki_markup_syntax') or 'default'
 
         # Handle bytes (vim returnes bytes for Python3)
         if six.PY3:
             default_rc = util.decode_bytes(default_rc)
             default_data = util.decode_bytes(default_data)
             extra_warrior_defs = util.decode_bytes(extra_warrior_defs)
-            syntax = util.decode_bytes(syntax)
+            markup_syntax = util.decode_bytes(markup_syntax)
 
-        # Validate syntax choice and set it
-        if syntax in ["default", "markdown", "restructuredtext"]:
-            self.syntax = syntax
+        # Validate markup choice and set it
+        if markup_syntax in ["default", "markdown", "restructuredtext"]:
+            self.markup_syntax = markup_syntax
         else:
-            raise errors.TaskWikiException("Syntax '{}' unknown."
-                                           .format(syntax))
+            raise errors.TaskWikiException("Markup'{}' unknown."
+                                           .format(markup_syntax))
 
         # Initialize all the subcomponents
         self.buffer = BufferProxy(buffer_number)
