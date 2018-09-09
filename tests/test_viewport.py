@@ -1,17 +1,17 @@
 # -*- coding: utf-8 -*-
 from datetime import datetime
-from tests.base import IntegrationTest
+from tests.base import MultiSyntaxIntegrationTest
 from time import sleep
 
 
-class TestViewportsTaskGeneration(IntegrationTest):
+class TestViewportsTaskGeneration(MultiSyntaxIntegrationTest):
 
     viminput = """
-    === Work tasks | +work ===
+    HEADER(Work tasks | +work)
     """
 
     vimoutput = """
-    === Work tasks | +work ===
+    HEADER(Work tasks | +work)
     * [ ] tag work task  #{uuid}
     """
 
@@ -23,14 +23,14 @@ class TestViewportsTaskGeneration(IntegrationTest):
         self.command("w", regex="written$", lines=1)
 
 
-class TestViewportsTaskGenerationEmptyFilter(IntegrationTest):
+class TestViewportsTaskGenerationEmptyFilter(MultiSyntaxIntegrationTest):
 
     viminput = """
-    === Work tasks | ===
+    HEADER(Work tasks |)
     """
 
     vimoutput = """
-    === Work tasks | ===
+    HEADER(Work tasks |)
     * [ ] some task  #{uuid}
     """
 
@@ -42,15 +42,15 @@ class TestViewportsTaskGenerationEmptyFilter(IntegrationTest):
         self.command("w", regex="written$", lines=1)
 
 
-class TestViewportsTaskRemoval(IntegrationTest):
+class TestViewportsTaskRemoval(MultiSyntaxIntegrationTest):
 
     viminput = """
-    === Work tasks | -work ===
+    HEADER(Work tasks | -work)
     * [ ] tag work task  #{uuid}
     """
 
     vimoutput = """
-    === Work tasks | -work ===
+    HEADER(Work tasks | -work)
     """
 
     tasks = [
@@ -61,14 +61,14 @@ class TestViewportsTaskRemoval(IntegrationTest):
         self.command("w", regex="written$", lines=1)
 
 
-class TestViewportsContextTaskGeneration(IntegrationTest):
+class TestViewportsContextTaskGeneration(MultiSyntaxIntegrationTest):
 
     viminput = """
-    === Work tasks | @work ===
+    HEADER(Work tasks | @work)
     """
 
     vimoutput = """
-    === Work tasks | @work ===
+    HEADER(Work tasks | @work)
     * [ ] tag work task  #{uuid}
     """
 
@@ -83,14 +83,14 @@ class TestViewportsContextTaskGeneration(IntegrationTest):
         self.command("w", regex="written$", lines=1)
 
 
-class TestViewportsContextComplexFilterTaskGeneration(IntegrationTest):
+class TestViewportsContextComplexFilterTaskGeneration(MultiSyntaxIntegrationTest):
 
     viminput = """
-    === Work tasks | @work or project:Home ===
+    HEADER(Work tasks | @work or project:Home)
     """
 
     vimoutput = """
-    === Work tasks | @work or project:Home ===
+    HEADER(Work tasks | @work or project:Home)
     * [ ] home project task  #{uuid}
     * [ ] tag work task  #{uuid}
     """
@@ -107,14 +107,14 @@ class TestViewportsContextComplexFilterTaskGeneration(IntegrationTest):
         self.command("w", regex="written$", lines=1)
 
 
-class TestViewportsTwoContextTaskGeneration(IntegrationTest):
+class TestViewportsTwoContextTaskGeneration(MultiSyntaxIntegrationTest):
 
     viminput = """
-    === Work tasks | @work or @home ===
+    HEADER(Work tasks | @work or @home)
     """
 
     vimoutput = """
-    === Work tasks | @work or @home ===
+    HEADER(Work tasks | @work or @home)
     * [ ] home project task  #{uuid}
     * [ ] tag work task  #{uuid}
     """
@@ -132,14 +132,14 @@ class TestViewportsTwoContextTaskGeneration(IntegrationTest):
         self.command("w", regex="written$", lines=1)
 
 
-class TestViewportsContextInvalid(IntegrationTest):
+class TestViewportsContextInvalid(MultiSyntaxIntegrationTest):
 
     viminput = """
-    === Work tasks | @doesnotexist ===
+    HEADER(Work tasks | @doesnotexist)
     """
 
     vimoutput = """
-    === Work tasks | @doesnotexist ===
+    HEADER(Work tasks | @doesnotexist)
     """
 
     def execute(self):
@@ -147,15 +147,15 @@ class TestViewportsContextInvalid(IntegrationTest):
                                 "could not be found.", lines=3)
 
 
-class TestViewportDefaultsAssigment(IntegrationTest):
+class TestViewportDefaultsAssigment(MultiSyntaxIntegrationTest):
 
     viminput = """
-    === Work tasks | +work ===
+    HEADER(Work tasks | +work)
     * [ ] tag work task
     """
 
     vimoutput = """
-    === Work tasks | +work ===
+    HEADER(Work tasks | +work)
     * [ ] tag work task  #{uuid}
     """
 
@@ -169,15 +169,15 @@ class TestViewportDefaultsAssigment(IntegrationTest):
         assert task['tags'] == set(['work'])
 
 
-class TestViewportDefaultsExplicit(IntegrationTest):
+class TestViewportDefaultsExplicit(MultiSyntaxIntegrationTest):
 
     viminput = """
-    === Work tasks | project:Home +home | project:Chores  ===
+    HEADER(Work tasks | project:Home +home | project:Chores )
     * [ ] home task
     """
 
     vimoutput = """
-    === Work tasks | project:Home +home | project:Chores  ===
+    HEADER(Work tasks | project:Home +home | project:Chores )
     """
 
     def execute(self):
@@ -191,15 +191,15 @@ class TestViewportDefaultsExplicit(IntegrationTest):
         assert task['tags'] == set()
 
 
-class TestViewportDefaultsExplicitEmpty(IntegrationTest):
+class TestViewportDefaultsExplicitEmpty(MultiSyntaxIntegrationTest):
 
     viminput = """
-    === Work tasks | project:Home +home | project:  ===
+    HEADER(Work tasks | project:Home +home | project: )
     * [ ] home task
     """
 
     vimoutput = """
-    === Work tasks | project:Home +home | project:  ===
+    HEADER(Work tasks | project:Home +home | project: )
     """
 
     def execute(self):
@@ -213,21 +213,21 @@ class TestViewportDefaultsExplicitEmpty(IntegrationTest):
         assert task['tags'] == set()
 
 
-class TestViewportDefaultsTerminatedByHeader(IntegrationTest):
+class TestViewportDefaultsTerminatedByHeader(MultiSyntaxIntegrationTest):
 
     viminput = """
-    === Work tasks | +work ===
+    HEADER(Work tasks | +work)
     * [ ] tag work task
 
-    === Unrelated work tasks ===
+    HEADER(Unrelated work tasks)
     * [ ] not tagged work task
     """
 
     vimoutput = """
-    === Work tasks | +work ===
+    HEADER(Work tasks | +work)
     * [ ] tag work task  #{uuid}
 
-    === Unrelated work tasks ===
+    HEADER(Unrelated work tasks)
     * [ ] not tagged work task  #{uuid}
     """
 
@@ -246,10 +246,10 @@ class TestViewportDefaultsTerminatedByHeader(IntegrationTest):
         assert task['tags'] == set()
 
 
-class TestViewportInspection(IntegrationTest):
+class TestViewportInspection(MultiSyntaxIntegrationTest):
 
     viminput = """
-    === Work tasks | +work ===
+    HEADER(Work tasks | +work)
     * [ ] tag work task  #{uuid}
     """
 
@@ -279,13 +279,13 @@ class TestViewportInspection(IntegrationTest):
         assert self.py("print(vim.current.buffer)", regex="<buffer taskwiki.")
 
 
-class TestViewportInspectionWithVisibleTag(IntegrationTest):
+class TestViewportInspectionWithVisibleTag(MultiSyntaxIntegrationTest):
 
     viminput = """
-    === Work tasks | +work -VISIBLE ===
+    HEADER(Work tasks | +work -VISIBLE)
     * [ ] tag work task  #{uuid}
 
-    === Home tasks | +home ===
+    HEADER(Home tasks | +home)
     * [ ] tag work task  #{uuid}
     """
 
@@ -317,14 +317,14 @@ class TestViewportInspectionWithVisibleTag(IntegrationTest):
         assert self.py("print(vim.current.buffer)", regex="<buffer taskwiki.")
 
 
-class TestViewportsUnicodeTaskGeneration(IntegrationTest):
+class TestViewportsUnicodeTaskGeneration(MultiSyntaxIntegrationTest):
 
     viminput = """
-    === Work tasks | +work ===
+    HEADER(Work tasks | +work)
     """
 
     vimoutput = u"""
-    === Work tasks | +work ===
+    HEADER(Work tasks | +work)
     * [ ] tag work täsk  #{uuid}
     """
 
@@ -336,14 +336,14 @@ class TestViewportsUnicodeTaskGeneration(IntegrationTest):
         self.command("w", regex="written$", lines=1)
 
 
-class TestUnicodeViewportsUnicodeTaskGeneration(IntegrationTest):
+class TestUnicodeViewportsUnicodeTaskGeneration(MultiSyntaxIntegrationTest):
 
     viminput = u"""
-    === Réunion 2017 | project:Réunion2017 ===
+    HEADER(Réunion 2017 | project:Réunion2017)
     """
 
     vimoutput = u"""
-    === Réunion 2017 | project:Réunion2017 ===
+    HEADER(Réunion 2017 | project:Réunion2017)
     * [ ] Réunion task 1  #{uuid}
     """
 
@@ -356,15 +356,15 @@ class TestUnicodeViewportsUnicodeTaskGeneration(IntegrationTest):
         assert len(self.tw.tasks.pending()) == 1
 
 
-class TestUnicodeViewportsUnicodeDefaultsAssignment(IntegrationTest):
+class TestUnicodeViewportsUnicodeDefaultsAssignment(MultiSyntaxIntegrationTest):
 
     viminput = u"""
-    === Réunion 2017 | project:Réunion2017 ===
+    HEADER(Réunion 2017 | project:Réunion2017)
     * [ ] Réunion task 1
     """
 
     vimoutput = u"""
-    === Réunion 2017 | project:Réunion2017 ===
+    HEADER(Réunion 2017 | project:Réunion2017)
     * [ ] Réunion task 1  #{uuid}
     """
 
@@ -378,14 +378,14 @@ class TestUnicodeViewportsUnicodeDefaultsAssignment(IntegrationTest):
         assert task['project'] == u'Réunion2017'
 
 
-class TestViewportsSortedGeneration(IntegrationTest):
+class TestViewportsSortedGeneration(MultiSyntaxIntegrationTest):
 
     viminput = """
-    === Work tasks | +work ===
+    HEADER(Work tasks | +work)
     """
 
     vimoutput = """
-    === Work tasks | +work ===
+    HEADER(Work tasks | +work)
     * [ ] main task 1 (2015-08-07)  #{uuid}
         * [ ] sub task 1a (2015-08-01)  #{uuid}
             * [ ] sub task 1aa  #{uuid}
@@ -426,7 +426,7 @@ class TestViewportsSortedGeneration(IntegrationTest):
 class TestViewportsSortedGenerationReverse(TestViewportsSortedGeneration):
 
     vimoutput = """
-    === Work tasks | +work ===
+    HEADER(Work tasks | +work)
     * [ ] main task 3 (2015-08-09)  #{uuid}
         * [ ] sub task 3a (2015-08-03)  #{uuid}
         * [ ] sub task 3b  #{uuid}
@@ -446,14 +446,14 @@ class TestViewportsSortedGenerationReverse(TestViewportsSortedGeneration):
         super(TestViewportsSortedGenerationReverse, self).execute()
 
 
-class TestViewportsMultilevelSortedGeneration(IntegrationTest):
+class TestViewportsMultilevelSortedGeneration(MultiSyntaxIntegrationTest):
 
     viminput = """
-    === Work tasks | project:Work or project:Home ===
+    HEADER(Work tasks | project:Work or project:Home)
     """
 
     vimoutput = """
-    === Work tasks | project:Work or project:Home ===
+    HEADER(Work tasks | project:Work or project:Home)
     * [ ] home task 1 (2015-08-01)  #{uuid}
     * [ ] home task 2 (2015-08-02)  #{uuid}
     * [ ] home task 3 (2015-08-03)  #{uuid}
@@ -479,14 +479,14 @@ class TestViewportsMultilevelSortedGeneration(IntegrationTest):
         self.command("w", regex="written$", lines=1)
 
 
-class TestViewportsSpecificSorting(IntegrationTest):
+class TestViewportsSpecificSorting(MultiSyntaxIntegrationTest):
 
     viminput = """
-    === Work tasks | project:Work or project:Home $T ===
+    HEADER(Work tasks | project:Work or project:Home $T)
     """
 
     vimoutput = """
-    === Work tasks | project:Work or project:Home $T ===
+    HEADER(Work tasks | project:Work or project:Home $T)
     * [ ] home task 1 (2015-08-01)  #{uuid}
     * [ ] home task 2 (2015-08-02)  #{uuid}
     * [ ] work task 1 (2015-08-01)  #{uuid}
@@ -511,19 +511,19 @@ class TestViewportsSpecificSorting(IntegrationTest):
 class TestViewportsSpecificSortingCombined(TestViewportsSpecificSorting):
 
     viminput = """
-    === Work tasks | project:Work or project:Home $T ===
+    HEADER(Work tasks | project:Work or project:Home $T)
 
-    === Work tasks | project:Work or project:Home ===
+    HEADER(Work tasks | project:Work or project:Home)
     """
 
     vimoutput = """
-    === Work tasks | project:Work or project:Home $T ===
+    HEADER(Work tasks | project:Work or project:Home $T)
     * [ ] home task 1 (2015-08-01)  #{uuid}
     * [ ] home task 2 (2015-08-02)  #{uuid}
     * [ ] work task 1 (2015-08-01)  #{uuid}
     * [ ] work task 2 (2015-08-02)  #{uuid}
 
-    === Work tasks | project:Work or project:Home ===
+    HEADER(Work tasks | project:Work or project:Home)
     * [ ] home task 1 (2015-08-01)  #{uuid}
     * [ ] work task 1 (2015-08-01)  #{uuid}
     * [ ] home task 2 (2015-08-02)  #{uuid}
@@ -531,14 +531,14 @@ class TestViewportsSpecificSortingCombined(TestViewportsSpecificSorting):
     """
 
 
-class TestViewportsSortedInvalidOrder(IntegrationTest):
+class TestViewportsSortedInvalidOrder(MultiSyntaxIntegrationTest):
 
     viminput = """
-    === Work tasks | +work $X ===
+    HEADER(Work tasks | +work $X)
     """
 
     vimoutput = """
-    === Work tasks | +work $X ===
+    HEADER(Work tasks | +work $X)
     """
 
     def execute(self):
@@ -547,19 +547,19 @@ class TestViewportsSortedInvalidOrder(IntegrationTest):
             "'Work tasks' is not defined, using default.", lines=2)
 
 
-class TestViewportsVisibleMetaTag(IntegrationTest):
+class TestViewportsVisibleMetaTag(MultiSyntaxIntegrationTest):
 
     viminput = """
-    === Home tasks | project:Home -VISIBLE ===
+    HEADER(Home tasks | project:Home -VISIBLE)
 
-    === Chores | project:Home.Chores ===
+    HEADER(Chores | project:Home.Chores)
     """
 
     vimoutput = """
-    === Home tasks | project:Home -VISIBLE ===
+    HEADER(Home tasks | project:Home -VISIBLE)
     * [ ] home task  #{uuid}
 
-    === Chores | project:Home.Chores ===
+    HEADER(Chores | project:Home.Chores)
     * [ ] chore task  #{uuid}
     """
 
@@ -574,17 +574,17 @@ class TestViewportsVisibleMetaTag(IntegrationTest):
         self.command("w", regex="written$", lines=1)
 
 
-class TestViewportsPreserveHierarchyUponCompletion(IntegrationTest):
+class TestViewportsPreserveHierarchyUponCompletion(MultiSyntaxIntegrationTest):
 
     viminput = """
-    === Work tasks | +work ===
+    HEADER(Work tasks | +work)
     * [ ] main task
         * [ ] sub task a
         * [ ] sub task b
     """
 
     vimoutput = """
-    === Work tasks | +work ===
+    HEADER(Work tasks | +work)
     * [ ] main task  #{uuid}
         * [X] sub task a  #{uuid}
         * [ ] sub task b  #{uuid}
@@ -601,15 +601,15 @@ class TestViewportsPreserveHierarchyUponCompletion(IntegrationTest):
         sleep(0.5)
 
 
-class TestViewportDefaultPreservesTags(IntegrationTest):
+class TestViewportDefaultPreservesTags(MultiSyntaxIntegrationTest):
 
     viminput = """
-    === Work tasks | +work ===
+    HEADER(Work tasks | +work)
     * [ ] hard task -- +hard
     """
 
     vimoutput = """
-    === Work tasks | +work ===
+    HEADER(Work tasks | +work)
     * [ ] hard task  #{uuid}
     """
 
