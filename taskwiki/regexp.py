@@ -41,47 +41,96 @@ GENERIC_TASK = re.compile(''.join([
 DATETIME_FORMAT = "(%Y-%m-%d %H:%M)"
 DATE_FORMAT = "(%Y-%m-%d)"
 
-GENERIC_VIEWPORT = re.compile(
-    '^'                          # Starts at the beginning of the line
-    '[=]+'                       # Heading beginning
-    '(?P<name>[^=\|\[\{]*)'      # Name of the viewport, all before the | sign
-                                 # Cannot include '[', '=', '|, and '{'
-    '\|'                         # Colon
-    '(?P<filter>[^=\|]+?)'       # Filter
-    '('                          # Optional defaults
-      '\|'                       # Colon
-      '(?P<defaults>[^=\|]+?)'   # Default attrs
-    ')?'
-    '\s*'                        # Any whitespace
-    '(#(?P<source>[A-Z]))?'      # Optional source indicator
-    '\s*'                        # Any whitespace
-    '(\$(?P<sort>[A-Z]))?'       # Optional sort indicator
-    '\s*'                        # Any whitespace
-    '[=]+'                       # Header ending
+VIEWPORT = {
+    'default':
+    re.compile(
+        '^'                     # Starts at the begging of the line
+        '[=]+'                  # Heading begging
+        '(?P<name>[^=\|\[\{]*)'      # Name of the viewport, all before the | sign
+                                    # Cannot include '[', '=', '|, and '{'
+        '\|'                         # Colon
+        '(?P<filter>[^=\|]+?)'       # Filter
+        '('                          # Optional defaults
+        '\|'                         # Colon
+        '(?P<defaults>[^=\|]+?)'     # Default attrs
+        ')?'
+        '\s*'                        # Any whitespace
+        '(#(?P<source>[A-Z]))?'      # Optional source indicator
+        '\s*'                        # Any whitespace
+        '(\$(?P<sort>[A-Z]))?'       # Optional sort indicator
+        '\s*'                        # Any whitespace
+        '[=]+'                  # Header ending
+    ),
+    'markdown':
+    re.compile(
+        '^'                     # Starts at the begging of the line
+        '[#]+'                  # Heading begging
+        '(?P<name>[^#\|\[\{]*)' # Name of the viewport, all before the | sign
+                                # Cannot include '[', '=', '|, and '{'
+        '\|'                    # Colon
+        '(?P<filter>[^#\|]+?)'  # Filter
+        '('                     # Optional defaults
+        '\|'                    # Colon
+        '(?P<defaults>[^#\|]+?)'# Default attrs
+        ')?'
+        '\s*'                   # Any whitespace
+        '(#(?P<source>[A-Z]))?' # Optional source indicator
+        '\s*'                   # Any whitespace
+        '(\$(?P<sort>[A-Z]))?'  # Optional sort indicator
+        '\s*'                   # Any whitespace
+        '$'                     # End of line
     )
+}
 
-GENERIC_PRESET = re.compile(
-    '^'                           # Starts at the beginning of the line
-    '(?P<header_start>[=]+)'      # With a positive number of =
-    '([^=\|\[\{]*)'               # Heading caption, everything up to ||
-                                  # Cannot include '[', '=', '|, and '{'
-    '\|\|'                        # Delimiter
-    '(?P<filter>[^=\|]+?)'        # Filter preset
-    '('                           # Optional defaults
-      '\|\|'                      # Delimiter
-      '(?P<defaults>[^=\|]+?)'    # Default attrs preset
-    ')?'
-    '\s*'                         # Any whitespace
-    '[=]+'                        # Header ending
+HEADER = {
+    'default':
+    re.compile(
+        '^'                      # Starts at the beginning of the line
+        '(?P<header_start>[=]+)' # With a positive number of =
+        '[^=]+'                  # Character other than =
+        '[=]+'                   # Positive number of =, closing the header
+        '\s*'                    # Allow trailing whitespace
+    ),
+    'markdown':
+    re.compile(
+        '^'                      # Starts at the beginning of the line
+        '(?P<header_start>[#]+)' # With a positive number of #
+        '[^#]+'                  # Character other than #
     )
+}
 
-GENERIC_HEADER = re.compile(
-    '^'                      # Starts at the beginning of the line
-    '(?P<header_start>[=]+)' # With a positive number of =
-    '[^=]+'                  # Character other than =
-    '[=]+'                   # Positive number of =, closing the header
-    '\s*'                    # Allow trailing whitespace
-)
+PRESET = {
+    'default':
+    re.compile(
+        '^'                           # Starts at the beginning of the line
+        '(?P<header_start>[=]+)'      # With a positive number of =
+        '([^=\|\[\{]*)'               # Heading caption, everything up to ||
+                                    # Cannot include '[', '=', '|, and '{'
+        '\|\|'                        # Delimiter
+        '(?P<filter>[^=\|]+?)'        # Filter preset
+        '('                           # Optional defaults
+        '\|\|'                      # Delimiter
+        '(?P<defaults>[^=\|]+?)'    # Default attrs preset
+        ')?'
+        '\s*'                         # Any whitespace
+        '[=]+'                        # Header ending
+    ),
+    'markdown':
+    re.compile(
+        '^'                           # Starts at the beginning of the line
+        '(?P<header_start>[#]+)'      # With a positive number of #
+        '([^#\|\[\{]*)'               # Heading caption, everything up to ||
+                                    # Cannot include '[', '#', '|, and '{'
+        '\|\|'                        # Delimiter
+        '(?P<filter>[^#\|]+?)'        # Filter preset
+        '('                           # Optional defaults
+        '\|\|'                      # Delimiter
+        '(?P<defaults>[^#\|]+?)'    # Default attrs preset
+        ')?'
+        '\s*'                   # Any whitespace
+        '$'                     # End of line
+    )
+}
 
 ANSI_ESCAPE_SEQ = re.compile(
     '\x1b'     # literal ESC
