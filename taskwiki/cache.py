@@ -8,6 +8,7 @@ from taskwiki import regexp
 from taskwiki import store
 from taskwiki import short
 from taskwiki import util
+from taskwiki import errors
 
 
 class BufferProxy(object):
@@ -107,13 +108,23 @@ class TaskCache(object):
         default_rc = util.get_var('taskwiki_taskrc_location') or '~/.taskrc'
         default_data = util.get_var('taskwiki_data_location') or None
         extra_warrior_defs = util.get_var('taskwiki_extra_warriors', {})
+        markup_syntax = util.get_var('taskwiki_markup_syntax') or 'default'
 
         # Handle bytes (vim returnes bytes for Python3)
         if six.PY3:
             default_rc = util.decode_bytes(default_rc)
             default_data = util.decode_bytes(default_data)
             extra_warrior_defs = util.decode_bytes(extra_warrior_defs)
+            markup_syntax = util.decode_bytes(markup_syntax)
 
+        # Validate markup choice and set it
+        if markup_syntax in ["default", "markdown"]:
+            self.markup_syntax = markup_syntax
+        else:
+            msg = "Unknown markup given: {}".format(markup_syntax)
+            raise errors.TaskWikiException(msg)
+
+        # Initialize all the subcomponents
         self.buffer = BufferProxy(buffer_number)
         self.task = store.TaskStore(self)
         self.presets = store.PresetStore(self)

@@ -19,6 +19,7 @@ class IntegrationTest(object):
     viminput = None
     vimoutput = None
     tasks = []
+    markup = None
 
     def add_plugin(self, name):
         plugin_base = os.path.expanduser('~/.vim/bundle/')
@@ -71,6 +72,7 @@ class IntegrationTest(object):
         self.command('let g:taskwiki_taskrc_location="{0}"'.format(self.taskrc_path))
         self.command("let g:vimwiki_list = [{'syntax': 'mediawiki', 'ext': '.txt','path': '%s'}]" % self.dir)
         self.command('let g:taskwiki_measure_coverage="yes"')
+        self.command('let g:taskwiki_markup_syntax="{0}"'.format(self.markup))
 
     def setup(self):
         self.generate_data()
@@ -198,6 +200,7 @@ class IntegrationTest(object):
     def test_execute(self):
         # First, run sanity checks
         success = False
+        self.markup = 'default'
 
         for i in range(5):
             if self.check_sanity(soft=True):
@@ -222,6 +225,51 @@ class IntegrationTest(object):
 
         # Check expected output
         if self.vimoutput:
+            lines = [
+                self.fill_uuid(l[4:])
+                for l in self.vimoutput.strip('\n').splitlines()[:-1]
+            ]
+            assert self.read_buffer() == lines
+
+
+class MultiSyntaxIntegrationTest(IntegrationTest):
+
+
+    def test_execute(self, test_syntax):
+
+        # Set markup syntax
+        markup, header_expand = test_syntax
+        self.markup = markup
+
+        # First, run sanity checks
+        success = False
+
+        for i in range(5):
+            if self.check_sanity(soft=True):
+                success = True
+                break
+            else:
+                self.teardown()
+                self.setup()
+
+        if not success:
+            self.check_sanity(soft=False)
+
+        # Then load the input
+        if self.viminput:
+            # Expand HEADER
+            self.viminput = header_expand(self.viminput)
+            # Unindent the lines
+            lines = [self.fill_uuid(l[4:])
+                     for l in self.viminput.strip('\n').splitlines()]
+            self.write_buffer(lines)
+
+        # Do the stuff
+        self.execute()
+
+        # Check expected output
+        if self.vimoutput:
+            self.vimoutput = header_expand(self.vimoutput)
             lines = [
                 self.fill_uuid(l[4:])
                 for l in self.vimoutput.strip('\n').splitlines()[:-1]
@@ -347,6 +395,7 @@ class MockCache(object):
         self.vwtask = dict()
         self.task = dict()
         self.viewport = dict()
+        self.markup_syntax = 'default'
 
     def reset(self):
         self.warriors.clear()

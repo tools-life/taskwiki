@@ -41,10 +41,12 @@ class PresetHeader(object):
 
     @classmethod
     def parse_line(cls, cache, number):
-        header = re.search(regexp.GENERIC_HEADER, cache.buffer[number])
+        header = re.search(regexp.HEADER[cache.markup_syntax],
+                           cache.buffer[number])
 
         if header:
-            preset = re.search(regexp.GENERIC_PRESET, cache.buffer[number])
+            preset = re.search(regexp.PRESET[cache.markup_syntax],
+                               cache.buffer[number])
             if preset:
                 return preset
 

@@ -16,16 +16,31 @@ class TestParsingPresetHeader(object):
         self.mockvim.reset()
         self.cache.reset()
 
-    def test_simple(self):
-        self.cache.buffer[0] = "== Test || project:Home =="
+    def process_preset_header(self, preset_header, test_syntax):
+        """
+        Expands the example preset_header to a syntax of a markup and pass on to
+        MockVim to be processed.
+        The result of the processed preset_header is collected.
+        """
+        markup, header_expand = test_syntax
+        formatted_preset_header = header_expand(preset_header)
+        print(formatted_preset_header)
+
+        self.cache.markup_syntax = markup
+        self.cache.buffer[0] = formatted_preset_header
         header = self.PresetHeader.from_line(0, self.cache)
+        return header
+
+    def test_simple(self, test_syntax):
+        preset_header = "HEADER2(Test || project:Home)"
+        header = self.process_preset_header(preset_header, test_syntax)
 
         assert header.taskfilter == ["(", "project:Home", ")"]
         assert header.defaults == {'project': 'Home'}
 
-    def test_defaults(self):
-        self.cache.buffer[0] = "== Test || project:Home || +home =="
-        header = self.PresetHeader.from_line(0, self.cache)
+    def test_defaults(self, test_syntax):
+        preset_header = "HEADER2(Test || project:Home || +home)"
+        header = self.process_preset_header(preset_header, test_syntax)
 
         assert header.taskfilter == ["(", "project:Home", ")"]
         assert header.defaults == {'tags': ['home']}
