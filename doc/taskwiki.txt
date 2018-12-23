@@ -42,6 +42,11 @@ Taskwarrior. Taskwarrior uses plaintext data files as a back end, and taskwiki
 uses Taskwarrior as a back end. This allows taskwiki to leverage its powerful
 features, such as filtering, recurrent tasks, user defined attributes or hooks.
 
+NOTE: Taskwiki only handles check lists that use the asterisk "*". All
+other lists, i.e. those written with a hyphen "-" or a pound sign "#" as
+well as ordered lists, are left alone. This allows you to define plain
+lists and even vimwiki check lists that are unrelated to Taskwarrior.
+
 ----------------------------------------------------------------------------
 Individual tasks
 
