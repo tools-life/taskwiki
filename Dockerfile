@@ -2,7 +2,7 @@ FROM fedora:27
 ARG TASK_VERSION
 
 RUN dnf update -y
-RUN dnf install procps-ng psmisc which vim curl git gvim gcc gcc-c++ cmake make gnutls-devel libuuid-devel mnemosyne -y
+RUN dnf install procps-ng psmisc which vim curl git gvim gcc gcc-c++ cmake make gnutls-devel libuuid-devel -y
 
 # Setup language environment
 ENV LC_ALL en_US.UTF-8
