@@ -474,7 +474,7 @@ class CallbackSplitMixin(object):
             self.selected.__dict__)
         )
 
-        vim.current.buffer.vars['taskwiki_callback'] = base64.encodestring(
+        vim.current.buffer.vars['taskwiki_callback'] = base64.encodebytes(
             bytes(dump)
         )
 
