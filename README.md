@@ -47,7 +47,7 @@ as simple as:
 
 However, make sure your box satisfies the requirements stated above.
 
-To access documentation, run :helptags and then :help taskwiki.
+To access documentation, run :helptags taskwiki and then :help taskwiki.
 
 #### Optional enhancements
 
