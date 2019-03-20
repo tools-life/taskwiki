@@ -3,7 +3,7 @@ from __future__ import print_function
 from distutils.version import LooseVersion
 
 import contextlib
-import pkg_resources
+import importlib_metadata
 import os
 import random
 import sys
@@ -371,8 +371,7 @@ def enforce_dependencies(cache):
     TASKWARRIOR_VERSION = '2.4.0'
 
     # Check tasklib version
-    tasklib_module_info = pkg_resources.get_distribution('tasklib')
-    tasklib_installed_version = LooseVersion(tasklib_module_info.version)
+    tasklib_installed_version = LooseVersion(importlib_metadata.version('tasklib'))
     tasklib_required_version = LooseVersion(TASKLIB_VERSION)
 
     if tasklib_required_version > tasklib_installed_version:
