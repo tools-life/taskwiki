@@ -474,7 +474,7 @@ class CallbackSplitMixin(object):
             self.selected.__dict__)
         )
 
-        vim.current.buffer.vars['taskwiki_callback'] = base64.encodestring(
+        vim.current.buffer.vars['taskwiki_callback'] = base64.encodebytes(
             bytes(dump)
         )
 
@@ -484,7 +484,7 @@ class CallbackSplitMixin(object):
             + util.get_var('taskwiki_py') +
             "callback = {0}('');".format(self.__class__.__name__) +
             "orig_dict, selected_dict = pickle.loads("
-            "base64.decodestring("
+            "base64.decodebytes("
               "six.b(util.get_var('taskwiki_callback', "
                                   "vars_obj=vim.current.buffer.vars)))); "
             "callback.__dict__.update(orig_dict);"

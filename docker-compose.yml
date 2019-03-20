@@ -3,6 +3,11 @@ services:
   tests:
     build: .
     volumes:
+      - "/etc/group:/etc/group:ro"
+      - "/etc/passwd:/etc/passwd:ro"
+      - "/etc/shadow:/etc/shadow:ro"
+      - "/etc/sudoers.d:/etc/sudoers.d:ro"
+      - "/tmp/.X11-unix:/tmp/.X11-unix:rw"
       - "$HOME/.Xauthority:/root/.Xauthority:rw"
       - ".:/root/.vim/bundle/taskwiki:rw"
     network_mode: "host"

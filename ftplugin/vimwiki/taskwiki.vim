@@ -93,43 +93,54 @@ endif
 execute "nnoremap <silent><buffer> <CR> :" . g:taskwiki_py . "Mappings.task_info_or_vimwiki_follow_link()<CR>"
 
 " Leader-related mappings. Mostly <Leader>t + <first letter of the action>
-nmap <silent><buffer> <Leader>ta :TaskWikiAnnotate<CR>
-nmap <silent><buffer> <Leader>tbd :TaskWikiBurndownDaily<CR>
-nmap <silent><buffer> <Leader>tbw :TaskWikiBurndownWeekly<CR>
-nmap <silent><buffer> <Leader>tbm :TaskWikiBurndownMonthly<CR>
-nmap <silent><buffer> <Leader>tcp :TaskWikiChooseProject<CR>
-nmap <silent><buffer> <Leader>tct :TaskWikiChooseTag<CR>
-nmap <silent><buffer> <Leader>tC :TaskWikiCalendar<CR>
-nmap <silent><buffer> <Leader>td :TaskWikiDone<CR>
-nmap <silent><buffer> <Leader>tD :TaskWikiDelete<CR>
-nmap <silent><buffer> <Leader>te :TaskWikiEdit<CR>
-nmap <silent><buffer> <Leader>tg :TaskWikiGrid<CR>
-nmap <silent><buffer> <Leader>tGm :TaskWikiGhistoryMonthly<CR>
-nmap <silent><buffer> <Leader>tGa :TaskWikiGhistoryAnnual<CR>
-nmap <silent><buffer> <Leader>thm :TaskWikiHistoryMonthly<CR>
-nmap <silent><buffer> <Leader>tha :TaskWikiHistoryAnnual<CR>
-nmap <silent><buffer> <Leader>ti :TaskWikiInfo<CR>
-nmap <silent><buffer> <Leader>tl :TaskWikiLink<CR>
-nmap <silent><buffer> <Leader>tm :TaskWikiMod<CR>
-nmap <silent><buffer> <Leader>tp :TaskWikiProjects<CR>
-nmap <silent><buffer> <Leader>ts :TaskWikiProjectsSummary<CR>
-nmap <silent><buffer> <Leader>tS :TaskWikiStats<CR>
-nmap <silent><buffer> <Leader>tt :TaskWikiTags<CR>
-nmap <silent><buffer> <Leader>t. :TaskWikiRedo<CR>
-nmap <silent><buffer> <Leader>t+ :TaskWikiStart<CR>
-nmap <silent><buffer> <Leader>t- :TaskWikiStop<CR>
+if !exists('g:taskwiki_suppress_mappings')
+        if exists('g:taskwiki_maplocalleader')
+                let maplocalleader = g:taskwiki_maplocalleader
+        else
+                if exists('g:mapleader')
+                        let maplocalleader = g:mapleader.'t'
+                else
+                        let maplocalleader = '\t'
+                endif
+        endif
+        nnoremap <silent><buffer> <LocalLeader>a :TaskWikiAnnotate<CR>
+        nnoremap <silent><buffer> <LocalLeader>bd :TaskWikiBurndownDaily<CR>
+        nnoremap <silent><buffer> <LocalLeader>bw :TaskWikiBurndownWeekly<CR>
+        nnoremap <silent><buffer> <LocalLeader>bm :TaskWikiBurndownMonthly<CR>
+        nnoremap <silent><buffer> <LocalLeader>cp :TaskWikiChooseProject<CR>
+        nnoremap <silent><buffer> <LocalLeader>ct :TaskWikiChooseTag<CR>
+        nnoremap <silent><buffer> <LocalLeader>C :TaskWikiCalendar<CR>
+        nnoremap <silent><buffer> <LocalLeader>d :TaskWikiDone<CR>
+        nnoremap <silent><buffer> <LocalLeader>D :TaskWikiDelete<CR>
+        nnoremap <silent><buffer> <LocalLeader>e :TaskWikiEdit<CR>
+        nnoremap <silent><buffer> <LocalLeader>g :TaskWikiGrid<CR>
+        nnoremap <silent><buffer> <LocalLeader>Gm :TaskWikiGhistoryMonthly<CR>
+        nnoremap <silent><buffer> <LocalLeader>Ga :TaskWikiGhistoryAnnual<CR>
+        nnoremap <silent><buffer> <LocalLeader>hm :TaskWikiHistoryMonthly<CR>
+        nnoremap <silent><buffer> <LocalLeader>ha :TaskWikiHistoryAnnual<CR>
+        nnoremap <silent><buffer> <LocalLeader>i :TaskWikiInfo<CR>
+        nnoremap <silent><buffer> <LocalLeader>l :TaskWikiLink<CR>
+        nnoremap <silent><buffer> <LocalLeader>m :TaskWikiMod<CR>
+        nnoremap <silent><buffer> <LocalLeader>p :TaskWikiProjects<CR>
+        nnoremap <silent><buffer> <LocalLeader>s :TaskWikiProjectsSummary<CR>
+        nnoremap <silent><buffer> <LocalLeader>S :TaskWikiStats<CR>
+        nnoremap <silent><buffer> <LocalLeader>t :TaskWikiTags<CR>
+        nnoremap <silent><buffer> <LocalLeader>. :TaskWikiRedo<CR>
+        nnoremap <silent><buffer> <LocalLeader>+ :TaskWikiStart<CR>
+        nnoremap <silent><buffer> <LocalLeader>- :TaskWikiStop<CR>
 
-" Mappings for visual mode.
-vmap <silent><buffer> <Leader>ta :TaskWikiAnnotate<CR>
-vmap <silent><buffer> <Leader>tcp :TaskWikiChooseProject<CR>
-vmap <silent><buffer> <Leader>tct :TaskWikiChooseTag<CR>
-vmap <silent><buffer> <Leader>td :TaskWikiDone<CR>
-vmap <silent><buffer> <Leader>tD :TaskWikiDelete<CR>
-vmap <silent><buffer> <Leader>te :TaskWikiEdit<CR>
-vmap <silent><buffer> <Leader>tg :TaskWikiGrid<CR>
-vmap <silent><buffer> <Leader>ti :TaskWikiInfo<CR>
-vmap <silent><buffer> <Leader>tl :TaskWikiLink<CR>
-vmap <silent><buffer> <Leader>tm :TaskWikiMod<CR>
-vmap <silent><buffer> <Leader>t. :TaskWikiRedo<CR>
-vmap <silent><buffer> <Leader>t+ :TaskWikiStart<CR>
-vmap <silent><buffer> <Leader>t- :TaskWikiStop<CR>
+        " Mappings for visual mode.
+        vnoremap <silent><buffer> <LocalLeader>a :TaskWikiAnnotate<CR>
+        vnoremap <silent><buffer> <LocalLeader>cp :TaskWikiChooseProject<CR>
+        vnoremap <silent><buffer> <LocalLeader>ct :TaskWikiChooseTag<CR>
+        vnoremap <silent><buffer> <LocalLeader>d :TaskWikiDone<CR>
+        vnoremap <silent><buffer> <LocalLeader>D :TaskWikiDelete<CR>
+        vnoremap <silent><buffer> <LocalLeader>e :TaskWikiEdit<CR>
+        vnoremap <silent><buffer> <LocalLeader>g :TaskWikiGrid<CR>
+        vnoremap <silent><buffer> <LocalLeader>i :TaskWikiInfo<CR>
+        vnoremap <silent><buffer> <LocalLeader>l :TaskWikiLink<CR>
+        vnoremap <silent><buffer> <LocalLeader>m :TaskWikiMod<CR>
+        vnoremap <silent><buffer> <LocalLeader>. :TaskWikiRedo<CR>
+        vnoremap <silent><buffer> <LocalLeader>+ :TaskWikiStart<CR>
+        vnoremap <silent><buffer> <LocalLeader>- :TaskWikiStop<CR>
+endif
