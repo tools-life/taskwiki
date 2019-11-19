@@ -12,12 +12,10 @@ python:
   - "3.6"
   - "3.7"
   - "3.8"
+dist: xenial
 services:
   - docker
-before_install:
-  # Setup virtual framebuffer
-  - export DISPLAY=:99.0
-  - sh -e /etc/init.d/xvfb start
+  - xvfb
 install:
   # Install coverage dependencies
   - pip install coverage coveralls
