@@ -83,7 +83,7 @@ def tw_args_to_kwargs(args):
             # Ignore anything which is not one-word string of alpha chars
             # This will skip over constructs with attribute modifiers
             if key.isalpha():
-                output[key] = value if value is not "" else None
+                output[key] = value if value != "" else None
         # Tag addition
         elif arg.startswith('+'):
             value = arg[1:]
