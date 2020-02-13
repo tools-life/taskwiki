@@ -25,6 +25,33 @@ class TestSimpleTaskCreation(IntegrationTest):
         assert task['description'] == 'This is a test task'
         assert task['status'] == 'pending'
 
+class TestSimpleTaskCreationWithDefaultTag(IntegrationTest):
+
+    viminput = """
+    * [ ] This is a test task
+    """
+
+    vimoutput = """
+    * [ ] This is a test task  #{uuid}
+    """
+
+    def execute(self):
+        self.command('let g:taskwiki_default_tag="mytag"')
+        self.command("w", regex="written$", lines=1)
+
+        # Check that only one tasks with this description exists
+        assert len(self.tw.tasks.pending()) == 1
+
+        task = self.tw.tasks.pending()[0]
+        assert task['description'] == 'This is a test task'
+        assert task['status'] == 'pending'
+        # Tag was added
+        assert task['tags'] == {'mytag'}
+        
+        self.command('let g:taskwiki_default_tag="anothertag"')
+        self.command("w", regex="written$", lines=1)
+        # Existing tags are not overwritten
+        assert task['tags'] == {'mytag' 'anothertag'}
 
 class TestInvalidUUIDTask(IntegrationTest):
 

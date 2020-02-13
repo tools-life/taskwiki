@@ -665,6 +665,11 @@ constructs.
 
 ~   === Home habits | project:Home #H ===
 
+*taskwiki_default_tag*
+    Optional tag to be added to all tasks created or modified by Taskwiki.
+    Example:
+    let g:taskwiki_default_tag='wiki'
+
 *taskwiki_sort_order*
     The default sort order used to sort the tasks within viewports. Defaults
     to 'status+,end+,due+,pri-,project+'. Expects a comma-separated list of

@@ -260,6 +260,8 @@ class VimwikiTask(object):
             self.task['depends'] -= set(port.viewport_tasks)
 
         self.task['depends'] |= set(s.task for s in self.add_dependencies)
+        if util.get_var('taskwiki_default_tag'):
+            self.task['tags'] |= {util.get_var('taskwiki_default_tag')} 
 
         # Push the values to the Task only if the Vimwiki representation
         # somehow differs
