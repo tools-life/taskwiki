@@ -21,10 +21,10 @@ class IntegrationTest(object):
     tasks = []
     markup = None
 
-    def add_plugin(self, name):
+    def add_plugin(self, name, init_script=''):
         plugin_base = os.path.expanduser('~/.vim/bundle/')
         plugin_path = os.path.join(plugin_base, name)
-        self.client.add_plugin(plugin_path)
+        self.client.add_plugin(plugin_path, init_script)
 
     def write_buffer(self, lines, position=0):
         result = self.client.write_buffer(position + 1, lines)
@@ -72,7 +72,8 @@ class IntegrationTest(object):
         self.command('let g:taskwiki_taskrc_location="{0}"'.format(self.taskrc_path))
         self.command("let g:vimwiki_list = [{'syntax': 'mediawiki', 'ext': '.txt','path': '%s'}]" % self.dir)
         self.command('let g:taskwiki_measure_coverage="yes"')
-        self.command('let g:taskwiki_markup_syntax="{0}"'.format(self.markup))
+        if self.markup is not None:
+            self.command('let g:taskwiki_markup_syntax="{0}"'.format(self.markup))
 
     def setup(self):
         self.generate_data()
@@ -84,12 +85,12 @@ class IntegrationTest(object):
 
         self.configure_global_varialbes()
         self.add_plugin('taskwiki')
-        self.add_plugin('vimwiki')
+        self.add_plugin('vimwiki', 'plugin/vimwiki.vim')
         sleep(0.5)
         self.filepath = os.path.join(self.dir, 'testwiki.txt')
         self.client.edit(self.filepath)
         sleep(0.5)
-        self.command('set filetype=vimwiki', silent=None)  # TODO: fix these vimwiki loading errors
+        self.command('set filetype=vimwiki')
         sleep(1)  # Give vim some time to load the scripts
 
     def teardown(self):
