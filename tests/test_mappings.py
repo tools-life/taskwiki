@@ -8,16 +8,25 @@ class TestDefaultMapping(IntegrationTest):
     viminput = """
     * [ ] test task 1  #{uuid}
     * [ ] test task 2  #{uuid}
+    * [ ] test task 3  #{uuid}
+    * [S] test task 4  #{uuid}
+    * [S] test task 5  #{uuid}
     """
 
     vimoutput = """
     * [X] test task 1  #{uuid}
     * [X] test task 2  #{uuid}
+    * [X] test task 3  #{uuid}
+    * [X] test task 4  #{uuid}
+    * [X] test task 5  #{uuid}
     """
 
     tasks = [
             dict(description="test task 1"),
             dict(description="test task 2"),
+            dict(description="test task 3"),
+            dict(description="test task 4"),
+            dict(description="test task 5"),
     ]
 
     def execute(self):
@@ -34,6 +43,24 @@ class TestDefaultMapping(IntegrationTest):
         sleep(0.5)
 
         self.client.feedkeys(r'\\td')
+        sleep(0.5)
+
+        self.client.normal('3gg')
+        sleep(0.5)
+
+        self.client.feedkeys(r'\<c-space>')
+        sleep(0.5)
+
+        self.client.normal('4gg')
+        sleep(0.5)
+
+        self.client.feedkeys(r'\\td')
+        sleep(0.5)
+
+        self.client.normal('5gg')
+        sleep(0.5)
+
+        self.client.feedkeys(r'\<c-space>')
         sleep(0.5)
 
         for task in self.tasks:
