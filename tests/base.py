@@ -235,12 +235,18 @@ class IntegrationTest(object):
 
 class MultiSyntaxIntegrationTest(IntegrationTest):
 
+    def setup(self):
+        # We have to delay setup call until markup_syntax is set.
+        pass
 
     def test_execute(self, test_syntax):
 
         # Set markup syntax
         markup, header_expand = test_syntax
         self.markup = markup
+
+        # Now we call the actual setup because markup is ready
+        super(MultiSyntaxIntegrationTest, self).setup()
 
         # First, run sanity checks
         success = False
