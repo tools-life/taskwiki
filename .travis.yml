@@ -14,10 +14,6 @@ python:
   - "3.8"
 services:
   - docker
-before_install:
-  # Setup virtual framebuffer
-  - export DISPLAY=:99.0
-  - sh -e /etc/init.d/xvfb start
 install:
   # Install coverage dependencies
   - pip install coverage coveralls
@@ -25,7 +21,6 @@ install:
   - pushd $TRAVIS_BUILD_DIR
   - docker-compose build --build-arg TASK_VERSION=$TASK_VERSION tests
 script:
-  - xhost +local:root
   - make test
 after_success:
   - ls /tmp/taskwiki-coverage

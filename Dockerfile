@@ -34,4 +34,7 @@ RUN pip3 install -r requirements.txt
 RUN mkdir /root/.vim/bundle/taskwiki
 WORKDIR /root/.vim/bundle/taskwiki
 
-CMD ["sh", "-c", "python3 -m pytest -vv tests/"]
+# Setup xvfb
+RUN dnf install xorg-x11-server-Xvfb -y
+
+CMD ["sh", "-c", "xvfb-run python3 -m pytest -vv tests/"]
