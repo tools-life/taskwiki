@@ -92,6 +92,13 @@ endif
 
 execute "nnoremap <silent><buffer> <CR> :" . g:taskwiki_py . "Mappings.task_info_or_vimwiki_follow_link()<CR>"
 
+" Disable <C-Space> as VimwikiToggleListItem
+if !hasmapto('<Plug>VimwikiToggleListItem')
+  nmap <Plug>NoVimwikiToggleListItem <Plug>VimwikiToggleListItem
+endif
+
+execute "nnoremap <silent><buffer> <C-Space> :" . g:taskwiki_py . "Mappings.task_done_or_vimwiki_toggle_list_item()<CR>"
+
 " Leader-related mappings. Mostly <Leader>t + <first letter of the action>
 if !exists('g:taskwiki_suppress_mappings')
         if exists('g:taskwiki_maplocalleader')
@@ -103,6 +110,8 @@ if !exists('g:taskwiki_suppress_mappings')
                         let maplocalleader = '\t'
                 endif
         endif
+        " Override vimwiki's <C-Space>
+        nnoremap <silent><buffer> <C-Space> :TaskWikiDone<CR>
         nnoremap <silent><buffer> <LocalLeader>a :TaskWikiAnnotate<CR>
         nnoremap <silent><buffer> <LocalLeader>bd :TaskWikiBurndownDaily<CR>
         nnoremap <silent><buffer> <LocalLeader>bw :TaskWikiBurndownWeekly<CR>

@@ -291,6 +291,20 @@ class Mappings(object):
         # VimwikiFollowLink for link creation
         vim.command('VimwikiFollowLink')
 
+    @staticmethod
+    @errors.pretty_exception_handler
+    def task_done_or_vimwiki_toggle_list_item():
+        # Reset the cache() to use up-to-date buffer content
+        cache().reset()
+
+        # If the line under cursor contains a task, mark as done
+        # otherwise fallback to VimwikiToggleListItem
+        row = util.get_current_line_number()
+        if cache().vwtask[row] is not None:
+            vim.command('TaskWikiDone')
+            return
+        vim.command('VimwikiToggleListItem')
+
 
 
 class Meta(object):
