@@ -31,6 +31,10 @@ if !exists("g:did_python_taskwiki")
   let g:did_python_taskwiki = 1
 endif
 
+" Global update commands
+execute "command! -buffer -nargs=* TaskWikiBufferSave :"      . g:taskwiki_py . "WholeBuffer.update_to_tw()"
+execute "command! -buffer -nargs=* TaskWikiBufferLoad :"      . g:taskwiki_py . "WholeBuffer.update_from_tw()"
+
 augroup taskwiki
     autocmd! * <buffer>
     " Update to TW upon saving
@@ -45,15 +49,11 @@ augroup taskwiki
 
     " Refresh on load (if possible, after loadview to preserve folds)
     if has('patch-8.1.1113') || has('nvim-0.4.0')
-      execute "autocmd BufWinEnter <buffer> ++once :" . g:taskwiki_py . "WholeBuffer.update_from_tw()"
+      autocmd BufWinEnter <buffer> ++once TaskWikiBufferLoad
     else
-      execute g:taskwiki_py . "WholeBuffer.update_from_tw()"
+      TaskWikiBufferLoad
     endif
 augroup END
-
-" Global update commands
-execute "command! -buffer -nargs=* TaskWikiBufferSave :"      . g:taskwiki_py . "WholeBuffer.update_to_tw()"
-execute "command! -buffer -nargs=* TaskWikiBufferLoad :"      . g:taskwiki_py . "WholeBuffer.update_from_tw()"
 
 " Split reports commands
 execute "command! -buffer -nargs=* TaskWikiProjects :"        . g:taskwiki_py . "SplitProjects(<q-args>).execute()"
