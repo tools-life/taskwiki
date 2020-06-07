@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import os
 from datetime import datetime
 from tests.base import MultiSyntaxIntegrationTest
 
@@ -614,3 +615,31 @@ class TestViewportDefaultPreservesTags(MultiSyntaxIntegrationTest):
         assert task['description'] == 'hard task'
         assert task['status'] == 'pending'
         assert task['tags'] == set(['work', 'hard'])
+
+
+class TestViewportBufferModified(MultiSyntaxIntegrationTest):
+
+    viminput = """
+    HEADER2(Work tasks |)
+    * [ ] a task  #{uuid}
+    """
+
+    tasks = [
+        dict(description="a task", tags=['work']),
+    ]
+
+    def execute(self):
+        testfile2 = os.path.join(self.dir, "testwiki2.txt")
+        testfile3 = os.path.join(self.dir, "testwiki3.txt")
+
+        self.command("w", regex="written$", lines=1)
+        self.command("w {}".format(testfile2), regex="written$", lines=1)
+        self.command("1w {}".format(testfile3), regex="written$", lines=1)
+
+        # testfile2 has the task, so refresh on open shouldn't change anything
+        self.client.edit(testfile2)
+        assert self.client.eval('&modified') == '0'
+
+        # testfile3 only has header, so refresh on open makes changes
+        self.client.edit(testfile3)
+        assert self.client.eval('&modified') == '1'
