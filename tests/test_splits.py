@@ -277,6 +277,9 @@ class TestSplitReplacement(IntegrationTest):
         assert self.py("print(vim.current.buffer)", silent=False).startswith("<buffer burndown.daily")
         assert "Daily Burndown" in self.read_buffer()[0]
 
+        # switch back to taskwiki buffer
+        self.client.feedkeys("\\<C-W>p")
+
         self.command("TaskWikiBurndownDaily")
         assert self.py("print(vim.current.buffer)", silent=False).startswith("<buffer burndown.daily")
         assert "Daily Burndown" in self.read_buffer()[0]
