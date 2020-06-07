@@ -31,8 +31,6 @@ if !exists("g:did_python_taskwiki")
   let g:did_python_taskwiki = 1
 endif
 
-execute g:taskwiki_py . "WholeBuffer.update_from_tw()"
-
 augroup taskwiki
     autocmd! * <buffer>
     " Update to TW upon saving
@@ -44,6 +42,13 @@ augroup taskwiki
       autocmd BufWinEnter <buffer> silent! doautocmd SessionLoadPost
     endif
     execute "autocmd BufEnter <buffer> :" . g:taskwiki_py . "cache.load_current().reset()"
+
+    " Refresh on load (if possible, after loadview to preserve folds)
+    if has('patch-8.1.1113') || has('nvim-0.4.0')
+      execute "autocmd BufWinEnter <buffer> ++once :" . g:taskwiki_py . "WholeBuffer.update_from_tw()"
+    else
+      execute g:taskwiki_py . "WholeBuffer.update_from_tw()"
+    endif
 augroup END
 
 " Global update commands
