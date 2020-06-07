@@ -21,11 +21,17 @@ if exists("g:taskwiki_disable")
   finish
 endif
 
-" Determine the plugin path
-let s:plugin_path = escape(expand('<sfile>:p:h:h:h'), '\')
+if !exists("g:did_python_taskwiki")
+  " Determine the plugin path
+  let s:plugin_path = escape(expand('<sfile>:p:h:h:h'), '\')
 
-" Execute the main body of taskwiki source
-execute g:taskwiki_pyfile . s:plugin_path . '/taskwiki/main.py'
+  " Execute the main body of taskwiki source
+  execute g:taskwiki_pyfile . s:plugin_path . '/taskwiki/main.py'
+
+  let g:did_python_taskwiki = 1
+endif
+
+execute g:taskwiki_py . "WholeBuffer.update_from_tw()"
 
 augroup taskwiki
     autocmd! * <buffer>
