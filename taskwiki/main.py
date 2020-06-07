@@ -32,7 +32,7 @@ class WholeBuffer(object):
         Updates all the incomplete tasks in the vimwiki file if the info from TW is different.
         """
 
-        c = cache()
+        c = cache.load_current()
         c.reset()
         c.load_tasks()
         c.load_presets()
@@ -51,7 +51,7 @@ class WholeBuffer(object):
         Updates all tasks that differ from their TaskWarrior representation.
         """
 
-        c = cache()
+        c = cache.load_current()
         c.reset()
         c.load_tasks()
         c.load_presets()
@@ -637,6 +637,5 @@ class ChooseSplitTags(CallbackSplitMixin, SplitTags):
 
 
 if __name__ == '__main__':
-    WholeBuffer.update_from_tw()
     Meta().integrate_tagbar()
     Meta().set_proper_colors()
