@@ -28,16 +28,16 @@ let s:plugin_path = escape(expand('<sfile>:p:h:h:h'), '\')
 execute g:taskwiki_pyfile . s:plugin_path . '/taskwiki/main.py'
 
 augroup taskwiki
-    autocmd!
+    autocmd! * <buffer>
     " Update to TW upon saving
-    execute "autocmd BufWrite *.".expand('%:e')." TaskWikiBufferSave"
+    autocmd BufWrite <buffer> TaskWikiBufferSave
     " Save and load the view to preserve folding, if desired
     if !exists('g:taskwiki_dont_preserve_folds')
-      execute "autocmd BufWinLeave *.".expand('%:e')." mkview"
-      execute "autocmd BufWinEnter *.".expand('%:e')." silent! loadview"
-      execute "autocmd BufWinEnter *.".expand('%:e')." silent! doautocmd SessionLoadPost *.".expand('%:e')
+      autocmd BufWinLeave <buffer> mkview
+      autocmd BufWinEnter <buffer> silent! loadview
+      autocmd BufWinEnter <buffer> silent! doautocmd SessionLoadPost
     endif
-    execute "autocmd BufEnter *.".expand('%:e')." :" . g:taskwiki_py . "cache.load_current().reset()"
+    execute "autocmd BufEnter <buffer> :" . g:taskwiki_py . "cache.load_current().reset()"
 augroup END
 
 " Global update commands
