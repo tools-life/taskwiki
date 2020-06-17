@@ -26,7 +26,7 @@ let s:plugin_path = escape(expand('<sfile>:p:h:h:h'), '\')
 
 " Run the measure parts first, if desired
 if exists("g:taskwiki_measure_coverage")
-  execute 'py3file ' . s:plugin_path . '/knowledge/testcoverage.py'
+  execute 'py3file ' . s:plugin_path . '/taskwiki/testcoverage.py'
 endif
 
 " Execute the main body of taskwiki source
@@ -91,6 +91,13 @@ if !hasmapto('<Plug>VimwikiFollowLink')
 endif
 
 execute "nnoremap <silent><buffer> <CR> :" . g:taskwiki_py . "Mappings.task_info_or_vimwiki_follow_link()<CR>"
+
+" Disable <C-Space> as VimwikiToggleListItem
+if !hasmapto('<Plug>VimwikiToggleListItem')
+  nmap <Plug>NoVimwikiToggleListItem <Plug>VimwikiToggleListItem
+endif
+
+execute "nnoremap <silent><buffer> <C-Space> :" . g:taskwiki_py . "Mappings.task_done_or_vimwiki_toggle_list_item()<CR>"
 
 " Leader-related mappings. Mostly <Leader>t + <first letter of the action>
 if !exists('g:taskwiki_suppress_mappings')
