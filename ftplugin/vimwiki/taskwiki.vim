@@ -110,8 +110,6 @@ if !exists('g:taskwiki_suppress_mappings')
                         let maplocalleader = '\t'
                 endif
         endif
-        " Override vimwiki's <C-Space>
-        nnoremap <silent><buffer> <C-Space> :TaskWikiDone<CR>
         nnoremap <silent><buffer> <LocalLeader>a :TaskWikiAnnotate<CR>
         nnoremap <silent><buffer> <LocalLeader>bd :TaskWikiBurndownDaily<CR>
         nnoremap <silent><buffer> <LocalLeader>bw :TaskWikiBurndownWeekly<CR>
