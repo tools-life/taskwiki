@@ -112,6 +112,14 @@ class TestParsingVimwikiTask(object):
         assert port.sort == 'extra'
         assert port.tw == 'extra'
 
+    def test_count(self, test_syntax):
+        example_viewport = "HEADER2(Test | project:Home limit:2)"
+        port = self.process_viewport(example_viewport, test_syntax)
+
+        assert port.taskfilter == list(DEFAULT_VIEWPORT_VIRTUAL_TAGS) + ["(", "project:Home", ")"]
+        assert port.name == "Test"
+        assert port.count == 2
+
     def test_override_default_virtual_tags_neutral(self, test_syntax):
         example_viewport = "HEADER2(Test | project:Home !?DELETED)"
         port = self.process_viewport(example_viewport, test_syntax)

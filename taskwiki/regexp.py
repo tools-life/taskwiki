@@ -44,43 +44,47 @@ DATE_FORMAT = "(%Y-%m-%d)"
 VIEWPORT = {
     'default':
     re.compile(
-        r'^'                         # Starts at the begging of the line
-        r'(?P<header_start>[=]+)'    # Heading begging
-        r'(?P<name>[^=\|\[\{]*)'     # Name of the viewport, all before the | sign
-                                     # Cannot include '[', '=', '|', and '{'
-        r'\|'                        # Bar
-        r'(?!\|)'                    # (But not two, that would be a preset)
-        r'(?P<filter>[^=\|]*?)'      # Filter
-        r'('                         # Optional defaults
-          r'\|'                      # Bar
-          r'(?P<defaults>[^=\|]+?)'  # Default attrs
+        r'^'                             # Starts at the begging of the line
+        r'(?P<header_start>[=]+)'        # Heading begging
+        r'(?P<name>[^=\|\[\{]*)'         # Name of the viewport, all before the | sign
+                                         # Cannot include '[', '=', '|', and '{'
+        r'\|'                            # Bar
+        r'(?!\|)'                        # (But not two, that would be a preset)
+        r'(?P<filter>[^=\|]*?)'          # Filter
+        r'('                             # Optional defaults
+          r'\|'                          # Bar
+          r'(?P<defaults>[^=\|]+?)'      # Default attrs
         r')?'
-        r'\s*'                       # Any whitespace
-        r'(#(?P<source>[A-Z]))?'     # Optional source indicator
-        r'\s*'                       # Any whitespace
-        r'(\$(?P<sort>[A-Z]))?'      # Optional sort indicator
-        r'\s*'                       # Any whitespace
-        r'[=]+'                      # Header ending
+        r'\s*'                           # Any whitespace
+        r'(#(?P<source>[A-Z]))?'         # Optional source indicator
+        r'\s*'                           # Any whitespace
+        r'(\$(?P<sort>[A-Z]))?'          # Optional sort indicator
+        r'\s*'                           # Any whitespace
+        r'(limit:(?P<count>[0-9]+))?'    # Optional count indicator
+        r'\s*'                           # Any whitespace
+        r'[=]+'                          # Header ending
     ),
     'markdown':
     re.compile(
-        r'^'                         # Starts at the begging of the line
-        r'(?P<header_start>[#]+)'    # Heading begging
-        r'(?P<name>[^#\|\[\{]*)'     # Name of the viewport, all before the | sign
-                                     # Cannot include '[', '#', '|', and '{'
-        r'\|'                        # Bar
-        r'(?!\|)'                    # (But not two, that would be a preset)
-        r'(?P<filter>[^#\|]*?)'      # Filter
-        r'('                         # Optional defaults
-          r'\|'                      # Bar
-          r'(?P<defaults>[^#\|]+?)'  # Default attrs
+        r'^'                             # Starts at the begging of the line
+        r'(?P<header_start>[#]+)'        # Heading begging
+        r'(?P<name>[^#\|\[\{]*)'         # Name of the viewport, all before the | sign
+                                         # Cannot include '[', '#', '|', and '{'
+        r'\|'                            # Bar
+        r'(?!\|)'                        # (But not two, that would be a preset)
+        r'(?P<filter>[^#\|]*?)'          # Filter
+        r'('                             # Optional defaults
+          r'\|'                          # Bar
+          r'(?P<defaults>[^#\|]+?)'      # Default attrs
         r')?'
-        r'\s*'                       # Any whitespace
-        r'(#(?P<source>[A-Z]))?'     # Optional source indicator
-        r'\s*'                       # Any whitespace
-        r'(\$(?P<sort>[A-Z]))?'      # Optional sort indicator
-        r'\s*'                       # Any whitespace
-        r'$'                         # End of line
+        r'\s*'                           # Any whitespace
+        r'(#(?P<source>[A-Z]))?'         # Optional source indicator
+        r'\s*'                           # Any whitespace
+        r'(\$(?P<sort>[A-Z]))?'          # Optional sort indicator
+        r'\s*'                           # Any whitespace
+        r'(limit:(?P<count>[0-9]+))?'    # Optional count indicator
+        r'\s*'                           # Any whitespace
+        r'$'                             # End of line
     )
 }
 
