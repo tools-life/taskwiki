@@ -31,8 +31,17 @@ class ViewPort(object):
 
     meta_tokens = ('-VISIBLE',)
 
-    def __init__(self, line_number, cache, tw,
-                 name, filterstring, defaultstring, sort=None):
+    def __init__(
+        self,
+        line_number,
+        cache,
+        tw,
+        name,
+        filterstring,
+        defaultstring,
+        sort=None,
+        count=-1,
+    ):
         """
         Constructs a ViewPort out of given line.
         """
@@ -57,6 +66,8 @@ class ViewPort(object):
             util.get_var('taskwiki_sort_order') or
             constants.DEFAULT_SORT_ORDER
         )
+
+        self.count = count and int(count) or None
 
     def process_filterstring(self, filterstring, use_presets=True):
         """
@@ -234,8 +245,10 @@ class ViewPort(object):
                 print(u"Sort indicator '{0}' for viewport '{1}' is not defined,"
                        " using default.".format(sort_id, name), sys.stderr)
 
+        count = match.group('count')
+
         self = cls(number, cache, tw, name, filterstring,
-                   defaults, sortstring)
+                   defaults, sortstring, count)
 
         return self
 
@@ -379,3 +392,10 @@ class ViewPort(object):
             self.cache.vwtask[added_at] = vimwikitask
 
         sort.TaskSorter(self.cache, self.tasks, self.sort).execute()
+
+        if self.count is not None:
+            for i in range(
+                self.line_number + self.count,
+                self.line_number + existing_tasks + added_tasks,
+            ):
+                self.cache.remove_line(self.line_number + self.count + 1)
