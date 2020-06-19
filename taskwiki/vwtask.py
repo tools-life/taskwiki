@@ -175,8 +175,8 @@ class VimwikiTask(object):
             # * [ ] this is new task
             # with project:home applied
 
-            if '--' in self['description']:
-                first_part, second_part = self['description'].split('--', 1)
+            if ' -- ' in self['description']:
+                first_part, second_part = self['description'].split(' -- ', 1)
 
                 new_description = first_part.strip()
                 modstring = second_part.strip()
