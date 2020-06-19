@@ -99,3 +99,9 @@ class TestParsingVimwikiTask(object):
         assert vwtask['priority'] == None
         assert vwtask['due'] == None
         assert vwtask['uuid'] == None
+
+    def test_not_modstring(self):
+        self.cache.buffer[0] = "* [ ] Task https://somewhere/dash--dash"
+        vwtask = self.VimwikiTask.from_line(self.cache, 0)
+
+        assert vwtask['description'] == u"Task https://somewhere/dash--dash"
