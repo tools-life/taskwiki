@@ -2,7 +2,7 @@ FROM fedora:27
 ARG TASK_VERSION
 
 RUN dnf update -y
-RUN dnf install procps-ng psmisc which vim curl git gvim gcc gcc-c++ cmake make gnutls-devel libuuid-devel -y
+RUN dnf install procps-ng psmisc which vim curl git gvim gcc gcc-c++ cmake make gnutls-devel libuuid-devel xorg-x11-server-Xvfb -y
 
 # Setup language environment
 ENV LC_ALL en_US.UTF-8
@@ -34,4 +34,4 @@ RUN pip3 install -r requirements.txt
 RUN mkdir /root/.vim/bundle/taskwiki
 WORKDIR /root/.vim/bundle/taskwiki
 
-CMD ["sh", "-c", "python3 -m pytest -vv tests/"]
+CMD xvfb-run python3 -m pytest -vv tests/
