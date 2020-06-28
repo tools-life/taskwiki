@@ -22,10 +22,10 @@ class IntegrationTest(object):
     tasks = []
     markup = 'default'
 
-    def add_plugin(self, name):
+    def add_plugin(self, name, *args):
         plugin_base = os.path.expanduser('~/.vim/bundle/')
         plugin_path = os.path.join(plugin_base, name)
-        self.client.add_plugin(plugin_path)
+        self.client.add_plugin(plugin_path, *args)
 
     def write_buffer(self, lines, position=0):
         result = self.client.write_buffer(position + 1, lines)
@@ -92,10 +92,10 @@ class IntegrationTest(object):
 
         self.configure_global_variables()
         self.add_plugin('taskwiki')
-        self.add_plugin('vimwiki')
+        self.add_plugin('vimwiki', 'plugin/vimwiki.vim')
         self.filepath = os.path.join(self.dir, 'testwiki.txt')
         self.client.edit(self.filepath)
-        self.command('set filetype=vimwiki', silent=None)  # TODO: fix these vimwiki loading errors
+        self.command('set filetype=vimwiki')
 
     def teardown(self):
         if not self.client:

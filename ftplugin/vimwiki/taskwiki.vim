@@ -26,7 +26,7 @@ let s:plugin_path = escape(expand('<sfile>:p:h:h:h'), '\')
 
 " Run the measure parts first, if desired
 if exists("g:taskwiki_measure_coverage")
-  execute 'py3file ' . s:plugin_path . '/knowledge/testcoverage.py'
+  execute 'py3file ' . s:plugin_path . '/taskwiki/testcoverage.py'
 endif
 
 " Execute the main body of taskwiki source

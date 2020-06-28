@@ -1370,7 +1370,7 @@ class TestSelectAfterBufferSwitch(IntegrationTest):
         sleep(0.5)
         self.command('split testwiki2.txt', silent=False)
         sleep(0.5)
-        self.command('set filetype=vimwiki', silent=False)
+        self.command('set filetype=vimwiki')
         sleep(0.5)
         self.command('q!')
         sleep(0.5)
