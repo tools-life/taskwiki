@@ -2,6 +2,11 @@
 import pytest
 import re
 
+
+# enable assertion introspection for the common code in tests.base
+pytest.register_assert_rewrite('tests.base')
+
+
 markup_headers = {
     'default': {
         'HEADER1': "= %s =",
