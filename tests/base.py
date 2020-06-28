@@ -84,17 +84,15 @@ class IntegrationTest(object):
         self.configure_global_variables()
         self.add_plugin('taskwiki')
         self.add_plugin('vimwiki')
-        sleep(0.5)
         self.filepath = os.path.join(self.dir, 'testwiki.txt')
         self.client.edit(self.filepath)
-        sleep(0.5)
         self.command('set filetype=vimwiki', silent=None)  # TODO: fix these vimwiki loading errors
-        sleep(1)  # Give vim some time to load the scripts
 
     def teardown(self):
         self.client.quit()
+        sleep(0.1)  # quit uses --remote-send which doesn't wait
         subprocess.call(['pkill', '-f', 'gvim.*--servername ' + server_name])
-        sleep(0.5)  # Killing takes some time
+        sleep(0.2)  # Killing takes some time
         self.tasks = self.__class__.tasks  # Reset the task list
 
     def py(self, command, silent=True, regex=None, lines=None, direct=False):
