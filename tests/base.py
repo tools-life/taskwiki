@@ -66,7 +66,7 @@ class IntegrationTest(object):
             else:
                 raise
 
-    def configure_global_varialbes(self):
+    def configure_global_variables(self):
         self.command('let g:taskwiki_data_location="{0}"'.format(self.dir))
         self.command('let g:taskwiki_taskrc_location="{0}"'.format(self.taskrc_path))
         self.command("let g:vimwiki_list = [{'syntax': 'mediawiki', 'ext': '.txt','path': '%s'}]" % self.dir)
@@ -81,7 +81,7 @@ class IntegrationTest(object):
         if six.PY3:
             self.client.command('exec has("python3")')
 
-        self.configure_global_varialbes()
+        self.configure_global_variables()
         self.add_plugin('taskwiki')
         self.add_plugin('vimwiki')
         sleep(0.5)
@@ -295,8 +295,8 @@ class MultipleSourceTest(IntegrationTest):
         for task in self.extra_tasks:
             task.save()
 
-    def configure_global_varialbes(self):
-        super(MultipleSourceTest, self).configure_global_varialbes()
+    def configure_global_variables(self):
+        super(MultipleSourceTest, self).configure_global_variables()
 
         self.client.feedkeys(':let g:taskwiki_extra_warriors={0}'.format(
             {'H': dict(data_location=str(self.extra_dir), taskrc_location='/')}

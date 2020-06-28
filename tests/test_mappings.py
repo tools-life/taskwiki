@@ -57,8 +57,8 @@ class TestSuppressedMapping(IntegrationTest):
             dict(description="test task 2"),
     ]
 
-    def configure_global_varialbes(self):
-        super(TestSuppressedMapping, self).configure_global_varialbes()
+    def configure_global_variables(self):
+        super(TestSuppressedMapping, self).configure_global_variables()
         self.command('let g:taskwiki_suppress_mappings="yes"')
 
     def execute(self):
@@ -98,8 +98,8 @@ class TestCustomMapping(IntegrationTest):
             dict(description="test task 2"),
     ]
 
-    def configure_global_varialbes(self):
-        super(TestCustomMapping, self).configure_global_varialbes()
+    def configure_global_variables(self):
+        super(TestCustomMapping, self).configure_global_variables()
         self.command('let g:taskwiki_maplocalleader=",t"')
 
     def execute(self):
@@ -181,8 +181,8 @@ class TestColonRemapWithCustomMap(IntegrationTest):
             dict(description="test task 2"),
     ]
 
-    def configure_global_varialbes(self):
-        super(TestColonRemapWithCustomMap, self).configure_global_varialbes()
+    def configure_global_variables(self):
+        super(TestColonRemapWithCustomMap, self).configure_global_variables()
         self.command('let g:taskwiki_maplocalleader=",t"')
 
     def execute(self):

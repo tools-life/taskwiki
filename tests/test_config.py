@@ -4,8 +4,8 @@ from tests.base import IntegrationTest, MultipleSourceTest
 
 class TestSimpleColorAssigment(IntegrationTest):
 
-    def configure_global_varialbes(self):
-        super(TestSimpleColorAssigment, self).configure_global_varialbes()
+    def configure_global_variables(self):
+        super(TestSimpleColorAssigment, self).configure_global_variables()
         self.command('let g:taskwiki_source_tw_colors="yes"')
 
         # Also setup TW config at this point
