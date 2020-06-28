@@ -33,5 +33,3 @@ ADD requirements.txt requirements.txt
 RUN pip3 install -r requirements.txt
 RUN mkdir /root/.vim/bundle/taskwiki
 WORKDIR /root/.vim/bundle/taskwiki
-
-CMD xvfb-run python3 -m pytest -vv tests/
