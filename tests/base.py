@@ -36,7 +36,6 @@ class IntegrationTest(object):
             six.text_type(end+1)
             ).splitlines()
 
-
     def generate_data(self):
         self.dir = tempfile.mkdtemp(dir='/tmp/')
 
@@ -106,7 +105,7 @@ class IntegrationTest(object):
             return self.client.command(py_command + command)
         else:
             return self.command(py_command + command,
-                            silent=silent, regex=regex, lines=lines)
+                                silent=silent, regex=regex, lines=lines)
 
     def command(self, command, silent=True, regex=None, lines=None):
         result = self.client.command(command)
@@ -182,8 +181,8 @@ class IntegrationTest(object):
     # Helper function that fills in {uuid} placeholders with correct UUIDs
     def fill_uuid(self, line):
         # Tasks in testing can have only alphanumerical descriptions
-        match = re.match(u'\\s*\\* \\[.\\] (?P<desc>[äéôa-zA-Z0-9 \[\]]*)(?<!\\s)', line,
-                flags=re.UNICODE)
+        match = re.match(u'\\s*\\* \\[.\\] (?P<desc>[äéôa-zA-Z0-9 \\[\\]]*)(?<!\\s)', line,
+                         flags=re.UNICODE)
 
         if not match:
             return line
@@ -195,7 +194,6 @@ class IntegrationTest(object):
             return line.format(uuid=tasks[0]['uuid'].split('-')[0])
         else:
             return line
-
 
     def test_execute(self):
         # First, run sanity checks
@@ -216,8 +214,8 @@ class IntegrationTest(object):
         # Then load the input
         if self.viminput:
             # Unindent the lines
-            lines = [self.fill_uuid(l[4:])
-                     for l in self.viminput.strip('\n').splitlines()]
+            lines = [self.fill_uuid(line[4:])
+                     for line in self.viminput.strip('\n').splitlines()]
             self.write_buffer(lines)
 
         # Do the stuff
@@ -226,14 +224,13 @@ class IntegrationTest(object):
         # Check expected output
         if self.vimoutput:
             lines = [
-                self.fill_uuid(l[4:])
-                for l in self.vimoutput.strip('\n').splitlines()[:-1]
+                self.fill_uuid(line[4:])
+                for line in self.vimoutput.strip('\n').splitlines()[:-1]
             ]
             assert self.read_buffer() == lines
 
 
 class MultiSyntaxIntegrationTest(IntegrationTest):
-
 
     def test_execute(self, test_syntax):
 
@@ -260,8 +257,8 @@ class MultiSyntaxIntegrationTest(IntegrationTest):
             # Expand HEADER
             self.viminput = header_expand(self.viminput)
             # Unindent the lines
-            lines = [self.fill_uuid(l[4:])
-                     for l in self.viminput.strip('\n').splitlines()]
+            lines = [self.fill_uuid(line[4:])
+                     for line in self.viminput.strip('\n').splitlines()]
             self.write_buffer(lines)
 
         # Do the stuff
@@ -271,8 +268,8 @@ class MultiSyntaxIntegrationTest(IntegrationTest):
         if self.vimoutput:
             self.vimoutput = header_expand(self.vimoutput)
             lines = [
-                self.fill_uuid(l[4:])
-                for l in self.vimoutput.strip('\n').splitlines()[:-1]
+                self.fill_uuid(line[4:])
+                for line in self.vimoutput.strip('\n').splitlines()[:-1]
             ]
             assert self.read_buffer() == lines
 
@@ -292,7 +289,7 @@ class MultipleSourceTest(IntegrationTest):
         )
 
         extra_tasks = [Task(self.extra_tw, **task_kwargs)
-                      for task_kwargs in self.extra_tasks]
+                       for task_kwargs in self.extra_tasks]
 
         self.extra_tasks = extra_tasks
         for task in self.extra_tasks:
@@ -304,8 +301,8 @@ class MultipleSourceTest(IntegrationTest):
         self.client.feedkeys(':let g:taskwiki_extra_warriors={0}'.format(
             {'H': dict(data_location=str(self.extra_dir), taskrc_location='/')}
         ))
-        self.client.feedkeys('\<CR>')
-        self.client.feedkeys('\<CR>')
+        self.client.feedkeys('\\<CR>')
+        self.client.feedkeys('\\<CR>')
 
     def fill_uuid(self, line):
         # Tasks in testing can have only alphanumerical descriptions
@@ -318,7 +315,8 @@ class MultipleSourceTest(IntegrationTest):
         extra_tasks = self.extra_tw.tasks.filter(description=match.group('desc'))
 
         if len(tasks) > 1 or len(extra_tasks) > 1:
-            raise RuntimeError("Description '{0}' matches multiple tasks. "
+            raise RuntimeError(
+                "Description '{0}' matches multiple tasks. "
                 "Aborting fill_uuid operation.".format(match.group('desc')))
 
         if tasks:
@@ -328,6 +326,7 @@ class MultipleSourceTest(IntegrationTest):
             return line.format(uuid=tasks[0]['uuid'].split('-')[0])
         else:
             return line
+
 
 # Mock vim to test vim-nonrelated functions
 class MockVim(object):
@@ -345,6 +344,7 @@ class MockVim(object):
         self.current.buffer = ['']
         self.vars.clear()
         self.warriors.clear()
+
 
 class MockBuffer(object):
 
@@ -401,4 +401,3 @@ class MockCache(object):
         self.warriors.clear()
         self.warriors.update({'default': 'default'})
         self.buffer_has_authority = True
-
