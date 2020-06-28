@@ -10,8 +10,6 @@ env:
   - TASK_VERSION=v2.5.1
 python:
   - "3.6"
-  - "3.7"
-  - "3.8"
 services:
   - docker
 before_install:
