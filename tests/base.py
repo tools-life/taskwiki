@@ -394,7 +394,6 @@ class MockCache(object):
         self.vwtask = dict()
         self.task = dict()
         self.viewport = dict()
-        self.markup_syntax = 'default'
 
     def reset(self):
         self.warriors.clear()
