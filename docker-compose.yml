@@ -3,16 +3,8 @@ services:
   tests:
     build: .
     volumes:
-      - "/etc/group:/etc/group:ro"
-      - "/etc/passwd:/etc/passwd:ro"
-      - "/etc/shadow:/etc/shadow:ro"
-      - "/etc/sudoers.d:/etc/sudoers.d:ro"
-      - "/tmp/.X11-unix:/tmp/.X11-unix:rw"
-      - "$HOME/.Xauthority:/root/.Xauthority:rw"
-      - ".:/root/.vim/bundle/taskwiki:rw"
+      - ".:/root/.vim/bundle/taskwiki:ro"
     network_mode: "host"
-    environment:
-      - DISPLAY
     security_opt:
       - label=type:container_runtime_t
     tty: true
