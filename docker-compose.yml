@@ -8,4 +8,4 @@ services:
     security_opt:
       - label=type:container_runtime_t
     tty: true
-    command: xvfb-run python3 -m pytest -vv tests/
+    command: xvfb-run --server-args=-noreset python3 -m pytest -vv tests/
