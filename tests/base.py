@@ -114,7 +114,10 @@ class IntegrationTest(object):
 
         # For silent commands, there should be no output
         if silent is not None:
-            assert silent == bool(not result)
+            if silent:
+                assert not result
+            else:
+                assert result
 
             # Multiline-evaluate the regex
             if regex:
