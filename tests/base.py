@@ -95,9 +95,9 @@ class IntegrationTest(object):
         if not self.client:
             return
 
-        self.client.quit()
+        self.client.normal(':qa!<Enter>')  # unlike .quit() this also works in insert/visual
         self.client = None
-        sleep(0.1)  # quit uses --remote-send which doesn't wait
+        sleep(0.1)  # quit/normal use --remote-send which doesn't wait
         subprocess.call(['pkill', '-f', 'gvim.*--servername ' + server_name])
         sleep(0.2)  # Killing takes some time
         self.tasks = self.__class__.tasks  # Reset the task list
