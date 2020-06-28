@@ -32,9 +32,15 @@ class IntegrationTest(object):
         assert result == u"0"
 
     def read_buffer(self, start=0, end=1000):
+        # ensure that vim isn't stuck stuck showing an error message
+        # (read_buffer would ignore this and just return '')
+        buf = self.client.get_active_buffer()
+        assert buf
+
         return self.client.read_buffer(
             six.text_type(start+1),
-            six.text_type(end+1)
+            six.text_type(end+1),
+            buf=buf
             ).splitlines()
 
     def generate_data(self):
