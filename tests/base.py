@@ -16,10 +16,11 @@ server = vimrunner.Server(name=server_name)
 
 class IntegrationTest(object):
 
+    client = None
     viminput = None
     vimoutput = None
     tasks = []
-    markup = None
+    markup = 'default'
 
     def add_plugin(self, name):
         plugin_base = os.path.expanduser('~/.vim/bundle/')
@@ -74,6 +75,8 @@ class IntegrationTest(object):
         self.command('let g:taskwiki_markup_syntax="{0}"'.format(self.markup))
 
     def setup(self):
+        assert not self.client
+
         self.generate_data()
         self.start_client()  # Start client with 3 chances
 
@@ -89,7 +92,11 @@ class IntegrationTest(object):
         self.command('set filetype=vimwiki', silent=None)  # TODO: fix these vimwiki loading errors
 
     def teardown(self):
+        if not self.client:
+            return
+
         self.client.quit()
+        self.client = None
         sleep(0.1)  # quit uses --remote-send which doesn't wait
         subprocess.call(['pkill', '-f', 'gvim.*--servername ' + server_name])
         sleep(0.2)  # Killing takes some time
@@ -133,6 +140,11 @@ class IntegrationTest(object):
         """
         Makes sanity checks upon the vim instance.
         """
+
+        if not soft:
+            assert self.client
+        elif not self.client:
+            return False
 
         # Assert all the important files were loaded
         scriptnames = self.client.command('scriptnames').splitlines()
@@ -199,7 +211,6 @@ class IntegrationTest(object):
     def test_execute(self):
         # First, run sanity checks
         success = False
-        self.markup = 'default'
 
         for i in range(5):
             if self.check_sanity(soft=True):
@@ -232,6 +243,14 @@ class IntegrationTest(object):
 
 
 class MultiSyntaxIntegrationTest(IntegrationTest):
+
+    markup = None
+
+    def setup(self):
+        if self.markup:
+            super(MultiSyntaxIntegrationTest, self).setup()
+        else:
+            pass
 
     def test_execute(self, test_syntax):
 
