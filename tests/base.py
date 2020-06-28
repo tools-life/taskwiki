@@ -253,45 +253,18 @@ class MultiSyntaxIntegrationTest(IntegrationTest):
             pass
 
     def test_execute(self, test_syntax):
-
         # Set markup syntax
         markup, header_expand = test_syntax
         self.markup = markup
 
-        # First, run sanity checks
-        success = False
-
-        for i in range(5):
-            if self.check_sanity(soft=True):
-                success = True
-                break
-            else:
-                self.teardown()
-                self.setup()
-
-        if not success:
-            self.check_sanity(soft=False)
-
-        # Then load the input
         if self.viminput:
             # Expand HEADER
             self.viminput = header_expand(self.viminput)
-            # Unindent the lines
-            lines = [self.fill_uuid(line[4:])
-                     for line in self.viminput.strip('\n').splitlines()]
-            self.write_buffer(lines)
-
-        # Do the stuff
-        self.execute()
-
-        # Check expected output
         if self.vimoutput:
+            # Expand HEADER
             self.vimoutput = header_expand(self.vimoutput)
-            lines = [
-                self.fill_uuid(line[4:])
-                for line in self.vimoutput.strip('\n').splitlines()[:-1]
-            ]
-            assert self.read_buffer() == lines
+
+        super(MultiSyntaxIntegrationTest, self).test_execute()
 
 
 class MultipleSourceTest(IntegrationTest):
