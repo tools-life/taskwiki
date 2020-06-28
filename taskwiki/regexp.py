@@ -44,97 +44,97 @@ DATE_FORMAT = "(%Y-%m-%d)"
 VIEWPORT = {
     'default':
     re.compile(
-        '^'                     # Starts at the begging of the line
-        '[=]+'                  # Heading begging
-        '(?P<name>[^=\|\[\{]*)'      # Name of the viewport, all before the | sign
-                                    # Cannot include '[', '=', '|, and '{'
-        '\|'                         # Colon
-        '(?P<filter>[^=\|]+?)'       # Filter
-        '('                          # Optional defaults
-        '\|'                         # Colon
-        '(?P<defaults>[^=\|]+?)'     # Default attrs
-        ')?'
-        '\s*'                        # Any whitespace
-        '(#(?P<source>[A-Z]))?'      # Optional source indicator
-        '\s*'                        # Any whitespace
-        '(\$(?P<sort>[A-Z]))?'       # Optional sort indicator
-        '\s*'                        # Any whitespace
-        '[=]+'                  # Header ending
+        r'^'                         # Starts at the begging of the line
+        r'[=]+'                      # Heading begging
+        r'(?P<name>[^=\|\[\{]*)'     # Name of the viewport, all before the | sign
+                                     # Cannot include '[', '=', '|, and '{'
+        r'\|'                        # Colon
+        r'(?P<filter>[^=\|]+?)'      # Filter
+        r'('                         # Optional defaults
+          r'\|'                      # Colon
+          r'(?P<defaults>[^=\|]+?)'  # Default attrs
+        r')?'
+        r'\s*'                       # Any whitespace
+        r'(#(?P<source>[A-Z]))?'     # Optional source indicator
+        r'\s*'                       # Any whitespace
+        r'(\$(?P<sort>[A-Z]))?'      # Optional sort indicator
+        r'\s*'                       # Any whitespace
+        r'[=]+'                      # Header ending
     ),
     'markdown':
     re.compile(
-        '^'                     # Starts at the begging of the line
-        '[#]+'                  # Heading begging
-        '(?P<name>[^#\|\[\{]*)' # Name of the viewport, all before the | sign
-                                # Cannot include '[', '=', '|, and '{'
-        '\|'                    # Colon
-        '(?P<filter>[^#\|]+?)'  # Filter
-        '('                     # Optional defaults
-        '\|'                    # Colon
-        '(?P<defaults>[^#\|]+?)'# Default attrs
-        ')?'
-        '\s*'                   # Any whitespace
-        '(#(?P<source>[A-Z]))?' # Optional source indicator
-        '\s*'                   # Any whitespace
-        '(\$(?P<sort>[A-Z]))?'  # Optional sort indicator
-        '\s*'                   # Any whitespace
-        '$'                     # End of line
+        r'^'                         # Starts at the begging of the line
+        r'[#]+'                      # Heading begging
+        r'(?P<name>[^#\|\[\{]*)'     # Name of the viewport, all before the | sign
+                                     # Cannot include '[', '=', '|, and '{'
+        r'\|'                        # Colon
+        r'(?P<filter>[^#\|]+?)'      # Filter
+        r'('                         # Optional defaults
+          r'\|'                      # Colon
+          r'(?P<defaults>[^#\|]+?)'  # Default attrs
+        r')?'
+        r'\s*'                       # Any whitespace
+        r'(#(?P<source>[A-Z]))?'     # Optional source indicator
+        r'\s*'                       # Any whitespace
+        r'(\$(?P<sort>[A-Z]))?'      # Optional sort indicator
+        r'\s*'                       # Any whitespace
+        r'$'                         # End of line
     )
 }
 
 HEADER = {
     'default':
     re.compile(
-        '^'                      # Starts at the beginning of the line
-        '(?P<header_start>[=]+)' # With a positive number of =
-        '[^=]+'                  # Character other than =
-        '[=]+'                   # Positive number of =, closing the header
-        '\s*'                    # Allow trailing whitespace
+        r'^'                         # Starts at the beginning of the line
+        r'(?P<header_start>[=]+)'    # With a positive number of =
+        r'[^=]+'                     # Character other than =
+        r'[=]+'                      # Positive number of =, closing the header
+        r'\s*'                       # Allow trailing whitespace
     ),
     'markdown':
     re.compile(
-        '^'                      # Starts at the beginning of the line
-        '(?P<header_start>[#]+)' # With a positive number of #
-        '[^#]+'                  # Character other than #
+        r'^'                         # Starts at the beginning of the line
+        r'(?P<header_start>[#]+)'    # With a positive number of #
+        r'[^#]+'                     # Character other than #
     )
 }
 
 PRESET = {
     'default':
     re.compile(
-        '^'                           # Starts at the beginning of the line
-        '(?P<header_start>[=]+)'      # With a positive number of =
-        '([^=\|\[\{]*)'               # Heading caption, everything up to ||
-                                    # Cannot include '[', '=', '|, and '{'
-        '\|\|'                        # Delimiter
-        '(?P<filter>[^=\|]+?)'        # Filter preset
-        '('                           # Optional defaults
-        '\|\|'                      # Delimiter
-        '(?P<defaults>[^=\|]+?)'    # Default attrs preset
-        ')?'
-        '\s*'                         # Any whitespace
-        '[=]+'                        # Header ending
+        r'^'                         # Starts at the beginning of the line
+        r'(?P<header_start>[=]+)'    # With a positive number of =
+        r'([^=\|\[\{]*)'             # Heading caption, everything up to ||
+                                     # Cannot include '[', '=', '|, and '{'
+        r'\|\|'                      # Delimiter
+        r'(?P<filter>[^=\|]+?)'      # Filter preset
+        r'('                         # Optional defaults
+        r'\|\|'                      # Delimiter
+        r'(?P<defaults>[^=\|]+?)'    # Default attrs preset
+        r')?'
+        r'\s*'                       # Any whitespace
+        r'[=]+'                      # Header ending
     ),
     'markdown':
     re.compile(
-        '^'                           # Starts at the beginning of the line
-        '(?P<header_start>[#]+)'      # With a positive number of #
-        '([^#\|\[\{]*)'               # Heading caption, everything up to ||
-                                    # Cannot include '[', '#', '|, and '{'
-        '\|\|'                        # Delimiter
-        '(?P<filter>[^#\|]+?)'        # Filter preset
-        '('                           # Optional defaults
-        '\|\|'                      # Delimiter
-        '(?P<defaults>[^#\|]+?)'    # Default attrs preset
-        ')?'
-        '\s*'                   # Any whitespace
-        '$'                     # End of line
+        r'^'                         # Starts at the beginning of the line
+        r'(?P<header_start>[#]+)'    # With a positive number of #
+        r'([^#\|\[\{]*)'             # Heading caption, everything up to ||
+                                     # Cannot include '[', '#', '|, and '{'
+        r'\|\|'                      # Delimiter
+        r'(?P<filter>[^#\|]+?)'      # Filter preset
+        r'('                         # Optional defaults
+        r'\|\|'                      # Delimiter
+        r'(?P<defaults>[^#\|]+?)'    # Default attrs preset
+        r')?'
+        r'\s*'                       # Any whitespace
+        r'$'                         # End of line
     )
 }
 
 ANSI_ESCAPE_SEQ = re.compile(
-    '\x1b'     # literal ESC
-    '\['       # literal [
-    '[;\d]*'   # zero or more digits or semicolons
-    '[A-Za-z]' # a letter
+    r'\x1b'      # literal ESC
+    r'\['        # literal [
+    r'[;\d]*'    # zero or more digits or semicolons
+    r'[A-Za-z]'  # a letter
     )
