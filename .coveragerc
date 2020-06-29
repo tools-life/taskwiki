@@ -1,6 +1,3 @@
-[report]
-omit = */python2.7/*,*/test*,*/__init__.py
-[paths]
-source =
-    .
-    /root/.vim/bundle/taskwiki
+[run]
+source = taskwiki
+data_file = /tmp/taskwiki-coverage/.coverage
