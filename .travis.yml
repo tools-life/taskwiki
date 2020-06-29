@@ -8,21 +8,11 @@ env:
   - TASK_VERSION=v2.4.4
   - TASK_VERSION=v2.5.0
   - TASK_VERSION=v2.5.1
-python:
-  - "3.6"
 services:
   - docker
 install:
-  # Install coverage dependencies
-  - pip install coverage coveralls
   # Build the docker container
   - pushd $TRAVIS_BUILD_DIR
   - docker-compose build --build-arg TASK_VERSION=$TASK_VERSION tests
 script:
   - make test
-after_success:
-  - ls /tmp/taskwiki-coverage
-  - mv /tmp/taskwiki-coverage/.coverage.* . || echo ok
-  - coverage combine
-  - coverage report
-  - coveralls

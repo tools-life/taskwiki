@@ -8,5 +8,10 @@ test:
 pytest:
 	$(PYTHON) -m pytest -vv $(PYTEST_FLAGS) tests/
 
+cover-pytest: pytest
+	coverage combine
+	coverage report
+	if [ "$$TRAVIS" ]; then coveralls; fi
+
 xvfb-%:
 	xvfb-run --server-args=-noreset $(MAKE) $*

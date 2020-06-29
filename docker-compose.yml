@@ -8,6 +8,10 @@ services:
     security_opt:
       - label=type:container_runtime_t
     tty: true
-    command: make xvfb-pytest
+    command: make xvfb-cover-pytest
     environment:
       PYTEST_FLAGS: "-o cache_dir=/tmp/pytest-cache ${PYTEST_FLAGS:-}"
+      TRAVIS:
+      TRAVIS_JOB_ID:
+      TRAVIS_BRANCH:
+      TRAVIS_PULL_REQUEST:
