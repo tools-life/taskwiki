@@ -10,7 +10,7 @@ import vimrunner
 from tasklib import TaskWarrior, Task
 from time import sleep
 
-server_name = "TaskWikiTestServer"
+server_name = "TaskWikiTestServer-{}".format(os.getpid())
 server = vimrunner.Server(name=server_name)
 
 

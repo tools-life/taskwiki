@@ -28,7 +28,7 @@ RUN cd /root/.vim/bundle; git clone https://github.com/vimwiki/vimwiki.git
 RUN cd /root/.vim/bundle/vimwiki/; git checkout dev
 
 # Setup taskwiki
-RUN pip3 install nose pytest coveralls coverage vimrunner
+RUN pip3 install nose pytest pytest-xdist coveralls coverage vimrunner
 ADD requirements.txt requirements.txt
 RUN pip3 install -r requirements.txt
 RUN mkdir /root/.vim/bundle/taskwiki
