@@ -47,11 +47,12 @@ VIEWPORT = {
         r'^'                         # Starts at the begging of the line
         r'[=]+'                      # Heading begging
         r'(?P<name>[^=\|\[\{]*)'     # Name of the viewport, all before the | sign
-                                     # Cannot include '[', '=', '|, and '{'
-        r'\|'                        # Colon
-        r'(?P<filter>[^=\|]+?)'      # Filter
+                                     # Cannot include '[', '=', '|', and '{'
+        r'\|'                        # Bar
+        r'(?!\|)'                    # (But not two, that would be a preset)
+        r'(?P<filter>[^=\|]*?)'      # Filter
         r'('                         # Optional defaults
-          r'\|'                      # Colon
+          r'\|'                      # Bar
           r'(?P<defaults>[^=\|]+?)'  # Default attrs
         r')?'
         r'\s*'                       # Any whitespace
@@ -66,11 +67,12 @@ VIEWPORT = {
         r'^'                         # Starts at the begging of the line
         r'[#]+'                      # Heading begging
         r'(?P<name>[^#\|\[\{]*)'     # Name of the viewport, all before the | sign
-                                     # Cannot include '[', '=', '|, and '{'
-        r'\|'                        # Colon
-        r'(?P<filter>[^#\|]+?)'      # Filter
+                                     # Cannot include '[', '#', '|', and '{'
+        r'\|'                        # Bar
+        r'(?!\|)'                    # (But not two, that would be a preset)
+        r'(?P<filter>[^#\|]*?)'      # Filter
         r'('                         # Optional defaults
-          r'\|'                      # Colon
+          r'\|'                      # Bar
           r'(?P<defaults>[^#\|]+?)'  # Default attrs
         r')?'
         r'\s*'                       # Any whitespace
