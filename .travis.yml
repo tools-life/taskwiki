@@ -1,5 +1,4 @@
-sudo: required
-language: python
+language: minimal
 env:
   - TASK_VERSION=v2.4.0
   - TASK_VERSION=v2.4.1
