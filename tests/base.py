@@ -56,10 +56,9 @@ class IntegrationTest(object):
             taskrc_location=self.taskrc_path
         )
 
-        new_tasks = [Task(self.tw, **task_kwargs)
-                     for task_kwargs in self.tasks]
+        self.tasks = [Task(self.tw, **task_kwargs)
+                      for task_kwargs in self.__class__.tasks]
 
-        self.tasks = new_tasks
         for task in self.tasks:
             task.save()
 
@@ -106,7 +105,6 @@ class IntegrationTest(object):
         sleep(0.1)  # quit/normal use --remote-send which doesn't wait
         subprocess.call(['pkill', '-f', 'gvim.*--servername ' + server_name])
         sleep(0.2)  # Killing takes some time
-        self.tasks = self.__class__.tasks  # Reset the task list
 
     def py(self, command, silent=True, regex=None, lines=None, direct=False):
         py_command = 'py ' if six.PY2 else 'py3 '
