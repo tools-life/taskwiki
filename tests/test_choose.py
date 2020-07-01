@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 from tests.base import IntegrationTest
-from time import sleep
 
 
 class TestChooseProject(IntegrationTest):
@@ -22,15 +21,10 @@ class TestChooseProject(IntegrationTest):
 
     def execute(self):
         self.client.normal('2gg')
-        sleep(1)
-
         self.command("TaskWikiChooseProject")
-        sleep(1)
-
         self.client.normal('5gg')
-        sleep(0.5)
         self.client.feedkeys("\\<CR>")
-        sleep(1)
+        self.client.eval('0')  # wait for command completion
 
         for task in self.tasks:
             task.refresh()
@@ -58,15 +52,10 @@ class TestChooseProjectUnset(IntegrationTest):
 
     def execute(self):
         self.client.normal('1gg')
-        sleep(0.5)
-
         self.command("TaskWikiChooseProject")
-        sleep(0.5)
-
         self.client.normal('4gg')
-        sleep(0.5)
         self.client.feedkeys("\\<CR>")
-        sleep(0.5)
+        self.client.eval('0')  # wait for command completion
 
         for task in self.tasks:
             task.refresh()
@@ -94,15 +83,10 @@ class TestChooseProjectCanceled(IntegrationTest):
 
     def execute(self):
         self.client.normal('1gg')
-        sleep(0.5)
-
         self.command("TaskWikiChooseProject")
-        sleep(0.5)
-
         self.client.normal('4gg')
-        sleep(0.5)
         self.client.feedkeys("q")
-        sleep(0.5)
+        self.client.eval('0')  # wait for command completion
 
         for task in self.tasks:
             task.refresh()
@@ -130,15 +114,10 @@ class TestChooseTag(IntegrationTest):
 
     def execute(self):
         self.client.normal('2gg')
-        sleep(1)
-
         self.command("TaskWikiChooseTag")
-        sleep(1)
-
         self.client.normal('4gg')
-        sleep(0.5)
         self.client.feedkeys("\\<CR>")
-        sleep(1)
+        self.client.eval('0')  # wait for command completion
 
         for task in self.tasks:
             task.refresh()
@@ -166,15 +145,10 @@ class TestChooseTagCancelled(IntegrationTest):
 
     def execute(self):
         self.client.normal('1gg')
-        sleep(0.5)
-
         self.command("TaskWikiChooseTag")
-        sleep(0.5)
-
         self.client.normal('4gg')
-        sleep(0.5)
         self.client.feedkeys("q")
-        sleep(0.5)
+        self.client.eval('0')  # wait for command completion
 
         for task in self.tasks:
             task.refresh()
@@ -202,16 +176,10 @@ class TestChooseTagNoSelected(IntegrationTest):
 
     def execute(self):
         self.client.normal('1gg')
-        sleep(0.5)
-
         self.command("TaskWikiChooseTag")
-        sleep(0.5)
-
-        # No tak on the 5th row
-        self.client.normal('5gg')
-        sleep(0.5)
+        self.client.normal('5gg')  # No task on the 5th row
         self.client.feedkeys("\\<CR>")
-        sleep(0.5)
+        self.client.eval('0')  # wait for command completion
 
         for task in self.tasks:
             task.refresh()
@@ -239,15 +207,10 @@ class TestChooseProjectUnicode(IntegrationTest):
 
     def execute(self):
         self.client.normal('2gg')
-        sleep(1)
-
         self.command("TaskWikiChooseProject")
-        sleep(1)
-
         self.client.normal('5gg')
-        sleep(0.5)
         self.client.feedkeys("\\<CR>")
-        sleep(1)
+        self.client.eval('0')  # wait for command completion
 
         for task in self.tasks:
             task.refresh()
@@ -275,15 +238,10 @@ class TestChooseTagUnicode(IntegrationTest):
 
     def execute(self):
         self.client.normal('2gg')
-        sleep(1)
-
         self.command("TaskWikiChooseTag")
-        sleep(1)
-
         self.client.normal('4gg')
-        sleep(0.5)
         self.client.feedkeys("\\<CR>")
-        sleep(1)
+        self.client.eval('0')  # wait for command completion
 
         for task in self.tasks:
             task.refresh()

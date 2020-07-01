@@ -3,7 +3,6 @@ import re
 from datetime import datetime
 from tasklib import local_zone
 from tests.base import IntegrationTest
-from time import sleep
 
 
 class TestAnnotateAction(IntegrationTest):
@@ -43,12 +42,9 @@ class TestAnnotateActionManually(IntegrationTest):
     ]
 
     def execute(self):
-        self.client.feedkeys(":TaskWikiAnnotate")
-        self.client.type("<Enter>")
-        sleep(0.5)
-        self.client.feedkeys("This is typed annotation.")
-        self.client.type("<Enter>")
-        sleep(0.5)
+        self.client.feedkeys(":TaskWikiAnnotate\\<Enter>")
+        self.client.feedkeys("This is typed annotation.\\<Enter>")
+        self.client.eval('0')  # wait for command completion
 
         self.tasks[0].refresh()
         annotation = self.tasks[0]['annotations']
@@ -70,11 +66,9 @@ class TestAnnotateActionManuallyAbort(IntegrationTest):
 
     def execute(self):
         # Start entering the annotation but bail out
-        self.client.feedkeys(":TaskWikiAnnotate")
-        self.client.type("<Enter>")
-        sleep(0.5)
+        self.client.feedkeys(":TaskWikiAnnotate\\<Enter>")
         self.client.type("<Esc>")
-        sleep(0.5)
+        self.client.eval('0')  # wait for command completion
 
         # Refresh and check no annotation has been added
         self.tasks[0].refresh()
@@ -124,10 +118,8 @@ class TestAnnotateActionRange(IntegrationTest):
 
     def execute(self):
         self.client.type('V2gg')  # Go to the second line
-        self.client.feedkeys(":TaskWikiAnnotate This is annotation.")
-        self.client.type('<Enter>')
-
-        sleep(2)
+        self.client.feedkeys(":TaskWikiAnnotate This is annotation.\\<Enter>")
+        self.client.eval('0')  # wait for command completion
 
         for task in self.tasks:
             task.refresh()
@@ -222,7 +214,6 @@ class TestDeleteActionMoved(IntegrationTest):
             "TaskWikiDelete",
             regex="Task \"test task 2\" deleted.$",
             lines=1)
-        sleep(1)
 
         for task in self.tasks:
             task.refresh()
@@ -248,12 +239,9 @@ class TestDeleteActionRange(IntegrationTest):
 
     def execute(self):
         self.client.normal('1gg')
-        sleep(1)
         self.client.normal('VG')
-        sleep(1)
-        self.client.feedkeys(":TaskWikiDelete")
-        self.client.type('<Enter>')
-        sleep(1)
+        self.client.feedkeys(":TaskWikiDelete\\<Enter>")
+        self.client.eval('0')  # wait for command completion
 
         for task in self.tasks:
             task.refresh()
@@ -341,7 +329,7 @@ class TestInfoActionTriggeredByEnter(IntegrationTest):
     def execute(self):
         self.client.type('1gg')
         self.client.feedkeys("\\<CR>")
-        sleep(0.5)
+        self.client.eval('0')  # wait for command completion
 
         assert self.py("print(vim.current.buffer)", silent=False).startswith("<buffer info")
         output = '\n'.join(self.read_buffer())
@@ -371,7 +359,7 @@ class TestInfoActionNotTriggeredByEnterOnLink(IntegrationTest):
         self.client.type('1gg')
         self.client.type('10l')
         self.client.feedkeys("\\<CR>")
-        sleep(0.5)
+        self.client.eval('0')  # wait for command completion
 
         # Make sure we have been sent to a new buffer
         output = '\n'.join(self.read_buffer())
@@ -422,10 +410,8 @@ class TestInfoActionRange(IntegrationTest):
 
     def execute(self):
         self.client.type('V2gg')  # Go to the second line
-        self.client.feedkeys(":TaskWikiInfo")
-        self.client.type('<Enter>')
-
-        sleep(1)
+        self.client.feedkeys(":TaskWikiInfo\\<Enter>")
+        self.client.eval('0')  # wait for command completion
 
         assert self.py("print(vim.current.buffer)", silent=False).startswith("<buffer info")
         output = '\n'.join(self.read_buffer())
@@ -506,12 +492,10 @@ class TestLinkActionRange(IntegrationTest):
 
     def execute(self):
         self.client.type('V2gg')  # Go to the second line
-        self.client.feedkeys(":TaskWikiLink")
-        self.client.type('<Enter>')
+        self.client.feedkeys(":TaskWikiLink\\<Enter>")
+        self.client.eval('0')  # wait for command completion
 
         backlink = "wiki: {0}".format(self.filepath)
-
-        sleep(2)
 
         for task in self.tasks:
             task.refresh()
@@ -628,7 +612,6 @@ class TestStartActionMoved(IntegrationTest):
             "TaskWikiStart",
             regex="Task \"test task 2\" started.$",
             lines=1)
-        sleep(1)
 
         for task in self.tasks:
             task.refresh()
@@ -663,12 +646,9 @@ class TestStartActionRange(IntegrationTest):
 
     def execute(self):
         self.client.normal('1gg')
-        sleep(1)
         self.client.normal('VG')
-        sleep(1)
-        self.client.feedkeys(":TaskWikiStart")
-        self.client.type('<Enter>')
-        sleep(1)
+        self.client.feedkeys(":TaskWikiStart\\<Enter>")
+        self.client.eval('0')  # wait for command completion
 
         for task in self.tasks:
             task.refresh()
@@ -793,7 +773,6 @@ class TestStopActionMoved(IntegrationTest):
             "TaskWikiStop",
             regex="Task \"test task 2\" stopped.$",
             lines=1)
-        sleep(1)
 
         for task in self.tasks:
             task.refresh()
@@ -828,12 +807,9 @@ class TestStopActionRange(IntegrationTest):
 
     def execute(self):
         self.client.normal('1gg')
-        sleep(1)
         self.client.normal('VG')
-        sleep(1)
-        self.client.feedkeys(":TaskWikiStop")
-        self.client.type('<Enter>')
-        sleep(1)
+        self.client.feedkeys(":TaskWikiStop\\<Enter>")
+        self.client.eval('0')  # wait for command completion
 
         for task in self.tasks:
             task.refresh()
@@ -976,13 +952,9 @@ class TestModInteractiveAction(IntegrationTest):
     ]
 
     def execute(self):
-        self.client.feedkeys(":TaskWikiMod")
-        sleep(1)
-        self.client.type('<Enter>')
-        sleep(1)
-        self.client.feedkeys("+work")
-        self.client.type('<Enter>')
-        sleep(1)
+        self.client.feedkeys(":TaskWikiMod\\<Enter>")
+        self.client.feedkeys("+work\\<Enter>")
+        self.client.eval('0')  # wait for command completion
 
         for task in self.tasks:
             task.refresh()
@@ -1009,13 +981,9 @@ class TestModInteractiveActionRedo(IntegrationTest):
     ]
 
     def execute(self):
-        self.client.feedkeys(":TaskWikiMod")
-        sleep(1)
-        self.client.type('<Enter>')
-        sleep(1)
-        self.client.feedkeys("+work")
-        self.client.type('<Enter>')
-        sleep(1)
+        self.client.feedkeys(":TaskWikiMod\\<Enter>")
+        self.client.feedkeys("+work\\<Enter>")
+        self.client.eval('0')  # wait for command completion
 
         # Now also modify the second task
         self.client.type('j')
@@ -1087,8 +1055,6 @@ class TestModActionMoved(IntegrationTest):
             regex="Modified 1 task.$",
             lines=1)
 
-        sleep(1)
-
         for task in self.tasks:
             task.refresh()
 
@@ -1115,12 +1081,9 @@ class TestModActionRange(IntegrationTest):
 
     def execute(self):
         self.client.normal('1gg')
-        sleep(1)
         self.client.normal('VG')
-        sleep(1)
-        self.client.feedkeys(":TaskWikiMod project:Home")
-        self.client.type('<Enter>')
-        sleep(1)
+        self.client.feedkeys(":TaskWikiMod project:Home\\<Enter>")
+        self.client.eval('0')  # wait for command completion
 
         for task in self.tasks:
             task.refresh()
@@ -1221,7 +1184,6 @@ class TestDoneActionMoved(IntegrationTest):
             "TaskWikiDone",
             regex="Task \"test task 2\" completed.$",
             lines=1)
-        sleep(1)
 
         for task in self.tasks:
             task.refresh()
@@ -1256,12 +1218,9 @@ class TestDoneActionRange(IntegrationTest):
 
     def execute(self):
         self.client.normal('1gg')
-        sleep(1)
         self.client.normal('VG')
-        sleep(1)
-        self.client.feedkeys(":TaskWikiDone")
-        self.client.type('<Enter>')
-        sleep(1)
+        self.client.feedkeys(":TaskWikiDone\\<Enter>")
+        self.client.eval('0')  # wait for command completion
 
         for task in self.tasks:
             task.refresh()
@@ -1344,12 +1303,8 @@ class TestSortManually(IntegrationTest):
 
     def execute(self):
         self.client.normal('1gg')
-        sleep(0.5)
         self.client.normal('VG')
-        sleep(0.5)
-        self.client.feedkeys(":TaskWikiSort description-")
-        self.client.type("<Enter>")
-        sleep(0.5)
+        self.client.feedkeys(":TaskWikiSort description-\\<Enter>")
 
 class TestSelectAfterBufferSwitch(IntegrationTest):
 
@@ -1367,17 +1322,11 @@ class TestSelectAfterBufferSwitch(IntegrationTest):
 
     def execute(self):
         self.command('w', silent=False)
-        sleep(0.5)
         self.command('split testwiki2.txt', silent=False)
-        sleep(0.5)
         self.command('set filetype=vimwiki')
-        sleep(0.5)
         self.command('q!')
-        sleep(0.5)
         self.client.normal('1gg')
-        sleep(0.5)
         self.command("TaskWikiMod project:Home", regex="Modified 1 task.")
-        sleep(0.5)
 
         self.tasks[0].refresh()
         assert self.tasks[0]['project'] == "Home"
