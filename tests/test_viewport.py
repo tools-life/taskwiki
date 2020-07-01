@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from datetime import datetime
 from tests.base import MultiSyntaxIntegrationTest
-from time import sleep
 
 
 class TestViewportsTaskGeneration(MultiSyntaxIntegrationTest):
@@ -274,7 +273,7 @@ class TestViewportInspection(MultiSyntaxIntegrationTest):
         self.command("w", regex="written$", lines=1)
         self.client.feedkeys('1gg')
         self.client.feedkeys(r'\<CR>')
-        sleep(0.5)
+        self.client.eval('0')  # wait for command completion
 
         assert self.py("print(vim.current.buffer)", regex="<buffer taskwiki.")
 
@@ -308,11 +307,9 @@ class TestViewportInspectionWithVisibleTag(MultiSyntaxIntegrationTest):
 
     def execute(self):
         self.command("w", regex="written$", lines=1)
-        sleep(0.5)
         self.client.feedkeys('1gg')
-        sleep(0.5)
         self.client.feedkeys(r'\<CR>')
-        sleep(0.5)
+        self.client.eval('0')  # wait for command completion
 
         assert self.py("print(vim.current.buffer)", regex="<buffer taskwiki.")
 
@@ -592,13 +589,9 @@ class TestViewportsPreserveHierarchyUponCompletion(MultiSyntaxIntegrationTest):
 
     def execute(self):
         self.command("w", regex="written$", lines=1)
-        sleep(0.5)
         self.client.feedkeys('3gg')
-        sleep(0.5)
         self.client.feedkeys(r'\\td')
-        sleep(0.5)
         self.command("w", regex="written$", lines=1)
-        sleep(0.5)
 
 
 class TestViewportDefaultPreservesTags(MultiSyntaxIntegrationTest):
@@ -615,7 +608,6 @@ class TestViewportDefaultPreservesTags(MultiSyntaxIntegrationTest):
 
     def execute(self):
         self.command("w", regex="written$", lines=1)
-        sleep(0.5)
 
         # Make sure both tags were preserved
         task = self.tw.tasks.pending()[0]

@@ -1,5 +1,4 @@
 from tests.base import MultiSyntaxIntegrationTest
-from time import sleep
 
 
 class TestPresetDefaults(MultiSyntaxIntegrationTest):
@@ -235,7 +234,6 @@ class TestPresetDefaultPreservesTags(MultiSyntaxIntegrationTest):
 
     def execute(self):
         self.command("w", regex="written$", lines=1)
-        sleep(0.5)
 
         # Make sure both tags were preserved
         task = self.tw.tasks.pending()[0]

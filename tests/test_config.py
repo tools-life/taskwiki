@@ -1,5 +1,4 @@
-from time import sleep
-from tests.base import IntegrationTest, MultipleSourceTest
+from tests.base import IntegrationTest
 
 
 class TestSimpleColorAssigment(IntegrationTest):

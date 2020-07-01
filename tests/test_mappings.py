@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 from tests.base import IntegrationTest
-from time import sleep
 
 
 class TestDefaultMapping(IntegrationTest):
@@ -22,19 +21,11 @@ class TestDefaultMapping(IntegrationTest):
 
     def execute(self):
         self.client.normal('1gg')
-        sleep(0.5)
-
         self.client.feedkeys(r'\\td')
-        sleep(0.5)
-
         self.client.normal('2gg')
-        sleep(0.5)
-
         self.client.normal('V')
-        sleep(0.5)
-
         self.client.feedkeys(r'\\td')
-        sleep(0.5)
+        self.client.eval('0')  # wait for command completion
 
         for task in self.tasks:
             task.refresh()
@@ -63,19 +54,11 @@ class TestSuppressedMapping(IntegrationTest):
 
     def execute(self):
         self.client.normal('1gg')
-        sleep(0.5)
-
         self.client.feedkeys(r'\\td')
-        sleep(0.5)
-
         self.client.normal('2gg')
-        sleep(0.5)
-
         self.client.normal('V')
-        sleep(0.5)
-
         self.client.feedkeys(r'\\td')
-        sleep(0.5)
+        self.client.eval('0')  # wait for command completion
 
         for task in self.tasks:
             task.refresh()
@@ -104,19 +87,11 @@ class TestCustomMapping(IntegrationTest):
 
     def execute(self):
         self.client.normal('1gg')
-        sleep(0.5)
-
         self.client.feedkeys(',td')
-        sleep(0.5)
-
         self.client.normal('2gg')
-        sleep(0.5)
-
         self.client.normal('V')
-        sleep(0.5)
-
         self.client.feedkeys(',td')
-        sleep(0.5)
+        self.client.eval('0')  # wait for command completion
 
         for task in self.tasks:
             task.refresh()
@@ -146,19 +121,11 @@ class TestColonRemap(IntegrationTest):
         self.command('vnoremap : ;')
 
         self.client.normal('1gg')
-        sleep(0.5)
-
         self.client.feedkeys(r'\\td')
-        sleep(0.5)
-
         self.client.normal('2gg')
-        sleep(0.5)
-
         self.client.normal('V')
-        sleep(0.5)
-
         self.client.feedkeys(r'\\td')
-        sleep(0.5)
+        self.client.eval('0')  # wait for command completion
 
         for task in self.tasks:
             task.refresh()
@@ -192,19 +159,11 @@ class TestColonRemapWithCustomMap(IntegrationTest):
         self.command('vnoremap : ;')
 
         self.client.normal('1gg')
-        sleep(0.5)
-
         self.client.feedkeys(',td')
-        sleep(0.5)
-
         self.client.normal('2gg')
-        sleep(0.5)
-
         self.client.normal('V')
-        sleep(0.5)
-
         self.client.feedkeys(',td')
-        sleep(0.5)
+        self.client.eval('0')  # wait for command completion
 
         for task in self.tasks:
             task.refresh()

@@ -32,15 +32,9 @@ class IntegrationTest(object):
         assert result == u"0"
 
     def read_buffer(self, start=0, end=1000):
-        # ensure that vim isn't stuck stuck showing an error message
-        # (read_buffer would ignore this and just return '')
-        buf = self.client.get_active_buffer()
-        assert buf
-
         return self.client.read_buffer(
             six.text_type(start+1),
-            six.text_type(end+1),
-            buf=buf
+            six.text_type(end+1)
             ).splitlines()
 
     def generate_data(self):
@@ -100,9 +94,8 @@ class IntegrationTest(object):
         if not self.client:
             return
 
-        self.client.normal(':qa!<Enter>')  # unlike .quit() this also works in insert/visual
+        self.client.quit()
         self.client = None
-        sleep(0.1)  # quit/normal use --remote-send which doesn't wait
         subprocess.call(['pkill', '-f', 'gvim.*--servername ' + server_name])
         sleep(0.2)  # Killing takes some time
 
