@@ -1,0 +1,36 @@
+name: tests
+on: [push, pull_request]
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - TASK_VERSION: v2.4.0
+          - TASK_VERSION: v2.4.1
+          - TASK_VERSION: v2.4.2
+          - TASK_VERSION: v2.4.3
+          - TASK_VERSION: v2.4.4
+          - TASK_VERSION: v2.5.0
+          - TASK_VERSION: v2.5.1
+    continue-on-error: ${{ matrix.continue-on-error == true }}
+    steps:
+      - uses: actions/checkout@v2
+      - name: Prepare docker image
+        run: docker-compose build --build-arg TASK_VERSION=${{ matrix.TASK_VERSION }} tests
+      - name: Test
+        run: make test PYTEST_FLAGS="-n8"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          COVERALLS_PARALLEL: true
+
+  coveralls-finished:
+    needs: tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Finished
+        uses: coverallsapp/github-action@v1.1.1
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          parallel-finished: true
