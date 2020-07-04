@@ -9,8 +9,12 @@ services:
       - label=type:container_runtime_t
     tty: true
     environment:
+      COVERALLS_PARALLEL:
+      GITHUB_ACTIONS:
+      GITHUB_HEAD_REF:
+      GITHUB_REF:
+      GITHUB_RUN_ID:
+      GITHUB_RUN_NUMBER:
+      GITHUB_SHA:
+      GITHUB_TOKEN:
       PYTEST_FLAGS: "-o cache_dir=/tmp/pytest-cache ${PYTEST_FLAGS:-}"
-      TRAVIS:
-      TRAVIS_JOB_ID:
-      TRAVIS_BRANCH:
-      TRAVIS_PULL_REQUEST:

@@ -3,7 +3,7 @@
 _Proper project management in vim.
 Standing on the shoulders of vimwiki and Taskwarrior_
 
-[![Travis build status](https://travis-ci.org/tbabej/taskwiki.svg?branch=master)](https://travis-ci.org/tbabej/taskwiki)
+[![GitHub Actions build status](https://github.com/tbabej/taskwiki/workflows/tests/badge.svg?branch=master)](https://github.com/tbabej/taskwiki/actions)
 [![Coverage Status](https://coveralls.io/repos/tbabej/taskwiki/badge.svg?branch=master)](https://coveralls.io/r/tbabej/taskwiki?branch=master)
 [![Code Health](https://landscape.io/github/tbabej/taskwiki/master/landscape.svg?style=flat)](https://landscape.io/github/tbabej/taskwiki/master)
 [![Chat with developers](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/tbabej/taskwiki)
@@ -295,7 +295,7 @@ need to install and enable either the `en_US` or `en_GB` locale. For example:
 
     LANG=en_US python -m pytest
 
-Finally you might want to have a look at [the travis configuration](.travis.yml)
+Finally you might want to have a look at [the CI configuration](.github/workflows/tests.yaml)
 and consider using a virtual machine or [Xvfb](https://www.x.org/releases/X11R7.6/doc/man/man1/Xvfb.1.xhtml).
 
 #### Known issues
