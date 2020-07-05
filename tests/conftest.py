@@ -21,7 +21,7 @@ markup_headers = {
 }
 
 
-@pytest.fixture(params=markup_headers)
+@pytest.fixture(params=sorted(markup_headers.keys()))
 def test_syntax(request):
     markup = request.param
     format_header_dict = markup_headers[markup]
