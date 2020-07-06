@@ -88,7 +88,6 @@ class IntegrationTest(object):
         self.add_plugin('vimwiki', 'plugin/vimwiki.vim')
         self.filepath = os.path.join(self.dir, 'testwiki.txt')
         self.client.edit(self.filepath)
-        self.command('set filetype=vimwiki')
 
     def teardown(self):
         if not self.client:
