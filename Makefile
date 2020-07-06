@@ -8,9 +8,8 @@ test:
 pytest:
 	$(PYTHON) -m pytest -vv $(PYTEST_FLAGS) tests/
 
+cover-pytest: PYTEST_FLAGS += --cov=taskwiki
 cover-pytest: pytest
-	coverage combine
-	coverage report
 	if [ "$$TRAVIS" ]; then coveralls; fi
 
 xvfb-%:
