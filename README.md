@@ -274,14 +274,21 @@ Feel free to submit pull requests and/or file issues for bugs and suggestions.
 Taskwiki comes with preconfigured docker-based test setup. To run the tests,
 simply issue:
 
+    PYTEST_FLAGS="-n8" make test
+
+To run a single test and show vim errors:
+
+    PYTEST_FLAGS="-s -k TestChooseProject" make test
+
+You may also build a docker image with different versions of some dependencies:
+
     docker-compose build --build-arg TASK_VERSION=2.6.0 tests
-    docker-compose up
 
 To run the included tests directly you will require
 
 * [test.py](http://pytest.org)
 * [gvim](http://vim.org)
-* [vimrunner-python](https://github.com/andri-ch/vimrunner-python) (with the included default_vimrc)
+* [vimrunner-python](https://github.com/liskin/vimrunner-python) (with the included default_vimrc)
 
 Note also, that the tests depend on language specific messages. So you might
 need to install and enable either the `en_US` or `en_GB` locale. For example:
