@@ -7,18 +7,36 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - TASK_VERSION: v2.4.0
-          - TASK_VERSION: v2.4.1
-          - TASK_VERSION: v2.4.2
-          - TASK_VERSION: v2.4.3
+          - _defaults: # see Dockerfile for variable defaults
           - TASK_VERSION: v2.4.4
-          - TASK_VERSION: v2.5.0
-          - TASK_VERSION: v2.5.1
+          - TASK_VERSION: 2.5.2
+            continue-on-error: true
+          - TASK_VERSION: 2.6.0
+          - VIM_VERSION: v7.4.1546
+          - VIM_VERSION: v8.0.0027
+          - VIM_VERSION: v8.1.0519
+          - VIMWIKI_VERSION: dev
+          - PYTHON_VERSION: 3.5
+          - PYTHON_VERSION: 3.6
+          - PYTHON_VERSION: 3.7
     continue-on-error: ${{ matrix.continue-on-error == true }}
     steps:
       - uses: actions/checkout@v2
       - name: Prepare docker image
-        run: docker-compose build --build-arg TASK_VERSION=${{ matrix.TASK_VERSION }} tests
+        run: |
+          docker-compose build \
+            ${ALPINE_VERSION:+--build-arg ALPINE_VERSION="$ALPINE_VERSION"} \
+            ${PYTHON_VERSION:+--build-arg PYTHON_VERSION="$PYTHON_VERSION"} \
+            ${TASK_VERSION:+--build-arg TASK_VERSION="$TASK_VERSION"} \
+            ${VIM_VERSION:+--build-arg VIM_VERSION="$VIM_VERSION"} \
+            ${VIMWIKI_VERSION:+--build-arg VIMWIKI_VERSION="$VIMWIKI_VERSION"} \
+            tests
+        env:
+          ALPINE_VERSION: ${{ matrix.ALPINE_VERSION }}
+          PYTHON_VERSION: ${{ matrix.PYTHON_VERSION }}
+          TASK_VERSION: ${{ matrix.TASK_VERSION }}
+          VIM_VERSION: ${{ matrix.VIM_VERSION }}
+          VIMWIKI_VERSION: ${{ matrix.VIMWIKI_VERSION }}
       - name: Test
         run: make test PYTEST_FLAGS="-n8"
         env:
