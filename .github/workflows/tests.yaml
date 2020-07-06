@@ -24,19 +24,39 @@ jobs:
       - uses: actions/checkout@v2
       - name: Prepare docker image
         run: |
-          docker-compose build \
+          set -ex -o pipefail
+          shopt -s lastpipe
+          (
+            echo ALPINE_VERSION="$ALPINE_VERSION"
+            echo PYTHON_VERSION="$PYTHON_VERSION"
+            echo TASK_VERSION="$TASK_VERSION"
+            echo VIM_VERSION="$VIM_VERSION"
+            echo VIMWIKI_VERSION="$VIMWIKI_VERSION"
+            cat Dockerfile
+          ) | sha256sum | read -r tag _
+          docker login "$DOCKER_REGISTRY" -u "$GITHUB_USER" -p "$GITHUB_TOKEN" || :
+          docker pull "$DOCKER_CACHE_IMAGE":"$tag" || :
+          docker build \
+            --cache-from "$DOCKER_CACHE_IMAGE":"$tag" \
             ${ALPINE_VERSION:+--build-arg ALPINE_VERSION="$ALPINE_VERSION"} \
             ${PYTHON_VERSION:+--build-arg PYTHON_VERSION="$PYTHON_VERSION"} \
             ${TASK_VERSION:+--build-arg TASK_VERSION="$TASK_VERSION"} \
             ${VIM_VERSION:+--build-arg VIM_VERSION="$VIM_VERSION"} \
             ${VIMWIKI_VERSION:+--build-arg VIMWIKI_VERSION="$VIMWIKI_VERSION"} \
-            tests
+            -t taskwiki_tests \
+            .
+          docker tag taskwiki_tests "$DOCKER_CACHE_IMAGE":"$tag"
+          docker push "$DOCKER_CACHE_IMAGE":"$tag" || :
         env:
           ALPINE_VERSION: ${{ matrix.ALPINE_VERSION }}
           PYTHON_VERSION: ${{ matrix.PYTHON_VERSION }}
           TASK_VERSION: ${{ matrix.TASK_VERSION }}
           VIM_VERSION: ${{ matrix.VIM_VERSION }}
           VIMWIKI_VERSION: ${{ matrix.VIMWIKI_VERSION }}
+          DOCKER_REGISTRY: docker.pkg.github.com
+          DOCKER_CACHE_IMAGE: docker.pkg.github.com/${{ github.repository }}/taskwiki_tests
+          GITHUB_USER: ${{ github.actor }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Test
         run: make test PYTEST_FLAGS="-n8"
         env:
