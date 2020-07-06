@@ -264,6 +264,7 @@ Currently, following task metadata is represented in the buffer:
 ~   * [X] Install Taskwiki   |   completed task
 ~   * [D] Install Taskwiki   |   deleted task
 ~   * [S] Install Taskwiki   |   started task
+~   * [W] Install Taskwiki   |   waiting task
 
 * Description. All the text that is not part of the other metadata.
 * Due date. Either a date, or date with time inside parentheses.
