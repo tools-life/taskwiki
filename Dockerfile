@@ -29,7 +29,7 @@ RUN cd /root/.vim/bundle/vimwiki/; git checkout dev
 
 # Setup taskwiki
 RUN pip3 install \
-    pytest pytest-xdist \
+    pytest pytest-cov pytest-xdist \
     coveralls coverage \
     https://github.com/liskin/vimrunner-python/archive/8c19ff88050c09236e7519425bfae33c687483df.zip
 ADD requirements.txt requirements.txt

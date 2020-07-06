@@ -24,11 +24,6 @@ endif
 " Determine the plugin path
 let s:plugin_path = escape(expand('<sfile>:p:h:h:h'), '\')
 
-" Run the measure parts first, if desired
-if exists("g:taskwiki_measure_coverage")
-  execute 'py3file ' . s:plugin_path . '/taskwiki/testcoverage.py'
-endif
-
 " Execute the main body of taskwiki source
 execute g:taskwiki_pyfile . s:plugin_path . '/taskwiki/main.py'
 
