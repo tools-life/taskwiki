@@ -36,7 +36,8 @@ jobs:
           ) | sha256sum | read -r tag _
           docker login "$DOCKER_REGISTRY" -u "$GITHUB_USER" -p "$GITHUB_TOKEN" || :
           docker pull "$DOCKER_CACHE_IMAGE":"$tag" || :
-          docker build \
+          DOCKER_BUILDKIT=1 docker build \
+            --build-arg BUILDKIT_INLINE_CACHE=1 \
             --cache-from "$DOCKER_CACHE_IMAGE":"$tag" \
             ${ALPINE_VERSION:+--build-arg ALPINE_VERSION="$ALPINE_VERSION"} \
             ${PYTHON_VERSION:+--build-arg PYTHON_VERSION="$PYTHON_VERSION"} \
