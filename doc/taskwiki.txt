@@ -668,8 +668,8 @@ constructs.
 
 *taskwiki_sort_order*
     The default sort order used to sort the tasks within viewports. Defaults
-    to 'status+,end+,due+,pri-,project+'. Expects a comma-separated list of
-    attributes, optionally followed by + or - to denote the increasing or
+    to 'status+,end+,due+,priority-,project+'. Expects a comma-separated list
+    of attributes, optionally followed by + or - to denote the increasing or
     decreasing order, respectively.
 
 *taskwiki_sort_orders*
