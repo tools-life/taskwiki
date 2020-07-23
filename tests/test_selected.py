@@ -1323,7 +1323,6 @@ class TestSelectAfterBufferSwitch(IntegrationTest):
     def execute(self):
         self.command('w', silent=False)
         self.command('split testwiki2.txt', silent=False)
-        self.command('set filetype=vimwiki')
         self.command('q!')
         self.client.normal('1gg')
         self.command("TaskWikiMod project:Home", regex="Modified 1 task.")
