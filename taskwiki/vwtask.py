@@ -379,8 +379,7 @@ class VimwikiTask(object):
                 self.update(port.defaults)
 
                 # If port was detected, break the search
-
-            break
+                break
 
     def update(self, defaults):
         """
