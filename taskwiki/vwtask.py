@@ -360,27 +360,26 @@ class VimwikiTask(object):
     def apply_defaults(self):
         from taskwiki import viewport, preset
 
+        # Find first parent header or viewport
+        header, port = None, None
         for i in reversed(range(0, self['line_number'])):
             header = preset.PresetHeader.from_line(i, self.cache)
+            port = viewport.ViewPort.from_line(i, self.cache)
+            if header or port:
+                break
 
-            if not header:
-                continue
-
+        if header:
             # Use defaults from the preset header hierarchy
             self.update(header.defaults)
 
-            port = viewport.ViewPort.from_line(i, self.cache)
-            if port:
-                # The task should have the same source as the viewport has
-                self.tw = port.tw
-                self.task.backend = port.tw
+        if port:
+            # The task should have the same source as the viewport has
+            self.tw = port.tw
+            self.task.backend = port.tw
 
-                # Any defaults specified should be inherited
-                self.update(port.defaults)
+            # Any defaults specified should be inherited
+            self.update(port.defaults)
 
-                # If port was detected, break the search
-
-            break
 
     def update(self, defaults):
         """
