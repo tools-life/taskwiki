@@ -165,6 +165,11 @@ class VimwikiTask(object):
         if self.parent:
             self.parent.add_dependencies |= set([self])
 
+        # Make task inherit parent task tag and project
+        if self.parent:
+            self.task['tags'].update(self.parent.task['tags'])
+            self.task['project'] = self.parent.task['project']
+
         # For new tasks, apply defaults from above viewport
         if not self.uuid:
             self.apply_defaults()
