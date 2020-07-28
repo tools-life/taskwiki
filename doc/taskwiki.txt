@@ -733,13 +733,6 @@ constructs.
         Example:
         let g:taskwiki_maplocalleader=",t"
 
-*taskwiki_markup_syntax*
-        This variable specifies the markup syntax you want to use in your
-        VimWiki pages. Valid values are "default" and "markdown".
-
-        Example:
-        let g:taskwiki_markup_syntax = "default"
-
 =============================================================================
 9. TROUBLESHOOTING					   *taskwiki-trouble*
 
