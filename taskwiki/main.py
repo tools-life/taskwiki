@@ -351,7 +351,7 @@ class Meta(object):
                 'kind2scope': {'h':'header', 'v':'viewport'},
                 'sort': 0,
                 'ctagsbin': os.path.join(BASE_DIR, 'extra/vwtags.py'),
-                'ctagsargs': 'default'
+                'ctagsargs': cache().markup_syntax
                 }
 
     @errors.pretty_exception_handler
