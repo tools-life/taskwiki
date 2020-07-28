@@ -346,9 +346,9 @@ class Meta(object):
         if tagbar_available:
             vim.vars['tagbar_type_vimwiki'] = {
                 'ctagstype': 'default',
-                'kinds': ['h:header', 'i:inside', 'v:viewport'],
+                'kinds': ['h:header'],
                 'sro': '&&&',
-                'kind2scope': {'h':'header', 'v':'viewport'},
+                'kind2scope': {'h': 'header'},
                 'sort': 0,
                 'ctagsbin': os.path.join(BASE_DIR, 'extra/vwtags.py'),
                 'ctagsargs': cache().markup_syntax
