@@ -110,13 +110,6 @@ class TaskCache(object):
         extra_warrior_defs = util.get_var('taskwiki_extra_warriors', {})
         markup_syntax = util.get_var('taskwiki_markup_syntax') or 'default'
 
-        # Handle bytes (vim returnes bytes for Python3)
-        if six.PY3:
-            default_rc = util.decode_bytes(default_rc)
-            default_data = util.decode_bytes(default_data)
-            extra_warrior_defs = util.decode_bytes(extra_warrior_defs)
-            markup_syntax = util.decode_bytes(markup_syntax)
-
         # Validate markup choice and set it
         if markup_syntax in ["default", "markdown"]:
             self.markup_syntax = markup_syntax
