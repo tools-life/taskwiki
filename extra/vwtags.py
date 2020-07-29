@@ -1,35 +1,43 @@
 #! /usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import sys
+import os
 import re
+import sys
 
-rx_default_media = r"^\s*(={1,6})([^=].*[^=])\1\s*$"
-rx_markdown = r"^\s*(#{1,6})([^#].*)$"
+if __name__ == '__main__':
+    path = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
+    sys.path.insert(0, path)
+
+from taskwiki import regexp
+
+
+def match_header(line, syntax):
+    m = re.search(regexp.VIEWPORT[syntax], line)
+    if m:
+        return m
+
+    m = re.search(regexp.PRESET[syntax], line)
+    if m:
+        return m
+
+    m = re.search(regexp.HEADER[syntax], line)
+    if m:
+        return m
+
+    return None
 
 
 def process(file_content, filename, syntax):
-    if syntax in ("default", "media"):
-        rx_header = re.compile(rx_default_media)
-    elif syntax == "markdown":
-        rx_header = re.compile(rx_markdown)
-    else:
-        rx_header = re.compile(rx_default_media + "|" + rx_markdown)
-
     state = [""]*6
     for lnum, line in enumerate(file_content):
-
-        match_header = rx_header.match(line)
-
-        if not match_header:
+        m = match_header(line, syntax)
+        if not m:
             continue
 
-        match_lvl = match_header.group(1) or match_header.group(3)
-        match_tag = match_header.group(2) or match_header.group(4)
-
-        cur_lvl = len(match_lvl)
-        cur_tag = match_tag.strip()
-        cur_searchterm = "^" + match_header.group(0).rstrip("\r\n") + "$"
+        cur_lvl = len(m.group('header_start'))
+        cur_tag = m.group('name').strip()
+        cur_searchterm = "^" + m.group(0).rstrip("\r\n") + "$"
         cur_kind = "h"
 
         state[cur_lvl-1] = cur_tag
