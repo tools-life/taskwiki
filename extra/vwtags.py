@@ -1,37 +1,10 @@
 #! /usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from __future__ import print_function
-
-help_text = """
-Extracts tags from Vimwiki files. Useful for the Tagbar plugin.
-
-Usage:
-Install Tagbar (http://majutsushi.github.io/tagbar/). Then, put this file
-anywhere and add the following to your .vimrc:
-
-let g:tagbar_type_vimwiki = {
-          \   'ctagstype':'vimwiki'
-          \ , 'kinds':['h:header']
-          \ , 'sro':'&&&'
-          \ , 'kind2scope':{'h':'header'}
-          \ , 'sort':0
-          \ , 'ctagsbin':'/path/to/vwtags.py'
-          \ , 'ctagsargs': 'default'
-          \ }
-
-The value of ctagsargs must be one of 'default', 'markdown' or 'media',
-whatever syntax you use. However, if you use multiple wikis with different
-syntaxes, you can, as a workaround, use the value 'all' instead. Then, Tagbar
-will show markdown style headers as well as default/mediawiki style headers,
-but there might be erroneously shown headers.
-"""
-
 import sys
 import re
 
 if len(sys.argv) < 3:
-    print(help_text)
     exit()
 
 syntax = sys.argv[1]
