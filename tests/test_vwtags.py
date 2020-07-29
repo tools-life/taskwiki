@@ -77,9 +77,9 @@ class TestTagsViewportsPresets(MultiSyntaxTagsTest):
 
     expected_output = [
         re.compile(r"^a	file.wiki	/.*/;\"	h	line:1$"),
-        re.compile(r"^b	file.wiki	/.*/;\"	h	line:2	header:a$"),
-        re.compile(r"^c	file.wiki	/.*/;\"	h	line:3	header:a$"),
-        re.compile(r"^d	file.wiki	/.*/;\"	h	line:4	header:a&&&c$"),
+        re.compile(r"^b	file.wiki	/.*/;\"	v	line:2	header:a$"),
+        re.compile(r"^c	file.wiki	/.*/;\"	p	line:3	header:a$"),
+        re.compile(r"^d	file.wiki	/.*/;\"	v	line:4	preset:a&&&c$"),
     ]
 
 

@@ -15,39 +15,41 @@ from taskwiki import regexp
 def match_header(line, syntax):
     m = re.search(regexp.VIEWPORT[syntax], line)
     if m:
-        return m
+        return 'viewport', m
 
     m = re.search(regexp.PRESET[syntax], line)
     if m:
-        return m
+        return 'preset', m
 
     m = re.search(regexp.HEADER[syntax], line)
     if m:
-        return m
+        return 'header', m
 
-    return None
+    return None, None
 
 
 def process(file_content, filename, syntax):
-    state = [""]*6
+    parents = [None] * 6
     for lnum, line in enumerate(file_content):
-        m = match_header(line, syntax)
+        cur_kind_long, m = match_header(line, syntax)
         if not m:
             continue
 
-        cur_lvl = len(m.group('header_start'))
+        cur_lvl = len(m.group('header_start')) - 1
         cur_tag = m.group('name').strip()
         cur_searchterm = "^" + m.group(0).rstrip("\r\n") + "$"
-        cur_kind = "h"
+        cur_kind = cur_kind_long[0]
 
-        state[cur_lvl-1] = cur_tag
-        for i in range(cur_lvl, 6):
-            state[i] = ""
+        assert cur_lvl < len(parents)
+        parents[cur_lvl] = cur_kind_long, cur_tag
+        for i in range(cur_lvl + 1, len(parents)):
+            parents[i] = None
 
-        scope = "&&&".join(
-                [state[i] for i in range(0, cur_lvl-1) if state[i] != ""])
+        parent_scopes = [p for p in parents[0:cur_lvl] if p]
+        scope = "&&&".join([tag for _, tag in parent_scopes])
         if scope:
-            scope = "\theader:" + scope
+            parent_kind, _ = parent_scopes[-1]
+            scope = "\t" + parent_kind + ":" + scope
 
         yield('{0}\t{1}\t/{2}/;"\t{3}\tline:{4}{5}'.format(
             cur_tag, filename, cur_searchterm, cur_kind, str(lnum+1), scope))
