@@ -65,3 +65,31 @@ class TestTagsBasic(MultiSyntaxTagsTest):
         re.compile(r"^g	file.wiki	/.*/;\"	h	line:7$"),
         re.compile(r"^h	file.wiki	/.*/;\"	h	line:8	header:g$"),
     ]
+
+
+class TestTagsViewportsPresets(MultiSyntaxTagsTest):
+    wiki_input = """\
+    HEADER1(a)
+    HEADER2(b | +DUETODAY)
+    HEADER2(c || +home)
+    HEADER3(d | +OVERDUE | due:today)
+    """
+
+    expected_output = [
+        re.compile(r"^a	file.wiki	/.*/;\"	h	line:1$"),
+        re.compile(r"^b	file.wiki	/.*/;\"	h	line:2	header:a$"),
+        re.compile(r"^c	file.wiki	/.*/;\"	h	line:3	header:a$"),
+        re.compile(r"^d	file.wiki	/.*/;\"	h	line:4	header:a&&&c$"),
+    ]
+
+
+class TestTagsVimwikiLinks(TagsTest):
+    wiki_input = """\
+    = [[link]] =
+    == [[li|nk]] ==
+    """
+
+    expected_output = """\
+    [[link]]	file.wiki	/^= [[link]] =$/;"	h	line:1
+    [[li|nk]]	file.wiki	/^== [[li|nk]] ==$/;"	h	line:2	header:[[link]]
+    """

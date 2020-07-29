@@ -45,7 +45,7 @@ VIEWPORT = {
     'default':
     re.compile(
         r'^'                         # Starts at the begging of the line
-        r'[=]+'                      # Heading begging
+        r'(?P<header_start>[=]+)'    # Heading begging
         r'(?P<name>[^=\|\[\{]*)'     # Name of the viewport, all before the | sign
                                      # Cannot include '[', '=', '|', and '{'
         r'\|'                        # Bar
@@ -65,7 +65,7 @@ VIEWPORT = {
     'markdown':
     re.compile(
         r'^'                         # Starts at the begging of the line
-        r'[#]+'                      # Heading begging
+        r'(?P<header_start>[#]+)'    # Heading begging
         r'(?P<name>[^#\|\[\{]*)'     # Name of the viewport, all before the | sign
                                      # Cannot include '[', '#', '|', and '{'
         r'\|'                        # Bar
@@ -89,7 +89,7 @@ HEADER = {
     re.compile(
         r'^'                         # Starts at the beginning of the line
         r'(?P<header_start>[=]+)'    # With a positive number of =
-        r'[^=]+'                     # Character other than =
+        r'(?P<name>[^=]+)'           # Character other than =
         r'[=]+'                      # Positive number of =, closing the header
         r'\s*'                       # Allow trailing whitespace
     ),
@@ -97,7 +97,7 @@ HEADER = {
     re.compile(
         r'^'                         # Starts at the beginning of the line
         r'(?P<header_start>[#]+)'    # With a positive number of #
-        r'[^#]+'                     # Character other than #
+        r'(?P<name>[^#]+)'           # Character other than #
     )
 }
 
@@ -106,7 +106,7 @@ PRESET = {
     re.compile(
         r'^'                         # Starts at the beginning of the line
         r'(?P<header_start>[=]+)'    # With a positive number of =
-        r'([^=\|\[\{]*)'             # Heading caption, everything up to ||
+        r'(?P<name>[^=\|\[\{]*)'     # Heading caption, everything up to ||
                                      # Cannot include '[', '=', '|, and '{'
         r'\|\|'                      # Delimiter
         r'(?P<filter>[^=\|]+?)'      # Filter preset
@@ -121,7 +121,7 @@ PRESET = {
     re.compile(
         r'^'                         # Starts at the beginning of the line
         r'(?P<header_start>[#]+)'    # With a positive number of #
-        r'([^#\|\[\{]*)'             # Heading caption, everything up to ||
+        r'(?P<name>[^#\|\[\{]*)'     # Heading caption, everything up to ||
                                      # Cannot include '[', '#', '|, and '{'
         r'\|\|'                      # Delimiter
         r'(?P<filter>[^#\|]+?)'      # Filter preset
