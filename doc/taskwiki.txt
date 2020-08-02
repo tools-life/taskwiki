@@ -305,6 +305,8 @@ To add arbitrary metadata to the tasks, see |taskwiki-commands|, especially
 To assign metadata when creating a task, you can use put it into the
 description, separating it from the real description using the '--' divider.
 
+Note that the spaces around the divider are required.
+
 ~   * [ ] This has project home -- project:Home
 
 Upon saving, the metadata string will disappear, saving the metadata into
