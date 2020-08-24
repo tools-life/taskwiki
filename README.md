@@ -3,8 +3,8 @@
 _Proper project management in vim.
 Standing on the shoulders of vimwiki and Taskwarrior_
 
-[![GitHub Actions build status](https://github.com/tbabej/taskwiki/workflows/tests/badge.svg?branch=master)](https://github.com/tbabej/taskwiki/actions)
-[![Coverage Status](https://coveralls.io/repos/tbabej/taskwiki/badge.svg?branch=master)](https://coveralls.io/r/tbabej/taskwiki?branch=master)
+[![GitHub Actions build status](https://github.com/tools-life/taskwiki/workflows/tests/badge.svg?branch=master)](https://github.com/tools-life/taskwiki/actions)
+[![Coverage Status](https://coveralls.io/repos/tools-life/taskwiki/badge.svg?branch=master)](https://coveralls.io/r/tools-life/taskwiki?branch=master)
 [![Code Health](https://landscape.io/github/tbabej/taskwiki/master/landscape.svg?style=flat)](https://landscape.io/github/tbabej/taskwiki/master)
 [![Chat with developers](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/tbabej/taskwiki)
 
@@ -43,7 +43,7 @@ developed with Python2 compatibility in mind.
 Using pathogen (or similar vim plugin manager), the taskwiki install is
 as simple as:
 
-    git clone https://github.com/tbabej/taskwiki ~/.vim/bundle/taskwiki
+    git clone https://github.com/tools-life/taskwiki ~/.vim/bundle/taskwiki
 
 However, make sure your box satisfies the requirements stated above.
 
@@ -265,7 +265,7 @@ Taskwarrior community. Come hang out at #taskwarrior on Freenode.
 
 ### Contributing
 
-Code and issue tracker is hosted at: https://github.com/tbabej/taskwiki
+Code and issue tracker is hosted at: https://github.com/tools-life/taskwiki
 
 Feel free to submit pull requests and/or file issues for bugs and suggestions.
 
@@ -300,6 +300,6 @@ and consider using a virtual machine or [Xvfb](https://www.x.org/releases/X11R7.
 
 #### Known issues
 
-When `tzlocal` library can't detect your local timezone, it has to be set [explicitly](https://github.com/tbabej/taskwiki/issues/110) using the environment variable `TZ`. For example, before launching vim:
+When `tzlocal` library can't detect your local timezone, it has to be set [explicitly](https://github.com/tools-life/taskwiki/issues/110) using the environment variable `TZ`. For example, before launching vim:
 
     export TZ="Europe/Prague"
