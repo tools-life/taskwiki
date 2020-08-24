@@ -49,6 +49,7 @@ FROM build AS build-pip
 # coverage needs to build a C extensions, otherwise it's slow
 RUN apk add --no-cache \
     gcc \
+    linux-headers \
     musl-dev
 RUN pip install --root=/opt/pip-root \
     coverage \
