@@ -367,7 +367,7 @@ def enforce_dependencies(cache):
     # Vim version is already checked in vimscript file
     # This is done so that we avoid problems with +python
 
-    TASKLIB_VERSION = '0.10.0'
+    TASKLIB_VERSION = '2.2.1'
     TASKWARRIOR_VERSION = '2.4.0'
 
     # Check tasklib version
