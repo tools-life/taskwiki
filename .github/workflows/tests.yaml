@@ -27,11 +27,17 @@ jobs:
           set -ex -o pipefail
           shopt -s lastpipe
           (
+            echo -n sha:
+            git ls-remote https://github.com/GothenburgBitFactory/taskwarrior.git | \
+            ( grep heads/$TASK_VERSION || : ) | awk '{print $1}'
+          ) | read -r TASK_DEVEL_SHA _ || :
+          (
             echo ALPINE_VERSION="$ALPINE_VERSION"
             echo PYTHON_VERSION="$PYTHON_VERSION"
             echo TASK_VERSION="$TASK_VERSION"
             echo VIM_VERSION="$VIM_VERSION"
             echo VIMWIKI_VERSION="$VIMWIKI_VERSION"
+            echo TASK_DEVEL_SHA="$TASK_DEVEL_SHA"
             cat Dockerfile
           ) | sha256sum | read -r tag _
           docker login "$DOCKER_REGISTRY" -u "$GITHUB_USER" -p "$GITHUB_TOKEN" || :
