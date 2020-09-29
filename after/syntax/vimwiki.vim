@@ -45,7 +45,7 @@ syntax match TaskWikiTaskCompleted containedin=TaskWikiTask contained contains=@
 syntax match TaskWikiTaskDeleted containedin=TaskWikiTask contained contains=@TaskWikiTaskContains /\s*\*\s*\[D\]\s[^#]*/
 syntax match TaskWikiTaskRecurring containedin=TaskWikiTask contained contains=@TaskWikiTaskContains /\s*\*\s\[R\]\s[^#]*/
 syntax match TaskWikiTaskWaiting containedin=TaskWikiTask contained contains=@TaskWikiTaskContains /\s*\*\s\[W\]\s[^#]*/
-syntax match TaskWikiTaskPriority contained /\( !\| !!\| !!!\)\( \)\@=/
+syntax match TaskWikiTaskPriority contained /\( \)\@<=\(!\|!!\|!!!\)\( \)\@=/
 syntax cluster TaskWikiTaskContains add=TaskWikiTaskPriority
 
 " Set concealed parts as really concealed in normal mode, and with cursor over
