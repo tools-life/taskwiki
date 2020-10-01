@@ -474,6 +474,31 @@ in:
 
 ~   * [ ] This is a habit task #H:2f45ae
 
+----------------------------------------------------------------------------
+5.4. Reviewing tasks                              *taskwiki-features-review*
+
+Taskwiki supports a task review process. Using the |TaskWikiReview| command,
+you can specify a taskwarrior filter and the corresponding non-reviewed tasks
+will be opened in a new temporary file where you can review them one by one.
+For example:
+
+~   :TaskWikiReview project:work
+
+Once finished, you can close the buffer, at which moment you will be asked
+whether to mark the listed tasks as reviewed.
+
+Alternatively, you can place the vim cursor on a viewport header and run
+|TaskWikiReview| and the viewport's filter will be used to populate the
+review.
+
+This functionality mirrors the review command of tasksh (bundled with
+taskwarrior), but provides a better interface to review your tasks.
+
+Before using this command, you need to run the review command of tasksh which
+will create the needed UDAs and taskwarrior report for the |TaskWikiReview|
+command to work correctly.
+
+
 =============================================================================
 6. MAPPING						   *taskwiki-mapping*
 
@@ -506,6 +531,7 @@ vn	m 	|:TaskWikiMod|
  n	t 	|:TaskWikiTags|
 vn	+ 	|:TaskWikiStart|
 vn	- 	|:TaskWikiStop|
+ n	r 	|:TaskWikiReview|
 
 =============================================================================
 7. COMMANDS						  *taskwiki-commands*
@@ -603,6 +629,9 @@ selected tasks.
 
 *:TaskWikiMod* [mods]
     Opens a prompt for task modification, for selected task(s).
+
+*:TaskWikiReview* [filter]
+    Start the task review process as described in |taskwiki-features-review|.
 
 ----------------------------------------------------------------------------
 Interactive commands.
