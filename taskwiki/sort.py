@@ -181,7 +181,7 @@ class TaskCollectionNode(object):
         return full_list
 
     def __repr__(self):
-        return u"Node for with ID: {0}".format(self.vwtask.task['id'])
+        return u"Node for with ID: {0}".format(self.vwtask.task['id'] or self.vwtask.task['uuid'])
 
     def __lt__(self, other):
         return self.comparator.lt(self, other)
