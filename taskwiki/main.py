@@ -87,7 +87,7 @@ class TaskWikiReview(object):
 
         # TODO add user configurable count to filter
         # TODO make the interval configurable
-        filter += ' reviewed.before:tod-2weeks'
+        filter += ' (reviewed.none: or reviewed.before:tod-2weeks)'
         with open(review_file, 'w') as f:
             # TODO do not support only vimwiki syntax
             f.write("== Pending review | %s ==\n" % filter)
