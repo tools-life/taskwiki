@@ -96,7 +96,7 @@ class TaskWikiReview(object):
         vim.command("e {0}".format(review_file))
 
         # TODO read this from vimwiki
-        vim.command('set ft=vimwiki.markdown')
+        vim.command('set ft=vimwiki.markdown.twreview')
         vim.command('setlocal foldlevel=9999')
 
         c = cache.load_current()
