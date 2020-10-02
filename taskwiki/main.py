@@ -1,4 +1,5 @@
 from __future__ import print_function
+import tempfile
 import base64
 import re
 import os
@@ -6,6 +7,7 @@ import pickle
 import six
 import sys
 import vim  # pylint: disable=F0401
+from datetime import datetime
 
 # Insert the taskwiki on the python path
 BASE_DIR = vim.eval("s:plugin_path")
@@ -61,6 +63,96 @@ class WholeBuffer(object):
         c.update_vwtasks_in_buffer()
         c.evaluate_viewports()
         c.buffer.push()
+
+
+class TaskWikiReview(object):
+    @staticmethod
+    @errors.pretty_exception_handler
+    @decorators.hold_vim_cursor
+    def run(filter=None):
+        """
+        Updates all the incomplete tasks in the vimwiki file if the info from TW is different.
+        """
+        if filter is None:
+            position = util.get_current_line_number()
+            port = viewport.ViewPort.from_line(position, cache())
+
+            if port is None:
+                raise ValueError("No filter given and cursor not on a viewport")
+
+            filter = port.raw_filter
+            print(filter)
+
+        review_file = tempfile.mkstemp(dir='/tmp/', suffix='.twreview', text=True)[1]
+
+        # TODO add user configurable count to filter
+        # TODO make the interval configurable
+        filter += ' (reviewed.none: or reviewed.before:tod-2weeks)'
+        with open(review_file, 'w') as f:
+            # TODO do not support only vimwiki syntax
+            f.write("== Pending review | %s ==\n" % filter)
+            f.seek(0)
+
+        vim.command("e {0}".format(review_file))
+
+        # TODO read this from vimwiki
+        vim.command('set ft=vimwiki.markdown.twreview')
+        vim.command('setlocal foldlevel=9999')
+
+        c = cache.load_current()
+        c.reset()
+        c.load_tasks()
+        c.load_presets()
+        c.load_vwtasks(buffer_has_authority=False)
+        c.load_viewports()
+        c.update_vwtasks_from_tasks()
+        c.update_vwtasks_in_buffer()
+        c.evaluate_viewports()
+        c.buffer.push()
+        
+        vim.command('w')
+
+    @staticmethod
+    @errors.pretty_exception_handler
+    @decorators.hold_vim_cursor
+    def update():
+        closing_buffer = vim.eval("expand('<afile>')")
+
+        if re.match(r".*\.twreview", closing_buffer):
+            user_choice = vim.eval(
+                "confirm('Update review status of reviewed tasks?', '&Yes\n&No', 1)"
+            )
+
+            if user_choice == '2':
+                return
+
+            for b in vim.buffers:
+                if b.name == closing_buffer:
+                    break
+
+            print(b.name)
+            c = cache(b.number)
+            #  c.reset()
+            c.load_tasks()
+            c.load_presets()
+            c.load_vwtasks(buffer_has_authority=False)
+            c.load_viewports()
+            for vwtask in c.vwtask.values():
+                vwtask.task['reviewed'] = datetime.now()
+            c.save_tasks()
+
+    @staticmethod
+    @errors.pretty_exception_handler
+    @decorators.hold_vim_cursor
+    def from_line():
+        position = util.get_current_line_number()
+        port = viewport.ViewPort.from_line(position, cache())
+
+        if port is None:
+            print('Not a viewport')
+            return
+
+        TaskWikiReview.run(port.raw_filter)
 
 
 class SelectedTasks(object):

@@ -34,6 +34,7 @@ endif
 " Global update commands
 execute "command! -buffer -nargs=* TaskWikiBufferSave :"      . g:taskwiki_py . "WholeBuffer.update_to_tw()"
 execute "command! -buffer -nargs=* TaskWikiBufferLoad :"      . g:taskwiki_py . "WholeBuffer.update_from_tw()"
+execute "command! -buffer -nargs=* TaskWikiReview :"          . g:taskwiki_py . "TaskWikiReview.run(<args>)"
 
 augroup taskwiki
     autocmd! * <buffer>
@@ -53,6 +54,9 @@ augroup taskwiki
     else
       TaskWikiBufferLoad
     endif
+
+    " Update reviewed date when exiting a review
+    execute "autocmd BufUnload <buffer> :" . g:taskwiki_py . "TaskWikiReview().update()"
 augroup END
 
 " Split reports commands
@@ -134,6 +138,7 @@ if !exists('g:taskwiki_suppress_mappings')
         nnoremap <silent><buffer> <LocalLeader>. :TaskWikiRedo<CR>
         nnoremap <silent><buffer> <LocalLeader>+ :TaskWikiStart<CR>
         nnoremap <silent><buffer> <LocalLeader>- :TaskWikiStop<CR>
+        nnoremap <silent><buffer> <LocalLeader>r :TaskWikiReview<CR>
 
         " Mappings for visual mode.
         vnoremap <silent><buffer> <LocalLeader>a :TaskWikiAnnotate<CR>
