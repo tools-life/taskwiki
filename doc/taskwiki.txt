@@ -405,7 +405,7 @@ Examples:
 -----------------------
 5.2.5 Meta virtual tags
 
-Currently there is one meta virtual tag: -VISIBLE. This tag can be used to
+Currently there is one meta virtual tag: VISIBLE. This tag can be used to
 filter out tasks that are displayed elsewhere in the same taskwiki file.
 
 Example:
@@ -413,6 +413,15 @@ Example:
 ~    == Work tasks not belonging to any subproject | project:Work -VISIBLE ==
 ~    == Work coding tasks | project:Work.Coding ==
 ~    == Work review tasks | project:Work.Review ==
+
+Reversely, it can be used to display under a viewport only tasks that are
+already displayed in the same taskwiki file.
+
+Example:
+
+~    == All work tasks by priority | +VISIBLE
+~    == Task for main work | project:Work.main ==
+~    == Tasks for weekend work | project:Work.weekend ==
 
 ----------------
 5.2.6 Inspection
