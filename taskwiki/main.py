@@ -299,6 +299,14 @@ class Mappings(object):
             ']]' in line,
             column >= line.find('[['),
             column <= line.find(']]') + 1
+        ]) or all([
+            '[' in line,
+            '](' in line,
+            ')' in line,
+            line.find('[') < line.find(']('),
+            line.find('](') < line.find(')'),
+            column >= line.find('['),
+            column <= line.find(')') + 1
         ])
 
         if inside_vimwiki_link:
