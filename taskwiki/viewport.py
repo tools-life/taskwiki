@@ -2,6 +2,8 @@ import itertools
 import re
 import six
 import sys
+import vim
+from datetime import datetime
 
 from taskwiki import vwtask
 from taskwiki import regexp
@@ -32,13 +34,15 @@ class ViewPort(object):
     meta_tokens = ('-VISIBLE',)
 
     def __init__(self, line_number, cache, tw,
-                 name, filterstring, defaultstring, sort=None):
+                 name, filterstring, defaultstring, sort=None, expires=None):
         """
         Constructs a ViewPort out of given line.
         """
 
         self.cache = cache
         self.tw = tw
+
+        self.presets = preset.PresetHeader.from_line(line_number, cache)
 
         self.name = name
         self.line_number = line_number
@@ -57,6 +61,24 @@ class ViewPort(object):
             util.get_var('taskwiki_sort_order') or
             constants.DEFAULT_SORT_ORDER
         )
+
+        self.expires = expires or self.presets and self.presets.expires
+        self.expired = False
+
+        parsed_expires = None
+        if self.expires is not None:
+            try:
+                parsed_expires = datetime.strptime(self.expires, regexp.DATETIME_FORMAT)
+            except ValueError:
+                try:
+                    parsed_expires = datetime.strptime(self.expires, regexp.DATE_FORMAT)
+                except ValueError:
+                    vim.command('echom "Taskwiki: Invalid timestamp '
+                                'on line %s, ignored."'
+                                % line_number)
+
+        if parsed_expires is not None and parsed_expires < datetime.now():
+            self.expired = True
 
     def process_filterstring(self, filterstring, use_presets=True):
         """
@@ -77,7 +99,7 @@ class ViewPort(object):
         # Get the initial version of the taskfilter args
         taskfilter_args = list(constants.DEFAULT_VIEWPORT_VIRTUAL_TAGS)
         if use_presets:
-            taskfilter_args += list(preset.PresetHeader.from_line(self.line_number, self.cache).taskfilter)
+            taskfilter_args += list(self.presets.taskfilter)
         taskfilter_args += "("
         taskfilter_args += util.tw_modstring_to_args(filterstring)
         taskfilter_args += ")"
@@ -234,8 +256,10 @@ class ViewPort(object):
                 print(u"Sort indicator '{0}' for viewport '{1}' is not defined,"
                        " using default.".format(sort_id, name), sys.stderr)
 
+        expires = match.group('expires')
+
         self = cls(number, cache, tw, name, filterstring,
-                   defaults, sortstring)
+                   defaults, sortstring, expires)
 
         return self
 

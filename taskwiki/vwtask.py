@@ -137,10 +137,10 @@ class VimwikiTask(object):
                 parsed_due = None
 
                 try:
-                    parsed_due = datetime.strptime(due, regexp.DATETIME_FORMAT)
+                    parsed_due = datetime.strptime(due, "({0})".format(regexp.DATETIME_FORMAT))
                 except ValueError:
                     try:
-                        parsed_due = datetime.strptime(due, regexp.DATE_FORMAT)
+                        parsed_due = datetime.strptime(due, "({0})".format(regexp.DATE_FORMAT))
                     except ValueError:
                         vim.command('echom "Taskwiki: Invalid timestamp '
                                     'on line %s, ignored."'
@@ -323,9 +323,9 @@ class VimwikiTask(object):
 
     def __str__(self):
         due_str = ' ' + (
-                self['due'].strftime(regexp.DATETIME_FORMAT)
+                self['due'].strftime("(" + regexp.DATETIME_FORMAT + ")")
                   if not util.is_midnight(self['due']) else
-                self['due'].strftime(regexp.DATE_FORMAT)
+                self['due'].strftime("(" + regexp.DATE_FORMAT + ")")
                 ) if self['due'] else ''
 
         return ''.join([

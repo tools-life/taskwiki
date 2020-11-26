@@ -44,3 +44,11 @@ class TestParsingPresetHeader(object):
 
         assert header.taskfilter == ["(", "project:Home", ")"]
         assert header.defaults == {'tags': ['home']}
+
+    def test_expires(self, test_syntax):
+        preset_header = "HEADER2(Test || project:Home !2020-01-01)"
+        header = self.process_preset_header(preset_header, test_syntax)
+
+        assert header.taskfilter == ["(", "project:Home", ")"]
+        assert header.defaults == {"project": "Home"}
+        assert header.expires == "2020-01-01"
