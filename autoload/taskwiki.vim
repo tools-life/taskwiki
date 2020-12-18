@@ -1,6 +1,18 @@
 if exists('g:loaded_taskwiki_auto') | finish | endif
 let g:loaded_taskwiki_auto = 1
 
+function! taskwiki#MkView() abort
+  let viewoptions = &viewoptions
+  set viewoptions-=options
+  mkview
+  let &viewoptions = viewoptions
+endfunction
+
+function! taskwiki#LoadView() abort
+  silent! loadview
+  silent! doautocmd SessionLoadPost
+endfunction
+
 function! taskwiki#FoldInit() abort
   " Unless vimwiki is configured to use its folding, set our own
   if &foldtext !~? 'VimwikiFold'
