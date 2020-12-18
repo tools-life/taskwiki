@@ -41,6 +41,7 @@ augroup taskwiki
     autocmd BufWrite <buffer> TaskWikiBufferSave
     " Save and load the view to preserve folding, if desired
     if !exists('g:taskwiki_dont_preserve_folds')
+      setlocal viewoptions-=options
       autocmd BufWinLeave <buffer> mkview
       autocmd BufWinEnter <buffer> silent! loadview
       autocmd BufWinEnter <buffer> silent! doautocmd SessionLoadPost
