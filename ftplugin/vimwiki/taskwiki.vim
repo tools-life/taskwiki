@@ -41,10 +41,8 @@ augroup taskwiki
     autocmd BufWrite <buffer> TaskWikiBufferSave
     " Save and load the view to preserve folding, if desired
     if !exists('g:taskwiki_dont_preserve_folds')
-      setlocal viewoptions-=options
-      autocmd BufWinLeave <buffer> mkview
-      autocmd BufWinEnter <buffer> silent! loadview
-      autocmd BufWinEnter <buffer> silent! doautocmd SessionLoadPost
+      autocmd BufWinLeave <buffer> call taskwiki#MkView()
+      autocmd BufWinEnter <buffer> call taskwiki#LoadView()
     endif
     " Reset cache when switching buffers
     execute "autocmd BufEnter <buffer> :" . g:taskwiki_py . "cache.load_current().reset()"
