@@ -1,6 +1,14 @@
 if exists('g:loaded_taskwiki_auto') | finish | endif
 let g:loaded_taskwiki_auto = 1
 
+function! taskwiki#FoldInit() abort
+  " Unless vimwiki is configured to use its folding, set our own
+  if &foldtext !~? 'VimwikiFold'
+    setlocal foldmethod=syntax
+    setlocal foldtext=taskwiki#FoldText()
+  endif
+endfunction
+
 " Altered version of the VimwikiFoldText, strips viewport params
 function! taskwiki#FoldText()
   let line = getline(v:foldstart)
