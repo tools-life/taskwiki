@@ -54,7 +54,3 @@ setlocal conceallevel=3
 if !exists('g:taskwiki_disable_concealcursor')
   setlocal concealcursor=nc
 endif
-
-" Configure custom FoldText function
-setlocal foldmethod=syntax
-setlocal foldtext=taskwiki#FoldText()
