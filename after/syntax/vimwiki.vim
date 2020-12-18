@@ -58,4 +58,3 @@ endif
 " Configure custom FoldText function
 setlocal foldmethod=syntax
 setlocal foldtext=taskwiki#FoldText()
-setlocal viewoptions-=options
