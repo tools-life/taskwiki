@@ -506,6 +506,8 @@ vn	m 	|:TaskWikiMod|
  n	t 	|:TaskWikiTags|
 vn	+ 	|:TaskWikiStart|
 vn	- 	|:TaskWikiStop|
+ n	o 	|:TaskWikiOpen|
+ n	n 	|:TaskWikiNote|
 
 =============================================================================
 7. COMMANDS						  *taskwiki-commands*
@@ -603,6 +605,16 @@ selected tasks.
 
 *:TaskWikiMod* [mods]
     Opens a prompt for task modification, for selected task(s).
+
+*:TaskWikiOpen*
+    Opens annotations in the selected task(s) containing links to local files,
+    urls, etc.
+
+*:TaskWikiNote*
+    Adds a note to the task under cursor and opens it to be edit. This command
+    is compatible with the taskopen utility. See
+    |taskwiki_taskopen_notes_folder|
+    |taskwiki_taskopen_notes_regex|.
 
 ----------------------------------------------------------------------------
 Interactive commands.
@@ -732,6 +744,13 @@ constructs.
 
         Example:
         let g:taskwiki_maplocalleader=",t"
+
+*taskwiki_taskopen_notes_folder*
+        The folder where taskopen has been configured to store notes. Defaults
+        to $HOME/tasknotes ().
+
+*taskwiki_taskopen_notes_regex*
+        The annotation to add for tasks that have a note. Defaults to Notes.
 
 =============================================================================
 9. TROUBLESHOOTING					   *taskwiki-trouble*

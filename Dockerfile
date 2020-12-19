@@ -69,6 +69,7 @@ RUN apk add --no-cache \
     make \
     patchelf \
     tzdata \
+    xdg-utils \
     xvfb-run
 RUN ln -sf /usr/share/zoneinfo/Etc/UTC /etc/localtime
 

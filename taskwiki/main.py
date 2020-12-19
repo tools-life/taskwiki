@@ -6,6 +6,7 @@ import pickle
 import six
 import sys
 import vim  # pylint: disable=F0401
+import subprocess
 
 # Insert the taskwiki on the python path
 BASE_DIR = vim.eval("s:plugin_path")
@@ -83,6 +84,14 @@ class SelectedTasks(object):
         if not self.tasks:
             print("No tasks selected.")
 
+        self.taskopen_notes_folder = (
+            util.get_var("taskwiki_taskopen_notes_folder", default="~/tasknotes")
+        )
+
+        self.taskopen_notes_regex = (
+            util.get_var("taskwiki_taskopen_notes_regex") or "Notes"
+        )
+
     @classmethod
     def save_action(cls, method, *args):
         cls.last_action = {'method': method, 'args': args}
@@ -122,6 +131,34 @@ class SelectedTasks(object):
             if out:
                 util.show_in_split(out, name='info', activate_cursorline=True)
             break  # Show only one task
+
+    @errors.pretty_exception_handler
+    def open(self):
+        compatible_annotation_found = False
+        for vimwikitask in self.tasks:
+            for annotation in vimwikitask.task["annotations"]:
+                annotation = annotation["description"]
+                proc = subprocess.Popen(["xdg-open", annotation])
+                try:
+                    proc.wait(0.3)
+                except subprocess.TimeoutExpired:
+                    compatible_annotation_found = True
+
+        if not compatible_annotation_found:
+            print("No compatible annotation found.")
+
+    @errors.pretty_exception_handler
+    def note(self):
+        for vimwikitask in self.tasks:
+            if self.taskopen_notes_regex not in [
+                a["description"] for a in vimwikitask.task["annotations"]
+            ]:
+                self.annotate(self.taskopen_notes_regex)
+
+            note_path = os.path.join(self.taskopen_notes_folder,
+                                     vimwikitask.task["uuid"] + ".md")
+            vim.command("edit " + note_path)
+            break  # Add not to only one task
 
     @errors.pretty_exception_handler
     def edit(self):

@@ -1329,3 +1329,97 @@ class TestSelectAfterBufferSwitch(IntegrationTest):
 
         self.tasks[0].refresh()
         assert self.tasks[0]['project'] == "Home"
+
+
+class TestAddTaskNote(IntegrationTest):
+
+    viminput = """
+    * [ ] test task 1  #{uuid}
+    """
+
+    vimoutput = """
+    * [ ] test task 1  #{uuid}
+    """
+
+    tasks = [
+        dict(description="test task 1"),
+    ]
+
+    def execute(self):
+        # Create a note
+        self.command("let g:taskwiki_taskopen_notes_folder='~'")
+        self.command(
+            "TaskWikiNote",
+            regex='Task "test task 1" annotated',
+            lines=3
+        )
+        self.command("w", silent=False)
+        self.command("bd", silent=False)
+
+        # Re-opening the note should not create a new one
+        self.command(
+            "TaskWikiNote",
+            regex=" 0L, 0C$"
+        )
+        self.command("w", silent=False)
+        self.command("bd", silent=False)
+
+        # Note should be listed in task annotations
+        self.command("TaskWikiInfo")
+
+        output = '\n'.join(self.read_buffer())
+
+        data = r"Annotation of 'Notes' added"
+
+        assert re.search(data, output, re.MULTILINE)
+
+        self.command("bd")
+
+
+class TestTaskOpenWithNoAnnotation(IntegrationTest):
+
+    viminput = """
+    * [ ] test task 1  #{uuid}
+    """
+
+    vimoutput = """
+    * [ ] test task 1  #{uuid}
+    """
+
+    tasks = [
+        dict(description="test task 1"),
+    ]
+
+    def execute(self):
+        self.command(
+            "TaskWikiOpen",
+            regex='No compatible annotation found.',
+            lines=1
+        )
+
+
+class TestTaskOpenWithIncompatibleAnnotation(IntegrationTest):
+
+    viminput = """
+    * [ ] test task 1  #{uuid}
+    """
+
+    vimoutput = """
+    * [ ] test task 1  #{uuid}
+    """
+
+    tasks = [
+        dict(description="test task 1"),
+    ]
+
+    def execute(self):
+        # Create an annotation
+        self.command(
+            "TaskWikiAnnotate what is this",
+            silent=False
+        )
+        self.command(
+            "TaskWikiOpen",
+            regex='No compatible annotation found.',
+            lines=1
+        )
