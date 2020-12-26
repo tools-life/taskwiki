@@ -5,6 +5,7 @@ from tests.base import IntegrationTest
 
 class FakeTW():
     def __init__(self, projects=[], tags=[]):
+        self.version = '2.5.1'
         self.projects = projects
         self.tags = tags
 

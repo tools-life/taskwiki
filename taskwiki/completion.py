@@ -1,6 +1,8 @@
 from functools import reduce, wraps
 import re
 
+from tasklib import TaskWarrior
+
 from taskwiki import constants
 
 
@@ -53,14 +55,20 @@ class Completion():
 
     @cached_property
     def _tags(self):
-        return sorted(set(
-            tag
-            for tags in self.tw.execute_command(['_unique', 'tag'])
-            for tag in tags.split(',')))
+        if self.tw.version < TaskWarrior.VERSION_2_4_5:
+            return sorted(self.tw.execute_command(['_tags']))
+        else:
+            return sorted(set(
+                tag
+                for tags in self.tw.execute_command(['_unique', 'tag'])
+                for tag in tags.split(',')))
 
     @cached_property
     def _projects(self):
-        return sorted(self.tw.execute_command(['_unique', 'project']))
+        if self.tw.version < TaskWarrior.VERSION_2_4_5:
+            return sorted(self.tw.execute_command(['_projects']))
+        else:
+            return sorted(self.tw.execute_command(['_unique', 'project']))
 
     def _complete_any(self, w):
         if w:
