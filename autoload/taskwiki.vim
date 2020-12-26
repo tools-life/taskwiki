@@ -36,3 +36,33 @@ endfunction
 function! taskwiki#CompleteMod(arglead, line, pos) abort
   return py3eval('cache().get_relevant_completion().modify(vim.eval("a:arglead"))')
 endfunction
+
+function! taskwiki#CompleteOmni(findstart, base) abort
+  if a:findstart == 1
+    let line = getline('.')[:col('.')-2]
+
+    " Complete modstring after -- in new tasks
+    let modstring = py3eval('cache().get_relevant_completion().omni_modstring_findstart(vim.eval("l:line"))')
+    if modstring >= 0
+      let s:omni_method = 'modstring'
+      return modstring
+    endif
+
+    " Fallback to vimwiki's omnifunc
+    if type(b:taskwiki_omnifunc_fallback) is v:t_func
+      let s:omni_method = 'fallback'
+      return b:taskwiki_omnifunc_fallback(a:findstart, a:base)
+    else
+      let s:omni_method = ''
+      return -1
+    endif
+  else
+    if s:omni_method is 'modstring'
+      return py3eval('cache().get_relevant_completion().omni_modstring(vim.eval("a:base"))')
+    elseif s:omni_method is 'fallback'
+      return b:taskwiki_omnifunc_fallback(a:findstart, a:base)
+    else
+      return []
+    endif
+  endif
+endfunction

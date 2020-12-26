@@ -4,6 +4,7 @@ import re
 from tasklib import TaskWarrior
 
 from taskwiki import constants
+from taskwiki import regexp
 
 
 def complete_last_word(f):
@@ -113,6 +114,23 @@ class Completion():
 
     @complete_last_word
     def modify(self, w):
+        return \
+            self._complete_any(w) or \
+            self._complete_attributes(w) or \
+            self._complete_projects(w) or \
+            self._complete_tags(w) or \
+            self._complete_dates(w) or \
+            self._complete_recur(w) or \
+            []
+
+    def omni_modstring_findstart(self, line):
+        m = re.search(regexp.GENERIC_TASK, line)
+        if m and not m.group('uuid') and ' -- ' in line:
+            return line.rfind(' ') + 1
+        else:
+            return -1
+
+    def omni_modstring(self, w):
         return \
             self._complete_any(w) or \
             self._complete_attributes(w) or \

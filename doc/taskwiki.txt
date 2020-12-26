@@ -314,6 +314,11 @@ Taskwarrior:
 
 ~   * [ ] This has project home  #431f42
 
+Typing additional metadata can be simplified by using omni completion (see
+|compl-omni|), like so:
+
+~   * [ ] This has project home -- project:<C-X><C-O>
+
 ----------------------------------------------------------------------------
 5.2. Viewports                                  *taskwiki-features-viewport*
 

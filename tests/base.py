@@ -85,6 +85,7 @@ class IntegrationTest(object):
         self.configure_global_variables()
         self.add_plugin('taskwiki')
         self.add_plugin('vimwiki', 'plugin/vimwiki.vim')
+        self.add_plugin('taskwiki/after')
         self.filepath = os.path.join(self.dir, 'testwiki.txt')
         self.client.edit(self.filepath)
 

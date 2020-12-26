@@ -53,8 +53,19 @@ class TestCompletionUnit():
         assert c.modify("re:da") == ["re:daily", "re:day"]
         assert c.modify("recur:q") == ["recur:quarterly"]
 
+    def test_omni(self):
+        c = Completion(FakeTW())
+        assert c.omni_modstring_findstart("* [ ] x") == -1
+        assert c.omni_modstring_findstart("* [ ] x --") == -1
+        assert c.omni_modstring_findstart("* [ ] x #12345678 --") == -1
+        assert c.omni_modstring_findstart("* [ ] x -- #12345678") == -1
+        assert c.omni_modstring_findstart("* [ ] x -- ") == 11
+        assert c.omni_modstring_findstart("* [ ] x -- x") == 11
+        assert c.omni_modstring_findstart("* [ ] x -- xy") == 11
+        assert c.omni_modstring_findstart("* [ ] x -- x y") == 13
 
-class TestCompletionIntegration(IntegrationTest):
+
+class TestCompletionIntegMod(IntegrationTest):
     viminput = """
     * [ ] test task 1  #{uuid}
     * [ ] test task 2  #{uuid}
@@ -74,3 +85,23 @@ class TestCompletionIntegration(IntegrationTest):
             task.refresh()
 
         assert self.tasks[0]['project'] == "DEF"
+
+
+class TestCompletionIntegOmni(IntegrationTest):
+    viminput = """
+    * [ ] test task 1  #{uuid}
+    """
+
+    tasks = [
+        dict(description="test task 1", project="ABC"),
+    ]
+
+    def execute(self):
+        self.client.feedkeys('1gg')
+        self.client.feedkeys('otest task 2 -- pro\\<C-X>\\<C-O>A\\<C-X>\\<C-O>\\<Esc>')
+        self.client.eval('0')  # wait for command completion
+        self.command("w", regex="written$", lines=1)
+
+        task = self.tw.tasks.pending()[1]
+        assert task['description'] == 'test task 2'
+        assert task['project'] == 'ABC'
