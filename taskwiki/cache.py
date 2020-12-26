@@ -149,6 +149,7 @@ class TaskCache(object):
         self.buffer.obtain()
         self.completion.store = dict()
         self.task.store = dict()
+        self.presets.store = dict()
         self.vwtask.store = dict()
         self.viewport.store = dict()
         self.line.store = dict()
