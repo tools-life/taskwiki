@@ -32,3 +32,7 @@ function! taskwiki#FoldText()
   let len_text = ' ['.fold_len.'] '
   return short_text.len_text.repeat(' ', 500)
 endfunction
+
+function! taskwiki#CompleteMod(arglead, line, pos) abort
+  return py3eval('cache().get_relevant_completion().modify(vim.eval("a:arglead"))')
+endfunction

@@ -95,8 +95,11 @@ def tw_args_to_kwargs(args):
 
     return output
 
-def get_input(prompt="Enter: ", allow_empty=False):
-    value = vim.eval('input("%s")' % prompt)
+def get_input(prompt="Enter: ", allow_empty=False, completion=None):
+    if completion is not None:
+        value = vim.eval('input("%s", "", "%s")' % (prompt, completion))
+    else:
+        value = vim.eval('input("%s")' % prompt)
     vim.command('redraw')
 
     # Check for empty value and bail out if not allowed

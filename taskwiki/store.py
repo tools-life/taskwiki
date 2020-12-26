@@ -203,3 +203,9 @@ class LineStore(NoNoneStore):
         self.cache.buffer[position1] = self.cache.buffer[position2]
         self.cache.buffer[position2] = temp
 
+
+class CompletionStore(NoNoneStore):
+
+    def get_method(self, key):
+        from taskwiki import completion
+        return completion.Completion(key)

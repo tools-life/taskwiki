@@ -121,6 +121,7 @@ class TaskCache(object):
 
         # Initialize all the subcomponents
         self.buffer = BufferProxy(buffer_number)
+        self.completion = store.CompletionStore(self)
         self.task = store.TaskStore(self)
         self.presets = store.PresetStore(self)
         self.vwtask = store.VwtaskStore(self)
@@ -146,6 +147,7 @@ class TaskCache(object):
 
     def reset(self):
         self.buffer.obtain()
+        self.completion.store = dict()
         self.task.store = dict()
         self.vwtask.store = dict()
         self.viewport.store = dict()
@@ -307,3 +309,6 @@ class TaskCache(object):
         from taskwiki import vwtask
         task = vwtask.VimwikiTask.find_closest(self)
         return task.tw if task else self.warriors['default']
+
+    def get_relevant_completion(self):
+        return self.completion[self.get_relevant_tw()]
