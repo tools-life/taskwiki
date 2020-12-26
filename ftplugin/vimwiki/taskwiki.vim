@@ -83,8 +83,8 @@ execute "command! -buffer -range TaskWikiDone :<line1>,<line2>"   . g:taskwiki_p
 execute "command! -buffer -range TaskWikiRedo :<line1>,<line2>"   . g:taskwiki_py . "SelectedTasks().redo()"
 
 execute "command! -buffer -range -nargs=* TaskWikiSort :<line1>,<line2>"     . g:taskwiki_py . "SelectedTasks().sort(<q-args>)"
-execute "command! -buffer -range -nargs=* TaskWikiMod :<line1>,<line2>"      . g:taskwiki_py . "SelectedTasks().modify(<q-args>)"
 execute "command! -buffer -range -nargs=* TaskWikiAnnotate :<line1>,<line2>" . g:taskwiki_py . "SelectedTasks().annotate(<q-args>)"
+execute "command! -buffer -range -nargs=* -complete=customlist,taskwiki#CompleteMod TaskWikiMod :<line1>,<line2>" . g:taskwiki_py . "SelectedTasks().modify(<q-args>)"
 
 " Interactive commands
 execute "command! -buffer -range TaskWikiChooseProject :<line1>,<line2>"     . g:taskwiki_py . "ChooseSplitProjects('global').execute()"

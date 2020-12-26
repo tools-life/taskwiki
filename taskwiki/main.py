@@ -17,6 +17,7 @@ from taskwiki import sort
 from taskwiki import util
 from taskwiki import viewport
 from taskwiki import decorators
+from taskwiki import completion
 
 
 cache = cache_module.CacheRegistry()
@@ -177,7 +178,9 @@ class SelectedTasks(object):
         # If no modstring was passed as argument, ask the user interactively
         if not modstring:
             with util.current_line_highlighted():
-                modstring = util.get_input("Enter modifications: ")
+                modstring = util.get_input(
+                    "Enter modifications: ",
+                    completion="customlist,taskwiki#CompleteMod")
 
         # We might have two same tasks in the range, make sure we do not pass the
         # same uuid twice
