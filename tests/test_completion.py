@@ -102,6 +102,14 @@ class TestCompletionIntegOmni(IntegrationTest):
         self.client.eval('0')  # wait for command completion
         self.command("w", regex="written$", lines=1)
 
+        self.client.feedkeys('otest task ☺ -- pro\\<C-X>\\<C-O>A\\<C-X>\\<C-O>\\<Esc>')
+        self.client.eval('0')  # wait for command completion
+        self.command("w", regex="written$", lines=1)
+
         task = self.tw.tasks.pending()[1]
         assert task['description'] == 'test task 2'
+        assert task['project'] == 'ABC'
+
+        task = self.tw.tasks.pending()[2]
+        assert task['description'] == 'test task ☺'
         assert task['project'] == 'ABC'

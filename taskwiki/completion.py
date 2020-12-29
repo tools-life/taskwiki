@@ -125,8 +125,9 @@ class Completion():
 
     def omni_modstring_findstart(self, line):
         m = re.search(regexp.GENERIC_TASK, line)
-        if m and not m.group('uuid') and ' -- ' in line:
-            return line.rfind(' ') + 1
+        bline = line.encode("utf-8")  # omni findstart needs byte offset
+        if m and not m.group('uuid') and b' -- ' in bline:
+            return bline.rfind(b' ') + 1
         else:
             return -1
 
