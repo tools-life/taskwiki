@@ -29,7 +29,7 @@ class ViewPort(object):
           * [ ] Make sure the hosting is working
     """
 
-    meta_tokens = ('-VISIBLE',)
+    meta_tokens = ('-VISIBLE', '+VISIBLE')
 
     def __init__(self, line_number, cache, tw,
                  name, filterstring, defaultstring, sort=None):
@@ -171,6 +171,8 @@ class ViewPort(object):
         for token in taskfilter_args:
             if token == '-VISIBLE':
                 meta['visible'] = False
+            elif token == '+VISIBLE':
+                meta['visible'] = True
 
         taskfilter_args = [x for x in taskfilter_args
                            if x not in self.meta_tokens]
@@ -282,7 +284,7 @@ class ViewPort(object):
                 task for task in self.tw.tasks.filter(*args)
             )
         # -VISIBLE virtual tag used
-        elif self.meta.get('visible') is False:
+        elif self.meta.get('visible') is not None:
             # Determine which tasks are outside the viewport
             all_vwtasks = set(self.cache.vwtask.values())
             vwtasks_outside_viewport = all_vwtasks - set(self.tasks)
@@ -291,12 +293,20 @@ class ViewPort(object):
                 if t is not None
             )
 
-            # Return only those that are not duplicated outside
-            # of the viewport
-            return set(
-                task for task in self.tw.tasks.filter(*args)
-                if task not in tasks_outside_viewport
-            )
+            if not self.meta['visible']:
+                # Return only those that are not duplicated outside
+                # of the viewport
+                return set(
+                    task for task in self.tw.tasks.filter(*args)
+                    if task not in tasks_outside_viewport
+                )
+            else:
+                # Return only those that are duplicated outside
+                # of the viewport
+                return set(
+                    task for task in self.tw.tasks.filter(*args)
+                    if task in tasks_outside_viewport
+                )
 
     def get_tasks_to_add_and_del(self):
         # Find the tasks that are new and tasks that are no longer

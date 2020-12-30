@@ -279,7 +279,7 @@ class TestViewportInspection(MultiSyntaxIntegrationTest):
         assert self.py("print(vim.current.buffer)", regex="<buffer taskwiki.")
 
 
-class TestViewportInspectionWithVisibleTag(MultiSyntaxIntegrationTest):
+class TestViewportInspectionWithNonVisibleTag(MultiSyntaxIntegrationTest):
 
     viminput = """
     HEADER2(Work tasks | +work -VISIBLE)
@@ -304,6 +304,42 @@ class TestViewportInspectionWithVisibleTag(MultiSyntaxIntegrationTest):
 
     tasks = [
         dict(description="tag work task", tags=['work', 'home']),
+    ]
+
+    def execute(self):
+        self.command("w", regex="written$", lines=1)
+        self.client.feedkeys('1gg')
+        self.client.feedkeys(r'\<CR>')
+        self.client.eval('0')  # wait for command completion
+
+        assert self.py("print(vim.current.buffer)", regex="<buffer taskwiki.")
+
+
+class TestViewportInspectionWithVisibleTag(MultiSyntaxIntegrationTest):
+
+    viminput = """
+    HEADER2(Work tasks | +work +VISIBLE)
+
+    HEADER2(Home tasks | +home)
+    * [ ] tag work task  #{uuid}
+    """
+
+    vimoutput = """
+    ViewPort inspection:
+    --------------------
+    Name: Work tasks
+    Filter used: -DELETED -PARENT ( +work )
+    Defaults used: tags:['work']
+    Ordering used: status+,end+,due+,priority-,project+
+    Matching taskwarrior tasks: 0
+    Displayed tasks: 1
+    Tasks to be added:
+    Tasks to be deleted: tag work task
+    """
+
+    tasks = [
+        dict(description="tag work task", tags=['work', 'home']),
+        dict(description="tag work task 2", tags=['home']),
     ]
 
     def execute(self):
@@ -545,7 +581,7 @@ class TestViewportsSortedInvalidOrder(MultiSyntaxIntegrationTest):
             "'Work tasks' is not defined, using default.", lines=2)
 
 
-class TestViewportsVisibleMetaTag(MultiSyntaxIntegrationTest):
+class TestViewportsInvisibleMetaTag(MultiSyntaxIntegrationTest):
 
     viminput = """
     HEADER2(Home tasks | project:Home -VISIBLE)
@@ -556,6 +592,33 @@ class TestViewportsVisibleMetaTag(MultiSyntaxIntegrationTest):
     vimoutput = """
     HEADER2(Home tasks | project:Home -VISIBLE)
     * [ ] home task  #{uuid}
+
+    HEADER2(Chores | project:Home.Chores)
+    * [ ] chore task  #{uuid}
+    """
+
+    tasks = [
+        dict(description="home task", project='Home.Random'),
+        dict(description="chore task", project='Home.Chores'),
+    ]
+
+    def execute(self):
+        # Currently, two saves are necessary for VISIBLE to take effect
+        self.command("w", regex="written$", lines=1)
+        self.command("w", regex="written$", lines=1)
+
+
+class TestViewportsVisibleMetaTag(MultiSyntaxIntegrationTest):
+
+    viminput = """
+    HEADER2(Home tasks | project:Home +VISIBLE)
+
+    HEADER2(Chores | project:Home.Chores)
+    """
+
+    vimoutput = """
+    HEADER2(Home tasks | project:Home +VISIBLE)
+    * [ ] chore task  #{uuid}
 
     HEADER2(Chores | project:Home.Chores)
     * [ ] chore task  #{uuid}
