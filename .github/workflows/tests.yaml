@@ -63,6 +63,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           COVERALLS_PARALLEL: true
+          COVERALLS_SERVICE_NAME: github
 
   coveralls-finished:
     needs: tests
