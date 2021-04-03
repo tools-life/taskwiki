@@ -17,7 +17,7 @@ UUID = r'(?P<uuid>{0}|{1})'.format(UUID_UNNAMED, UUID_UNNAMED_SHORT)
 DUE = r'(?P<due>{0})'.format(DUE_UNNAMED)
 TEXT = r'(?P<text>.+?)'
 COMPLETION_MARK = r'(?P<completed>.)'
-PRIORITY = r'(?P<priority>!{1,3})'
+PRIORITY = r'(?P<priority>!+|¡+)'
 
 GENERIC_TASK = re.compile(''.join([
     '^',

@@ -22,9 +22,31 @@ class WarriorStore(object):
             current_kwargs.update(extra_warrior_defs[key])
             self.warriors[key] = TaskWarrior(**current_kwargs)
 
-        # Make sure context is not respected in any TaskWarrior
         for tw in self.warriors.values():
+            # Make sure context is not respected in any TaskWarrior
             tw.overrides.update({'context':''})
+
+            # Read urgency levels once instead of at every task processing.
+            _urgency_levels = tw.config.get("uda.priority.values") or "H,M,L,"
+            tw._config = None  # unset the config cache
+            _urgency_levels = _urgency_levels.split(",")
+            _urgency_levels.reverse()
+
+            # The empty urgency (priority:) is considered the zero point.
+            # Priorities left of it in taskwarrior's conf are considered values
+            # of insignificance, i.e. they have a negative weight.
+            zero_point = _urgency_levels.index('')
+            keys = [i - zero_point for i in range(0, len(_urgency_levels))]
+
+            urgency_levels = {k:_urgency_levels[i] for i, k in enumerate(keys)}
+            urgency_levels[0] = None
+            #  urgency_levels[None] = None
+            # For the default urgency levels, this will be:
+            # {0: None, 1: 'L', 2: 'M', 3: 'H'}
+
+            # Urgency levels need to be stored in the respective TaskWarrior
+            # instance as they are specific to it.
+            tw.urgency_levels = urgency_levels
 
     def __getitem__(self, key):
         try:

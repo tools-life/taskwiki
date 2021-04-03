@@ -11,14 +11,6 @@ from taskwiki import util
 from taskwiki.short import ShortUUID
 
 
-def convert_priority_from_tw_format(priority):
-    return {None: None, 'L': 1, 'M': 2, 'H': 3}[priority]
-
-
-def convert_priority_to_tw_format(priority):
-    return {0: None, 1: 'L', 2: 'M', 3: 'H'}[priority]
-
-
 class VimwikiTask(object):
     # Lists all data keys that are reflected in Vim representation
     buffer_keys = ('indent', 'description', 'uuid', 'completed_mark',
@@ -106,9 +98,11 @@ class VimwikiTask(object):
             else:
                 self.task['description'] = match.group('text')
 
-            self.task['priority'] = convert_priority_to_tw_format(
-                len(match.group('priority') or [])) # This is either 0,1,2 or 3
-
+            self.task['priority'] = tw.urgency_levels.get(
+                0 if match.group('priority') is None
+                else len(match.group('priority')) if '!' in match.group('priority')
+                else -len(match.group('priority')) # if '¡' in match.group('priority')
+            )
             # Also make sure changes in the progress field are reflected
             if self['completed_mark'] == 'X':
                 self.task['status'] = 'completed'
@@ -241,11 +235,13 @@ class VimwikiTask(object):
 
     @property
     def priority_from_tw_format(self):
-        return convert_priority_from_tw_format(self.task['priority'])
+        return list(self.tw.urgency_levels.keys())[
+            list(self.tw.urgency_levels.values()).index(self.task["priority"])
+        ]
 
     @property
     def priority_to_tw_format(self):
-        return convert_priority_to_tw_format(self['priority'])
+        return self.tw.urgency_levels[self['priority']]
 
     def save_to_tw(self):
         # This method persumes all the dependencies have been created at the
@@ -328,6 +324,14 @@ class VimwikiTask(object):
                 self['due'].strftime(regexp.DATE_FORMAT)
                 ) if self['due'] else ''
 
+        priority_str = (
+            " " + "!" * self.priority_from_tw_format
+            if self["priority"] and self.priority_from_tw_format > 0
+            else " " + "¡" * self.priority_from_tw_format
+            if self["priority"] and self.priority_from_tw_format < 0
+            else ""
+        )
+
         return ''.join([
             self['indent'],
             '* [',
@@ -335,7 +339,7 @@ class VimwikiTask(object):
             '] ',
             (self['description'].encode('utf-8') if six.PY2 else self['description'])
                 if self['description'] else 'TEXT MISSING?',
-            ' ' + '!' * self.priority_from_tw_format if self['priority'] else '',
+            priority_str,
             due_str,
             '  #' + self.uuid.vim_representation(self.cache) if self.uuid else '',
         ])
