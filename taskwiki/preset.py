@@ -96,3 +96,16 @@ class PresetHeader(object):
 
         self = cls(cache, parent, level, filterstring, defaults)
         return self
+
+    @property
+    def raw_filter(self):
+        return u' '.join(self.taskfilter)
+
+    @property
+    def raw_defaults(self):
+        value = u', '.join(
+            u'{0}:{1}'.format(key, value)
+            for key, value in self.defaults.items()
+            )
+        # Strip u'' literal symbols from the output
+        return value.replace("u'", "'") if six.PY2 else value

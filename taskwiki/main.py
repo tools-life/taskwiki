@@ -18,6 +18,7 @@ from taskwiki import util
 from taskwiki import viewport
 from taskwiki import decorators
 from taskwiki import completion
+from taskwiki import preset
 
 
 cache = cache_module.CacheRegistry()
@@ -290,6 +291,11 @@ class Mappings(object):
                 Meta().inspect_viewport()
                 return
 
+            header = preset.PresetHeader.from_line(row, cache())
+            if header is not None:
+                Meta().inspect_presetheader()
+                return
+
         # No link detected, not a viewport or a task, so delegate to
         # VimwikiFollowLink for link creation
         vim.command('VimwikiFollowLink')
@@ -337,6 +343,31 @@ class Meta(object):
                 len(port.tasks),
                 ', '.join(map(six.text_type, to_add)),
                 ', '.join(map(six.text_type, to_del)),
+            )
+
+            # Show in the split
+            lines = template_formatted.splitlines()
+            util.show_in_split(lines, activate_cursorline=True)
+
+
+    @errors.pretty_exception_handler
+    def inspect_presetheader(self):
+        position = util.get_current_line_number()
+        header = preset.PresetHeader.from_line(position, cache())
+
+        template = (
+            "ViewPort inspection:\n"
+            "--------------------\n"
+            "Filter used: {0}\n"
+            "Defaults used: {1}\n"
+        )
+
+        if header is not None:
+
+            # Fill in the interesting info in the template
+            template_formatted = template.format(
+                header.raw_filter if six.PY3 else header.raw_filter.encode('utf-8'),
+                header.raw_defaults if six.PY3 else header.raw_defaults.encode('utf-8'),
             )
 
             # Show in the split
