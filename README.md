@@ -33,6 +33,10 @@ Python library for Taskwarrior.
 
         sudo pip3 install --upgrade -r requirements.txt
 
+* **For neovim users:** Note that `pynvim` is a required python 3 provider in case you are using neovim
+
+        sudo pip3 install pynvim
+
 #### Python2 support
 
 Taskwiki is slowly deprecating Python 2 support. Future features are no longer
