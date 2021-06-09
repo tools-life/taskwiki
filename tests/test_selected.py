@@ -589,6 +589,49 @@ class TestStartAction(IntegrationTest):
         assert self.tasks[1]['start'] == None
 
 
+class TestToggleAction(IntegrationTest):
+
+    viminput = """
+    * [S] test task 1  #{uuid}
+    * [ ] test task 2  #{uuid}
+    """
+
+    vimoutput = """
+    * [ ] test task 1  #{uuid}
+    * [S] test task 2  #{uuid}
+    """
+
+    tasks = [
+        dict(description="test task 1", start="now"),
+        dict(description="test task 2"),
+    ]
+
+    def execute(self):
+        self.command(
+            "TaskWikiToggle",
+            regex="Task \"test task 1\" stopped.$",
+            lines=1)
+
+        self.client.type('j')
+        self.command(
+            "TaskWikiToggle",
+            regex="Task \"test task 2\" started.$",
+            lines=1)
+
+        for task in self.tasks:
+            task.refresh()
+
+        now = local_zone.localize(datetime.now())
+
+        assert self.tasks[0]['status'] == "pending"
+        assert self.tasks[1]['status'] == "pending"
+
+        assert self.tasks[0]['start'] == None
+        assert self.tasks[1]['start'] != None
+
+        assert abs((now - self.tasks[1]['start']).total_seconds()) < 5
+
+
 class TestStartActionMoved(IntegrationTest):
 
     viminput = """
