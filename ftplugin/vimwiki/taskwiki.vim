@@ -79,6 +79,7 @@ execute "command! -buffer -range TaskWikiGrid :<line1>,<line2>"   . g:taskwiki_p
 execute "command! -buffer -range TaskWikiDelete :<line1>,<line2>" . g:taskwiki_py . "SelectedTasks().delete()"
 execute "command! -buffer -range TaskWikiStart :<line1>,<line2>"  . g:taskwiki_py . "SelectedTasks().start()"
 execute "command! -buffer -range TaskWikiStop :<line1>,<line2>"   . g:taskwiki_py . "SelectedTasks().stop()"
+execute "command! -buffer -range TaskWikiToggle :<line1>,<line2>" . g:taskwiki_py . "SelectedTasks().toggle()"
 execute "command! -buffer -range TaskWikiDone :<line1>,<line2>"   . g:taskwiki_py . "SelectedTasks().done()"
 execute "command! -buffer -range TaskWikiRedo :<line1>,<line2>"   . g:taskwiki_py . "SelectedTasks().redo()"
 
