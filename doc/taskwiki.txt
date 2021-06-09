@@ -626,6 +626,9 @@ selected tasks.
 *:TaskWikiStop*
     "Stops" the selected task(s).
 
+*:TaskWikiToggle*
+    "Starts" or "stops" the selected task(s), depending on their state.
+
 *:TaskWikiMod* [mods]
     Opens a prompt for task modification, for selected task(s).
 
