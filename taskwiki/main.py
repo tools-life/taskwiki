@@ -249,6 +249,30 @@ class SelectedTasks(object):
         self.save_action('stop')
 
     @errors.pretty_exception_handler
+    def toggle(self):
+        # Multiple VimwikiTasks might refer to the same task, so make sure
+        # we do not start one task twice
+        started = set()
+        for task in set(vimwikitask.task for vimwikitask in self.tasks):
+            if task['start']:
+                task.stop()
+            else:
+                task.start()
+                started.add(task)
+
+        # Update the lines in the buffer
+        for vimwikitask in self.tasks:
+            vimwikitask.update_from_task()
+            vimwikitask.update_in_buffer()
+            if task in started:
+                print(u"Task \"{0}\" started.".format(vimwikitask['description']))
+            else:
+                print(u"Task \"{0}\" stopped.".format(vimwikitask['description']))
+
+        cache().buffer.push()
+        self.save_action('toggle')
+
+    @errors.pretty_exception_handler
     def sort(self, sortstring):
         sort.TaskSorter(cache(), self.tasks, sortstring).execute()
         cache().buffer.push()
