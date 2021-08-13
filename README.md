@@ -29,7 +29,7 @@ or using your [package manager](http://taskwarrior.org/download/#dist)
         sudo dnf install task
 
 * [tasklib](https://github.com/tbabej/tasklib/tree/develop) (the develop branch),
-Python library for Taskwarrior.
+Python library for Taskwarrior. Use the requirements.txt file from the cloned tasklib directory.
 
         sudo pip3 install --upgrade -r requirements.txt
 
