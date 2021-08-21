@@ -154,7 +154,8 @@ class SelectedTasks(object):
         port = viewport.ViewPort.find_closest(cache())
         if port:
             vim.command("TW rc:{0} rc.context: {1}"
-                        .format(port.tw.taskrc_location, port.raw_filter))
+                        .format(port.tw.taskrc_location, port.raw_filter)
+                        .replace('(', '').replace(')', ''))
         else:
             print("No viewport detected.", file=sys.stderr)
 
