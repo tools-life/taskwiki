@@ -10,7 +10,7 @@ pytest:
 
 cover-pytest: PYTEST_FLAGS += --cov=taskwiki
 cover-pytest: pytest
-	if [ "$$GITHUB_ACTIONS" ]; then coveralls || :; fi
+	if [ "$$GITHUB_ACTIONS" ]; then coveralls --service=github || :; fi
 
 xvfb-%:
 	xvfb-run --server-args=-noreset $(MAKE) $*
