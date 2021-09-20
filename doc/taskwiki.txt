@@ -732,6 +732,10 @@ constructs.
     If set to a non-empty value (such as "yes"), taskwiki will not
     preserve folding when entering or leaving a vimwiki buffer.
 
+*taskwiki_dont_fold*
+    If set to a non-empty value (such as "yes"), taskwiki will not
+    set up custom folding logic for vimwiki buffers.
+
 *taskwiki_disable_concealcursor*
     If set to any non-empty value (such as "yes"), taskwiki will not conceal
     characters on the cursor line in normal mode via `concealcursor=nc`.
