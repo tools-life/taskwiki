@@ -7,7 +7,8 @@ Standing on the shoulders of vimwiki and Taskwarrior_
 [![Coverage Status](https://coveralls.io/repos/tools-life/taskwiki/badge.svg?branch=master)](https://coveralls.io/r/tools-life/taskwiki?branch=master)
 [![Code Health](https://landscape.io/github/tbabej/taskwiki/master/landscape.svg?style=flat)](https://landscape.io/github/tbabej/taskwiki/master)
 [![Chat with developers](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/tbabej/taskwiki)
-```                   _____         _   __        ___ _    _
+```
+                   _____         _   __        ___ _    _
         a         |_   _|_ _ ___| | _\ \      / (_) | _(_)         a
    command-line     | |/ _` / __| |/ /\ \ /\ / /| | |/ / |   personal wiki
     todo list       | | (_| \__ \   <  \ V  V / | |   <| |      for vim
