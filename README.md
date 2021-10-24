@@ -28,10 +28,10 @@ or using your [package manager](http://taskwarrior.org/download/#dist)
 
         sudo dnf install task
 
-* [tasklib](https://github.com/tbabej/tasklib/tree/develop) (the develop branch),
-Python library for Taskwarrior. Use the requirements.txt file from the cloned tasklib directory.
+* [tasklib](https://github.com/GothenburgBitFactory/tasklib/) (version 2.4.3 or newer),
+Python library for Taskwarrior.
 
-        sudo pip3 install --upgrade -r requirements.txt
+        sudo pip3 install tasklib
 
 * **For neovim users:** Note that `pynvim` is a required python 3 provider in case you are using neovim
 
