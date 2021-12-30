@@ -531,6 +531,8 @@ vn	m 	|:TaskWikiMod|
  n	t 	|:TaskWikiTags|
 vn	+ 	|:TaskWikiStart|
 vn	- 	|:TaskWikiStop|
+ n	o 	|:TaskWikiOpen|
+ n	n 	|:TaskWikiNote|
 
 =============================================================================
 7. COMMANDS						  *taskwiki-commands*
@@ -633,6 +635,16 @@ selected tasks.
     Opens a prompt for task modification, for selected task(s).
 
     Supports |cmdline-completion|.
+
+*:TaskWikiOpen*
+    Opens annotations in the selected task(s) containing links to local files,
+    urls, etc. This command requires taskopen to be installed
+    (https://github.com/jschlatow/taskopen).
+
+*:TaskWikiNote*
+    Adds a note to the task under cursor and opens it to be edited. This
+    command requires taskopen to be installed
+    (https://github.com/jschlatow/taskopen).
 
 ----------------------------------------------------------------------------
 Interactive commands.

@@ -126,6 +126,40 @@ class SelectedTasks(object):
             break  # Show only one task
 
     @errors.pretty_exception_handler
+    def taskopen(self, mode):
+        if mode == "note":
+            args = "-n {task_id} -x 'echo'"
+        if mode == "open":
+            args = "-N {task_id}"
+
+        for vimwikitask in self.tasks:
+            output, exit_status = util.taskopen(args.format(task_id=vimwikitask["id"]))
+
+            if mode == "note":
+                if exit_status:
+                    vim.command("echohl Error")
+                    vim.command('echo "%s"' % output)
+                    vim.command("echohl None")
+                    # Using `echoerr` is too verbose and scary, using
+                    # echohl+echo instead.
+                else:
+                    vim.command("edit " + output)
+
+            if mode == "open":
+                if exit_status:
+                    error_msg = "taskopen failed to open task " + str(
+                        vimwikitask["id"]
+                    )
+
+                    vim.command('echo "%s"' % output)
+                    vim.command("echohl Error")
+                    vim.command('echo "%s"' % error_msg)
+                    vim.command("echohl None")
+
+                else:
+                    vim.command("echomsg 'Opened task %s'" % vimwikitask["id"])
+
+    @errors.pretty_exception_handler
     def edit(self):
         for vimwikitask in self.tasks:
             alternate_data_location = self.tw.overrides.get('data.location')
