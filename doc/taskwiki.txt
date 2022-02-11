@@ -767,6 +767,15 @@ constructs.
         Example:
         let g:taskwiki_maplocalleader=",t"
 
+*taskwiki_scan_for_duplicates*
+    If set to a non-empty value (such as "yes"), taskwiki will force-scan the
+    current file for other mentions of the task being processed and update
+    them too. This is useful if you have multiple overlapping viewports. If
+    you edit a task that appears in several of these viewports (e.g. mark it
+    as done) and save the file, the non-updated mentions of the task may undo
+    your edits. This option is disabled by default as it will add some
+    overhead to simple operations that you perform on selected tasks.
+
 =============================================================================
 9. TROUBLESHOOTING					   *taskwiki-trouble*
 
