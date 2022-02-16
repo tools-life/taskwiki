@@ -303,7 +303,7 @@ class Mappings(object):
         ])
         # markdown type link [DESCRIPTION](URL)
         pattern = re.compile(r'\[[^]]*\]\([^)]*\)')
-        inside_vimwiki_link_2 = re.match(pattern, line)
+        inside_vimwiki_link_2 = re.search(pattern, line)
 
         if inside_vimwiki_link_1 or inside_vimwiki_link_2:
             vim.command('VimwikiFollowLink')
