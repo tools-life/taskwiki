@@ -667,3 +667,28 @@ class TestViewportBufferModified(MultiSyntaxIntegrationTest):
         # testfile3 only has header, so refresh on open makes changes
         self.client.edit(testfile3)
         assert self.client.eval('&modified') == '1'
+
+
+class TestViewportsNoChangePreserving(MultiSyntaxIntegrationTest):
+
+    viminput = """
+    HEADER2(Work tasks | +work)
+
+    * [ ] tag work task  #{uuid}
+
+
+    HEADER2(Home tasks | +home)
+
+
+    * [ ] tag home task  #{uuid}
+    """
+
+    vimoutput = viminput
+
+    tasks = [
+        dict(description="tag work task", tags=['work']),
+        dict(description="tag home task", tags=['home']),
+    ]
+
+    def execute(self):
+        self.command("w", regex="written$", lines=1)

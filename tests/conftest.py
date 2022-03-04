@@ -14,9 +14,9 @@ markup_headers = {
         'HEADER3': "=== %s ===",
     },
     'markdown': {
-        'HEADER1': "# %s",
-        'HEADER2': "## %s",
-        'HEADER3': "### %s",
+        'HEADER1': "# %s\n",
+        'HEADER2': "## %s\n",
+        'HEADER3': "### %s\n",
     }
 }
 
