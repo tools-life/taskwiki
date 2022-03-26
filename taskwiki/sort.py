@@ -166,8 +166,9 @@ class TaskCollectionNode(object):
         self.vwtask['indent'] = ' ' * indent
         self.vwtask.update_in_buffer()
 
+        tabstop = self.vwtask.cache.buffer.options()['tabstop']
         for child in self.children:
-            child.build_indentation(indent + 4)
+            child.build_indentation(indent + tabstop)
 
     def sort(self):
         self.children.sort()
