@@ -64,10 +64,12 @@ RUN pip install --root=/opt/pip-root \
 
 
 FROM build AS tests
+# Terminus-font required for gvim to run
 RUN apk add --no-cache \
     git \
     make \
     patchelf \
+    terminus-font \
     tzdata \
     xvfb-run
 RUN ln -sf /usr/share/zoneinfo/Etc/UTC /etc/localtime
