@@ -96,4 +96,7 @@ ARG VIMWIKI_VERSION
 RUN git clone --depth 1 --recurse-submodules --shallow-submodules \
     --branch $VIMWIKI_VERSION https://github.com/vimwiki/vimwiki /root/.vim/bundle/vimwiki
 
+# Fixes coveralls reporting
+RUN git config --global --add safe.directory /root/.vim/bundle/taskwiki
+
 WORKDIR /root/.vim/bundle/taskwiki
