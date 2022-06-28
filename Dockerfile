@@ -23,7 +23,7 @@ RUN git clone --depth 1 --recurse-submodules --shallow-submodules \
 WORKDIR /usr/src/vim
 # "backport" https://github.com/vim/vim/commit/16d7eced1a08565a9837db8067c7b9db5ed68854
 RUN sed -i -e '/#\s*undef _POSIX_THREADS/d' src/if_python3.c
-RUN ./configure --prefix=/opt/vim --enable-pythoninterp --enable-python3interp --enable-gui=gtk3
+RUN ./configure --prefix=/opt/vim --enable-pythoninterp=yes --enable-python3interp=yes --enable-gui=gtk3
 RUN make -j$(nproc)
 RUN make install
 
