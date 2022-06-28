@@ -13,10 +13,10 @@ jobs:
           - TASK_VERSION: v2.5.3
           - TASK_VERSION: v2.6.0
           - TASK_VERSION: develop
-          - VIM_VERSION: v7.4.2367
           - VIM_VERSION: v8.0.1850
           - VIM_VERSION: v8.1.2424
           - VIM_VERSION: v8.2.5172
+          - VIM_VERSION: v9.0.0000
           - VIMWIKI_VERSION: dev
           - PYTHON_VERSION: 3.6
           - PYTHON_VERSION: 3.7
