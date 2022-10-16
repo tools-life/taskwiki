@@ -428,8 +428,6 @@ expiry date by specifying a new one:
 ~   === ...(expired) | +tag1 ===
 ~   === ...except this viewport | +tag2 !2500-01-01 ===
 
-The expiry token must be the last in the viewport specification to work.
-
 --------------------
 5.2.6 Default filter
 
