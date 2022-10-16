@@ -314,6 +314,11 @@ Taskwarrior:
 
 ~   * [ ] This has project home  #431f42
 
+Typing additional metadata can be simplified by using omni completion (see
+|compl-omni|), like so:
+
+~   * [ ] This has project home -- project:<C-X><C-O>
+
 ----------------------------------------------------------------------------
 5.2. Viewports                                  *taskwiki-features-viewport*
 
@@ -382,8 +387,28 @@ viewport definition:
 
 ~   == Differently ordered home tasks | project:Home $T ==
 
+------------------
+5.2.4 Limiting number of tasks displayed
+
+By default, taskwiki will present the full list of tasks that match the
+viewport definition.
+
+You can limit the number of tasks listed by using the limit filter:
+
+~   == List only the 5 first tasks | project:Home limit:5 ==
+
+This will instruct taskwiki to limit the list of tasks to 5.
+
+The limit must always come last. For instance, if you are also using a sorting
+identifier:
+
+~   == List only the 5 first tasks | project:Home $T limit:5 ==
+
+The limit keyword will not be passed over to taskwarrior and is consumed only
+by taskwiki.
+
 ------------------------
-5.2.4 Expiring viewports
+5.2.5 Expiring viewports
 
 Every time you view or save a vimwiki file that contains taskwiki compatible
 tasks, the task lists will get updated. However, if you want to archive
@@ -403,8 +428,10 @@ expiry date by specifying a new one:
 ~   === ...(expired) | +tag1 ===
 ~   === ...except this viewport | +tag2 !2500-01-01 ===
 
+The expiry token must be the last in the viewport specification to work.
+
 --------------------
-5.2.5 Default filter
+5.2.6 Default filter
 
 By default, every viewport filter is extended with the -DELETED and -PARENT
 virtual tags.
@@ -424,7 +451,7 @@ Examples:
 ~   == Home tasks, excluding deleted | project:Home !-DELETED ==
 
 -----------------------
-5.2.6 Meta virtual tags
+5.2.7 Meta virtual tags
 
 Currently there is one meta virtual tag: -VISIBLE. This tag can be used to
 filter out tasks that are displayed elsewhere in the same taskwiki file.
@@ -436,14 +463,14 @@ Example:
 ~    == Work review tasks | project:Work.Review ==
 
 ----------------
-5.2.7 Inspection
+5.2.8 Inspection
 
 You can inspect a given viewport (see what filter and defaults are being used,
 as well as other pieces of information) by using the |:TaskWikiInspect|
 command (or hitting <CR>) over a viewport definition.
 
 -------------------------------------------
-5.2.8 Usage of existing context definitions
+5.2.9 Usage of existing context definitions
 
 If you use the context feature in Taskwarrior, you can easily reference
 definition of any context using the @[context_name] syntax in the viewport's
@@ -622,8 +649,13 @@ selected tasks.
 *:TaskWikiStop*
     "Stops" the selected task(s).
 
+*:TaskWikiToggle*
+    "Starts" or "stops" the selected task(s), depending on their state.
+
 *:TaskWikiMod* [mods]
     Opens a prompt for task modification, for selected task(s).
+
+    Supports |cmdline-completion|.
 
 ----------------------------------------------------------------------------
 Interactive commands.
@@ -722,6 +754,10 @@ constructs.
 *taskwiki_dont_preserve_folds*
     If set to a non-empty value (such as "yes"), taskwiki will not
     preserve folding when entering or leaving a vimwiki buffer.
+
+*taskwiki_dont_fold*
+    If set to a non-empty value (such as "yes"), taskwiki will not
+    set up custom folding logic for vimwiki buffers.
 
 *taskwiki_disable_concealcursor*
     If set to any non-empty value (such as "yes"), taskwiki will not conceal

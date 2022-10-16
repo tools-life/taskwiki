@@ -547,6 +547,30 @@ class TestViewportsSortedInvalidOrder(MultiSyntaxIntegrationTest):
             "'Work tasks' is not defined, using default.", lines=2)
 
 
+class TestViewportsCount(MultiSyntaxIntegrationTest):
+
+    viminput = """
+    HEADER2(Work tasks | project:Work or project:Home limit:2)
+    """
+
+    vimoutput = """
+    HEADER2(Work tasks | project:Work or project:Home limit:2)
+    * [ ] home task 1 (2015-08-01)  #{uuid}
+    * [ ] work task 1 (2015-08-01)  #{uuid}
+    """
+
+    tasks = [
+        dict(description="home task 1", project="Home", due=datetime(2015,8,1)),
+        dict(description="home task 2", project="Home", due=datetime(2015,8,2)),
+        dict(description="work task 1", project="Work", due=datetime(2015,8,1)),
+        dict(description="work task 2", project="Work", due=datetime(2015,8,2)),
+    ]
+
+    def execute(self):
+        # Generate the tasks
+        self.command("w", regex="written$", lines=1)
+
+
 class TestViewportsVisibleMetaTag(MultiSyntaxIntegrationTest):
 
     viminput = """

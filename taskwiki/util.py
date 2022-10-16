@@ -1,6 +1,6 @@
 # Various utility functions
 from __future__ import print_function
-from distutils.version import LooseVersion
+from packaging import version
 
 import contextlib
 import os
@@ -95,8 +95,11 @@ def tw_args_to_kwargs(args):
 
     return output
 
-def get_input(prompt="Enter: ", allow_empty=False):
-    value = vim.eval('input("%s")' % prompt)
+def get_input(prompt="Enter: ", allow_empty=False, completion=None):
+    if completion is not None:
+        value = vim.eval('input("%s", "", "%s")' % (prompt, completion))
+    else:
+        value = vim.eval('input("%s")' % prompt)
     vim.command('redraw')
 
     # Check for empty value and bail out if not allowed
@@ -373,8 +376,8 @@ def enforce_dependencies(cache):
 
     # Check tasklib version
     tasklib_module_version = getattr(tasklib, '__version__', '2.2.0')
-    tasklib_installed_version = LooseVersion(tasklib_module_version)
-    tasklib_required_version = LooseVersion(TASKLIB_VERSION)
+    tasklib_installed_version = version.parse(tasklib_module_version)
+    tasklib_required_version = version.parse(TASKLIB_VERSION)
 
     if tasklib_required_version > tasklib_installed_version:
         raise TaskWikiException("Tasklib version at least %s is required."
@@ -382,8 +385,8 @@ def enforce_dependencies(cache):
 
     # Check taskwarrior version
     tw = cache.warriors['default']
-    taskwarrior_installed_version = LooseVersion(tw.version)
-    taskwarrior_required_version = LooseVersion(TASKWARRIOR_VERSION)
+    taskwarrior_installed_version = version.parse(tw.version)
+    taskwarrior_required_version = version.parse(TASKWARRIOR_VERSION)
 
     if taskwarrior_required_version > taskwarrior_installed_version:
         raise TaskWikiException("Taskwarrior version at least %s is required."

@@ -67,6 +67,7 @@ class IntegrationTest(object):
                 raise
 
     def configure_global_variables(self):
+        self.command('set foldlevel=99')
         self.command('let g:taskwiki_data_location="{0}"'.format(self.dir))
         self.command('let g:taskwiki_taskrc_location="{0}"'.format(self.taskrc_path))
         self.command('let g:vimwiki_list = [{"syntax": "%s", "ext": ".txt","path": "%s"}]' % (self.markup, self.dir))
@@ -84,6 +85,7 @@ class IntegrationTest(object):
         self.configure_global_variables()
         self.add_plugin('taskwiki')
         self.add_plugin('vimwiki', 'plugin/vimwiki.vim')
+        self.add_plugin('taskwiki/after')
         self.filepath = os.path.join(self.dir, 'testwiki.txt')
         self.client.edit(self.filepath)
 

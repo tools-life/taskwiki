@@ -45,30 +45,12 @@ syntax match TaskWikiTaskCompleted containedin=TaskWikiTask contained contains=@
 syntax match TaskWikiTaskDeleted containedin=TaskWikiTask contained contains=@TaskWikiTaskContains /\s*\*\s*\[D\]\s[^#]*/
 syntax match TaskWikiTaskRecurring containedin=TaskWikiTask contained contains=@TaskWikiTaskContains /\s*\*\s\[R\]\s[^#]*/
 syntax match TaskWikiTaskWaiting containedin=TaskWikiTask contained contains=@TaskWikiTaskContains /\s*\*\s\[W\]\s[^#]*/
-syntax match TaskWikiTaskPriority contained /\( !\| !!\| !!!\)\( \)\@=/
+syntax match TaskWikiTaskPriority contained /\( \)\@<=\(!\|!!\|!!!\)\( \)\@=/
 syntax cluster TaskWikiTaskContains add=TaskWikiTaskPriority
 
 " Set concealed parts as really concealed in normal mode, and with cursor over
 " (unless disabled by user)
-setlocal conceallevel=3
 if !exists('g:taskwiki_disable_concealcursor')
+  setlocal conceallevel=3
   setlocal concealcursor=nc
 endif
-
-" Configure custom FoldText function
-" Altered version of the VimwikiFoldText
-setlocal foldmethod=syntax
-setlocal viewoptions-=options
-
-function! TaskwikiFoldText()
-  let line = getline(v:foldstart)
-  let main_text = substitute(line, '^\s*', repeat(' ',indent(v:foldstart)), '')
-  let short_text = substitute(main_text, '|[^=]* =', '=', '')
-  let short_text = substitute(short_text, '@[^=]* =', '=', '')
-  let short_text = substitute(short_text, ' @[A-Za-z0-9]\+', '', '')
-  let fold_len = v:foldend - v:foldstart + 1
-  let len_text = ' ['.fold_len.'] '
-  return short_text.len_text.repeat(' ', 500)
-endfunction
-
-setlocal foldtext=TaskwikiFoldText()

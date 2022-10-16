@@ -28,10 +28,14 @@ or using your [package manager](http://taskwarrior.org/download/#dist)
 
         sudo dnf install task
 
-* [tasklib](https://github.com/tbabej/tasklib/tree/develop) (the develop branch),
+* [tasklib](https://github.com/GothenburgBitFactory/tasklib/) (version 2.4.3 or newer),
 Python library for Taskwarrior.
 
-        sudo pip3 install --upgrade -r requirements.txt
+        sudo pip3 install tasklib
+
+* **For neovim users:** Note that `pynvim` is a required python 3 provider in case you are using neovim
+
+        sudo pip3 install pynvim
 
 #### Python2 support
 
@@ -113,8 +117,12 @@ the corresponding task list. These tasks can be modified and changes
 will be synced back to task data.  A simple viewport can look as follows:
 
     == Home tasks | project:Home ==
+    
+Or if you are using markdown syntax it will be
 
-Filter query is concealed.
+    ## Home tasks | project:Home
+
+The filter query will be automatically concealed when leaving insert mode.
 
 Upon saving, this will generate the list of matching tasks, in a tree-like
 fashion (respecting dependencies).

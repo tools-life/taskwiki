@@ -346,13 +346,17 @@ class VimwikiTask(object):
             return None
 
         for i in reversed(range(0, self['line_number'])):
-            # Stop looking if there is less indentation
-            indentation = len(self.cache.buffer[i]) - len(self.cache.buffer[i].lstrip())
+            # Tab is equal to four spaces
+            # TODO: Source this from tabstop setting, but this would be only
+            # useful for mixed tab/space indentations
+            indentation = len(self.cache.buffer[i].replace('\t', '    ')) - len(self.cache.buffer[i].lstrip())
             indent = self['indent'].replace('\t', '    ')
+
             if indentation < len(indent):
                 # The from_line constructor returns None if line doesn't match a task
                 line = self.cache.line[(VimwikiTask, i)]
                 if line:
+                    # Stop looking, we found a less-indented task
                     return self.cache.vwtask[i]
                 else:
                     return None

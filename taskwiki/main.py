@@ -17,6 +17,8 @@ from taskwiki import sort
 from taskwiki import util
 from taskwiki import viewport
 from taskwiki import decorators
+from taskwiki import completion
+from taskwiki import preset
 
 
 cache = cache_module.CacheRegistry()
@@ -177,7 +179,9 @@ class SelectedTasks(object):
         # If no modstring was passed as argument, ask the user interactively
         if not modstring:
             with util.current_line_highlighted():
-                modstring = util.get_input("Enter modifications: ")
+                modstring = util.get_input(
+                    "Enter modifications: ",
+                    completion="customlist,taskwiki#CompleteMod")
 
         # We might have two same tasks in the range, make sure we do not pass the
         # same uuid twice
@@ -245,6 +249,30 @@ class SelectedTasks(object):
         self.save_action('stop')
 
     @errors.pretty_exception_handler
+    def toggle(self):
+        # Multiple VimwikiTasks might refer to the same task, so make sure
+        # we do not start one task twice
+        started = set()
+        for task in set(vimwikitask.task for vimwikitask in self.tasks):
+            if task['start']:
+                task.stop()
+            else:
+                task.start()
+                started.add(task)
+
+        # Update the lines in the buffer
+        for vimwikitask in self.tasks:
+            vimwikitask.update_from_task()
+            vimwikitask.update_in_buffer()
+            if task in started:
+                print(u"Task \"{0}\" started.".format(vimwikitask['description']))
+            else:
+                print(u"Task \"{0}\" stopped.".format(vimwikitask['description']))
+
+        cache().buffer.push()
+        self.save_action('toggle')
+
+    @errors.pretty_exception_handler
     def sort(self, sortstring):
         sort.TaskSorter(cache(), self.tasks, sortstring).execute()
         cache().buffer.push()
@@ -285,6 +313,11 @@ class Mappings(object):
             port = viewport.ViewPort.from_line(row, cache())
             if port is not None:
                 Meta().inspect_viewport()
+                return
+
+            header = preset.PresetHeader.from_line(row, cache())
+            if header is not None:
+                Meta().inspect_presetheader()
                 return
 
         # No link detected, not a viewport or a task, so delegate to
@@ -338,6 +371,31 @@ class Meta(object):
                 "Expired: " + port.expires
                 if port.expired
                 else 'Expires: ' + (port.expires if port.expires else 'never'),
+            )
+
+            # Show in the split
+            lines = template_formatted.splitlines()
+            util.show_in_split(lines, activate_cursorline=True)
+
+
+    @errors.pretty_exception_handler
+    def inspect_presetheader(self):
+        position = util.get_current_line_number()
+        header = preset.PresetHeader.from_line(position, cache())
+
+        template = (
+            "ViewPort inspection:\n"
+            "--------------------\n"
+            "Filter used: {0}\n"
+            "Defaults used: {1}\n"
+        )
+
+        if header is not None:
+
+            # Fill in the interesting info in the template
+            template_formatted = template.format(
+                header.raw_filter if six.PY3 else header.raw_filter.encode('utf-8'),
+                header.raw_defaults if six.PY3 else header.raw_defaults.encode('utf-8'),
             )
 
             # Show in the split

@@ -10,6 +10,7 @@ services:
     tty: true
     environment:
       COVERALLS_PARALLEL:
+      COVERALLS_SERVICE_NAME:
       GITHUB_ACTIONS:
       GITHUB_HEAD_REF:
       GITHUB_REF:

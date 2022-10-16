@@ -1,1 +1,2 @@
-tasklib>=2.2.1
+tasklib>=2.4.3
+six
