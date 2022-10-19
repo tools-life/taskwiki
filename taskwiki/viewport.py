@@ -96,8 +96,14 @@ class ViewPort(object):
         # Process syntactic sugar: Context expansion
         detected_contexts = []
         for token in filter(lambda x: x.startswith('@'), taskfilter_args):
-            context_variable_name = 'context.{0}.read'.format(token[1:])
+            # Try the old context definition first.
+            context_variable_name = 'context.{0}'.format(token[1:])
             context_definition = self.tw.config.get(context_variable_name)
+
+            # Use the new definition if the old one fails
+            if context_definition == None:
+                context_variable_name = 'context.{0}.read'.format(token[1:])
+                context_definition = self.tw.config.get(context_variable_name)
 
             if context_definition:
                 context_args = util.tw_modstring_to_args(context_definition)
