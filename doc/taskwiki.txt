@@ -479,7 +479,7 @@ To utilize both in taskwiki, you will need to define any non-default
 taskwarriors using the |taskwiki_extra_warriors| setting.
 
 Example:
-let g:taskwiki_extra_warriors={'H': {'data_location': '/home/tbabej/.habit/', 'taskrc_location': '/home/tbabej/.habitrc'}
+let g:taskwiki_extra_warriors={'H': {'data_location': '/home/tbabej/.habit/', 'taskrc_location': '/home/tbabej/.habitrc'}}
 
 Any extra taskwarrior instance is defined by its identifier, along with the
 alternative data and taskrc locations.
