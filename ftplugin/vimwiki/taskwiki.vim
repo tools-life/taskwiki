@@ -106,52 +106,52 @@ execute "nnoremap <silent><buffer> <CR> :" . g:taskwiki_py . "Mappings.task_info
 " Leader-related mappings. Mostly <Leader>t + <first letter of the action>
 if !exists('g:taskwiki_suppress_mappings')
         if exists('g:taskwiki_maplocalleader')
-                let maplocalleader = g:taskwiki_maplocalleader
+                let s:map_prefix = g:taskwiki_maplocalleader
         else
                 if exists('g:mapleader')
-                        let maplocalleader = g:mapleader.'t'
+                        let s:map_prefix = g:mapleader.'t'
                 else
-                        let maplocalleader = '\t'
+                        let s:map_prefix = '\t'
                 endif
         endif
-        nnoremap <silent><buffer> <LocalLeader>a :TaskWikiAnnotate<CR>
-        nnoremap <silent><buffer> <LocalLeader>bd :TaskWikiBurndownDaily<CR>
-        nnoremap <silent><buffer> <LocalLeader>bw :TaskWikiBurndownWeekly<CR>
-        nnoremap <silent><buffer> <LocalLeader>bm :TaskWikiBurndownMonthly<CR>
-        nnoremap <silent><buffer> <LocalLeader>cp :TaskWikiChooseProject<CR>
-        nnoremap <silent><buffer> <LocalLeader>ct :TaskWikiChooseTag<CR>
-        nnoremap <silent><buffer> <LocalLeader>C :TaskWikiCalendar<CR>
-        nnoremap <silent><buffer> <LocalLeader>d :TaskWikiDone<CR>
-        nnoremap <silent><buffer> <LocalLeader>D :TaskWikiDelete<CR>
-        nnoremap <silent><buffer> <LocalLeader>e :TaskWikiEdit<CR>
-        nnoremap <silent><buffer> <LocalLeader>g :TaskWikiGrid<CR>
-        nnoremap <silent><buffer> <LocalLeader>Gm :TaskWikiGhistoryMonthly<CR>
-        nnoremap <silent><buffer> <LocalLeader>Ga :TaskWikiGhistoryAnnual<CR>
-        nnoremap <silent><buffer> <LocalLeader>hm :TaskWikiHistoryMonthly<CR>
-        nnoremap <silent><buffer> <LocalLeader>ha :TaskWikiHistoryAnnual<CR>
-        nnoremap <silent><buffer> <LocalLeader>i :TaskWikiInfo<CR>
-        nnoremap <silent><buffer> <LocalLeader>l :TaskWikiLink<CR>
-        nnoremap <silent><buffer> <LocalLeader>m :TaskWikiMod<CR>
-        nnoremap <silent><buffer> <LocalLeader>p :TaskWikiProjects<CR>
-        nnoremap <silent><buffer> <LocalLeader>s :TaskWikiProjectsSummary<CR>
-        nnoremap <silent><buffer> <LocalLeader>S :TaskWikiStats<CR>
-        nnoremap <silent><buffer> <LocalLeader>t :TaskWikiTags<CR>
-        nnoremap <silent><buffer> <LocalLeader>. :TaskWikiRedo<CR>
-        nnoremap <silent><buffer> <LocalLeader>+ :TaskWikiStart<CR>
-        nnoremap <silent><buffer> <LocalLeader>- :TaskWikiStop<CR>
+        execute "nnoremap <silent><buffer> ".s:map_prefix."a :TaskWikiAnnotate<CR>"
+        execute "nnoremap <silent><buffer> ".s:map_prefix."bd :TaskWikiBurndownDaily<CR>"
+        execute "nnoremap <silent><buffer> ".s:map_prefix."bw :TaskWikiBurndownWeekly<CR>"
+        execute "nnoremap <silent><buffer> ".s:map_prefix."bm :TaskWikiBurndownMonthly<CR>"
+        execute "nnoremap <silent><buffer> ".s:map_prefix."cp :TaskWikiChooseProject<CR>"
+        execute "nnoremap <silent><buffer> ".s:map_prefix."ct :TaskWikiChooseTag<CR>"
+        execute "nnoremap <silent><buffer> ".s:map_prefix."C :TaskWikiCalendar<CR>"
+        execute "nnoremap <silent><buffer> ".s:map_prefix."d :TaskWikiDone<CR>"
+        execute "nnoremap <silent><buffer> ".s:map_prefix."D :TaskWikiDelete<CR>"
+        execute "nnoremap <silent><buffer> ".s:map_prefix."e :TaskWikiEdit<CR>"
+        execute "nnoremap <silent><buffer> ".s:map_prefix."g :TaskWikiGrid<CR>"
+        execute "nnoremap <silent><buffer> ".s:map_prefix."Gm :TaskWikiGhistoryMonthly<CR>"
+        execute "nnoremap <silent><buffer> ".s:map_prefix."Ga :TaskWikiGhistoryAnnual<CR>"
+        execute "nnoremap <silent><buffer> ".s:map_prefix."hm :TaskWikiHistoryMonthly<CR>"
+        execute "nnoremap <silent><buffer> ".s:map_prefix."ha :TaskWikiHistoryAnnual<CR>"
+        execute "nnoremap <silent><buffer> ".s:map_prefix."i :TaskWikiInfo<CR>"
+        execute "nnoremap <silent><buffer> ".s:map_prefix."l :TaskWikiLink<CR>"
+        execute "nnoremap <silent><buffer> ".s:map_prefix."m :TaskWikiMod<CR>"
+        execute "nnoremap <silent><buffer> ".s:map_prefix."p :TaskWikiProjects<CR>"
+        execute "nnoremap <silent><buffer> ".s:map_prefix."s :TaskWikiProjectsSummary<CR>"
+        execute "nnoremap <silent><buffer> ".s:map_prefix."S :TaskWikiStats<CR>"
+        execute "nnoremap <silent><buffer> ".s:map_prefix."t :TaskWikiTags<CR>"
+        execute "nnoremap <silent><buffer> ".s:map_prefix.". :TaskWikiRedo<CR>"
+        execute "nnoremap <silent><buffer> ".s:map_prefix."+ :TaskWikiStart<CR>"
+        execute "nnoremap <silent><buffer> ".s:map_prefix."- :TaskWikiStop<CR>"
 
         " Mappings for visual mode.
-        vnoremap <silent><buffer> <LocalLeader>a :TaskWikiAnnotate<CR>
-        vnoremap <silent><buffer> <LocalLeader>cp :TaskWikiChooseProject<CR>
-        vnoremap <silent><buffer> <LocalLeader>ct :TaskWikiChooseTag<CR>
-        vnoremap <silent><buffer> <LocalLeader>d :TaskWikiDone<CR>
-        vnoremap <silent><buffer> <LocalLeader>D :TaskWikiDelete<CR>
-        vnoremap <silent><buffer> <LocalLeader>e :TaskWikiEdit<CR>
-        vnoremap <silent><buffer> <LocalLeader>g :TaskWikiGrid<CR>
-        vnoremap <silent><buffer> <LocalLeader>i :TaskWikiInfo<CR>
-        vnoremap <silent><buffer> <LocalLeader>l :TaskWikiLink<CR>
-        vnoremap <silent><buffer> <LocalLeader>m :TaskWikiMod<CR>
-        vnoremap <silent><buffer> <LocalLeader>. :TaskWikiRedo<CR>
-        vnoremap <silent><buffer> <LocalLeader>+ :TaskWikiStart<CR>
-        vnoremap <silent><buffer> <LocalLeader>- :TaskWikiStop<CR>
+        execute "vnoremap <silent><buffer> ".s:map_prefix."a :TaskWikiAnnotate<CR>"
+        execute "vnoremap <silent><buffer> ".s:map_prefix."cp :TaskWikiChooseProject<CR>"
+        execute "vnoremap <silent><buffer> ".s:map_prefix."ct :TaskWikiChooseTag<CR>"
+        execute "vnoremap <silent><buffer> ".s:map_prefix."d :TaskWikiDone<CR>"
+        execute "vnoremap <silent><buffer> ".s:map_prefix."D :TaskWikiDelete<CR>"
+        execute "vnoremap <silent><buffer> ".s:map_prefix."e :TaskWikiEdit<CR>"
+        execute "vnoremap <silent><buffer> ".s:map_prefix."g :TaskWikiGrid<CR>"
+        execute "vnoremap <silent><buffer> ".s:map_prefix."i :TaskWikiInfo<CR>"
+        execute "vnoremap <silent><buffer> ".s:map_prefix."l :TaskWikiLink<CR>"
+        execute "vnoremap <silent><buffer> ".s:map_prefix."m :TaskWikiMod<CR>"
+        execute "vnoremap <silent><buffer> ".s:map_prefix.". :TaskWikiRedo<CR>"
+        execute "vnoremap <silent><buffer> ".s:map_prefix."+ :TaskWikiStart<CR>"
+        execute "vnoremap <silent><buffer> ".s:map_prefix."- :TaskWikiStop<CR>"
 endif
