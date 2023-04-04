@@ -113,9 +113,10 @@ class SelectedTasks(object):
             vimwikitask.update_from_task()
             vimwikitask.update_in_buffer()
             print(u"Task \"{0}\" completed.".format(vimwikitask['description']))
+        WholeBuffer.update_from_tw()
 
-        cache().buffer.push()
-        self.save_action('done')
+        # cache().buffer.push()
+        # self.save_action('done')
 
     @errors.pretty_exception_handler
     def info(self):
