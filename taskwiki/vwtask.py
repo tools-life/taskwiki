@@ -165,8 +165,12 @@ class VimwikiTask(object):
         if self.parent:
             self.parent.add_dependencies |= set([self])
 
-        # For new tasks, apply defaults from above viewport
+        # For new tasks, apply defaults from parent and above viewport
         if not self.uuid:
+            if self.parent:
+                self['tags'] = self.parent['tags']
+                self['project'] = self.parent['project']
+
             self.apply_defaults()
 
             # If -- is in description, assume it's separator for metadata
