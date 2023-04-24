@@ -89,7 +89,8 @@ def tw_args_to_kwargs(args):
         elif arg.startswith('+'):
             value = arg[1:]
             # Ignore virtual tags
-            if not value.isupper():
+            vtags = ["BLOCKED", "UNBLOCKED", "BLOCKING", "DUE", "DUETODAY", "TODAY", "OVERDUE", "WEEK", "MONTH", "QUARTER", "YEAR", "ACTIVE", "SCHEDULED", "PARENT", "CHILD", "UNTIL", "WAITING", "ANNOTATED", "READY", "YESTERDAY", "TOMORROW", "TAGGED", "PENDING", "COMPLETED", "DELETED", "UDA", "ORPHAN", "PRIORITY", "PROJECT", "LATEST"]
+            if not value in vtags:
                 output.setdefault('tags', []).append(value)
             # Ignore tag removal
 
