@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 from datetime import datetime
-from tasklib import local_zone
 from tests.base import IntegrationTest, MultipleSourceTest
 
 
@@ -292,7 +291,7 @@ class TestSimpleTaskWithDueDatetimeCreation(IntegrationTest):
         task = self.tw.tasks.pending()[0]
         assert task['description'] == 'This is a test task'
         assert task['status'] == 'pending'
-        assert task['due'] == local_zone.localize(due)
+        assert task['due'] == due.astimezone()
 
 
 class TestSimpleTaskWithFlawedDueDatetimeCreation(IntegrationTest):
@@ -338,7 +337,7 @@ class TestSimpleTaskWithDueDateCreation(IntegrationTest):
         task = self.tw.tasks.pending()[0]
         assert task['description'] == 'This is a test task'
         assert task['status'] == 'pending'
-        assert task['due'] == local_zone.localize(due)
+        assert task['due'] == due.astimezone()
 
 
 class TestSimpleTaskWithDueDatetimeModification(IntegrationTest):
@@ -373,7 +372,7 @@ class TestSimpleTaskWithDueDatetimeModification(IntegrationTest):
         task = self.tw.tasks.pending()[0]
         assert task['description'] == 'This is a test task'
         assert task['status'] == 'pending'
-        assert task['due'] == local_zone.localize(due)
+        assert task['due'] == due.astimezone()
 
 
 class TestSimpleTaskWithPriorityCreation(IntegrationTest):
