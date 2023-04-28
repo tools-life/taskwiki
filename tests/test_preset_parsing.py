@@ -4,7 +4,7 @@ import sys
 
 
 class TestParsingPresetHeader(object):
-    def setup(self):
+    def setup_method(self):
         self.mockvim = MockVim()
         self.cache = MockCache()
 
@@ -12,7 +12,7 @@ class TestParsingPresetHeader(object):
         from taskwiki.preset import PresetHeader
         self.PresetHeader = PresetHeader
 
-    def teardown(self):
+    def teardown_method(self):
         self.mockvim.reset()
         self.cache.reset()
 

@@ -1,7 +1,6 @@
 import re
 
 from datetime import datetime
-from tasklib import local_zone
 from tests.base import IntegrationTest
 
 
@@ -578,7 +577,7 @@ class TestStartAction(IntegrationTest):
         for task in self.tasks:
             task.refresh()
 
-        now = local_zone.localize(datetime.now())
+        now = datetime.now().astimezone()
 
         assert self.tasks[0]['status'] == "pending"
         assert self.tasks[1]['status'] == "pending"
@@ -621,7 +620,7 @@ class TestToggleAction(IntegrationTest):
         for task in self.tasks:
             task.refresh()
 
-        now = local_zone.localize(datetime.now())
+        now = datetime.now().astimezone()
 
         assert self.tasks[0]['status'] == "pending"
         assert self.tasks[1]['status'] == "pending"
@@ -659,7 +658,7 @@ class TestStartActionMoved(IntegrationTest):
         for task in self.tasks:
             task.refresh()
 
-        now = local_zone.localize(datetime.now())
+        now = datetime.now().astimezone()
 
         assert self.tasks[0]['status'] == "pending"
         assert self.tasks[1]['status'] == "pending"
@@ -696,7 +695,7 @@ class TestStartActionRange(IntegrationTest):
         for task in self.tasks:
             task.refresh()
 
-        now = local_zone.localize(datetime.now())
+        now = datetime.now().astimezone()
 
         assert self.tasks[0]['status'] == "pending"
         assert self.tasks[1]['status'] == "pending"
@@ -744,7 +743,7 @@ class TestStartActionRedo(IntegrationTest):
         for task in self.tasks:
             task.refresh()
 
-        now = local_zone.localize(datetime.now())
+        now = datetime.now().astimezone()
 
         assert self.tasks[0]['status'] == "pending"
         assert self.tasks[1]['status'] == "pending"
@@ -782,7 +781,7 @@ class TestStopAction(IntegrationTest):
         for task in self.tasks:
             task.refresh()
 
-        now = local_zone.localize(datetime.now())
+        now = datetime.now().astimezone().astimezone()
 
         assert self.tasks[0]['status'] == "pending"
         assert self.tasks[1]['status'] == "pending"
@@ -820,7 +819,7 @@ class TestStopActionMoved(IntegrationTest):
         for task in self.tasks:
             task.refresh()
 
-        now = local_zone.localize(datetime.now())
+        now = datetime.now().astimezone()
 
         assert self.tasks[0]['status'] == "pending"
         assert self.tasks[1]['status'] == "pending"
@@ -899,7 +898,7 @@ class TestStopActionRedo(IntegrationTest):
         for task in self.tasks:
             task.refresh()
 
-        now = local_zone.localize(datetime.now())
+        now = datetime.now().astimezone()
 
         assert self.tasks[0]['status'] == "pending"
         assert self.tasks[1]['status'] == "pending"
@@ -1056,8 +1055,7 @@ class TestModVisibleAction(IntegrationTest):
     ]
 
     def execute(self):
-        today = local_zone.localize(
-            datetime.now().replace(hour=0,minute=0,second=0,microsecond=0))
+        today = datetime.now().replace(hour=0,minute=0,second=0,microsecond=0).astimezone()
 
         self.command(
             "TaskWikiMod due:today",
@@ -1164,7 +1162,7 @@ class TestDoneAction(IntegrationTest):
         for task in self.tasks:
             task.refresh()
 
-        now = local_zone.localize(datetime.now())
+        now = datetime.now().astimezone()
 
         assert self.tasks[0]['status'] == "completed"
         assert self.tasks[1]['status'] == "pending"
@@ -1231,7 +1229,7 @@ class TestDoneActionMoved(IntegrationTest):
         for task in self.tasks:
             task.refresh()
 
-        now = local_zone.localize(datetime.now())
+        now = datetime.now().astimezone()
 
         assert self.tasks[0]['status'] == "pending"
         assert self.tasks[1]['status'] == "completed"
@@ -1268,7 +1266,7 @@ class TestDoneActionRange(IntegrationTest):
         for task in self.tasks:
             task.refresh()
 
-        now = local_zone.localize(datetime.now())
+        now = datetime.now().astimezone()
 
         assert self.tasks[0]['status'] == "completed"
         assert self.tasks[1]['status'] == "completed"
@@ -1315,7 +1313,7 @@ class TestDoneActionRedo(IntegrationTest):
         for task in self.tasks:
             task.refresh()
 
-        now = local_zone.localize(datetime.now())
+        now = datetime.now().astimezone()
 
         assert self.tasks[0]['status'] == "completed"
         assert self.tasks[1]['status'] == "completed"

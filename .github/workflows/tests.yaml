@@ -13,6 +13,7 @@ jobs:
           - TASK_VERSION: v2.5.3
           - TASK_VERSION: v2.6.0
           - TASK_VERSION: develop
+            continue-on-error: true
           - VIM_VERSION: v8.0.1850
           - VIM_VERSION: v8.1.2424
           - VIM_VERSION: v8.2.5172

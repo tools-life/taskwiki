@@ -7,7 +7,7 @@ from taskwiki.constants import DEFAULT_SORT_ORDER, DEFAULT_VIEWPORT_VIRTUAL_TAGS
 
 
 class TestParsingVimwikiTask(object):
-    def setup(self):
+    def setup_method(self):
         self.mockvim = MockVim()
         self.cache = MockCache()
 
@@ -19,7 +19,7 @@ class TestParsingVimwikiTask(object):
         from taskwiki.viewport import ViewPort
         self.ViewPort = ViewPort
 
-    def teardown(self):
+    def teardown_method(self):
         self.mockvim.reset()
         self.cache.reset()
 
