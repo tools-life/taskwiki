@@ -85,6 +85,7 @@ VIEWPORT = {
         r'(limit:(?P<count>[0-9]+))?'    # Optional count indicator
         r'\s*'                           # Any whitespace
         r'$'                             # End of line
+        r'\n'                            # New Line
     )
 }
 
@@ -135,6 +136,7 @@ PRESET = {
         r')?'
         r'\s*'                       # Any whitespace
         r'$'                         # End of line
+        r'\n'                        # New Line
     )
 }
 
