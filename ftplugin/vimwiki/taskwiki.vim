@@ -101,7 +101,9 @@ if !hasmapto('<Plug>VimwikiFollowLink')
   nmap <Plug>NoVimwikiFollowLink <Plug>VimwikiFollowLink
 endif
 
-execute "nnoremap <silent><buffer> <CR> :" . g:taskwiki_py . "Mappings.task_info_or_vimwiki_follow_link()<CR>"
+if !exists("g:taskwiki_disable_cr_mapping")
+  execute "nnoremap <silent><buffer> <CR> :" . g:taskwiki_py . "Mappings.task_info_or_vimwiki_follow_link()<CR>"
+endif
 
 " Leader-related mappings. Mostly <Leader>t + <first letter of the action>
 if !exists('g:taskwiki_suppress_mappings')
