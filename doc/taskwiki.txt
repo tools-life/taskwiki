@@ -743,6 +743,10 @@ constructs.
 *taskwiki_disable*
     Setting any non-empty value for this variable will disable taskwiki.
 
+*taskwiki_disable_cr_mapping*
+    Setting any non-empty value for this variable will prevent taskwiki
+    from remapping <CR>.
+
 *taskwiki_use_python2*
     Setting this variable to non-empty value (such as "yes") will force
     taskwiki to use python2.
