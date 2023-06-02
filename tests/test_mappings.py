@@ -1,17 +1,18 @@
 # -*- coding: utf-8 -*-
+from taskwiki.util import uuid_char
 from tests.base import IntegrationTest
 
 
 class TestDefaultMapping(IntegrationTest):
 
     viminput = """
-    * [ ] test task 1  #{uuid}
-    * [ ] test task 2  #{uuid}
+    * [ ] test task 1  """+uuid_char+"""{uuid}
+    * [ ] test task 2  """+uuid_char+"""{uuid}
     """
 
     vimoutput = """
-    * [X] test task 1  #{uuid}
-    * [X] test task 2  #{uuid}
+    * [X] test task 1  """+uuid_char+"""{uuid}
+    * [X] test task 2  """+uuid_char+"""{uuid}
     """
 
     tasks = [
@@ -34,13 +35,13 @@ class TestDefaultMapping(IntegrationTest):
 class TestSuppressedMapping(IntegrationTest):
 
     viminput = """
-    * [ ] test task 1  #{uuid}
-    * [ ] test task 2  #{uuid}
+    * [ ] test task 1  """+uuid_char+"""{uuid}
+    * [ ] test task 2  """+uuid_char+"""{uuid}
     """
 
     vimoutput = """
-    * [ ] test task 1  #{uuid}
-    * [ ] test task 2  #{uuid}
+    * [ ] test task 1  """+uuid_char+"""{uuid}
+    * [ ] test task 2  """+uuid_char+"""{uuid}
     """
 
     tasks = [
@@ -67,13 +68,13 @@ class TestSuppressedMapping(IntegrationTest):
 class TestCustomMapping(IntegrationTest):
 
     viminput = """
-    * [ ] test task 1  #{uuid}
-    * [ ] test task 2  #{uuid}
+    * [ ] test task 1  """+uuid_char+"""{uuid}
+    * [ ] test task 2  """+uuid_char+"""{uuid}
     """
 
     vimoutput = """
-    * [X] test task 1  #{uuid}
-    * [X] test task 2  #{uuid}
+    * [X] test task 1  """+uuid_char+"""{uuid}
+    * [X] test task 2  """+uuid_char+"""{uuid}
     """
 
     tasks = [
@@ -100,13 +101,13 @@ class TestCustomMapping(IntegrationTest):
 class TestColonRemap(IntegrationTest):
 
     viminput = """
-    * [ ] test task 1  #{uuid}
-    * [ ] test task 2  #{uuid}
+    * [ ] test task 1  """+uuid_char+"""{uuid}
+    * [ ] test task 2  """+uuid_char+"""{uuid}
     """
 
     vimoutput = """
-    * [X] test task 1  #{uuid}
-    * [X] test task 2  #{uuid}
+    * [X] test task 1  """+uuid_char+"""{uuid}
+    * [X] test task 2  """+uuid_char+"""{uuid}
     """
 
     tasks = [
@@ -134,13 +135,13 @@ class TestColonRemap(IntegrationTest):
 class TestColonRemapWithCustomMap(IntegrationTest):
 
     viminput = """
-    * [ ] test task 1  #{uuid}
-    * [ ] test task 2  #{uuid}
+    * [ ] test task 1  """+uuid_char+"""{uuid}
+    * [ ] test task 2  """+uuid_char+"""{uuid}
     """
 
     vimoutput = """
-    * [X] test task 1  #{uuid}
-    * [X] test task 2  #{uuid}
+    * [X] test task 1  """+uuid_char+"""{uuid}
+    * [X] test task 2  """+uuid_char+"""{uuid}
     """
 
     tasks = [

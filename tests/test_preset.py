@@ -1,3 +1,4 @@
+from taskwiki.util import uuid_char
 from tests.base import MultiSyntaxIntegrationTest
 
 
@@ -10,7 +11,7 @@ class TestPresetDefaults(MultiSyntaxIntegrationTest):
 
     vimoutput = """
     HEADER3(Work tasks || +work)
-    * [ ] This is a test task  #{uuid}
+    * [ ] This is a test task  """+uuid_char+"""{uuid}
     """
 
     def execute(self):
@@ -36,7 +37,7 @@ class TestPresetHierarchy(MultiSyntaxIntegrationTest):
     HEADER2(Work tasks || +work)
     HEADER3(Hard work tasks || +hard)
     HEADER3(Easy work tasks || +easy)
-    * [ ] This is a test task  #{uuid}
+    * [ ] This is a test task  """+uuid_char+"""{uuid}
     """
 
     def execute(self):
@@ -58,7 +59,7 @@ class TestPresetSeparateDefaults(MultiSyntaxIntegrationTest):
 
     vimoutput = """
     HEADER1(Work tasks || +work or +play || +work)
-    * [ ] This is a test task  #{uuid}
+    * [ ] This is a test task  """+uuid_char+"""{uuid}
     """
 
     def execute(self):
@@ -82,7 +83,7 @@ class TestPresetNestedDefaults(MultiSyntaxIntegrationTest):
     vimoutput = """
     HEADER2(Work tasks || +work)
     HEADER3(Hard work || +hard)
-    * [ ] This is a test task  #{uuid}
+    * [ ] This is a test task  """+uuid_char+"""{uuid}
     """
 
     def execute(self):
@@ -105,7 +106,7 @@ class TestPresetViewport(MultiSyntaxIntegrationTest):
     vimoutput = """
     HEADER2(Work tasks || +work)
     HEADER3(Hard work | +hard)
-    * [ ] tag hard work task  #{uuid}
+    * [ ] tag hard work task  """+uuid_char+"""{uuid}
     """
 
     tasks = [
@@ -130,7 +131,7 @@ class TestPresetIgnoreViewport(MultiSyntaxIntegrationTest):
     vimoutput = """
     HEADER2(Work tasks | +work)
     HEADER3(Hard work || +hard)
-    * [ ] This is a test task  #{uuid}
+    * [ ] This is a test task  """+uuid_char+"""{uuid}
     """
 
     def execute(self):
@@ -154,7 +155,7 @@ class TestPresetViewportDefaultsYesNo(MultiSyntaxIntegrationTest):
     vimoutput = """
     HEADER2(Work tasks || project:Work or project:Play || project:Work)
     HEADER3(Hard work | +hard)
-    * [ ] This is a test task  #{uuid}
+    * [ ] This is a test task  """+uuid_char+"""{uuid}
     """
 
     def execute(self):
@@ -179,7 +180,7 @@ class TestPresetViewportDefaultsNoYes(MultiSyntaxIntegrationTest):
     vimoutput = """
     HEADER2(Work tasks || project:Work)
     HEADER3(Hard work | +hard or +easy | +hard)
-    * [ ] This is a test task  #{uuid}
+    * [ ] This is a test task  """+uuid_char+"""{uuid}
     """
 
     def execute(self):
@@ -204,7 +205,7 @@ class TestPresetViewportDefaultsYesYes(MultiSyntaxIntegrationTest):
     vimoutput = """
     HEADER2(Work tasks || project:Work or project:Play || project:Work)
     HEADER3(Hard work | +hard or +easy | +hard)
-    * [ ] This is a test task  #{uuid}
+    * [ ] This is a test task  """+uuid_char+"""{uuid}
     """
 
     def execute(self):
@@ -229,7 +230,7 @@ class TestPresetDefaultPreservesTags(MultiSyntaxIntegrationTest):
     vimoutput = """
     HEADER2(Work tasks || +work)
     HEADER3(Work tasks | +hard)
-    * [ ] hard task  #{uuid}
+    * [ ] hard task  """+uuid_char+"""{uuid}
     """
 
     def execute(self):

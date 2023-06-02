@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import os
 from datetime import datetime
+from taskwiki.util import uuid_char
 from tests.base import MultiSyntaxIntegrationTest
 
 
@@ -12,7 +13,7 @@ class TestViewportsTaskGeneration(MultiSyntaxIntegrationTest):
 
     vimoutput = """
     HEADER2(Work tasks | +work)
-    * [ ] tag work task  #{uuid}
+    * [ ] tag work task  """+uuid_char+"""{uuid}
     """
 
     tasks = [
@@ -31,7 +32,7 @@ class TestViewportsTaskGenerationEmptyFilter(MultiSyntaxIntegrationTest):
 
     vimoutput = """
     HEADER2(Work tasks |)
-    * [ ] some task  #{uuid}
+    * [ ] some task  """+uuid_char+"""{uuid}
     """
 
     tasks = [
@@ -46,7 +47,7 @@ class TestViewportsTaskRemoval(MultiSyntaxIntegrationTest):
 
     viminput = """
     HEADER2(Work tasks | -work)
-    * [ ] tag work task  #{uuid}
+    * [ ] tag work task  """+uuid_char+"""{uuid}
     """
 
     vimoutput = """
@@ -69,7 +70,7 @@ class TestViewportsContextTaskGeneration(MultiSyntaxIntegrationTest):
 
     vimoutput = """
     HEADER2(Work tasks | @work)
-    * [ ] tag work task  #{uuid}
+    * [ ] tag work task  """+uuid_char+"""{uuid}
     """
 
     tasks = [
@@ -91,8 +92,8 @@ class TestViewportsContextComplexFilterTaskGeneration(MultiSyntaxIntegrationTest
 
     vimoutput = """
     HEADER2(Work tasks | @work or project:Home)
-    * [ ] home project task  #{uuid}
-    * [ ] tag work task  #{uuid}
+    * [ ] home project task  """+uuid_char+"""{uuid}
+    * [ ] tag work task  """+uuid_char+"""{uuid}
     """
 
     tasks = [
@@ -115,8 +116,8 @@ class TestViewportsTwoContextTaskGeneration(MultiSyntaxIntegrationTest):
 
     vimoutput = """
     HEADER2(Work tasks | @work or @home)
-    * [ ] home project task  #{uuid}
-    * [ ] tag work task  #{uuid}
+    * [ ] home project task  """+uuid_char+"""{uuid}
+    * [ ] tag work task  """+uuid_char+"""{uuid}
     """
 
     tasks = [
@@ -156,7 +157,7 @@ class TestViewportDefaultsAssigment(MultiSyntaxIntegrationTest):
 
     vimoutput = """
     HEADER2(Work tasks | +work)
-    * [ ] tag work task  #{uuid}
+    * [ ] tag work task  """+uuid_char+"""{uuid}
     """
 
     def execute(self):
@@ -225,10 +226,10 @@ class TestViewportDefaultsTerminatedByHeader(MultiSyntaxIntegrationTest):
 
     vimoutput = """
     HEADER2(Work tasks | +work)
-    * [ ] tag work task  #{uuid}
+    * [ ] tag work task  """+uuid_char+"""{uuid}
 
     HEADER2(Unrelated work tasks)
-    * [ ] not tagged work task  #{uuid}
+    * [ ] not tagged work task  """+uuid_char+"""{uuid}
     """
 
     def execute(self):
@@ -250,7 +251,7 @@ class TestViewportInspection(MultiSyntaxIntegrationTest):
 
     viminput = """
     HEADER2(Work tasks | +work)
-    * [ ] tag work task  #{uuid}
+    * [ ] tag work task  """+uuid_char+"""{uuid}
     """
 
     vimoutput = """
@@ -283,10 +284,10 @@ class TestViewportInspectionWithVisibleTag(MultiSyntaxIntegrationTest):
 
     viminput = """
     HEADER2(Work tasks | +work -VISIBLE)
-    * [ ] tag work task  #{uuid}
+    * [ ] tag work task  """+uuid_char+"""{uuid}
 
     HEADER2(Home tasks | +home)
-    * [ ] tag work task  #{uuid}
+    * [ ] tag work task  """+uuid_char+"""{uuid}
     """
 
     vimoutput = """
@@ -323,7 +324,7 @@ class TestViewportsUnicodeTaskGeneration(MultiSyntaxIntegrationTest):
 
     vimoutput = u"""
     HEADER2(Work tasks | +work)
-    * [ ] tag work täsk  #{uuid}
+    * [ ] tag work täsk  """+uuid_char+"""{uuid}
     """
 
     tasks = [
@@ -342,7 +343,7 @@ class TestUnicodeViewportsUnicodeTaskGeneration(MultiSyntaxIntegrationTest):
 
     vimoutput = u"""
     HEADER2(Réunion 2017 | project:Réunion2017)
-    * [ ] Réunion task 1  #{uuid}
+    * [ ] Réunion task 1  """+uuid_char+"""{uuid}
     """
 
     tasks = [
@@ -363,7 +364,7 @@ class TestUnicodeViewportsUnicodeDefaultsAssignment(MultiSyntaxIntegrationTest):
 
     vimoutput = u"""
     HEADER2(Réunion 2017 | project:Réunion2017)
-    * [ ] Réunion task 1  #{uuid}
+    * [ ] Réunion task 1  """+uuid_char+"""{uuid}
     """
 
     def execute(self):
@@ -384,15 +385,15 @@ class TestViewportsSortedGeneration(MultiSyntaxIntegrationTest):
 
     vimoutput = """
     HEADER2(Work tasks | +work)
-    * [ ] main task 1 (2015-08-07)  #{uuid}
-        * [ ] sub task 1a (2015-08-01)  #{uuid}
-            * [ ] sub task 1aa  #{uuid}
-        * [ ] sub task 1b  #{uuid}
-    * [ ] main task 2 (2015-08-08)  #{uuid}
-    * [ ] main task 3 (2015-08-09)  #{uuid}
-        * [ ] sub task 3a (2015-08-03)  #{uuid}
-        * [ ] sub task 3b  #{uuid}
-    * [ ] main task 4  #{uuid}
+    * [ ] main task 1 (2015-08-07)  """+uuid_char+"""{uuid}
+        * [ ] sub task 1a (2015-08-01)  """+uuid_char+"""{uuid}
+            * [ ] sub task 1aa  """+uuid_char+"""{uuid}
+        * [ ] sub task 1b  """+uuid_char+"""{uuid}
+    * [ ] main task 2 (2015-08-08)  """+uuid_char+"""{uuid}
+    * [ ] main task 3 (2015-08-09)  """+uuid_char+"""{uuid}
+        * [ ] sub task 3a (2015-08-03)  """+uuid_char+"""{uuid}
+        * [ ] sub task 3b  """+uuid_char+"""{uuid}
+    * [ ] main task 4  """+uuid_char+"""{uuid}
     """
 
     tasks = [
@@ -425,15 +426,15 @@ class TestViewportsSortedGenerationReverse(TestViewportsSortedGeneration):
 
     vimoutput = """
     HEADER2(Work tasks | +work)
-    * [ ] main task 3 (2015-08-09)  #{uuid}
-        * [ ] sub task 3a (2015-08-03)  #{uuid}
-        * [ ] sub task 3b  #{uuid}
-    * [ ] main task 2 (2015-08-08)  #{uuid}
-    * [ ] main task 1 (2015-08-07)  #{uuid}
-        * [ ] sub task 1a (2015-08-01)  #{uuid}
-            * [ ] sub task 1aa  #{uuid}
-        * [ ] sub task 1b  #{uuid}
-    * [ ] main task 4  #{uuid}
+    * [ ] main task 3 (2015-08-09)  """+uuid_char+"""{uuid}
+        * [ ] sub task 3a (2015-08-03)  """+uuid_char+"""{uuid}
+        * [ ] sub task 3b  """+uuid_char+"""{uuid}
+    * [ ] main task 2 (2015-08-08)  """+uuid_char+"""{uuid}
+    * [ ] main task 1 (2015-08-07)  """+uuid_char+"""{uuid}
+        * [ ] sub task 1a (2015-08-01)  """+uuid_char+"""{uuid}
+            * [ ] sub task 1aa  """+uuid_char+"""{uuid}
+        * [ ] sub task 1b  """+uuid_char+"""{uuid}
+    * [ ] main task 4  """+uuid_char+"""{uuid}
     """
 
     def execute(self):
@@ -452,12 +453,12 @@ class TestViewportsMultilevelSortedGeneration(MultiSyntaxIntegrationTest):
 
     vimoutput = """
     HEADER2(Work tasks | project:Work or project:Home)
-    * [ ] home task 1 (2015-08-01)  #{uuid}
-    * [ ] home task 2 (2015-08-02)  #{uuid}
-    * [ ] home task 3 (2015-08-03)  #{uuid}
-    * [ ] work task 1 (2015-08-01)  #{uuid}
-    * [ ] work task 2 (2015-08-02)  #{uuid}
-    * [ ] work task 3 (2015-08-03)  #{uuid}
+    * [ ] home task 1 (2015-08-01)  """+uuid_char+"""{uuid}
+    * [ ] home task 2 (2015-08-02)  """+uuid_char+"""{uuid}
+    * [ ] home task 3 (2015-08-03)  """+uuid_char+"""{uuid}
+    * [ ] work task 1 (2015-08-01)  """+uuid_char+"""{uuid}
+    * [ ] work task 2 (2015-08-02)  """+uuid_char+"""{uuid}
+    * [ ] work task 3 (2015-08-03)  """+uuid_char+"""{uuid}
     """
 
     tasks = [
@@ -485,10 +486,10 @@ class TestViewportsSpecificSorting(MultiSyntaxIntegrationTest):
 
     vimoutput = """
     HEADER2(Work tasks | project:Work or project:Home $T)
-    * [ ] home task 1 (2015-08-01)  #{uuid}
-    * [ ] home task 2 (2015-08-02)  #{uuid}
-    * [ ] work task 1 (2015-08-01)  #{uuid}
-    * [ ] work task 2 (2015-08-02)  #{uuid}
+    * [ ] home task 1 (2015-08-01)  """+uuid_char+"""{uuid}
+    * [ ] home task 2 (2015-08-02)  """+uuid_char+"""{uuid}
+    * [ ] work task 1 (2015-08-01)  """+uuid_char+"""{uuid}
+    * [ ] work task 2 (2015-08-02)  """+uuid_char+"""{uuid}
     """
 
     tasks = [
@@ -516,16 +517,16 @@ class TestViewportsSpecificSortingCombined(TestViewportsSpecificSorting):
 
     vimoutput = """
     HEADER2(Work tasks | project:Work or project:Home $T)
-    * [ ] home task 1 (2015-08-01)  #{uuid}
-    * [ ] home task 2 (2015-08-02)  #{uuid}
-    * [ ] work task 1 (2015-08-01)  #{uuid}
-    * [ ] work task 2 (2015-08-02)  #{uuid}
+    * [ ] home task 1 (2015-08-01)  """+uuid_char+"""{uuid}
+    * [ ] home task 2 (2015-08-02)  """+uuid_char+"""{uuid}
+    * [ ] work task 1 (2015-08-01)  """+uuid_char+"""{uuid}
+    * [ ] work task 2 (2015-08-02)  """+uuid_char+"""{uuid}
 
     HEADER2(Work tasks | project:Work or project:Home)
-    * [ ] home task 1 (2015-08-01)  #{uuid}
-    * [ ] work task 1 (2015-08-01)  #{uuid}
-    * [ ] home task 2 (2015-08-02)  #{uuid}
-    * [ ] work task 2 (2015-08-02)  #{uuid}
+    * [ ] home task 1 (2015-08-01)  """+uuid_char+"""{uuid}
+    * [ ] work task 1 (2015-08-01)  """+uuid_char+"""{uuid}
+    * [ ] home task 2 (2015-08-02)  """+uuid_char+"""{uuid}
+    * [ ] work task 2 (2015-08-02)  """+uuid_char+"""{uuid}
     """
 
 
@@ -553,8 +554,8 @@ class TestViewportsCount(MultiSyntaxIntegrationTest):
 
     vimoutput = """
     HEADER2(Work tasks | project:Work or project:Home limit:2)
-    * [ ] home task 1 (2015-08-01)  #{uuid}
-    * [ ] work task 1 (2015-08-01)  #{uuid}
+    * [ ] home task 1 (2015-08-01)  """+uuid_char+"""{uuid}
+    * [ ] work task 1 (2015-08-01)  """+uuid_char+"""{uuid}
     """
 
     tasks = [
@@ -579,10 +580,10 @@ class TestViewportsVisibleMetaTag(MultiSyntaxIntegrationTest):
 
     vimoutput = """
     HEADER2(Home tasks | project:Home -VISIBLE)
-    * [ ] home task  #{uuid}
+    * [ ] home task  """+uuid_char+"""{uuid}
 
     HEADER2(Chores | project:Home.Chores)
-    * [ ] chore task  #{uuid}
+    * [ ] chore task  """+uuid_char+"""{uuid}
     """
 
     tasks = [
@@ -607,9 +608,9 @@ class TestViewportsPreserveHierarchyUponCompletion(MultiSyntaxIntegrationTest):
 
     vimoutput = """
     HEADER2(Work tasks | +work)
-    * [ ] main task  #{uuid}
-        * [X] sub task a  #{uuid}
-        * [ ] sub task b  #{uuid}
+    * [ ] main task  """+uuid_char+"""{uuid}
+        * [X] sub task a  """+uuid_char+"""{uuid}
+        * [ ] sub task b  """+uuid_char+"""{uuid}
     """
 
     def execute(self):
@@ -628,7 +629,7 @@ class TestViewportDefaultPreservesTags(MultiSyntaxIntegrationTest):
 
     vimoutput = """
     HEADER2(Work tasks | +work)
-    * [ ] hard task  #{uuid}
+    * [ ] hard task  """+uuid_char+"""{uuid}
     """
 
     def execute(self):
@@ -645,7 +646,7 @@ class TestViewportBufferModified(MultiSyntaxIntegrationTest):
 
     viminput = """
     HEADER2(Work tasks |)
-    * [ ] a task  #{uuid}
+    * [ ] a task  """+uuid_char+"""{uuid}
     """
 
     tasks = [
