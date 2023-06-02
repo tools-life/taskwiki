@@ -6,6 +6,11 @@ endif
 " Detect if conceal feature is available
 let s:conceal = exists("+conceallevel") ? ' conceal': ''
 
+let s:uuid_char = '#'
+if exists("g:taskwiki_uuid_char")
+    let s:uuid_char = g:taskwiki_uuid_char
+endif
+
 syntax match TaskWikiTask /\s*\* \[.\]\s.*$/ contains=@TaskWikiTaskContains
 syntax cluster TaskWikiTaskContains
        \ contains=VimwikiListTodo,
