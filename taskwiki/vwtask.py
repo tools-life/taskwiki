@@ -8,6 +8,7 @@ from tasklib import Task
 
 from taskwiki import regexp
 from taskwiki import util
+from taskwiki.util import uuid_char
 from taskwiki.short import ShortUUID
 
 
@@ -337,7 +338,7 @@ class VimwikiTask(object):
                 if self['description'] else 'TEXT MISSING?',
             ' ' + '!' * self.priority_from_tw_format if self['priority'] else '',
             due_str,
-            '  #' + self.uuid.vim_representation(self.cache) if self.uuid else '',
+            '  ' + uuid_char + self.uuid.vim_representation(self.cache) if self.uuid else '',
         ])
 
     def find_parent_task(self):
