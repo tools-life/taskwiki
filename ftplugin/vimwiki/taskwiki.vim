@@ -96,16 +96,16 @@ execute "command! -buffer -range TaskWikiChooseTag :<line1>,<line2>"         . g
 " Meta commands
 execute "command! -buffer TaskWikiInspect :" . g:taskwiki_py . "Meta().inspect_viewport()"
 
-" Disable <CR> as VimwikiFollowLink
-if !hasmapto('<Plug>VimwikiFollowLink')
-  nmap <Plug>NoVimwikiFollowLink <Plug>VimwikiFollowLink
-endif
-
-execute "nnoremap <silent><buffer> <CR> :" . g:taskwiki_py . "Mappings.task_info_or_vimwiki_follow_link()<CR>"
-
-" Leader-related mappings. Mostly <Leader>t + <first letter of the action>
 if !exists('g:taskwiki_suppress_mappings')
-        if exists('g:taskwiki_maplocalleader')
+  " Disable <CR> as VimwikiFollowLink
+  if !hasmapto('<Plug>VimwikiFollowLink')
+    nmap <Plug>NoVimwikiFollowLink <Plug>VimwikiFollowLink
+  endif
+
+  execute "nnoremap <silent><buffer> <CR> :" . g:taskwiki_py . "Mappings.task_info_or_vimwiki_follow_link()<CR>"
+
+  " Leader-related mappings. Mostly <Leader>t + <first letter of the action>
+  if exists('g:taskwiki_maplocalleader')
                 let maplocalleader = g:taskwiki_maplocalleader
         else
                 if exists('g:mapleader')
