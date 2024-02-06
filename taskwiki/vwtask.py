@@ -110,7 +110,7 @@ class VimwikiTask(object):
                 len(match.group('priority') or [])) # This is either 0,1,2 or 3
 
             # Also make sure changes in the progress field are reflected
-            if self['completed_mark'] == 'X':
+            if self['completed_mark'].lower() == 'x':
                 self.task['status'] = 'completed'
                 self.task['start'] = None
                 self.task['end'] = self.task['end'] or datetime.now()
@@ -280,8 +280,8 @@ class VimwikiTask(object):
         mark = self['completed_mark']
 
         if self.task.completed:
-            mark = 'X'
-        elif mark == 'X':
+            mark = 'x'
+        elif mark == 'x':
             mark = ' '
 
         if self.task.active:
