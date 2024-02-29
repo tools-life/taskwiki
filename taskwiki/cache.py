@@ -17,6 +17,9 @@ class BufferProxy(object):
         self.data = []
         self.buffer_number = number
 
+    def options(self):
+        return util.get_buffer(self.buffer_number).options
+
     def obtain(self):
         self.data = util.get_buffer(self.buffer_number)[:]
 

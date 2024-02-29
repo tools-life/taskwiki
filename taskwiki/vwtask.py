@@ -340,17 +340,19 @@ class VimwikiTask(object):
             '  #' + self.uuid.vim_representation(self.cache) if self.uuid else '',
         ])
 
+    def _normalise_indent(self, string):
+        tabstop = self.cache.buffer.options()['tabstop']
+        return string.replace('\t', ' ' * tabstop)
+
     def find_parent_task(self):
         # If this task is not indented, we have nothing to do here
         if not self['indent']:
             return None
 
         for i in reversed(range(0, self['line_number'])):
-            # Tab is equal to four spaces
-            # TODO: Source this from tabstop setting, but this would be only
-            # useful for mixed tab/space indentations
-            indentation = len(self.cache.buffer[i].replace('\t', '    ')) - len(self.cache.buffer[i].lstrip())
-            indent = self['indent'].replace('\t', '    ')
+            line = self.cache.buffer[i]
+            indentation = len(self._normalise_indent(line)) - len(line.lstrip())
+            indent = self._normalise_indent(self['indent'])
 
             if indentation < len(indent):
                 # The from_line constructor returns None if line doesn't match a task
