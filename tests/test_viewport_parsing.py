@@ -159,3 +159,13 @@ class TestParsingVimwikiTask(object):
         assert port.defaults == {'project':'Home'}
         assert port.sort == DEFAULT_SORT_ORDER
         assert port.tw == 'default'
+
+    def test_expires(self, test_syntax):
+        example_viewport = "HEADER2(Test | project:Home !2020-01-01)"
+        port = self.process_viewport(example_viewport, test_syntax)
+
+        assert port.taskfilter == list(DEFAULT_VIEWPORT_VIRTUAL_TAGS) + ["(", "project:Home", ")"]
+        assert port.name == "Test"
+        #  assert port.expired == True
+        assert port.expires == '2020-01-01'
+        assert port.tw == 'default'

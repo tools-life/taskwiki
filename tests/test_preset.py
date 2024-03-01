@@ -16,7 +16,7 @@ class TestPresetDefaults(MultiSyntaxIntegrationTest):
     def execute(self):
         self.command('w', regex='written$', lines=1)
 
-        # Check that only one tasks with this description exists
+        # Check that only one task with this description exists
         assert len(self.tw.tasks.pending()) == 1
 
         task = self.tw.tasks.pending()[0]
@@ -240,3 +240,62 @@ class TestPresetDefaultPreservesTags(MultiSyntaxIntegrationTest):
         assert task['description'] == 'hard task'
         assert task['status'] == 'pending'
         assert task['tags'] == set(['work', 'hard'])
+
+
+class TestPresetExpires(MultiSyntaxIntegrationTest):
+
+    viminput = """
+    HEADER2(Work tasks || !2020-01-01)
+    HEADER3(Work tasks |)
+    * [ ] old task
+    """
+
+    vimoutput = """
+    HEADER2(Work tasks || !2020-01-01)
+    HEADER3(Work tasks |)
+    * [ ] old task
+    """
+
+    tasks = [
+        dict(description="task 1"),
+        dict(description="task 2"),
+        dict(description="task 3"),
+        dict(description="task 4"),
+    ]
+
+    def execute(self):
+        # Generate the tasks
+        self.command("w", regex="written$", lines=1)
+
+
+class TestPresetExpiresWithOverridingViewport(MultiSyntaxIntegrationTest):
+
+    viminput = """
+    HEADER2(Work tasks || !2020-01-01)
+    HEADER3(Work tasks | $T !2500-01-01)
+    * [ ] old task
+    """
+
+    vimoutput = """
+    HEADER2(Work tasks || !2020-01-01)
+    HEADER3(Work tasks | $T !2500-01-01)
+    * [ ] old task  #{uuid}
+    * [ ] task 1  #{uuid}
+    * [ ] task 2  #{uuid}
+    * [ ] task 3  #{uuid}
+    * [ ] task 4  #{uuid}
+    """
+
+    tasks = [
+        dict(description="task 1"),
+        dict(description="task 2"),
+        dict(description="task 3"),
+        dict(description="task 4"),
+    ]
+
+    def execute(self):
+        # Define the ordering T
+        self.command('let g:taskwiki_sort_orders={"T": "description"}')
+
+        # Generate the tasks
+        self.command("w", regex="written$", lines=1)

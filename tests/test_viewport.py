@@ -264,6 +264,7 @@ class TestViewportInspection(MultiSyntaxIntegrationTest):
     Displayed tasks: 1
     Tasks to be added:
     Tasks to be deleted:
+    Expires: never
     """
 
     tasks = [
@@ -300,6 +301,7 @@ class TestViewportInspectionWithVisibleTag(MultiSyntaxIntegrationTest):
     Displayed tasks: 0
     Tasks to be added:
     Tasks to be deleted:
+    Expires: never
     """
 
     tasks = [
@@ -667,3 +669,27 @@ class TestViewportBufferModified(MultiSyntaxIntegrationTest):
         # testfile3 only has header, so refresh on open makes changes
         self.client.edit(testfile3)
         assert self.client.eval('&modified') == '1'
+
+
+class TestExpiredViewport(MultiSyntaxIntegrationTest):
+
+    viminput = """
+    HEADER2(Work tasks | project:Work !2020-01-01)
+    * [ ] Old task
+    """
+
+    vimoutput = """
+    HEADER2(Work tasks | project:Work !2020-01-01)
+    * [ ] Old task
+    """
+
+    tasks = [
+        dict(description="task 1"),
+        dict(description="task 2"),
+        dict(description="task 3"),
+        dict(description="task 4"),
+    ]
+
+    def execute(self):
+        # Generate the tasks
+        self.command("w", regex="written$", lines=1)

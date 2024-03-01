@@ -4,6 +4,7 @@ import re
 UUID_UNNAMED = r'[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}'
 UUID_UNNAMED_SHORT = r'[0-9a-fA-F]{8}'
 DUE_UNNAMED = r'\(\d{4}-\d\d-\d\d( \d\d:\d\d)?\)'
+EXPIRES_UNNAMED = r'\d{4}-\d\d-\d\d( \d\d:\d\d)?'
 SPACE_UNNAMED = r'\s*'
 NONEMPTY_SPACE_UNNAMED = r'\s+'
 FINAL_SEGMENT_SEPARATOR_UNNAMED = r'(\s+|$)'
@@ -15,6 +16,7 @@ BRACKET_CLOSING = re.escape('] ')
 EMPTY_SPACE = r'(?P<space>\s*)'
 UUID = r'(?P<uuid>{0}|{1})'.format(UUID_UNNAMED, UUID_UNNAMED_SHORT)
 DUE = r'(?P<due>{0})'.format(DUE_UNNAMED)
+EXPIRES = r'(\!(?P<expires>{0}))?'.format(EXPIRES_UNNAMED)
 TEXT = r'(?P<text>.+?)'
 COMPLETION_MARK = r'(?P<completed>.)'
 PRIORITY = r'(?P<priority>!{1,3})'
@@ -38,8 +40,8 @@ GENERIC_TASK = re.compile(''.join([
     '$'    # Enforce match on the whole line
 ]))
 
-DATETIME_FORMAT = "(%Y-%m-%d %H:%M)"
-DATE_FORMAT = "(%Y-%m-%d)"
+DATETIME_FORMAT = "%Y-%m-%d %H:%M"
+DATE_FORMAT = "%Y-%m-%d"
 
 VIEWPORT = {
     'default':
@@ -62,6 +64,8 @@ VIEWPORT = {
         r'\s*'                           # Any whitespace
         r'(limit:(?P<count>[0-9]+))?'    # Optional count indicator
         r'\s*'                           # Any whitespace
+        + EXPIRES +
+        r'\s*'                           # Any whitespace
         r'[=]+'                          # Header ending
     ),
     'markdown':
@@ -83,6 +87,8 @@ VIEWPORT = {
         r'(\$(?P<sort>[A-Z]))?'          # Optional sort indicator
         r'\s*'                           # Any whitespace
         r'(limit:(?P<count>[0-9]+))?'    # Optional count indicator
+        r'\s*'                           # Any whitespace
+        + EXPIRES +
         r'\s*'                           # Any whitespace
         r'$'                             # End of line
     )
@@ -119,6 +125,8 @@ PRESET = {
         r'(?P<defaults>[^=\|]+?)'    # Default attrs preset
         r')?'
         r'\s*'                       # Any whitespace
+        + EXPIRES +
+        r'\s*'                       # Any whitespace
         r'[=]+'                      # Header ending
     ),
     'markdown':
@@ -133,6 +141,8 @@ PRESET = {
         r'\|\|'                      # Delimiter
         r'(?P<defaults>[^#\|]+?)'    # Default attrs preset
         r')?'
+        r'\s*'                       # Any whitespace
+        + EXPIRES +
         r'\s*'                       # Any whitespace
         r'$'                         # End of line
     )

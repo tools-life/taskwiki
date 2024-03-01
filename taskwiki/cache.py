@@ -196,12 +196,18 @@ class TaskCache(object):
             self.viewport[i] = port
 
     def update_vwtasks_in_buffer(self):
-        for task in self.vwtask.values():
-            task.update_in_buffer()
+        for vwtask in self.vwtask.values():
+            port = self.get_viewport_by_task(vwtask.task)
+            if port and port.expired:
+                continue
+            vwtask.update_in_buffer()
 
     def save_tasks(self):
-        for task in self.vimwikitask_dependency_order:
-            task.save_to_tw()
+        for vwtask in self.vimwikitask_dependency_order:
+            port = self.get_viewport_by_task(vwtask.task)
+            if port and port.expired:
+                continue
+            vwtask.save_to_tw()
 
     def load_tasks(self):
         raw_task_info = []
@@ -240,10 +246,15 @@ class TaskCache(object):
 
     def update_vwtasks_from_tasks(self):
         for vwtask in self.vwtask.values():
+            port = self.get_viewport_by_task(vwtask.task)
+            if port and port.expired:
+                continue
             vwtask.update_from_task()
 
     def evaluate_viewports(self):
         for port in self.viewport.values():
+            if port.expired:
+                continue
             port.sync_with_taskwarrior()
 
     def get_viewport_by_task(self, task):

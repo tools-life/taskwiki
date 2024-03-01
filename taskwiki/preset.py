@@ -9,7 +9,7 @@ class PresetHeader(object):
         == Taskwiki tasks || project:taskwiki ==
     """
 
-    def __init__(self, cache, parent, level, filterstring, defaultstring):
+    def __init__(self, cache, parent, level, filterstring, defaultstring, expires=None):
 
         self.level = level
         self.parent = parent
@@ -38,6 +38,8 @@ class PresetHeader(object):
             defaults.update(util.tw_args_to_kwargs(taskfilter))
 
         self.defaults = defaults
+
+        self.expires = expires
 
     @classmethod
     def parse_line(cls, cache, number):
@@ -89,12 +91,13 @@ class PresetHeader(object):
 
 
         defaults = match.group('defaults')
+        expires = match.group('expires')
 
         if six.PY2:
             filterstring = filterstring.decode('utf-8')
             defaults = defaults.decode('utf-8') if defaults is not None else defaults
 
-        self = cls(cache, parent, level, filterstring, defaults)
+        self = cls(cache, parent, level, filterstring, defaults, expires)
         return self
 
     @property
