@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from datetime import datetime
-from tests.base import MockVim, MockCache
+from tests.base import MockVim, MockCacheWithPriorities
 import sys
 
 from tasklib import local_zone
@@ -8,7 +8,7 @@ from tasklib import local_zone
 class TestParsingVimwikiTask(object):
     def setup(self):
         self.mockvim = MockVim()
-        self.cache = MockCache()
+        self.cache = MockCacheWithPriorities()
         sys.modules['vim'] = self.mockvim
         from taskwiki.vwtask import VimwikiTask
         self.VimwikiTask = VimwikiTask
@@ -56,7 +56,7 @@ class TestParsingVimwikiTask(object):
         assert vwtask['priority'] == None
         assert vwtask['indent'] == ''
 
-    def test_priority_low(self):
+    def test_default_priority_low(self):
         self.cache.buffer[0] = "* [ ] Semi-Important task !"
         vwtask = self.VimwikiTask.from_line(self.cache, 0)
 
@@ -64,7 +64,7 @@ class TestParsingVimwikiTask(object):
         assert vwtask['priority'] == 'L'
         assert vwtask['uuid'] == None
 
-    def test_priority_medium(self):
+    def test_default_priority_medium(self):
         self.cache.buffer[0] = "* [ ] Important task !!"
         vwtask = self.VimwikiTask.from_line(self.cache, 0)
 
@@ -72,12 +72,84 @@ class TestParsingVimwikiTask(object):
         assert vwtask['priority'] == 'M'
         assert vwtask['uuid'] == None
 
-    def test_priority_high(self):
+    def test_default_priority_high(self):
         self.cache.buffer[0] = "* [ ] Very important task !!!"
         vwtask = self.VimwikiTask.from_line(self.cache, 0)
 
         assert vwtask['description'] == u"Very important task"
         assert vwtask['priority'] == 'H'
+        assert vwtask['uuid'] == None
+        assert vwtask['due'] == None
+
+    def test_custom_priority_0(self):
+        self.cache = MockCacheWithPriorities({
+            -2: 0, -1: 'L', 0: None, 1: 'M', 2: 'H'
+        })
+        self.cache.buffer[0] = "* [ ] Very important task ¡¡"
+        vwtask = self.VimwikiTask.from_line(self.cache, 0)
+
+        assert vwtask['description'] == u"Very important task"
+        assert vwtask['priority'] == 0
+        assert vwtask['uuid'] == None
+        assert vwtask['due'] == None
+
+    def test_custom_priority_L(self):
+        self.cache = MockCacheWithPriorities({
+            -2: 0, -1: 'L', 0: None, 1: 'M', 2: 'H'
+        })
+        self.cache.buffer[0] = "* [ ] Very important task ¡"
+        vwtask = self.VimwikiTask.from_line(self.cache, 0)
+
+        assert vwtask['description'] == u"Very important task"
+        assert vwtask['priority'] == 'L'
+        assert vwtask['uuid'] == None
+        assert vwtask['due'] == None
+
+    def test_custom_priority_none(self):
+        self.cache = MockCacheWithPriorities({
+            -2: 0, -1: 'L', 0: None, 1: 'M', 2: 'H'
+        })
+        self.cache.buffer[0] = "* [ ] Very important task"
+        vwtask = self.VimwikiTask.from_line(self.cache, 0)
+
+        assert vwtask['description'] == u"Very important task"
+        assert vwtask['priority'] == None
+        assert vwtask['uuid'] == None
+        assert vwtask['due'] == None
+
+    def test_custom_priority_M(self):
+        self.cache = MockCacheWithPriorities({
+            -2: 0, -1: 'L', 0: None, 1: 'M', 2: 'H'
+        })
+        self.cache.buffer[0] = "* [ ] Very important task !"
+        vwtask = self.VimwikiTask.from_line(self.cache, 0)
+
+        assert vwtask['description'] == u"Very important task"
+        assert vwtask['priority'] == 'M'
+        assert vwtask['uuid'] == None
+        assert vwtask['due'] == None
+
+    def test_custom_priority_H(self):
+        self.cache = MockCacheWithPriorities({
+            -2: 0, -1: 'L', 0: None, 1: 'M', 2: 'H'
+        })
+        self.cache.buffer[0] = "* [ ] Very important task !!"
+        vwtask = self.VimwikiTask.from_line(self.cache, 0)
+
+        assert vwtask['description'] == u"Very important task"
+        assert vwtask['priority'] == 'H'
+        assert vwtask['uuid'] == None
+        assert vwtask['due'] == None
+
+    def test_custom_priority_no_three_exclamations(self):
+        self.cache = MockCacheWithPriorities({
+            -2: 0, -1: 'L', 0: None, 1: 'M', 2: 'H'
+        })
+        self.cache.buffer[0] = "* [ ] Very important task !!!"
+        vwtask = self.VimwikiTask.from_line(self.cache, 0)
+
+        assert vwtask['description'] == u"Very important task"
+        assert vwtask['priority'] == None
         assert vwtask['uuid'] == None
         assert vwtask['due'] == None
 

@@ -389,3 +389,32 @@ class MockCache(object):
         self.warriors.clear()
         self.warriors.update({'default': 'default'})
         self.buffer_has_authority = True
+
+class MockCacheWithPriorities(object):
+    default_urgency_levels = {0: None, 1: 'L', 2: 'M', 3: 'H'}
+
+    # Create a warrior object on the fly
+    warriors = {"default": type("", (object,), {"urgency_levels": {}},)()}
+
+    buffer_has_authority = True
+
+    def __init__(self, urgency_levels=None):
+        from taskwiki import store
+        self.urgency_levels = urgency_levels
+        self.warriors['default'].urgency_levels = urgency_levels or self.default_urgency_levels
+        self.buffer = MockBuffer()
+        self.line = store.LineStore(self)
+        self.vwtask = dict()
+        self.task = dict()
+        self.viewport = dict()
+
+    def reset(self):
+        self.warriors.clear()
+        self.warriors.update(
+            {
+                "default": type(
+                    "", (object,), {"urgency_levels": self.urgency_levels}
+                )()
+            }
+        )
+        self.buffer_has_authority = True
