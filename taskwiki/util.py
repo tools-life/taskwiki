@@ -4,6 +4,7 @@ from packaging import version
 
 import contextlib
 import os
+import pexpect
 import random
 import sys
 import vim  # pylint: disable=F0401
@@ -96,6 +97,8 @@ def tw_args_to_kwargs(args):
     return output
 
 def get_input(prompt="Enter: ", allow_empty=False, completion=None):
+    prompt = prompt.replace('"', '\\"')
+
     if completion is not None:
         value = vim.eval('input("%s", "", "%s")' % (prompt, completion))
     else:
@@ -441,3 +444,48 @@ def is_midnight(dt):
     """
 
     return dt.hour == 0 and dt.minute == 0 and dt.second == 0
+
+def taskopen(args):
+    """
+    Runs taskopen, handles its interactive prompts, returns final output.
+
+    Params:
+        args - arguments to be passed to the taskopen command
+    """
+    try:
+        p = pexpect.spawn(
+            "taskopen " + args,
+            timeout=3,
+            echo=False,
+        )
+
+        prompts = [
+            "Type number\(s\): ",
+            "Config file.* does not exist. Do you want to create it? (Y/n)"
+        ]
+
+        while not p.eof():
+            index = p.expect([pexpect.EOF, *prompts])
+
+            if index == 0:
+                last_lines = p.before.splitlines()
+            else:
+                prompt = p.before.splitlines()
+                prompt += [bytes(prompts[index-1].replace('.*', ''), "utf-8")]
+
+                input = get_input(b"\n".join(prompt).decode("utf-8"))
+
+                p.sendline(input)
+
+        p.close(force=True)  # make sure the process is ended
+
+    except pexpect.exceptions.ExceptionPexpect as e:
+        if "command was not found" not in e.value:
+            return "taskopen is not installed", 127
+
+    if p.exitstatus == 3:  # xdg-open: no method to open annotation
+        last_lines = [last_lines[-1]]
+
+    last_lines = [l.decode("utf-8").rstrip("\r\n") for l in last_lines]
+
+    return "\n".join(last_lines).strip(), p.exitstatus

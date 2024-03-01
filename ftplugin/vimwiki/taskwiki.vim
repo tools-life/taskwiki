@@ -75,6 +75,8 @@ execute "command! -buffer -nargs=* TaskWikiTags :"            . g:taskwiki_py . 
 
 " Commands that operate on tasks in the buffer
 execute "command! -buffer -range TaskWikiInfo :<line1>,<line2>"   . g:taskwiki_py . "SelectedTasks().info()"
+execute "command! -buffer -range TaskWikiOpen :<line1>,<line2>"   . g:taskwiki_py . "SelectedTasks().taskopen('open')"
+execute "command! -buffer -range TaskWikiNote :<line1>,<line2>"   . g:taskwiki_py . "SelectedTasks().taskopen('note')"
 execute "command! -buffer -range TaskWikiEdit :<line1>,<line2>"   . g:taskwiki_py . "SelectedTasks().edit()"
 execute "command! -buffer -range TaskWikiLink :<line1>,<line2>"   . g:taskwiki_py . "SelectedTasks().link()"
 execute "command! -buffer -range TaskWikiGrid :<line1>,<line2>"   . g:taskwiki_py . "SelectedTasks().grid()"
@@ -130,6 +132,8 @@ if !exists('g:taskwiki_suppress_mappings')
         nnoremap <silent><buffer> <LocalLeader>hm :TaskWikiHistoryMonthly<CR>
         nnoremap <silent><buffer> <LocalLeader>ha :TaskWikiHistoryAnnual<CR>
         nnoremap <silent><buffer> <LocalLeader>i :TaskWikiInfo<CR>
+        nnoremap <silent><buffer> <LocalLeader>o :TaskWikiOpen<CR>
+        nnoremap <silent><buffer> <LocalLeader>n :TaskWikiNote<CR>
         nnoremap <silent><buffer> <LocalLeader>l :TaskWikiLink<CR>
         nnoremap <silent><buffer> <LocalLeader>m :TaskWikiMod<CR>
         nnoremap <silent><buffer> <LocalLeader>p :TaskWikiProjects<CR>
@@ -149,6 +153,8 @@ if !exists('g:taskwiki_suppress_mappings')
         vnoremap <silent><buffer> <LocalLeader>e :TaskWikiEdit<CR>
         vnoremap <silent><buffer> <LocalLeader>g :TaskWikiGrid<CR>
         vnoremap <silent><buffer> <LocalLeader>i :TaskWikiInfo<CR>
+        vnoremap <silent><buffer> <LocalLeader>o :TaskWikiOpen<CR>
+        vnoremap <silent><buffer> <LocalLeader>n :TaskWikiNote<CR>
         vnoremap <silent><buffer> <LocalLeader>l :TaskWikiLink<CR>
         vnoremap <silent><buffer> <LocalLeader>m :TaskWikiMod<CR>
         vnoremap <silent><buffer> <LocalLeader>. :TaskWikiRedo<CR>
