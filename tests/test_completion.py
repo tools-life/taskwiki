@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from taskwiki.completion import Completion
+from taskwiki.util import uuid_char
 from tests.base import IntegrationTest
 
 
@@ -57,8 +58,8 @@ class TestCompletionUnit():
         c = Completion(FakeTW())
         assert c.omni_modstring_findstart("* [ ] x") == -1
         assert c.omni_modstring_findstart("* [ ] x --") == -1
-        assert c.omni_modstring_findstart("* [ ] x #12345678 --") == -1
-        assert c.omni_modstring_findstart("* [ ] x -- #12345678") == -1
+        assert c.omni_modstring_findstart("* [ ] x "+uuid_char+"12345678 --") == -1
+        assert c.omni_modstring_findstart("* [ ] x -- "+uuid_char+"12345678") == -1
         assert c.omni_modstring_findstart("* [ ] x -- ") == 11
         assert c.omni_modstring_findstart("* [ ] x -- x") == 11
         assert c.omni_modstring_findstart("* [ ] x -- xy") == 11
@@ -67,8 +68,8 @@ class TestCompletionUnit():
 
 class TestCompletionIntegMod(IntegrationTest):
     viminput = """
-    * [ ] test task 1  #{uuid}
-    * [ ] test task 2  #{uuid}
+    * [ ] test task 1  """+uuid_char+"""{uuid}
+    * [ ] test task 2  """+uuid_char+"""{uuid}
     """
 
     tasks = [
@@ -89,7 +90,7 @@ class TestCompletionIntegMod(IntegrationTest):
 
 class TestCompletionIntegOmni(IntegrationTest):
     viminput = """
-    * [ ] test task 1  #{uuid}
+    * [ ] test task 1  """+uuid_char+"""{uuid}
     """
 
     tasks = [

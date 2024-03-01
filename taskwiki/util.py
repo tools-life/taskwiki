@@ -13,6 +13,8 @@ import tasklib
 from taskwiki.errors import TaskWikiException
 from taskwiki import regexp
 
+uuid_char = vim.eval("g:taskwiki_uuid_char") if vim.eval("exists('g:taskwiki_uuid_char')") == '1' else '#'
+
 # Detect if command AnsiEsc is available
 ANSI_ESC_AVAILABLE = vim.eval('exists(":AnsiEsc")') == '2'
 NEOVIM = (vim.eval('has("nvim")') == "1")

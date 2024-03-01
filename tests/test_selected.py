@@ -2,14 +2,15 @@ import re
 
 from datetime import datetime
 from tasklib import local_zone
+from taskwiki.util import uuid_char
 from tests.base import IntegrationTest
 
 
 class TestAnnotateAction(IntegrationTest):
 
     viminput = """
-    * [ ] test task 1  #{uuid}
-    * [ ] test task 2  #{uuid}
+    * [ ] test task 1  """+uuid_char+"""{uuid}
+    * [ ] test task 2  """+uuid_char+"""{uuid}
     """
 
     tasks = [
@@ -32,8 +33,8 @@ class TestAnnotateAction(IntegrationTest):
 class TestAnnotateActionManually(IntegrationTest):
 
     viminput = """
-    * [ ] test task 1  #{uuid}
-    * [ ] test task 2  #{uuid}
+    * [ ] test task 1  """+uuid_char+"""{uuid}
+    * [ ] test task 2  """+uuid_char+"""{uuid}
     """
 
     tasks = [
@@ -55,8 +56,8 @@ class TestAnnotateActionManually(IntegrationTest):
 class TestAnnotateActionManuallyAbort(IntegrationTest):
 
     viminput = """
-    * [ ] test task 1  #{uuid}
-    * [ ] test task 2  #{uuid}
+    * [ ] test task 1  """+uuid_char+"""{uuid}
+    * [ ] test task 2  """+uuid_char+"""{uuid}
     """
 
     tasks = [
@@ -82,8 +83,8 @@ class TestAnnotateActionManuallyAbort(IntegrationTest):
 class TestAnnotateActionMoved(IntegrationTest):
 
     viminput = """
-    * [ ] test task 1  #{uuid}
-    * [ ] test task 2  #{uuid}
+    * [ ] test task 1  """+uuid_char+"""{uuid}
+    * [ ] test task 2  """+uuid_char+"""{uuid}
     """
 
     tasks = [
@@ -107,8 +108,8 @@ class TestAnnotateActionMoved(IntegrationTest):
 class TestAnnotateActionRange(IntegrationTest):
 
     viminput = """
-    * [ ] test task 1  #{uuid}
-    * [ ] test task 2  #{uuid}
+    * [ ] test task 1  """+uuid_char+"""{uuid}
+    * [ ] test task 2  """+uuid_char+"""{uuid}
     """
 
     tasks = [
@@ -136,8 +137,8 @@ class TestAnnotateActionRange(IntegrationTest):
 class TestAnnotateActionRedo(IntegrationTest):
 
     viminput = """
-    * [ ] test task 1  #{uuid}
-    * [ ] test task 2  #{uuid}
+    * [ ] test task 1  """+uuid_char+"""{uuid}
+    * [ ] test task 2  """+uuid_char+"""{uuid}
     """
 
     tasks = [
@@ -166,12 +167,12 @@ class TestAnnotateActionRedo(IntegrationTest):
 class TestDeleteAction(IntegrationTest):
 
     viminput = """
-    * [ ] test task 1  #{uuid}
-    * [ ] test task 2  #{uuid}
+    * [ ] test task 1  """+uuid_char+"""{uuid}
+    * [ ] test task 2  """+uuid_char+"""{uuid}
     """
 
     vimoutput = """
-    * [ ] test task 2  #{uuid}
+    * [ ] test task 2  """+uuid_char+"""{uuid}
     """
 
     tasks = [
@@ -195,12 +196,12 @@ class TestDeleteAction(IntegrationTest):
 class TestDeleteActionMoved(IntegrationTest):
 
     viminput = """
-    * [ ] test task 1  #{uuid}
-    * [ ] test task 2  #{uuid}
+    * [ ] test task 1  """+uuid_char+"""{uuid}
+    * [ ] test task 2  """+uuid_char+"""{uuid}
     """
 
     vimoutput = """
-    * [ ] test task 1  #{uuid}
+    * [ ] test task 1  """+uuid_char+"""{uuid}
     """
 
     tasks = [
@@ -225,8 +226,8 @@ class TestDeleteActionMoved(IntegrationTest):
 class TestDeleteActionRange(IntegrationTest):
 
     viminput = """
-    * [ ] test task 1  #{uuid}
-    * [ ] test task 2  #{uuid}
+    * [ ] test task 1  """+uuid_char+"""{uuid}
+    * [ ] test task 2  """+uuid_char+"""{uuid}
     """
 
     vimoutput = """
@@ -253,8 +254,8 @@ class TestDeleteActionRange(IntegrationTest):
 class TestDeleteActionRedo(IntegrationTest):
 
     viminput = """
-    * [ ] test task 1  #{uuid}
-    * [ ] test task 2  #{uuid}
+    * [ ] test task 1  """+uuid_char+"""{uuid}
+    * [ ] test task 2  """+uuid_char+"""{uuid}
     """
 
     vimoutput = """
@@ -290,8 +291,8 @@ class TestDeleteActionRedo(IntegrationTest):
 class TestInfoAction(IntegrationTest):
 
     viminput = """
-    * [ ] test task 1  #{uuid}
-    * [ ] test task 2  #{uuid}
+    * [ ] test task 1  """+uuid_char+"""{uuid}
+    * [ ] test task 2  """+uuid_char+"""{uuid}
     """
 
     tasks = [
@@ -317,8 +318,8 @@ class TestInfoAction(IntegrationTest):
 class TestInfoActionTriggeredByEnter(IntegrationTest):
 
     viminput = """
-    * [ ] test task 1  #{uuid}
-    * [ ] test task 2  #{uuid}
+    * [ ] test task 1  """+uuid_char+"""{uuid}
+    * [ ] test task 2  """+uuid_char+"""{uuid}
     """
 
     tasks = [
@@ -346,8 +347,8 @@ class TestInfoActionTriggeredByEnter(IntegrationTest):
 class TestInfoActionNotTriggeredByEnterOnLink(IntegrationTest):
 
     viminput = """
-    * [ ] [[link task]] 1  #{uuid}
-    * [ ] test task 2  #{uuid}
+    * [ ] [[link task]] 1  """+uuid_char+"""{uuid}
+    * [ ] test task 2  """+uuid_char+"""{uuid}
     """
 
     tasks = [
@@ -371,8 +372,8 @@ class TestInfoActionNotTriggeredByEnterOnLink(IntegrationTest):
 class TestInfoActionMoved(IntegrationTest):
 
     viminput = """
-    * [ ] test task 1  #{uuid}
-    * [ ] test task 2  #{uuid}
+    * [ ] test task 1  """+uuid_char+"""{uuid}
+    * [ ] test task 2  """+uuid_char+"""{uuid}
     """
 
     tasks = [
@@ -399,8 +400,8 @@ class TestInfoActionMoved(IntegrationTest):
 class TestInfoActionRange(IntegrationTest):
 
     viminput = """
-    * [ ] test task 1  #{uuid}
-    * [ ] test task 2  #{uuid}
+    * [ ] test task 1  """+uuid_char+"""{uuid}
+    * [ ] test task 2  """+uuid_char+"""{uuid}
     """
 
     tasks = [
@@ -428,8 +429,8 @@ class TestInfoActionRange(IntegrationTest):
 class TestLinkAction(IntegrationTest):
 
     viminput = """
-    * [ ] test task 1  #{uuid}
-    * [ ] test task 2  #{uuid}
+    * [ ] test task 1  """+uuid_char+"""{uuid}
+    * [ ] test task 2  """+uuid_char+"""{uuid}
     """
 
     tasks = [
@@ -454,8 +455,8 @@ class TestLinkAction(IntegrationTest):
 class TestLinkActionMoved(IntegrationTest):
 
     viminput = """
-    * [ ] test task 1  #{uuid}
-    * [ ] test task 2  #{uuid}
+    * [ ] test task 1  """+uuid_char+"""{uuid}
+    * [ ] test task 2  """+uuid_char+"""{uuid}
     """
 
     tasks = [
@@ -481,8 +482,8 @@ class TestLinkActionMoved(IntegrationTest):
 class TestLinkActionRange(IntegrationTest):
 
     viminput = """
-    * [ ] test task 1  #{uuid}
-    * [ ] test task 2  #{uuid}
+    * [ ] test task 1  """+uuid_char+"""{uuid}
+    * [ ] test task 2  """+uuid_char+"""{uuid}
     """
 
     tasks = [
@@ -512,8 +513,8 @@ class TestLinkActionRange(IntegrationTest):
 class TestLinkActionRedo(IntegrationTest):
 
     viminput = """
-    * [ ] test task 1  #{uuid}
-    * [ ] test task 2  #{uuid}
+    * [ ] test task 1  """+uuid_char+"""{uuid}
+    * [ ] test task 2  """+uuid_char+"""{uuid}
     """
 
     tasks = [
@@ -555,13 +556,13 @@ class TestLinkActionRedo(IntegrationTest):
 class TestStartAction(IntegrationTest):
 
     viminput = """
-    * [ ] test task 1  #{uuid}
-    * [ ] test task 2  #{uuid}
+    * [ ] test task 1  """+uuid_char+"""{uuid}
+    * [ ] test task 2  """+uuid_char+"""{uuid}
     """
 
     vimoutput = """
-    * [S] test task 1  #{uuid}
-    * [ ] test task 2  #{uuid}
+    * [S] test task 1  """+uuid_char+"""{uuid}
+    * [ ] test task 2  """+uuid_char+"""{uuid}
     """
 
     tasks = [
@@ -592,13 +593,13 @@ class TestStartAction(IntegrationTest):
 class TestToggleAction(IntegrationTest):
 
     viminput = """
-    * [S] test task 1  #{uuid}
-    * [ ] test task 2  #{uuid}
+    * [S] test task 1  """+uuid_char+"""{uuid}
+    * [ ] test task 2  """+uuid_char+"""{uuid}
     """
 
     vimoutput = """
-    * [ ] test task 1  #{uuid}
-    * [S] test task 2  #{uuid}
+    * [ ] test task 1  """+uuid_char+"""{uuid}
+    * [S] test task 2  """+uuid_char+"""{uuid}
     """
 
     tasks = [
@@ -635,13 +636,13 @@ class TestToggleAction(IntegrationTest):
 class TestStartActionMoved(IntegrationTest):
 
     viminput = """
-    * [ ] test task 1  #{uuid}
-    * [ ] test task 2  #{uuid}
+    * [ ] test task 1  """+uuid_char+"""{uuid}
+    * [ ] test task 2  """+uuid_char+"""{uuid}
     """
 
     vimoutput = """
-    * [ ] test task 1  #{uuid}
-    * [S] test task 2  #{uuid}
+    * [ ] test task 1  """+uuid_char+"""{uuid}
+    * [S] test task 2  """+uuid_char+"""{uuid}
     """
 
     tasks = [
@@ -673,13 +674,13 @@ class TestStartActionMoved(IntegrationTest):
 class TestStartActionRange(IntegrationTest):
 
     viminput = """
-    * [ ] test task 1  #{uuid}
-    * [ ] test task 2  #{uuid}
+    * [ ] test task 1  """+uuid_char+"""{uuid}
+    * [ ] test task 2  """+uuid_char+"""{uuid}
     """
 
     vimoutput = """
-    * [S] test task 1  #{uuid}
-    * [S] test task 2  #{uuid}
+    * [S] test task 1  """+uuid_char+"""{uuid}
+    * [S] test task 2  """+uuid_char+"""{uuid}
     """
 
     tasks = [
@@ -711,13 +712,13 @@ class TestStartActionRange(IntegrationTest):
 class TestStartActionRedo(IntegrationTest):
 
     viminput = """
-    * [ ] test task 1  #{uuid}
-    * [ ] test task 2  #{uuid}
+    * [ ] test task 1  """+uuid_char+"""{uuid}
+    * [ ] test task 2  """+uuid_char+"""{uuid}
     """
 
     vimoutput = """
-    * [S] test task 1  #{uuid}
-    * [S] test task 2  #{uuid}
+    * [S] test task 1  """+uuid_char+"""{uuid}
+    * [S] test task 2  """+uuid_char+"""{uuid}
     """
 
     tasks = [
@@ -759,13 +760,13 @@ class TestStartActionRedo(IntegrationTest):
 class TestStopAction(IntegrationTest):
 
     viminput = """
-    * [S] test task 1  #{uuid}
-    * [S] test task 2  #{uuid}
+    * [S] test task 1  """+uuid_char+"""{uuid}
+    * [S] test task 2  """+uuid_char+"""{uuid}
     """
 
     vimoutput = """
-    * [ ] test task 1  #{uuid}
-    * [S] test task 2  #{uuid}
+    * [ ] test task 1  """+uuid_char+"""{uuid}
+    * [S] test task 2  """+uuid_char+"""{uuid}
     """
 
     tasks = [
@@ -796,13 +797,13 @@ class TestStopAction(IntegrationTest):
 class TestStopActionMoved(IntegrationTest):
 
     viminput = """
-    * [S] test task 1  #{uuid}
-    * [S] test task 2  #{uuid}
+    * [S] test task 1  """+uuid_char+"""{uuid}
+    * [S] test task 2  """+uuid_char+"""{uuid}
     """
 
     vimoutput = """
-    * [S] test task 1  #{uuid}
-    * [ ] test task 2  #{uuid}
+    * [S] test task 1  """+uuid_char+"""{uuid}
+    * [ ] test task 2  """+uuid_char+"""{uuid}
     """
 
     tasks = [
@@ -834,13 +835,13 @@ class TestStopActionMoved(IntegrationTest):
 class TestStopActionRange(IntegrationTest):
 
     viminput = """
-    * [S] test task 1  #{uuid}
-    * [S] test task 2  #{uuid}
+    * [S] test task 1  """+uuid_char+"""{uuid}
+    * [S] test task 2  """+uuid_char+"""{uuid}
     """
 
     vimoutput = """
-    * [ ] test task 1  #{uuid}
-    * [ ] test task 2  #{uuid}
+    * [ ] test task 1  """+uuid_char+"""{uuid}
+    * [ ] test task 2  """+uuid_char+"""{uuid}
     """
 
     tasks = [
@@ -867,13 +868,13 @@ class TestStopActionRange(IntegrationTest):
 class TestStopActionRedo(IntegrationTest):
 
     viminput = """
-    * [S] test task 1  #{uuid}
-    * [S] test task 2  #{uuid}
+    * [S] test task 1  """+uuid_char+"""{uuid}
+    * [S] test task 2  """+uuid_char+"""{uuid}
     """
 
     vimoutput = """
-    * [ ] test task 1  #{uuid}
-    * [ ] test task 2  #{uuid}
+    * [ ] test task 1  """+uuid_char+"""{uuid}
+    * [ ] test task 2  """+uuid_char+"""{uuid}
     """
 
     tasks = [
@@ -911,13 +912,13 @@ class TestStopActionRedo(IntegrationTest):
 class TestModAction(IntegrationTest):
 
     viminput = """
-    * [ ] test task 1  #{uuid}
-    * [ ] test task 2  #{uuid}
+    * [ ] test task 1  """+uuid_char+"""{uuid}
+    * [ ] test task 2  """+uuid_char+"""{uuid}
     """
 
     vimoutput = """
-    * [ ] test task 1  #{uuid}
-    * [ ] test task 2  #{uuid}
+    * [ ] test task 1  """+uuid_char+"""{uuid}
+    * [ ] test task 2  """+uuid_char+"""{uuid}
     """
 
     tasks = [
@@ -941,13 +942,13 @@ class TestModAction(IntegrationTest):
 class TestModActionRedo(IntegrationTest):
 
     viminput = """
-    * [ ] test task 1  #{uuid}
-    * [ ] test task 2  #{uuid}
+    * [ ] test task 1  """+uuid_char+"""{uuid}
+    * [ ] test task 2  """+uuid_char+"""{uuid}
     """
 
     vimoutput = """
-    * [ ] test task 1  #{uuid}
-    * [ ] test task 2  #{uuid}
+    * [ ] test task 1  """+uuid_char+"""{uuid}
+    * [ ] test task 2  """+uuid_char+"""{uuid}
     """
 
     tasks = [
@@ -980,13 +981,13 @@ class TestModActionRedo(IntegrationTest):
 class TestModInteractiveAction(IntegrationTest):
 
     viminput = """
-    * [ ] test task 1  #{uuid}
-    * [ ] test task 2  #{uuid}
+    * [ ] test task 1  """+uuid_char+"""{uuid}
+    * [ ] test task 2  """+uuid_char+"""{uuid}
     """
 
     vimoutput = """
-    * [ ] test task 1  #{uuid}
-    * [ ] test task 2  #{uuid}
+    * [ ] test task 1  """+uuid_char+"""{uuid}
+    * [ ] test task 2  """+uuid_char+"""{uuid}
     """
 
     tasks = [
@@ -1009,13 +1010,13 @@ class TestModInteractiveAction(IntegrationTest):
 class TestModInteractiveActionRedo(IntegrationTest):
 
     viminput = """
-    * [ ] test task 1  #{uuid}
-    * [ ] test task 2  #{uuid}
+    * [ ] test task 1  """+uuid_char+"""{uuid}
+    * [ ] test task 2  """+uuid_char+"""{uuid}
     """
 
     vimoutput = """
-    * [ ] test task 1  #{uuid}
-    * [ ] test task 2  #{uuid}
+    * [ ] test task 1  """+uuid_char+"""{uuid}
+    * [ ] test task 2  """+uuid_char+"""{uuid}
     """
 
     tasks = [
@@ -1046,8 +1047,8 @@ class TestModInteractiveActionRedo(IntegrationTest):
 class TestModVisibleAction(IntegrationTest):
 
     viminput = """
-    * [ ] test task 1  #{uuid}
-    * [ ] test task 2  #{uuid}
+    * [ ] test task 1  """+uuid_char+"""{uuid}
+    * [ ] test task 2  """+uuid_char+"""{uuid}
     """
 
     tasks = [
@@ -1077,13 +1078,13 @@ class TestModVisibleAction(IntegrationTest):
 class TestModActionMoved(IntegrationTest):
 
     viminput = """
-    * [ ] test task 1  #{uuid}
-    * [ ] test task 2  #{uuid}
+    * [ ] test task 1  """+uuid_char+"""{uuid}
+    * [ ] test task 2  """+uuid_char+"""{uuid}
     """
 
     vimoutput = """
-    * [ ] test task 1  #{uuid}
-    * [ ] test task 2  #{uuid}
+    * [ ] test task 1  """+uuid_char+"""{uuid}
+    * [ ] test task 2  """+uuid_char+"""{uuid}
     """
 
     tasks = [
@@ -1108,13 +1109,13 @@ class TestModActionMoved(IntegrationTest):
 class TestModActionRange(IntegrationTest):
 
     viminput = """
-    * [ ] test task 1  #{uuid}
-    * [ ] test task 2  #{uuid}
+    * [ ] test task 1  """+uuid_char+"""{uuid}
+    * [ ] test task 2  """+uuid_char+"""{uuid}
     """
 
     vimoutput = """
-    * [ ] test task 1  #{uuid}
-    * [ ] test task 2  #{uuid}
+    * [ ] test task 1  """+uuid_char+"""{uuid}
+    * [ ] test task 2  """+uuid_char+"""{uuid}
     """
 
     tasks = [
@@ -1141,13 +1142,13 @@ class TestModActionRange(IntegrationTest):
 class TestDoneAction(IntegrationTest):
 
     viminput = """
-    * [ ] test task 1  #{uuid}
-    * [ ] test task 2  #{uuid}
+    * [ ] test task 1  """+uuid_char+"""{uuid}
+    * [ ] test task 2  """+uuid_char+"""{uuid}
     """
 
     vimoutput = """
-    * [X] test task 1  #{uuid}
-    * [ ] test task 2  #{uuid}
+    * [X] test task 1  """+uuid_char+"""{uuid}
+    * [ ] test task 2  """+uuid_char+"""{uuid}
     """
 
     tasks = [
@@ -1177,15 +1178,15 @@ class TestDoneAction(IntegrationTest):
 class TestDoneNoSelected(IntegrationTest):
 
     viminput = """
-    * [ ] test task 1  #{uuid}
+    * [ ] test task 1  """+uuid_char+"""{uuid}
 
-    * [ ] test task 2  #{uuid}
+    * [ ] test task 2  """+uuid_char+"""{uuid}
     """
 
     vimoutput = """
-    * [ ] test task 1  #{uuid}
+    * [ ] test task 1  """+uuid_char+"""{uuid}
 
-    * [ ] test task 2  #{uuid}
+    * [ ] test task 2  """+uuid_char+"""{uuid}
     """
 
     tasks = [
@@ -1207,13 +1208,13 @@ class TestDoneNoSelected(IntegrationTest):
 class TestDoneActionMoved(IntegrationTest):
 
     viminput = """
-    * [ ] test task 1  #{uuid}
-    * [ ] test task 2  #{uuid}
+    * [ ] test task 1  """+uuid_char+"""{uuid}
+    * [ ] test task 2  """+uuid_char+"""{uuid}
     """
 
     vimoutput = """
-    * [ ] test task 1  #{uuid}
-    * [X] test task 2  #{uuid}
+    * [ ] test task 1  """+uuid_char+"""{uuid}
+    * [X] test task 2  """+uuid_char+"""{uuid}
     """
 
     tasks = [
@@ -1245,13 +1246,13 @@ class TestDoneActionMoved(IntegrationTest):
 class TestDoneActionRange(IntegrationTest):
 
     viminput = """
-    * [ ] test task 1  #{uuid}
-    * [ ] test task 2  #{uuid}
+    * [ ] test task 1  """+uuid_char+"""{uuid}
+    * [ ] test task 2  """+uuid_char+"""{uuid}
     """
 
     vimoutput = """
-    * [X] test task 1  #{uuid}
-    * [X] test task 2  #{uuid}
+    * [X] test task 1  """+uuid_char+"""{uuid}
+    * [X] test task 2  """+uuid_char+"""{uuid}
     """
 
     tasks = [
@@ -1283,13 +1284,13 @@ class TestDoneActionRange(IntegrationTest):
 class TestDoneActionRedo(IntegrationTest):
 
     viminput = """
-    * [ ] test task 1  #{uuid}
-    * [ ] test task 2  #{uuid}
+    * [ ] test task 1  """+uuid_char+"""{uuid}
+    * [ ] test task 2  """+uuid_char+"""{uuid}
     """
 
     vimoutput = """
-    * [X] test task 1  #{uuid}
-    * [X] test task 2  #{uuid}
+    * [X] test task 1  """+uuid_char+"""{uuid}
+    * [X] test task 2  """+uuid_char+"""{uuid}
     """
 
     tasks = [
@@ -1330,13 +1331,13 @@ class TestDoneActionRedo(IntegrationTest):
 class TestSortManually(IntegrationTest):
 
     viminput = """
-    * [ ] test task 1  #{uuid}
-    * [ ] test task 2  #{uuid}
+    * [ ] test task 1  """+uuid_char+"""{uuid}
+    * [ ] test task 2  """+uuid_char+"""{uuid}
     """
 
     vimoutput = """
-    * [ ] test task 2  #{uuid}
-    * [ ] test task 1  #{uuid}
+    * [ ] test task 2  """+uuid_char+"""{uuid}
+    * [ ] test task 1  """+uuid_char+"""{uuid}
     """
 
     tasks = [
@@ -1352,11 +1353,11 @@ class TestSortManually(IntegrationTest):
 class TestSelectAfterBufferSwitch(IntegrationTest):
 
     viminput = """
-    * [ ] test task  #{uuid}
+    * [ ] test task  """+uuid_char+"""{uuid}
     """
 
     vimoutput = """
-    * [ ] test task  #{uuid}
+    * [ ] test task  """+uuid_char+"""{uuid}
     """
 
     tasks = [

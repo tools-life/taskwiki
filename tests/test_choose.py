@@ -1,17 +1,18 @@
 # -*- coding: utf-8 -*-
+from taskwiki.util import uuid_char
 from tests.base import IntegrationTest
 
 
 class TestChooseProject(IntegrationTest):
 
     viminput = """
-    * [ ] test task 1  #{uuid}
-    * [ ] test task 2  #{uuid}
+    * [ ] test task 1  """+uuid_char+"""{uuid}
+    * [ ] test task 2  """+uuid_char+"""{uuid}
     """
 
     vimoutput = """
-    * [ ] test task 1  #{uuid}
-    * [ ] test task 2  #{uuid}
+    * [ ] test task 1  """+uuid_char+"""{uuid}
+    * [ ] test task 2  """+uuid_char+"""{uuid}
     """
 
     tasks = [
@@ -36,13 +37,13 @@ class TestChooseProject(IntegrationTest):
 class TestChooseProjectUnset(IntegrationTest):
 
     viminput = """
-    * [ ] test task 1  #{uuid}
-    * [ ] test task 2  #{uuid}
+    * [ ] test task 1  """+uuid_char+"""{uuid}
+    * [ ] test task 2  """+uuid_char+"""{uuid}
     """
 
     vimoutput = """
-    * [ ] test task 1  #{uuid}
-    * [ ] test task 2  #{uuid}
+    * [ ] test task 1  """+uuid_char+"""{uuid}
+    * [ ] test task 2  """+uuid_char+"""{uuid}
     """
 
     tasks = [
@@ -67,13 +68,13 @@ class TestChooseProjectUnset(IntegrationTest):
 class TestChooseProjectCanceled(IntegrationTest):
 
     viminput = """
-    * [ ] test task 1  #{uuid}
-    * [ ] test task 2  #{uuid}
+    * [ ] test task 1  """+uuid_char+"""{uuid}
+    * [ ] test task 2  """+uuid_char+"""{uuid}
     """
 
     vimoutput = """
-    * [ ] test task 1  #{uuid}
-    * [ ] test task 2  #{uuid}
+    * [ ] test task 1  """+uuid_char+"""{uuid}
+    * [ ] test task 2  """+uuid_char+"""{uuid}
     """
 
     tasks = [
@@ -98,13 +99,13 @@ class TestChooseProjectCanceled(IntegrationTest):
 class TestChooseTag(IntegrationTest):
 
     viminput = """
-    * [ ] test task 1  #{uuid}
-    * [ ] test task 2  #{uuid}
+    * [ ] test task 1  """+uuid_char+"""{uuid}
+    * [ ] test task 2  """+uuid_char+"""{uuid}
     """
 
     vimoutput = """
-    * [ ] test task 1  #{uuid}
-    * [ ] test task 2  #{uuid}
+    * [ ] test task 1  """+uuid_char+"""{uuid}
+    * [ ] test task 2  """+uuid_char+"""{uuid}
     """
 
     tasks = [
@@ -129,13 +130,13 @@ class TestChooseTag(IntegrationTest):
 class TestChooseTagCancelled(IntegrationTest):
 
     viminput = """
-    * [ ] test task 1  #{uuid}
-    * [ ] test task 2  #{uuid}
+    * [ ] test task 1  """+uuid_char+"""{uuid}
+    * [ ] test task 2  """+uuid_char+"""{uuid}
     """
 
     vimoutput = """
-    * [ ] test task 1  #{uuid}
-    * [ ] test task 2  #{uuid}
+    * [ ] test task 1  """+uuid_char+"""{uuid}
+    * [ ] test task 2  """+uuid_char+"""{uuid}
     """
 
     tasks = [
@@ -160,13 +161,13 @@ class TestChooseTagCancelled(IntegrationTest):
 class TestChooseTagNoSelected(IntegrationTest):
 
     viminput = """
-    * [ ] test task 1  #{uuid}
-    * [ ] test task 2  #{uuid}
+    * [ ] test task 1  """+uuid_char+"""{uuid}
+    * [ ] test task 2  """+uuid_char+"""{uuid}
     """
 
     vimoutput = """
-    * [ ] test task 1  #{uuid}
-    * [ ] test task 2  #{uuid}
+    * [ ] test task 1  """+uuid_char+"""{uuid}
+    * [ ] test task 2  """+uuid_char+"""{uuid}
     """
 
     tasks = [
@@ -191,13 +192,13 @@ class TestChooseTagNoSelected(IntegrationTest):
 class TestChooseProjectUnicode(IntegrationTest):
 
     viminput = """
-    * [ ] test task 1  #{uuid}
-    * [ ] test task 2  #{uuid}
+    * [ ] test task 1  """+uuid_char+"""{uuid}
+    * [ ] test task 2  """+uuid_char+"""{uuid}
     """
 
     vimoutput = """
-    * [ ] test task 1  #{uuid}
-    * [ ] test task 2  #{uuid}
+    * [ ] test task 1  """+uuid_char+"""{uuid}
+    * [ ] test task 2  """+uuid_char+"""{uuid}
     """
 
     tasks = [
@@ -222,13 +223,13 @@ class TestChooseProjectUnicode(IntegrationTest):
 class TestChooseTagUnicode(IntegrationTest):
 
     viminput = """
-    * [ ] test task 1  #{uuid}
-    * [ ] test task 2  #{uuid}
+    * [ ] test task 1  """+uuid_char+"""{uuid}
+    * [ ] test task 2  """+uuid_char+"""{uuid}
     """
 
     vimoutput = """
-    * [ ] test task 1  #{uuid}
-    * [ ] test task 2  #{uuid}
+    * [ ] test task 1  """+uuid_char+"""{uuid}
+    * [ ] test task 2  """+uuid_char+"""{uuid}
     """
 
     tasks = [

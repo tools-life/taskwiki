@@ -1,5 +1,7 @@
 import re
 
+from taskwiki.util import uuid_char
+
 # Unnamed building blocks
 UUID_UNNAMED = r'[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}'
 UUID_UNNAMED_SHORT = r'[0-9a-fA-F]{8}'
@@ -30,7 +32,7 @@ GENERIC_TASK = re.compile(''.join([
     '(', PRIORITY, FINAL_SEGMENT_SEPARATOR_UNNAMED, ')?',
     '(', DUE, FINAL_SEGMENT_SEPARATOR_UNNAMED, ')?',
     '(',
-        '#',
+        re.escape(uuid_char),
         '(', SOURCE_INDICATOR, ')?',
         '(', UUID, ')?',
     ')?',  # UUID is not there for new tasks
