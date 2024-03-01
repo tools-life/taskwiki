@@ -79,6 +79,10 @@ class SelectedTasks(object):
         self.tw = cache().get_relevant_tw()
 
         # Load the current tasks
+        if util.get_var('taskwiki_scan_for_duplicates'):
+            for i in range(len(cache().buffer)):
+                cache().vwtask[i]  # loads the line into the cache
+
         range_tasks = [cache().vwtask[i] for i in util.selected_line_numbers()]
         self.tasks = [t for t in range_tasks if t is not None]
 
@@ -113,6 +117,8 @@ class SelectedTasks(object):
             vimwikitask.update_from_task()
             vimwikitask.update_in_buffer()
             print(u"Task \"{0}\" completed.".format(vimwikitask['description']))
+
+        self._update_replications()
 
         cache().buffer.push()
         self.save_action('done')
@@ -276,6 +282,14 @@ class SelectedTasks(object):
     def sort(self, sortstring):
         sort.TaskSorter(cache(), self.tasks, sortstring).execute()
         cache().buffer.push()
+
+    def _update_replications(self):
+        """Update all same tasks occurrences in current buffer from taskwarrior."""
+
+        for vimwikitask in self.tasks:
+            for replica in cache().get_task_replications(vimwikitask.uuid):
+                replica.update_from_task()
+                replica.update_in_buffer()
 
 
 class Mappings(object):

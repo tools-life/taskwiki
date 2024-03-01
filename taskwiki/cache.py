@@ -313,3 +313,6 @@ class TaskCache(object):
 
     def get_relevant_completion(self):
         return self.completion[self.get_relevant_tw()]
+
+    def get_task_replications(self, uuid):
+        return [vwtask for vwtask in self.vwtask.values() if vwtask and vwtask.uuid == uuid]
