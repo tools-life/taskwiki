@@ -37,7 +37,7 @@ def test_syntax(request):
         inclusive.
         """
         for header_level, format_header in format_header_dict.items():
-            regex = header_level + '\((.*?)\)'
+            regex = header_level + r'\((.*)\)'
             string = re.sub(regex,
                             lambda match: format_header % match.group(1),
                             string)

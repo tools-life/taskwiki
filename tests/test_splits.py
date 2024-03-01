@@ -1,16 +1,15 @@
 import re
 
 from tests.base import IntegrationTest
-from tasklib import local_zone
 from datetime import datetime
 
 
 def current_year():
-    return local_zone.localize(datetime.now()).year
+    return datetime.now().astimezone().year
 
 
 def current_month():
-    current_month_number = local_zone.localize(datetime.now()).month
+    current_month_number = datetime.now().astimezone().month
     months = ["January", "February", "March", "April",
               "May", "June", "July", "August",
               "September", "October", "November", "December"]

@@ -46,8 +46,12 @@ VIEWPORT = {
     re.compile(
         r'^'                             # Starts at the begging of the line
         r'(?P<header_start>[=]+)'        # Heading begging
-        r'(?P<name>[^=\|\[\{]*)'         # Name of the viewport, all before the | sign
-                                         # Cannot include '[', '=', '|', and '{'
+
+        r'(?P<name>([^=\|\[\{]*)|(\s*\{\{.*}}\s*)|(.*\[\[.*]].*))'
+                                         # Name of the viewport, either with
+                                         # a vimwiki link or without
+                                         # Cannot include '='
+
         r'\|'                            # Bar
         r'(?!\|)'                        # (But not two, that would be a preset)
         r'(?P<filter>[^=\|]*?)'          # Filter
@@ -68,8 +72,8 @@ VIEWPORT = {
     re.compile(
         r'^'                             # Starts at the begging of the line
         r'(?P<header_start>[#]+)'        # Heading begging
-        r'(?P<name>[^#\|\[\{]*)'         # Name of the viewport, all before the | sign
-                                         # Cannot include '[', '#', '|', and '{'
+        r'(?P<name>[^#\|]*)'             # Name of the viewport, all before the | sign
+                                         # Cannot include '#'
         r'\|'                            # Bar
         r'(?!\|)'                        # (But not two, that would be a preset)
         r'(?P<filter>[^#\|]*?)'          # Filter
