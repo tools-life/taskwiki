@@ -1,5 +1,7 @@
 from taskwiki import constants
 from taskwiki import util
+import re
+
 
 class TaskSorter(object):
     def __init__(self, cache, tasks, sortstring=None):
@@ -110,15 +112,25 @@ class CustomNodeComparator(object):
                 return True if method == 'gt' else False
 
             # Non-None values should respect reverse flags, use loop_method
-            if first_value < second_value:
+            if self.natural_compare(first_value, second_value) == -1:
                 return True if loop_method == 'lt' else False
-            elif first_value > second_value:
+            elif self.natural_compare(first_value, second_value) == 1:
                 return True if loop_method == 'gt' else False
             else:
                 # Values are equal, move to next distinguisher
                 continue
 
         return True if method == 'eq' else False
+
+    def natural_compare(self, a, b):
+        if not isinstance(a, str):
+            return (a > b) - (a < b)
+
+        convert = lambda text: int(text) if text.isdigit() else text.lower()
+        alphanum_key = lambda key: [ convert(c) for c in re.split('([0-9]+).*$', key)]
+
+        return (alphanum_key(a) > alphanum_key(b)) - (alphanum_key(a) < alphanum_key(b))
+
 
     def lt(self, first, second):
         return self.generic_compare(first, second, 'lt')
