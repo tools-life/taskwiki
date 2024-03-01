@@ -236,10 +236,10 @@ provides taskwiki file navigation.
 
     git clone https://github.com/majutsushi/tagbar ~/.vim/bundle/
 
-* [vim-taskwarrior](https://github.com/farseer90718/vim-taskwarrior)
+* [vim-taskwarrior](https://github.com/linuxcaffe/taskwarrior.vim)
 enables grid view.
 
-    git clone https://github.com/farseer90718/vim-taskwarrior ~/.vim/bundle/
+    git clone https://github.com/linuxcaffe/taskwarrior.vim ~/.vim/bundle/
 
 =============================================================================
 5. FEATURES IN DETAIL                                     *taskwiki-features*
