@@ -294,14 +294,18 @@ class Mappings(object):
 
         # Detect if the cursor stands on a vimwiki link,
         # if so, trigger it
-        inside_vimwiki_link = all([
+        # vimwiki type link [[URL|DESCRIPTION]]
+        inside_vimwiki_link_1 = all([
             '[[' in line,
             ']]' in line,
             column >= line.find('[['),
             column <= line.find(']]') + 1
         ])
+        # markdown type link [DESCRIPTION](URL)
+        pattern = re.compile(r'\[[^]]*\]\([^)]*\)')
+        inside_vimwiki_link_2 = re.search(pattern, line)
 
-        if inside_vimwiki_link:
+        if inside_vimwiki_link_1 or inside_vimwiki_link_2:
             vim.command('VimwikiFollowLink')
             return
 
