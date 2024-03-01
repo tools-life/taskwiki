@@ -331,6 +331,9 @@ class ViewPort(object):
         # Load all tasks below the viewport
         for i in range(self.line_number + 1, len(self.cache.buffer)):
             line = self.cache.buffer[i]
+            if not line:
+                continue
+
             match = re.search(regexp.GENERIC_TASK, line)
 
             if match:
@@ -373,15 +376,28 @@ class ViewPort(object):
                 self.cache.remove_line(vimwikitask['line_number'])
 
         # Add the tasks that match the filter and are not listed
-        added_tasks = 0
         existing_tasks = len(self.tasks)
 
         sorted_to_add = list(to_add)
         sorted_to_add.sort(key=lambda x: x['entry'])
 
-        for task in sorted_to_add:
-            added_tasks += 1
-            added_at = self.line_number + existing_tasks + added_tasks
+        # Insert below headers (with separating lines), or below existing tasks
+        if existing_tasks == 0:
+            if to_add and self.cache.markup_syntax == 'markdown':
+                md_h_style = util.get_var('vimwiki_markdown_header_style', 1)
+                newlines = int(md_h_style)
+            else:
+                newlines = 0
+
+            for _ in range(newlines):
+                self.cache.insert_line('', self.line_number + 1)
+
+            insert_start_line = self.line_number + newlines + 1
+        else:
+            insert_start_line = max(t['line_number'] for t in self.tasks) + 1
+
+        for i, task in enumerate(sorted_to_add):
+            added_at = insert_start_line + i
 
             # Add the task object to cache
             self.cache.task[short.ShortUUID(task['uuid'], self.tw)] = task
@@ -399,9 +415,8 @@ class ViewPort(object):
 
         sort.TaskSorter(self.cache, self.tasks, self.sort).execute()
 
+        # Remove excess task lines beyond limit count
         if self.count is not None:
-            for i in range(
-                self.line_number + self.count,
-                self.line_number + existing_tasks + added_tasks,
-            ):
-                self.cache.remove_line(self.line_number + self.count + 1)
+            task_lines = sorted(t['line_number'] for t in self.tasks)
+            for excess_line in reversed(task_lines[self.count:]):
+                self.cache.remove_line(excess_line)
